@@ -971,6 +971,57 @@
     .fig-bagua > span { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
     .fig-bagua i { position: absolute; left: 0; top: -62px; transform: translateX(-50%); font-style: normal; font-size: 14px; white-space: nowrap; }
     .fig-bagua em { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-style: normal; color: var(--cinnabar); font-size: 14px; }
+    
+    /* 先天/后天八卦图 */
+    .fig-xiantian-bagua, .fig-houtian-bagua { width: 100%; display: flex; justify-content: center; padding: 10px 0; }
+    .bagua-circle {
+      position: relative; width: 280px; height: 280px; border: 2px solid var(--bronze); border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(244,234,214,.9) 0%, rgba(244,234,214,.6) 60%, transparent 100%);
+      box-shadow: inset 0 0 0 1px rgba(122,98,64,.15), 0 4px 12px rgba(20,15,12,.08);
+    }
+    .gua-pos { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 2px; z-index: 2; }
+    .gua-symbol { font-size: 22px; line-height: 1; font-weight: 500; }
+    .gua-name { font-size: 15px; color: var(--cinnabar); letter-spacing: .06em; font-weight: 600; margin-top: 1px; }
+    .gua-info { font-size: 11px; color: var(--mist); letter-spacing: .03em; white-space: nowrap; }
+    .pos-s { top: 4px; left: 50%; transform: translateX(-50%); }
+    .pos-n { bottom: 4px; left: 50%; transform: translateX(-50%); }
+    .pos-e { top: 50%; right: 4px; transform: translateY(-50%); }
+    .pos-w { top: 50%; left: 4px; transform: translateY(-50%); }
+    .pos-ne { top: 33px; right: 33px; }
+    .pos-se { bottom: 33px; right: 33px; }
+    .pos-sw { bottom: 33px; left: 33px; }
+    .pos-nw { top: 33px; left: 33px; }
+    .duidai-line { position: absolute; background: rgba(143,38,31,.15); z-index: 1; }
+    .line-ns { left: 50%; top: 45px; bottom: 45px; width: 1px; transform: translateX(-50%); }
+    .line-ew { top: 50%; left: 45px; right: 45px; height: 1px; transform: translateY(-50%); }
+    .line-nese { width: 1px; height: 180px; top: 50%; left: 50%; transform-origin: center; transform: translate(-50%,-50%) rotate(45deg); }
+    .line-nwsw { width: 1px; height: 180px; top: 50%; left: 50%; transform-origin: center; transform: translate(-50%,-50%) rotate(-45deg); }
+    .flow-arrow { position: absolute; width: 12px; height: 12px; border: 1px solid var(--bronze); border-left: none; border-bottom: none; z-index: 1; opacity: .3; }
+    .arrow-spring { top: 50%; right: 70px; transform: translateY(-50%) rotate(45deg); }
+    .arrow-summer { top: 70px; left: 50%; transform: translateX(-50%) rotate(-45deg); }
+    .arrow-autumn { top: 50%; left: 70px; transform: translateY(-50%) rotate(-135deg); }
+    .arrow-winter { bottom: 70px; left: 50%; transform: translateX(-50%) rotate(135deg); }
+    .center-mark {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 8px 10px; background: rgba(244,234,214,.95); border: 1.5px solid var(--line-strong); border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(20,15,12,.08);
+    }
+    .center-title { font-size: 16px; color: var(--cinnabar); letter-spacing: .1em; font-weight: 600; }
+    .center-sub { font-size: 11px; color: var(--bronze); letter-spacing: .06em; }
+    
+    /* 对照表 */
+    .fig-bagua-table { width: 100%; border: 1.5px solid var(--line-strong); background: rgba(244,234,214,.3); }
+    .fig-bagua-table .table-header { display: grid; grid-template-columns: 1.2fr 1fr 1fr; background: var(--ink); padding: 8px 4px; }
+    .fig-bagua-table .table-header span { text-align: center; font-size: 13px; letter-spacing: .06em; color: var(--cream); font-weight: 600; }
+    .fig-bagua-table .table-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr; border-top: 1px solid var(--line); padding: 7px 4px; align-items: center; }
+    .fig-bagua-table .table-row:nth-child(odd) { background: rgba(244,234,214,.2); }
+    .fig-bagua-table .td-gua { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 13px; }
+    .fig-bagua-table .td-gua .sym { font-size: 16px; }
+    .fig-bagua-table .td-xian, .fig-bagua-table .td-hou { text-align: center; font-size: 13px; letter-spacing: .04em; }
+    .fig-bagua-table .td-xian { color: var(--cinnabar); font-weight: 500; }
+    .fig-bagua-table .td-hou { color: var(--bronze); font-weight: 500; }
+    
     .fig-yao4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .fig-yao4 > div { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border: 1px solid var(--line); font-size: 14px; }
     .fig-yao4 .yao-bar { width: 56px; height: 4px; margin: 0; }

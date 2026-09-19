@@ -31,8 +31,8 @@
       <view class="rg r3">象</view>
     </view>
 
-    <!-- 八卦环 -->
-    <view class="bagua" wx:elif="{{name==='bagua' || name==='bagua-table'}}">
+    <!-- 八卦环（通用，保留用于其他地方） -->
+    <view class="bagua" wx:elif="{{name==='bagua'}}">
       <view class="bg-item" style="transform:rotate(0deg)"><text class="bg-in" style="transform:rotate(0deg)">☲离</text></view>
       <view class="bg-item" style="transform:rotate(45deg)"><text class="bg-in" style="transform:rotate(-45deg)">☷坤</text></view>
       <view class="bg-item" style="transform:rotate(90deg)"><text class="bg-in" style="transform:rotate(-90deg)">☱兑</text></view>
@@ -42,6 +42,183 @@
       <view class="bg-item" style="transform:rotate(270deg)"><text class="bg-in" style="transform:rotate(-270deg)">☳震</text></view>
       <view class="bg-item" style="transform:rotate(315deg)"><text class="bg-in" style="transform:rotate(-315deg)">☴巽</text></view>
       <view class="bg-core">南↑</view>
+    </view>
+
+    <!-- 先天八卦图（伏羲） -->
+    <view class="xiantian-bagua" wx:elif="{{name==='xiantian-bagua'}}">
+      <view class="bagua-circle">
+        <!-- 乾 正南 -->
+        <view class="gua-pos pos-s">
+          <text class="gua-symbol">☰</text>
+          <text class="gua-name">乾</text>
+          <text class="gua-info">天·父</text>
+        </view>
+        <!-- 坤 正北 -->
+        <view class="gua-pos pos-n">
+          <text class="gua-symbol">☷</text>
+          <text class="gua-name">坤</text>
+          <text class="gua-info">地·母</text>
+        </view>
+        <!-- 离 正东 -->
+        <view class="gua-pos pos-e">
+          <text class="gua-symbol">☲</text>
+          <text class="gua-name">离</text>
+          <text class="gua-info">火·中女</text>
+        </view>
+        <!-- 坎 正西 -->
+        <view class="gua-pos pos-w">
+          <text class="gua-symbol">☵</text>
+          <text class="gua-name">坎</text>
+          <text class="gua-info">水·中男</text>
+        </view>
+        <!-- 兑 东南 -->
+        <view class="gua-pos pos-se">
+          <text class="gua-symbol">☱</text>
+          <text class="gua-name">兑</text>
+          <text class="gua-info">泽·少女</text>
+        </view>
+        <!-- 震 东北 -->
+        <view class="gua-pos pos-ne">
+          <text class="gua-symbol">☳</text>
+          <text class="gua-name">震</text>
+          <text class="gua-info">雷·长男</text>
+        </view>
+        <!-- 巽 西南 -->
+        <view class="gua-pos pos-sw">
+          <text class="gua-symbol">☴</text>
+          <text class="gua-name">巽</text>
+          <text class="gua-info">风·长女</text>
+        </view>
+        <!-- 艮 西北 -->
+        <view class="gua-pos pos-nw">
+          <text class="gua-symbol">☶</text>
+          <text class="gua-name">艮</text>
+          <text class="gua-info">山·少男</text>
+        </view>
+        <!-- 对待连线 -->
+        <view class="duidai-line line-ns"></view>
+        <view class="duidai-line line-ew"></view>
+        <view class="duidai-line line-nese"></view>
+        <view class="duidai-line line-nwsw"></view>
+        <!-- 中心标识 -->
+        <view class="center-mark">
+          <text class="center-title">先天</text>
+          <text class="center-sub">伏羲</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 后天八卦图（文王） -->
+    <view class="houtian-bagua" wx:elif="{{name==='houtian-bagua'}}">
+      <view class="bagua-circle">
+        <!-- 离 正南 -->
+        <view class="gua-pos pos-s">
+          <text class="gua-symbol">☲</text>
+          <text class="gua-name">离</text>
+          <text class="gua-info">火·夏·午</text>
+        </view>
+        <!-- 坎 正北 -->
+        <view class="gua-pos pos-n">
+          <text class="gua-symbol">☵</text>
+          <text class="gua-name">坎</text>
+          <text class="gua-info">水·冬·子</text>
+        </view>
+        <!-- 震 正东 -->
+        <view class="gua-pos pos-e">
+          <text class="gua-symbol">☳</text>
+          <text class="gua-name">震</text>
+          <text class="gua-info">木·春·卯</text>
+        </view>
+        <!-- 兑 正西 -->
+        <view class="gua-pos pos-w">
+          <text class="gua-symbol">☱</text>
+          <text class="gua-name">兑</text>
+          <text class="gua-info">金·秋·酉</text>
+        </view>
+        <!-- 巽 东南 -->
+        <view class="gua-pos pos-se">
+          <text class="gua-symbol">☴</text>
+          <text class="gua-name">巽</text>
+          <text class="gua-info">木·辰巳</text>
+        </view>
+        <!-- 乾 西北 -->
+        <view class="gua-pos pos-nw">
+          <text class="gua-symbol">☰</text>
+          <text class="gua-name">乾</text>
+          <text class="gua-info">金·戌亥</text>
+        </view>
+        <!-- 坤 西南 -->
+        <view class="gua-pos pos-sw">
+          <text class="gua-symbol">☷</text>
+          <text class="gua-name">坤</text>
+          <text class="gua-info">土·未申</text>
+        </view>
+        <!-- 艮 东北 -->
+        <view class="gua-pos pos-ne">
+          <text class="gua-symbol">☶</text>
+          <text class="gua-name">艮</text>
+          <text class="gua-info">土·丑寅</text>
+        </view>
+        <!-- 四时流行指示箭头 -->
+        <view class="flow-arrow arrow-spring"></view>
+        <view class="flow-arrow arrow-summer"></view>
+        <view class="flow-arrow arrow-autumn"></view>
+        <view class="flow-arrow arrow-winter"></view>
+        <!-- 中心标识 -->
+        <view class="center-mark">
+          <text class="center-title">后天</text>
+          <text class="center-sub">文王</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 先天后天对照表 -->
+    <view class="bagua-table" wx:elif="{{name==='bagua-table'}}">
+      <view class="table-header">
+        <text class="th th-gua">八卦</text>
+        <text class="th th-xian">先天方位</text>
+        <text class="th th-hou">后天方位</text>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☰</text><text>乾</text></view>
+        <view class="td td-xian">正南</view>
+        <view class="td td-hou">西北</view>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☷</text><text>坤</text></view>
+        <view class="td td-xian">正北</view>
+        <view class="td td-hou">西南</view>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☲</text><text>离</text></view>
+        <view class="td td-xian">正东</view>
+        <view class="td td-hou">正南</view>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☵</text><text>坎</text></view>
+        <view class="td td-xian">正西</view>
+        <view class="td td-hou">正北</view>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☳</text><text>震</text></view>
+        <view class="td td-xian">东北</view>
+        <view class="td td-hou">正东</view>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☱</text><text>兑</text></view>
+        <view class="td td-xian">东南</view>
+        <view class="td td-hou">正西</view>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☴</text><text>巽</text></view>
+        <view class="td td-xian">西南</view>
+        <view class="td td-hou">东南</view>
+      </view>
+      <view class="table-row">
+        <view class="td td-gua"><text class="sym">☶</text><text>艮</text></view>
+        <view class="td td-xian">西北</view>
+        <view class="td td-hou">东北</view>
+      </view>
     </view>
 
     <!-- 四爻 -->
