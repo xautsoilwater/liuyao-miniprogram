@@ -1010,6 +1010,44 @@
     .center-title { font-size: 16px; color: var(--cinnabar); letter-spacing: .1em; font-weight: 600; }
     .center-sub { font-size: 11px; color: var(--bronze); letter-spacing: .06em; }
     
+    /* 先天/后天八卦盘：罗盘质感 */
+    .bagua-disk { --disk-size: 210px; position: relative; width: var(--disk-size); height: var(--disk-size); margin: 0 auto; }
+    .disk-halo { position: absolute; left: -10px; top: -10px; width: calc(var(--disk-size) + 20px); height: calc(var(--disk-size) + 20px); border-radius: 50%; background: rgba(122,98,64,.05); pointer-events: none; z-index: 0; }
+    .disk-plate { position: relative; width: var(--disk-size); height: var(--disk-size); border-radius: 50%; overflow: visible; background: #e6d4b0; box-shadow: inset 0 0 0 1px rgba(20,15,12,.3), inset 0 0 0 6px rgba(248,240,222,.5), inset 0 0 0 8px rgba(90,70,40,.18), 0 0 0 1px rgba(70,52,28,.4), 0 6px 14px rgba(20,15,12,.12); }
+    .disk-rim { position: absolute; border-radius: 50%; pointer-events: none; z-index: 1; }
+    .disk-rim-outer { inset: 1%; border: 1px solid rgba(20,15,12,.2); }
+    .disk-rim-mid { inset: 2.5%; border: 0.5px solid rgba(246,237,216,.5); }
+    .disk-band { position: absolute; border-radius: 50%; z-index: 1; background: transparent; box-sizing: border-box; pointer-events: none; }
+    .disk-band-gua { inset: 22%; border: 16px solid rgba(143,38,31,.04); }
+    .disk-ring { position: absolute; border-radius: 50%; border: 0.5px solid rgba(20,15,12,.1); pointer-events: none; z-index: 2; }
+    .disk-ring.disk-r-outer { inset: 3.5%; border-color: rgba(20,15,12,.18); }
+    .disk-ring.disk-r-gua { inset: 34%; border-color: rgba(143,38,31,.18); }
+    .disk-ring.disk-r-core { inset: 42%; border-color: rgba(20,15,12,.1); }
+    .disk-layer { position: absolute; inset: 0; border-radius: 50%; z-index: 3; }
+    .disk-tick { position: absolute; left: 50%; top: 50%; width: 0.5px; height: calc(var(--disk-size) / 2 - 3px); margin-left: -0.25px; margin-top: calc(0px - var(--disk-size) / 2 + 3px); transform-origin: 50% calc(var(--disk-size) / 2 - 3px); background: linear-gradient(to bottom, rgba(20,15,12,.14) 0, rgba(20,15,12,.14) 2.5px, transparent 2.5px); pointer-events: none; }
+    .disk-tick.major { width: 1px; margin-left: -0.5px; background: linear-gradient(to bottom, rgba(143,38,31,.4) 0, rgba(143,38,31,.4) 5px, transparent 5px); }
+    .disk-spoke { position: absolute; left: 50%; top: 50%; width: 0.5px; height: 22%; margin-left: -0.25px; margin-top: -22%; transform-origin: 50% 100%; background: rgba(20,15,12,.1); pointer-events: none; }
+    .disk-gua-item { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+    .disk-gua-content { position: absolute; left: 0; top: -45px; width: 36px; margin-left: -18px; text-align: center; line-height: 1.05; --gua: var(--ink); }
+    .disk-gua-bars { display: flex; flex-direction: column; align-items: center; gap: 1.5px; margin: 0 auto 2.5px; width: 18px; }
+    .disk-bar { width: 18px; height: 2px; background: var(--gua); border-radius: 0.5px; }
+    .disk-bar.yin { background: linear-gradient(to right, var(--gua) 0, var(--gua) 36%, transparent 36%, transparent 64%, var(--gua) 64%, var(--gua) 100%); }
+    .disk-gua-name { display: block; font-size: 11px; letter-spacing: .14em; text-indent: .14em; color: var(--gua); font-weight: 700; }
+    .disk-gua-tip { display: block; margin-top: 1px; font-size: 7.5px; letter-spacing: .06em; font-weight: 600; opacity: .85; color: var(--gua); }
+    .disk-center { position: absolute; left: 50%; top: 50%; width: 50px; height: 50px; margin: -25px 0 0 -25px; border-radius: 50%; z-index: 7; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    .disk-center-ring { position: absolute; inset: 0; border-radius: 50%; background: #f0e4c8; border: 0.5px solid rgba(20,15,12,.16); box-shadow: 0 0 0 2px rgba(250,243,228,.4), 0 0 0 3px rgba(143,38,31,.08), inset 0 0 0 0.5px rgba(246,237,216,.6); }
+    .disk-taiji { position: relative; width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: #f4ead6; box-shadow: inset 0 0 0 1px rgba(20,15,12,.35); z-index: 2; }
+    .disk-taiji .half { position: absolute; top: 0; width: 50%; height: 100%; }
+    .disk-taiji .yang { left: 0; background: #f4ead6; }
+    .disk-taiji .yin { right: 0; background: #140f0c; }
+    .disk-taiji .eye { position: absolute; left: 9.5px; width: 19px; height: 19px; border-radius: 50%; }
+    .disk-taiji .yang-eye { top: 0; background: #140f0c; }
+    .disk-taiji .yin-eye { bottom: 0; background: #f4ead6; }
+    .disk-taiji .dot { position: absolute; left: 15px; width: 7px; height: 7px; border-radius: 50%; z-index: 2; }
+    .disk-taiji .yang-dot { top: 7px; background: #f4ead6; }
+    .disk-taiji .yin-dot { bottom: 7px; background: #140f0c; }
+    .disk-label { position: absolute; left: 50%; bottom: 4px; transform: translateX(-50%); font-size: 9.5px; letter-spacing: .2em; text-indent: .2em; color: rgba(143,38,31,.75); font-weight: 700; z-index: 8; pointer-events: none; }
+    
     /* 对照表 */
     .fig-bagua-table { width: 100%; border: 1.5px solid var(--line-strong); background: rgba(244,234,214,.3); }
     .fig-bagua-table .table-header { display: grid; grid-template-columns: 1.2fr 1fr 1fr; background: var(--ink); padding: 8px 4px; }
@@ -13549,6 +13587,82 @@ window.LiuYao = {
     return `<i class="yao-bar ${cls}"></i>`
   }
 
+  function buildBaguaDiskHtml(baguaData, ticks, spokes, label) {
+    const ticksHtml = ticks.map(t => 
+      `<div class="disk-tick ${t.major ? 'major' : ''}" style="transform: rotate(${t.deg}deg)"></div>`
+    ).join('')
+    const spokesHtml = spokes.map(deg => 
+      `<div class="disk-spoke" style="transform: rotate(${deg}deg)"></div>`
+    ).join('')
+    const guaHtml = baguaData.map(gua => {
+      const barsHtml = gua.lines.map(line => 
+        `<div class="disk-bar ${line ? 'yang' : 'yin'}"></div>`
+      ).join('')
+      return `<div class="disk-gua-item" style="transform: rotate(${gua.deg}deg)">
+        <div class="disk-gua-content tone-${gua.tone}" style="transform: rotate(${-gua.deg}deg)">
+          <div class="disk-gua-bars">${barsHtml}</div>
+          <span class="disk-gua-name">${gua.name}</span>
+          <span class="disk-gua-tip">${gua.tip}</span>
+        </div>
+      </div>`
+    }).join('')
+    return `<div class="bagua-disk">
+      <div class="disk-halo"></div>
+      <div class="disk-plate">
+        <div class="disk-rim disk-rim-outer"></div>
+        <div class="disk-rim disk-rim-mid"></div>
+        <div class="disk-band disk-band-gua"></div>
+        <div class="disk-ring disk-r-outer"></div>
+        <div class="disk-ring disk-r-gua"></div>
+        <div class="disk-ring disk-r-core"></div>
+        <div class="disk-layer">${ticksHtml}</div>
+        <div class="disk-layer">${spokesHtml}</div>
+        <div class="disk-layer">${guaHtml}</div>
+        <div class="disk-center">
+          <div class="disk-center-ring"></div>
+          <div class="disk-taiji">
+            <div class="half yang"></div>
+            <div class="half yin"></div>
+            <div class="eye yang-eye"></div>
+            <div class="eye yin-eye"></div>
+            <div class="dot yang-dot"></div>
+            <div class="dot yin-dot"></div>
+          </div>
+        </div>
+        <div class="disk-label">${label}</div>
+      </div>
+    </div>`
+  }
+
+  function buildBaguaData() {
+    const xiantian = [
+      { name: '乾', tip: '天·金', lines: [1, 1, 1], deg: 0, tone: 'qian' },
+      { name: '巽', tip: '风·木', lines: [0, 1, 1], deg: 45, tone: 'xun' },
+      { name: '坎', tip: '水', lines: [0, 1, 0], deg: 90, tone: 'kan' },
+      { name: '艮', tip: '山·土', lines: [0, 0, 1], deg: 135, tone: 'gen' },
+      { name: '坤', tip: '地·土', lines: [0, 0, 0], deg: 180, tone: 'kun' },
+      { name: '震', tip: '雷·木', lines: [1, 0, 0], deg: 225, tone: 'zhen' },
+      { name: '离', tip: '火', lines: [1, 0, 1], deg: 270, tone: 'li' },
+      { name: '兑', tip: '泽·金', lines: [1, 1, 0], deg: 315, tone: 'dui' }
+    ]
+    const houtian = [
+      { name: '离', tip: '火', lines: [1, 0, 1], deg: 0, tone: 'li' },
+      { name: '坤', tip: '地·土', lines: [0, 0, 0], deg: 45, tone: 'kun' },
+      { name: '兑', tip: '泽·金', lines: [1, 1, 0], deg: 90, tone: 'dui' },
+      { name: '乾', tip: '天·金', lines: [1, 1, 1], deg: 135, tone: 'qian' },
+      { name: '坎', tip: '水', lines: [0, 1, 0], deg: 180, tone: 'kan' },
+      { name: '艮', tip: '山·土', lines: [0, 0, 1], deg: 225, tone: 'gen' },
+      { name: '震', tip: '雷·木', lines: [1, 0, 0], deg: 270, tone: 'zhen' },
+      { name: '巽', tip: '风·木', lines: [0, 1, 1], deg: 315, tone: 'xun' }
+    ]
+    const ticks = Array.from({ length: 24 }, (_, i) => {
+      const deg = i * 15
+      return { deg, major: deg % 45 === 0 }
+    })
+    const spokes = [45, 135, 225, 315]
+    return { xiantian, houtian, ticks, spokes }
+  }
+
   function buildFigureHtml(key, caption) {
     const cap = caption ? `<div class="fig-cap">${caption}</div>` : ''
     let body = ''
@@ -13564,7 +13678,13 @@ window.LiuYao = {
       body = `<div class="fig-tri"><div><b>变</b><i>迁流不息</i></div><div><b>简</b><i>执简驭繁</i></div><div><b>常</b><i>变中有则</i></div></div>`
     } else if (key === 'xiang-shu-li') {
       body = `<div class="fig-rings"><span class="r3">象</span><span class="r2">数</span><span class="r1">理</span></div>`
-    } else if (key === 'bagua' || key === 'bagua-table') {
+    } else if (key === 'xiantian-bagua') {
+      const { xiantian, ticks, spokes } = buildBaguaData()
+      body = buildBaguaDiskHtml(xiantian, ticks, spokes, '先天八卦')
+    } else if (key === 'houtian-bagua') {
+      const { houtian, ticks, spokes } = buildBaguaData()
+      body = buildBaguaDiskHtml(houtian, ticks, spokes, '后天八卦')
+    } else if (key === 'bagua') {
       body = `<div class="fig-bagua">${['离☲','坤☷','兑☱','乾☰','坎☵','艮☶','震☳','巽☴'].map((t, i) => {
         const deg = i * 45
         return `<span style="transform:rotate(${deg}deg)"><i style="transform:rotate(${-deg}deg)">${t}</i></span>`

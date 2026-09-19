@@ -1545,6 +1545,82 @@
     return `<i class="yao-bar ${cls}"></i>`
   }
 
+  function buildBaguaDiskHtml(baguaData, ticks, spokes, label) {
+    const ticksHtml = ticks.map(t => 
+      `<div class="disk-tick ${t.major ? 'major' : ''}" style="transform: rotate(${t.deg}deg)"></div>`
+    ).join('')
+    const spokesHtml = spokes.map(deg => 
+      `<div class="disk-spoke" style="transform: rotate(${deg}deg)"></div>`
+    ).join('')
+    const guaHtml = baguaData.map(gua => {
+      const barsHtml = gua.lines.map(line => 
+        `<div class="disk-bar ${line ? 'yang' : 'yin'}"></div>`
+      ).join('')
+      return `<div class="disk-gua-item" style="transform: rotate(${gua.deg}deg)">
+        <div class="disk-gua-content tone-${gua.tone}" style="transform: rotate(${-gua.deg}deg)">
+          <div class="disk-gua-bars">${barsHtml}</div>
+          <span class="disk-gua-name">${gua.name}</span>
+          <span class="disk-gua-tip">${gua.tip}</span>
+        </div>
+      </div>`
+    }).join('')
+    return `<div class="bagua-disk">
+      <div class="disk-halo"></div>
+      <div class="disk-plate">
+        <div class="disk-rim disk-rim-outer"></div>
+        <div class="disk-rim disk-rim-mid"></div>
+        <div class="disk-band disk-band-gua"></div>
+        <div class="disk-ring disk-r-outer"></div>
+        <div class="disk-ring disk-r-gua"></div>
+        <div class="disk-ring disk-r-core"></div>
+        <div class="disk-layer">${ticksHtml}</div>
+        <div class="disk-layer">${spokesHtml}</div>
+        <div class="disk-layer">${guaHtml}</div>
+        <div class="disk-center">
+          <div class="disk-center-ring"></div>
+          <div class="disk-taiji">
+            <div class="half yang"></div>
+            <div class="half yin"></div>
+            <div class="eye yang-eye"></div>
+            <div class="eye yin-eye"></div>
+            <div class="dot yang-dot"></div>
+            <div class="dot yin-dot"></div>
+          </div>
+        </div>
+        <div class="disk-label">${label}</div>
+      </div>
+    </div>`
+  }
+
+  function buildBaguaData() {
+    const xiantian = [
+      { name: '乾', tip: '天·金', lines: [1, 1, 1], deg: 0, tone: 'qian' },
+      { name: '巽', tip: '风·木', lines: [0, 1, 1], deg: 45, tone: 'xun' },
+      { name: '坎', tip: '水', lines: [0, 1, 0], deg: 90, tone: 'kan' },
+      { name: '艮', tip: '山·土', lines: [0, 0, 1], deg: 135, tone: 'gen' },
+      { name: '坤', tip: '地·土', lines: [0, 0, 0], deg: 180, tone: 'kun' },
+      { name: '震', tip: '雷·木', lines: [1, 0, 0], deg: 225, tone: 'zhen' },
+      { name: '离', tip: '火', lines: [1, 0, 1], deg: 270, tone: 'li' },
+      { name: '兑', tip: '泽·金', lines: [1, 1, 0], deg: 315, tone: 'dui' }
+    ]
+    const houtian = [
+      { name: '离', tip: '火', lines: [1, 0, 1], deg: 0, tone: 'li' },
+      { name: '坤', tip: '地·土', lines: [0, 0, 0], deg: 45, tone: 'kun' },
+      { name: '兑', tip: '泽·金', lines: [1, 1, 0], deg: 90, tone: 'dui' },
+      { name: '乾', tip: '天·金', lines: [1, 1, 1], deg: 135, tone: 'qian' },
+      { name: '坎', tip: '水', lines: [0, 1, 0], deg: 180, tone: 'kan' },
+      { name: '艮', tip: '山·土', lines: [0, 0, 1], deg: 225, tone: 'gen' },
+      { name: '震', tip: '雷·木', lines: [1, 0, 0], deg: 270, tone: 'zhen' },
+      { name: '巽', tip: '风·木', lines: [0, 1, 1], deg: 315, tone: 'xun' }
+    ]
+    const ticks = Array.from({ length: 24 }, (_, i) => {
+      const deg = i * 15
+      return { deg, major: deg % 45 === 0 }
+    })
+    const spokes = [45, 135, 225, 315]
+    return { xiantian, houtian, ticks, spokes }
+  }
+
   function buildFigureHtml(key, caption) {
     const cap = caption ? `<div class="fig-cap">${caption}</div>` : ''
     let body = ''
@@ -1566,41 +1642,11 @@
         return `<span style="transform:rotate(${deg}deg)"><i style="transform:rotate(${-deg}deg)">${t}</i></span>`
       }).join('')}<em>南↑</em></div>`
     } else if (key === 'xiantian-bagua') {
-      body = `<div class="fig-xiantian-bagua">
-        <div class="bagua-circle">
-          <div class="gua-pos pos-s"><span class="gua-symbol">☰</span><span class="gua-name">乾</span><span class="gua-info">天·父</span></div>
-          <div class="gua-pos pos-n"><span class="gua-symbol">☷</span><span class="gua-name">坤</span><span class="gua-info">地·母</span></div>
-          <div class="gua-pos pos-e"><span class="gua-symbol">☲</span><span class="gua-name">离</span><span class="gua-info">火·中女</span></div>
-          <div class="gua-pos pos-w"><span class="gua-symbol">☵</span><span class="gua-name">坎</span><span class="gua-info">水·中男</span></div>
-          <div class="gua-pos pos-se"><span class="gua-symbol">☱</span><span class="gua-name">兑</span><span class="gua-info">泽·少女</span></div>
-          <div class="gua-pos pos-ne"><span class="gua-symbol">☳</span><span class="gua-name">震</span><span class="gua-info">雷·长男</span></div>
-          <div class="gua-pos pos-sw"><span class="gua-symbol">☴</span><span class="gua-name">巽</span><span class="gua-info">风·长女</span></div>
-          <div class="gua-pos pos-nw"><span class="gua-symbol">☶</span><span class="gua-name">艮</span><span class="gua-info">山·少男</span></div>
-          <div class="duidai-line line-ns"></div>
-          <div class="duidai-line line-ew"></div>
-          <div class="duidai-line line-nese"></div>
-          <div class="duidai-line line-nwsw"></div>
-          <div class="center-mark"><span class="center-title">先天</span><span class="center-sub">伏羲</span></div>
-        </div>
-      </div>`
+      const { xiantian, ticks, spokes } = buildBaguaData()
+      body = buildBaguaDiskHtml(xiantian, ticks, spokes, '先天八卦')
     } else if (key === 'houtian-bagua') {
-      body = `<div class="fig-houtian-bagua">
-        <div class="bagua-circle">
-          <div class="gua-pos pos-s"><span class="gua-symbol">☲</span><span class="gua-name">离</span><span class="gua-info">火·夏·午</span></div>
-          <div class="gua-pos pos-n"><span class="gua-symbol">☵</span><span class="gua-name">坎</span><span class="gua-info">水·冬·子</span></div>
-          <div class="gua-pos pos-e"><span class="gua-symbol">☳</span><span class="gua-name">震</span><span class="gua-info">木·春·卯</span></div>
-          <div class="gua-pos pos-w"><span class="gua-symbol">☱</span><span class="gua-name">兑</span><span class="gua-info">金·秋·酉</span></div>
-          <div class="gua-pos pos-se"><span class="gua-symbol">☴</span><span class="gua-name">巽</span><span class="gua-info">木·辰巳</span></div>
-          <div class="gua-pos pos-nw"><span class="gua-symbol">☰</span><span class="gua-name">乾</span><span class="gua-info">金·戌亥</span></div>
-          <div class="gua-pos pos-sw"><span class="gua-symbol">☷</span><span class="gua-name">坤</span><span class="gua-info">土·未申</span></div>
-          <div class="gua-pos pos-ne"><span class="gua-symbol">☶</span><span class="gua-name">艮</span><span class="gua-info">土·丑寅</span></div>
-          <div class="flow-arrow arrow-spring"></div>
-          <div class="flow-arrow arrow-summer"></div>
-          <div class="flow-arrow arrow-autumn"></div>
-          <div class="flow-arrow arrow-winter"></div>
-          <div class="center-mark"><span class="center-title">后天</span><span class="center-sub">文王</span></div>
-        </div>
-      </div>`
+      const { houtian, ticks, spokes } = buildBaguaData()
+      body = buildBaguaDiskHtml(houtian, ticks, spokes, '后天八卦')
     } else if (key === 'bagua-table') {
       const rows = [
         ['☰','乾','正南','西北'],

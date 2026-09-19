@@ -45,130 +45,126 @@
     </view>
 
     <!-- 先天八卦图（伏羲） -->
-    <view class="xiantian-bagua" wx:elif="{{name==='xiantian-bagua'}}">
-      <view class="bagua-circle">
-        <!-- 乾 正南 -->
-        <view class="gua-pos pos-s">
-          <text class="gua-symbol">☰</text>
-          <text class="gua-name">乾</text>
-          <text class="gua-info">天·父</text>
+    <view class="bagua-disk" wx:elif="{{name==='xiantian-bagua'}}">
+      <view class="disk-halo"></view>
+      <view class="disk-plate">
+        <view class="disk-rim disk-rim-outer"></view>
+        <view class="disk-rim disk-rim-mid"></view>
+        <view class="disk-band disk-band-gua"></view>
+        <view class="disk-ring disk-r-outer"></view>
+        <view class="disk-ring disk-r-gua"></view>
+        <view class="disk-ring disk-r-core"></view>
+
+        <view class="disk-layer">
+          <view
+            wx:for="{{xiantianTicks}}"
+            wx:key="deg"
+            class="disk-tick {{item.major ? 'major' : ''}}"
+            style="transform: rotate({{item.deg}}deg)"
+          ></view>
         </view>
-        <!-- 坤 正北 -->
-        <view class="gua-pos pos-n">
-          <text class="gua-symbol">☷</text>
-          <text class="gua-name">坤</text>
-          <text class="gua-info">地·母</text>
+
+        <view class="disk-layer">
+          <view
+            wx:for="{{xiantianSpokes}}"
+            wx:key="*this"
+            class="disk-spoke"
+            style="transform: rotate({{item}}deg)"
+          ></view>
         </view>
-        <!-- 离 正东 -->
-        <view class="gua-pos pos-e">
-          <text class="gua-symbol">☲</text>
-          <text class="gua-name">离</text>
-          <text class="gua-info">火·中女</text>
+
+        <view class="disk-layer">
+          <view
+            wx:for="{{xiantianBagua}}"
+            wx:key="tone"
+            class="disk-gua-item"
+            style="transform: rotate({{item.deg}}deg)"
+          >
+            <view class="disk-gua-content tone-{{item.tone}}" style="transform: rotate({{-item.deg}}deg)">
+              <view class="disk-gua-bars">
+                <view wx:for="{{item.lines}}" wx:for-item="line" wx:key="*this" class="disk-bar {{line ? 'yang' : 'yin'}}"></view>
+              </view>
+              <text class="disk-gua-name">{{item.name}}</text>
+              <text class="disk-gua-tip">{{item.tip}}</text>
+            </view>
+          </view>
         </view>
-        <!-- 坎 正西 -->
-        <view class="gua-pos pos-w">
-          <text class="gua-symbol">☵</text>
-          <text class="gua-name">坎</text>
-          <text class="gua-info">水·中男</text>
+
+        <view class="disk-center">
+          <view class="disk-center-ring"></view>
+          <view class="disk-taiji">
+            <view class="half yang"></view>
+            <view class="half yin"></view>
+            <view class="eye yang-eye"></view>
+            <view class="eye yin-eye"></view>
+            <view class="dot yang-dot"></view>
+            <view class="dot yin-dot"></view>
+          </view>
         </view>
-        <!-- 兑 东南 -->
-        <view class="gua-pos pos-se">
-          <text class="gua-symbol">☱</text>
-          <text class="gua-name">兑</text>
-          <text class="gua-info">泽·少女</text>
-        </view>
-        <!-- 震 东北 -->
-        <view class="gua-pos pos-ne">
-          <text class="gua-symbol">☳</text>
-          <text class="gua-name">震</text>
-          <text class="gua-info">雷·长男</text>
-        </view>
-        <!-- 巽 西南 -->
-        <view class="gua-pos pos-sw">
-          <text class="gua-symbol">☴</text>
-          <text class="gua-name">巽</text>
-          <text class="gua-info">风·长女</text>
-        </view>
-        <!-- 艮 西北 -->
-        <view class="gua-pos pos-nw">
-          <text class="gua-symbol">☶</text>
-          <text class="gua-name">艮</text>
-          <text class="gua-info">山·少男</text>
-        </view>
-        <!-- 对待连线 -->
-        <view class="duidai-line line-ns"></view>
-        <view class="duidai-line line-ew"></view>
-        <view class="duidai-line line-nese"></view>
-        <view class="duidai-line line-nwsw"></view>
-        <!-- 中心标识 -->
-        <view class="center-mark">
-          <text class="center-title">先天</text>
-          <text class="center-sub">伏羲</text>
-        </view>
+
+        <view class="disk-label">先天八卦</view>
       </view>
     </view>
 
     <!-- 后天八卦图（文王） -->
-    <view class="houtian-bagua" wx:elif="{{name==='houtian-bagua'}}">
-      <view class="bagua-circle">
-        <!-- 离 正南 -->
-        <view class="gua-pos pos-s">
-          <text class="gua-symbol">☲</text>
-          <text class="gua-name">离</text>
-          <text class="gua-info">火·夏·午</text>
+    <view class="bagua-disk" wx:elif="{{name==='houtian-bagua'}}">
+      <view class="disk-halo"></view>
+      <view class="disk-plate">
+        <view class="disk-rim disk-rim-outer"></view>
+        <view class="disk-rim disk-rim-mid"></view>
+        <view class="disk-band disk-band-gua"></view>
+        <view class="disk-ring disk-r-outer"></view>
+        <view class="disk-ring disk-r-gua"></view>
+        <view class="disk-ring disk-r-core"></view>
+
+        <view class="disk-layer">
+          <view
+            wx:for="{{houtianTicks}}"
+            wx:key="deg"
+            class="disk-tick {{item.major ? 'major' : ''}}"
+            style="transform: rotate({{item.deg}}deg)"
+          ></view>
         </view>
-        <!-- 坎 正北 -->
-        <view class="gua-pos pos-n">
-          <text class="gua-symbol">☵</text>
-          <text class="gua-name">坎</text>
-          <text class="gua-info">水·冬·子</text>
+
+        <view class="disk-layer">
+          <view
+            wx:for="{{houtianSpokes}}"
+            wx:key="*this"
+            class="disk-spoke"
+            style="transform: rotate({{item}}deg)"
+          ></view>
         </view>
-        <!-- 震 正东 -->
-        <view class="gua-pos pos-e">
-          <text class="gua-symbol">☳</text>
-          <text class="gua-name">震</text>
-          <text class="gua-info">木·春·卯</text>
+
+        <view class="disk-layer">
+          <view
+            wx:for="{{houtianBagua}}"
+            wx:key="tone"
+            class="disk-gua-item"
+            style="transform: rotate({{item.deg}}deg)"
+          >
+            <view class="disk-gua-content tone-{{item.tone}}" style="transform: rotate({{-item.deg}}deg)">
+              <view class="disk-gua-bars">
+                <view wx:for="{{item.lines}}" wx:for-item="line" wx:key="*this" class="disk-bar {{line ? 'yang' : 'yin'}}"></view>
+              </view>
+              <text class="disk-gua-name">{{item.name}}</text>
+              <text class="disk-gua-tip">{{item.tip}}</text>
+            </view>
+          </view>
         </view>
-        <!-- 兑 正西 -->
-        <view class="gua-pos pos-w">
-          <text class="gua-symbol">☱</text>
-          <text class="gua-name">兑</text>
-          <text class="gua-info">金·秋·酉</text>
+
+        <view class="disk-center">
+          <view class="disk-center-ring"></view>
+          <view class="disk-taiji">
+            <view class="half yang"></view>
+            <view class="half yin"></view>
+            <view class="eye yang-eye"></view>
+            <view class="eye yin-eye"></view>
+            <view class="dot yang-dot"></view>
+            <view class="dot yin-dot"></view>
+          </view>
         </view>
-        <!-- 巽 东南 -->
-        <view class="gua-pos pos-se">
-          <text class="gua-symbol">☴</text>
-          <text class="gua-name">巽</text>
-          <text class="gua-info">木·辰巳</text>
-        </view>
-        <!-- 乾 西北 -->
-        <view class="gua-pos pos-nw">
-          <text class="gua-symbol">☰</text>
-          <text class="gua-name">乾</text>
-          <text class="gua-info">金·戌亥</text>
-        </view>
-        <!-- 坤 西南 -->
-        <view class="gua-pos pos-sw">
-          <text class="gua-symbol">☷</text>
-          <text class="gua-name">坤</text>
-          <text class="gua-info">土·未申</text>
-        </view>
-        <!-- 艮 东北 -->
-        <view class="gua-pos pos-ne">
-          <text class="gua-symbol">☶</text>
-          <text class="gua-name">艮</text>
-          <text class="gua-info">土·丑寅</text>
-        </view>
-        <!-- 四时流行指示箭头 -->
-        <view class="flow-arrow arrow-spring"></view>
-        <view class="flow-arrow arrow-summer"></view>
-        <view class="flow-arrow arrow-autumn"></view>
-        <view class="flow-arrow arrow-winter"></view>
-        <!-- 中心标识 -->
-        <view class="center-mark">
-          <text class="center-title">后天</text>
-          <text class="center-sub">文王</text>
-        </view>
+
+        <view class="disk-label">后天八卦</view>
       </view>
     </view>
 
