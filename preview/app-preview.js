@@ -1560,11 +1560,62 @@
       body = `<div class="fig-tri"><div><b>变</b><i>迁流不息</i></div><div><b>简</b><i>执简驭繁</i></div><div><b>常</b><i>变中有则</i></div></div>`
     } else if (key === 'xiang-shu-li') {
       body = `<div class="fig-rings"><span class="r3">象</span><span class="r2">数</span><span class="r1">理</span></div>`
-    } else if (key === 'bagua' || key === 'bagua-table') {
+    } else if (key === 'bagua') {
       body = `<div class="fig-bagua">${['离☲','坤☷','兑☱','乾☰','坎☵','艮☶','震☳','巽☴'].map((t, i) => {
         const deg = i * 45
         return `<span style="transform:rotate(${deg}deg)"><i style="transform:rotate(${-deg}deg)">${t}</i></span>`
       }).join('')}<em>南↑</em></div>`
+    } else if (key === 'xiantian-bagua') {
+      body = `<div class="fig-xiantian-bagua">
+        <div class="bagua-circle">
+          <div class="gua-pos pos-s"><span class="gua-symbol">☰</span><span class="gua-name">乾</span><span class="gua-info">天·父</span></div>
+          <div class="gua-pos pos-n"><span class="gua-symbol">☷</span><span class="gua-name">坤</span><span class="gua-info">地·母</span></div>
+          <div class="gua-pos pos-e"><span class="gua-symbol">☲</span><span class="gua-name">离</span><span class="gua-info">火·中女</span></div>
+          <div class="gua-pos pos-w"><span class="gua-symbol">☵</span><span class="gua-name">坎</span><span class="gua-info">水·中男</span></div>
+          <div class="gua-pos pos-se"><span class="gua-symbol">☱</span><span class="gua-name">兑</span><span class="gua-info">泽·少女</span></div>
+          <div class="gua-pos pos-ne"><span class="gua-symbol">☳</span><span class="gua-name">震</span><span class="gua-info">雷·长男</span></div>
+          <div class="gua-pos pos-sw"><span class="gua-symbol">☴</span><span class="gua-name">巽</span><span class="gua-info">风·长女</span></div>
+          <div class="gua-pos pos-nw"><span class="gua-symbol">☶</span><span class="gua-name">艮</span><span class="gua-info">山·少男</span></div>
+          <div class="duidai-line line-ns"></div>
+          <div class="duidai-line line-ew"></div>
+          <div class="duidai-line line-nese"></div>
+          <div class="duidai-line line-nwsw"></div>
+          <div class="center-mark"><span class="center-title">先天</span><span class="center-sub">伏羲</span></div>
+        </div>
+      </div>`
+    } else if (key === 'houtian-bagua') {
+      body = `<div class="fig-houtian-bagua">
+        <div class="bagua-circle">
+          <div class="gua-pos pos-s"><span class="gua-symbol">☲</span><span class="gua-name">离</span><span class="gua-info">火·夏·午</span></div>
+          <div class="gua-pos pos-n"><span class="gua-symbol">☵</span><span class="gua-name">坎</span><span class="gua-info">水·冬·子</span></div>
+          <div class="gua-pos pos-e"><span class="gua-symbol">☳</span><span class="gua-name">震</span><span class="gua-info">木·春·卯</span></div>
+          <div class="gua-pos pos-w"><span class="gua-symbol">☱</span><span class="gua-name">兑</span><span class="gua-info">金·秋·酉</span></div>
+          <div class="gua-pos pos-se"><span class="gua-symbol">☴</span><span class="gua-name">巽</span><span class="gua-info">木·辰巳</span></div>
+          <div class="gua-pos pos-nw"><span class="gua-symbol">☰</span><span class="gua-name">乾</span><span class="gua-info">金·戌亥</span></div>
+          <div class="gua-pos pos-sw"><span class="gua-symbol">☷</span><span class="gua-name">坤</span><span class="gua-info">土·未申</span></div>
+          <div class="gua-pos pos-ne"><span class="gua-symbol">☶</span><span class="gua-name">艮</span><span class="gua-info">土·丑寅</span></div>
+          <div class="flow-arrow arrow-spring"></div>
+          <div class="flow-arrow arrow-summer"></div>
+          <div class="flow-arrow arrow-autumn"></div>
+          <div class="flow-arrow arrow-winter"></div>
+          <div class="center-mark"><span class="center-title">后天</span><span class="center-sub">文王</span></div>
+        </div>
+      </div>`
+    } else if (key === 'bagua-table') {
+      const rows = [
+        ['☰','乾','正南','西北'],
+        ['☷','坤','正北','西南'],
+        ['☲','离','正东','正南'],
+        ['☵','坎','正西','正北'],
+        ['☳','震','东北','正东'],
+        ['☱','兑','东南','正西'],
+        ['☴','巽','西南','东南'],
+        ['☶','艮','西北','东北']
+      ]
+      body = `<div class="fig-bagua-table">
+        <div class="table-header"><span>八卦</span><span>先天方位</span><span>后天方位</span></div>
+        ${rows.map(r => `<div class="table-row"><div class="td-gua"><span class="sym">${r[0]}</span><span>${r[1]}</span></div><div class="td-xian">${r[2]}</div><div class="td-hou">${r[3]}</div></div>`).join('')}
+      </div>`
     } else if (key === 'yao-four') {
       body = `<div class="fig-yao4">
         <div>${yaoBar('yang')}<span>少阳 —</span></div>
