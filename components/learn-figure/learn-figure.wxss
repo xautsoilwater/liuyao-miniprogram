@@ -460,3 +460,340 @@
 
 .fallback .gua-big { font-size: 80rpx; color: var(--bronze); }
 .muted { color: var(--mist); }
+
+/* ═══════════════════════════════════════════════════════════════
+   先天/后天八卦盘：对标罗盘质感
+   多层同心圆、刻度、真爻画、宣纸底、朱砂墨色
+   ══════════════════════════════════════════════════════════════ */
+
+.bagua-disk {
+  --disk-size: 420rpx;
+  position: relative;
+  width: var(--disk-size);
+  height: var(--disk-size);
+  margin: 0 auto;
+}
+
+.disk-halo {
+  position: absolute;
+  left: -20rpx;
+  top: -20rpx;
+  width: calc(var(--disk-size) + 40rpx);
+  height: calc(var(--disk-size) + 40rpx);
+  border-radius: 50%;
+  background: rgba(122, 98, 64, 0.05);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.disk-plate {
+  position: relative;
+  width: var(--disk-size);
+  height: var(--disk-size);
+  border-radius: 50%;
+  overflow: visible;
+  background: #e6d4b0;
+  box-shadow:
+    inset 0 0 0 2rpx rgba(20, 15, 12, 0.3),
+    inset 0 0 0 12rpx rgba(248, 240, 222, 0.5),
+    inset 0 0 0 16rpx rgba(90, 70, 40, 0.18),
+    0 0 0 2rpx rgba(70, 52, 28, 0.4),
+    0 12rpx 28rpx rgba(20, 15, 12, 0.12);
+}
+
+.disk-rim {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+.disk-rim-outer {
+  inset: 1%;
+  border: 2rpx solid rgba(20, 15, 12, 0.2);
+}
+.disk-rim-mid {
+  inset: 2.5%;
+  border: 1rpx solid rgba(246, 237, 216, 0.5);
+}
+
+.disk-band {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 1;
+  background: transparent;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.disk-band-gua {
+  inset: 22%;
+  border: 32rpx solid rgba(143, 38, 31, 0.04);
+}
+
+.disk-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1rpx solid rgba(20, 15, 12, 0.1);
+  pointer-events: none;
+  z-index: 2;
+}
+.disk-ring.disk-r-outer { inset: 3.5%; border-color: rgba(20, 15, 12, 0.18); }
+.disk-ring.disk-r-gua { inset: 34%; border-color: rgba(143, 38, 31, 0.18); }
+.disk-ring.disk-r-core { inset: 42%; border-color: rgba(20, 15, 12, 0.1); }
+
+.disk-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.disk-tick {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1rpx;
+  height: calc(var(--disk-size) / 2 - 6rpx);
+  margin-left: -0.5rpx;
+  margin-top: calc(0px - var(--disk-size) / 2 + 6rpx);
+  transform-origin: 50% calc(var(--disk-size) / 2 - 6rpx);
+  background: linear-gradient(to bottom, rgba(20, 15, 12, 0.14) 0, rgba(20, 15, 12, 0.14) 5rpx, transparent 5rpx);
+  pointer-events: none;
+}
+.disk-tick.major {
+  width: 2rpx;
+  margin-left: -1rpx;
+  background: linear-gradient(to bottom, rgba(143, 38, 31, 0.4) 0, rgba(143, 38, 31, 0.4) 10rpx, transparent 10rpx);
+}
+
+.disk-spoke {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1rpx;
+  height: 22%;
+  margin-left: -0.5rpx;
+  margin-top: -22%;
+  transform-origin: 50% 100%;
+  background: rgba(20, 15, 12, 0.1);
+  pointer-events: none;
+}
+
+.disk-dir-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+.disk-dir-lab {
+  position: absolute;
+  left: 0;
+  top: -164rpx;
+  transform: translateX(-50%);
+  font-size: 18rpx;
+  letter-spacing: 0.12em;
+  color: rgba(143, 38, 31, 0.65);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.disk-gua-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+.disk-gua-content {
+  position: absolute;
+  left: 0;
+  top: -90rpx;
+  width: 72rpx;
+  margin-left: -36rpx;
+  text-align: center;
+  line-height: 1.05;
+  --gua: var(--ink);
+}
+.disk-gua-content.tone-li,
+.disk-gua-content.tone-kun,
+.disk-gua-content.tone-dui,
+.disk-gua-content.tone-qian,
+.disk-gua-content.tone-kan,
+.disk-gua-content.tone-gen,
+.disk-gua-content.tone-zhen,
+.disk-gua-content.tone-xun { --gua: var(--ink); }
+
+.disk-gua-bars {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rpx;
+  margin: 0 auto 5rpx;
+  width: 36rpx;
+}
+.disk-bar {
+  width: 36rpx;
+  height: 4rpx;
+  background: var(--gua);
+  border-radius: 1rpx;
+}
+.disk-bar.yin {
+  background: linear-gradient(
+    to right,
+    var(--gua) 0,
+    var(--gua) 36%,
+    transparent 36%,
+    transparent 64%,
+    var(--gua) 64%,
+    var(--gua) 100%
+  );
+}
+.disk-gua-name {
+  display: block;
+  font-size: 22rpx;
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
+  color: var(--gua);
+  font-weight: 700;
+}
+.disk-gua-tip {
+  display: block;
+  margin-top: 2rpx;
+  font-size: 15rpx;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  opacity: 0.85;
+  color: var(--gua);
+}
+
+.disk-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100rpx;
+  height: 100rpx;
+  margin: -50rpx 0 0 -50rpx;
+  border-radius: 50%;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.disk-center-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #f0e4c8;
+  border: 1rpx solid rgba(20, 15, 12, 0.16);
+  box-shadow:
+    0 0 0 4rpx rgba(250, 243, 228, 0.4),
+    0 0 0 6rpx rgba(143, 38, 31, 0.08),
+    inset 0 0 0 1rpx rgba(246, 237, 216, 0.6);
+}
+.disk-taiji {
+  position: relative;
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f4ead6;
+  box-shadow: inset 0 0 0 2rpx rgba(20, 15, 12, 0.35);
+  z-index: 2;
+}
+.disk-taiji .half { position: absolute; top: 0; width: 50%; height: 100%; }
+.disk-taiji .yang { left: 0; background: #f4ead6; }
+.disk-taiji .yin { right: 0; background: #140f0c; }
+.disk-taiji .eye {
+  position: absolute; left: 19rpx; width: 38rpx; height: 38rpx; border-radius: 50%;
+}
+.disk-taiji .yang-eye { top: 0; background: #140f0c; }
+.disk-taiji .yin-eye { bottom: 0; background: #f4ead6; }
+.disk-taiji .dot {
+  position: absolute; left: 30rpx; width: 14rpx; height: 14rpx; border-radius: 50%; z-index: 2;
+}
+.disk-taiji .yang-dot { top: 14rpx; background: #f4ead6; }
+.disk-taiji .yin-dot { bottom: 14rpx; background: #140f0c; }
+
+.disk-label {
+  position: absolute;
+  left: 50%;
+  bottom: 8rpx;
+  transform: translateX(-50%);
+  font-size: 19rpx;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  color: rgba(143, 38, 31, 0.75);
+  font-weight: 700;
+  z-index: 8;
+  pointer-events: none;
+}
+
+/* 先后天对照：两盘并陈 */
+.bagua-compare {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24rpx;
+  width: 100%;
+}
+.compare-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+.compare-disk.mini {
+  --disk-size: 280rpx;
+}
+.compare-disk.mini .disk-gua-content {
+  top: -60rpx;
+  width: 56rpx;
+  margin-left: -28rpx;
+}
+.compare-disk.mini .disk-gua-bars {
+  width: 28rpx;
+  gap: 2rpx;
+}
+.compare-disk.mini .disk-bar {
+  width: 28rpx;
+  height: 3rpx;
+}
+.compare-disk.mini .disk-gua-name {
+  font-size: 19rpx;
+}
+.compare-disk.mini .disk-gua-tip {
+  display: none;
+}
+.compare-disk.mini .disk-center {
+  width: 76rpx;
+  height: 76rpx;
+  margin: -38rpx 0 0 -38rpx;
+}
+.compare-disk.mini .disk-taiji {
+  width: 56rpx;
+  height: 56rpx;
+}
+.compare-disk.mini .disk-taiji .eye { left: 14rpx; width: 28rpx; height: 28rpx; }
+.compare-disk.mini .disk-taiji .dot { left: 22rpx; width: 10rpx; height: 10rpx; }
+.compare-disk.mini .disk-taiji .yang-dot { top: 10rpx; }
+.compare-disk.mini .disk-taiji .yin-dot { bottom: 10rpx; }
+.compare-disk.mini .disk-label {
+  font-size: 17rpx;
+  bottom: 6rpx;
+}
+.compare-disk.mini .disk-band-gua {
+  inset: 22%;
+  border-width: 24rpx;
+}
+.compare-disk.mini .disk-ring.disk-r-gua { inset: 32%; }
+.compare-disk.mini .disk-ring.disk-r-core { inset: 40%; }
+
+.compare-label {
+  font-size: 24rpx;
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
+  color: var(--mist);
+  font-weight: 600;
+}
