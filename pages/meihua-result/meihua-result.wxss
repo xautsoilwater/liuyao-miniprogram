@@ -1,0 +1,227 @@
+.head {
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.gua-name {
+  font-size: 50rpx;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  font-weight: 600;
+  margin: 12rpx 0 8rpx;
+}
+
+.gua-meta {
+  font-size: 28rpx;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  margin-top: 4rpx;
+}
+
+.ornament {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: var(--bronze);
+  letter-spacing: 0.12em;
+}
+
+.q {
+  margin-top: 10rpx;
+  letter-spacing: 0.06em;
+}
+
+.ask-box {
+  margin: 0 0 20rpx;
+  padding: 18rpx 20rpx;
+  border: 1rpx solid var(--line-strong);
+  background: rgba(246, 237, 216, 0.55);
+}
+
+.ask-lab {
+  font-size: 24rpx;
+  letter-spacing: 0.28em;
+  color: var(--bronze);
+  margin-bottom: 6rpx;
+}
+
+.ask-q {
+  font-size: 30rpx;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+}
+
+.verdict {
+  margin: 8rpx 0 24rpx;
+  padding: 28rpx 24rpx;
+  border: 2rpx solid var(--line-strong);
+  text-align: center;
+  background: rgba(244, 234, 214, 0.65);
+}
+
+.verdict.good { border-color: rgba(70, 110, 75, 0.45); }
+.verdict.bad { border-color: rgba(158, 47, 36, 0.5); }
+
+.verdict .summary {
+  margin: 14rpx 0 10rpx;
+  font-size: 38rpx;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.verdict .reply {
+  margin: 0 0 12rpx;
+  font-size: 30rpx;
+  letter-spacing: 0.08em;
+  color: var(--cinnabar);
+  font-weight: 600;
+}
+
+.verdict .judgment {
+  margin: 0 4rpx 12rpx;
+  font-size: 28rpx;
+  color: var(--ink-2);
+  text-align: justify;
+  line-height: 1.85;
+  letter-spacing: 0.04em;
+}
+
+.verdict .advice {
+  margin-top: 4rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx dashed var(--line-strong);
+  font-size: 26rpx;
+  color: var(--bronze);
+  text-align: justify;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+}
+
+.tri-board {
+  display: flex;
+  gap: 8rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid var(--line-strong);
+  background: rgba(246, 237, 216, 0.7);
+}
+
+.tri-col {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 6rpx;
+  border-left: 1rpx solid var(--line);
+}
+
+.tri-col:first-child { border-left: none; }
+
+.tri-lab {
+  font-size: 24rpx;
+  letter-spacing: 0.28em;
+  color: var(--bronze);
+}
+
+.tri-name {
+  margin-top: 8rpx;
+  font-size: 32rpx;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.tri-sym {
+  margin-top: 6rpx;
+  font-size: 30rpx;
+  letter-spacing: 0.08em;
+}
+
+.tri-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+}
+
+.yao-board {
+  padding: 12rpx 8rpx 20rpx;
+  border-top: 1rpx solid var(--line);
+  margin-bottom: 8rpx;
+}
+
+.yao-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 10rpx 4rpx;
+}
+
+.y-name {
+  width: 72rpx;
+  font-size: 26rpx;
+  color: var(--bronze);
+  letter-spacing: 0.08em;
+}
+
+.yao-row .yao-bar {
+  flex: 1;
+  height: 10rpx;
+  margin: 0;
+}
+
+.y-tag {
+  width: 88rpx;
+  text-align: right;
+  font-size: 26rpx;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+}
+
+.yao-row .yao-bar.moving {
+  outline: 2rpx solid rgba(158, 47, 36, 0.35);
+}
+
+.guide {
+  margin-top: 8rpx;
+  padding-top: 8rpx;
+}
+
+.guide-head {
+  text-align: center;
+  margin-bottom: 12rpx;
+}
+
+.guide-title {
+  margin-top: 10rpx;
+  font-size: 32rpx;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+}
+
+.guide-sec {
+  padding: 10rpx 0;
+  border-top: 1rpx solid var(--line);
+}
+
+.guide-sec-title {
+  font-size: 30rpx;
+  letter-spacing: 0.2em;
+  color: var(--bronze);
+  margin: 12rpx 0 8rpx;
+}
+
+.guide-item {
+  padding: 12rpx 0;
+  border-top: 1rpx dashed var(--line);
+  font-size: 30rpx;
+  color: var(--mist);
+  text-align: justify;
+  line-height: 1.8;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.half { flex: 1; }

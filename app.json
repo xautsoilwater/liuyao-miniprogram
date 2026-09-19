@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/ask/ask",
+    "pages/cast/cast",
+    "pages/result/result",
+    "pages/interpret/interpret",
+    "pages/meihua/meihua",
+    "pages/meihua-result/meihua-result",
+    "pages/account/account",
+    "pages/learn/learn",
+    "pages/learn-detail/learn-detail",
+    "pages/history/history"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#ebe0c8",
+    "backgroundTextStyle": "dark"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于罗盘测向，读取手机朝向（非收集行踪轨迹）"
+    }
+  },
+  "requiredPrivateInfos": [],
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

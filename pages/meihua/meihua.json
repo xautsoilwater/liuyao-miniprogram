@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "梅花易数",
+  "usingComponents": {
+    "nav-back": "/components/nav-back/nav-back"
+  },
+  "disableSwipeBack": false
+}

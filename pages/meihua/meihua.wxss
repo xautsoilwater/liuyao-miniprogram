@@ -1,0 +1,153 @@
+.section-head {
+  margin-bottom: 28rpx;
+}
+
+.field {
+  margin-bottom: 24rpx;
+}
+
+.field-label {
+  letter-spacing: 0.28em;
+  font-size: 26rpx;
+  color: var(--bronze);
+  margin-bottom: 10rpx;
+}
+
+.q-input,
+.num-input {
+  padding: 18rpx 0;
+  border: none;
+  border-bottom: 1rpx solid var(--line-strong);
+  background: transparent;
+  font-size: 32rpx;
+  letter-spacing: 0.08em;
+}
+
+.ask-summary {
+  margin-bottom: 28rpx;
+  padding-bottom: 18rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.ask-summary .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.ask-summary .field-label {
+  margin-bottom: 0;
+}
+
+.change-link {
+  font-size: 24rpx;
+  letter-spacing: 0.16em;
+  color: var(--cinnabar);
+}
+
+.ask-q {
+  margin-top: 12rpx;
+  font-size: 32rpx;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.mode-row {
+  display: flex;
+  margin-bottom: 28rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.mode {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  font-size: 30rpx;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  border-bottom: 4rpx solid transparent;
+  margin-bottom: -1rpx;
+}
+
+.mode.on {
+  color: var(--cinnabar);
+  border-bottom-color: var(--cinnabar);
+}
+
+.stage {
+  padding: 12rpx 0 28rpx;
+}
+
+.hint {
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  margin-bottom: 24rpx;
+  text-align: justify;
+}
+
+.num-row {
+  display: flex;
+  gap: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.num-field {
+  flex: 1;
+}
+
+.tip {
+  font-size: 26rpx;
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+  margin: 8rpx 0 28rpx;
+}
+
+.time-card {
+  text-align: center;
+  padding: 36rpx 20rpx;
+  border: 1rpx solid var(--line-strong);
+  background: rgba(244, 234, 214, 0.55);
+  margin-bottom: 20rpx;
+}
+
+.time-lab {
+  letter-spacing: 0.36em;
+  color: var(--bronze);
+  font-size: 26rpx;
+  margin-bottom: 12rpx;
+}
+
+.time-val {
+  font-size: 34rpx;
+  letter-spacing: 0.12em;
+}
+
+.howto {
+  margin: 28rpx 0 0;
+  padding: 20rpx 22rpx;
+  border: 1rpx solid var(--line-strong);
+  background: rgba(244, 234, 214, 0.55);
+}
+
+.howto-title {
+  font-size: 28rpx;
+  letter-spacing: 0.28em;
+  color: var(--bronze);
+  margin-bottom: 12rpx;
+}
+
+.howto-item {
+  font-size: 28rpx;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  line-height: 1.75;
+  padding: 6rpx 0;
+  border-top: 1rpx dashed var(--line);
+}
+
+.howto-item:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}

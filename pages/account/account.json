@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "账户",
+  "usingComponents": {
+    "nav-back": "/components/nav-back/nav-back"
+  },
+  "disableSwipeBack": false
+}

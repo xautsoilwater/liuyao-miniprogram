@@ -1,0 +1,155 @@
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.topic-hint {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: var(--bronze);
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+}
+
+.ask-box {
+  margin-top: 16rpx;
+  padding: 18rpx 20rpx;
+  border: 1rpx solid var(--line-strong);
+  background: rgba(250, 246, 234, 0.55);
+}
+
+.ask-lab {
+  font-size: 22rpx;
+  letter-spacing: 0.28em;
+  color: var(--bronze);
+  margin-bottom: 6rpx;
+}
+
+.ask-q {
+  font-size: 32rpx;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+.topic {
+  padding: 12rpx 18rpx;
+  border: 1rpx solid var(--line-strong);
+  font-size: 28rpx;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  background: transparent;
+}
+
+.topic.on {
+  color: #ffffff;
+  border-color: #756e64;
+  background: #8d8579;
+}
+
+.verdict {
+  margin: 16rpx 0 20rpx;
+  padding: 28rpx 24rpx;
+  border: 2rpx solid var(--line-strong);
+  text-align: center;
+  background: rgba(244, 234, 214, 0.65);
+}
+
+.verdict.good {
+  border-color: rgba(70, 110, 75, 0.45);
+}
+
+.footer-actions {
+  display: flex;
+  gap: 16rpx;
+  margin: 28rpx 0 20rpx;
+}
+
+.half {
+  flex: 1;
+}
+
+.verdict.bad {
+  border-color: rgba(158, 47, 36, 0.5);
+}
+
+.verdict .summary {
+  margin: 14rpx 0 10rpx;
+  font-size: 44rpx;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.verdict .reply {
+  margin: 0 0 12rpx;
+  font-size: 32rpx;
+  letter-spacing: 0.08em;
+  color: var(--cinnabar);
+  font-weight: 600;
+}
+
+.verdict .judgment {
+  margin: 0 4rpx 12rpx;
+  font-size: 30rpx;
+  color: var(--ink-2);
+  text-align: justify;
+  line-height: 1.85;
+  letter-spacing: 0.04em;
+}
+
+.verdict .advice {
+  margin-top: 4rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx dashed var(--line-strong);
+  font-size: 28rpx;
+  color: var(--bronze);
+  text-align: justify;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+}
+
+.section {
+  padding: 8rpx 0 20rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.sec-title {
+  font-size: 30rpx;
+  letter-spacing: 0.2em;
+  margin: 18rpx 0 8rpx;
+  color: var(--bronze);
+}
+
+.sec-item {
+  padding: 12rpx 0;
+  border-top: 1rpx dashed var(--line);
+  font-size: 30rpx;
+  color: var(--mist);
+  text-align: justify;
+  line-height: 1.8;
+}
+
+.verdict .pointer {
+  margin-top: 18rpx;
+  padding: 18rpx 20rpx;
+  border-left: 6rpx solid var(--cinnabar);
+  background: rgba(255, 255, 255, 0.34);
+  color: var(--ink);
+  font-size: 28rpx;
+  line-height: 1.75;
+  text-align: justify;
+}
+
+.verdict .pointer-label {
+  margin-right: 14rpx;
+  color: var(--cinnabar);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}

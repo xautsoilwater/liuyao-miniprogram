@@ -1,0 +1,146 @@
+<view
+  class="page account"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+
+  <view class="section-head">
+    <view class="title-zh">账户</view>
+    <view class="subtitle">首次登录即注册 · 无需另设密码</view>
+  </view>
+
+  <view class="panel profile" wx:if="{{user && !editing}}">
+    <view class="status-line"><view class="status-dot"></view>已登录</view>
+    <view class="avatar-wrap">
+      <image wx:if="{{user.avatarUrl}}" class="avatar" src="{{user.avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar placeholder">易</view>
+    </view>
+    <view class="name">{{user.nickName}}</view>
+    <view class="muted meta">本机账户 · {{loginText}}</view>
+
+    <view class="account-facts">
+      <view class="fact-row">
+        <text>账户状态</text>
+        <text class="fact-value">已登录</text>
+      </view>
+      <view class="fact-row">
+        <text>注册时间</text>
+        <text class="fact-value">{{registeredText}}</text>
+      </view>
+      <view class="fact-row">
+        <text>数据同步</text>
+        <text class="fact-value">仅此设备</text>
+      </view>
+    </view>
+
+    <view class="privacy-note">
+      昵称、头像、卦例与学习记录目前只保存在本机；退出不会删除历史记录。
+    </view>
+
+    <view class="action-grid">
+      <button class="btn-ghost" bindtap="onEditProfile">编辑资料</button>
+      <button class="btn-ghost" bindtap="onLogout">退出登录</button>
+    </view>
+    <view class="danger-link" bindtap="onDeleteAccount">注销本机账户</view>
+  </view>
+
+  <view class="panel edit-panel" wx:elif="{{user && editing}}">
+    <view class="panel-title">编辑账户资料</view>
+    <view class="hint muted">头像与昵称仅用于本机账户展示，可随时修改。</view>
+
+    <view class="avatar-field">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+        <view wx:else class="avatar placeholder">选</view>
+      </button>
+      <view class="muted avatar-lab">点击更换头像</view>
+    </view>
+
+    <view class="field">
+      <view class="field-label">昵称</view>
+      <input
+        class="nick-input"
+        type="nickname"
+        maxlength="20"
+        placeholder="填写昵称或自取雅号"
+        value="{{nickName}}"
+        bindinput="onNickInput"
+        bindblur="onNickBlur"
+      />
+    </view>
+
+    <view class="action-grid">
+      <button class="btn-ghost" bindtap="onCancelEdit" disabled="{{saving}}">取消</button>
+      <button class="btn-primary" bindtap="onSaveProfile" loading="{{saving}}" disabled="{{saving}}">
+        {{saving ? '保存中…' : '保存资料'}}
+      </button>
+    </view>
+  </view>
+
+  <view class="panel login" wx:else>
+    <view class="welcome-card" wx:if="{{hasAccount}}">
+      <image wx:if="{{account.avatarUrl}}" class="avatar small-avatar" src="{{account.avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar placeholder small-avatar">易</view>
+      <view class="welcome-copy">
+        <view class="welcome-title">欢迎回来，{{account.nickName}}</view>
+        <view class="muted welcome-tip">本机账户已存在，取得微信登录凭证后即可继续。</view>
+      </view>
+    </view>
+
+    <block wx:else>
+      <view class="panel-title">创建本机账户</view>
+      <view class="hint muted">取得微信登录凭证后自动创建本机账户。昵称和头像均可选填，不设置则使用默认身份。</view>
+
+      <view class="avatar-field">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+          <view wx:else class="avatar placeholder">选</view>
+        </button>
+        <view class="muted avatar-lab">头像可稍后设置</view>
+      </view>
+
+      <view class="field">
+        <view class="field-label">昵称（选填）</view>
+        <input
+          class="nick-input"
+          type="nickname"
+          maxlength="20"
+          placeholder="不填写则显示“研习者”"
+          value="{{nickName}}"
+          bindinput="onNickInput"
+          bindblur="onNickBlur"
+        />
+      </view>
+    </block>
+
+    <checkbox-group class="consent-row" bindchange="onConsentChange">
+      <label class="consent-label">
+        <checkbox value="agree" checked="{{consent}}" color="#8d2b24" />
+        <text>我已阅读并同意</text>
+      </label>
+      <text class="policy-link" bindtap="onShowAgreement">《用户协议》</text>
+      <text>和</text>
+      <text class="policy-link" bindtap="onShowPrivacy">《隐私说明》</text>
+    </checkbox-group>
+
+    <button
+      class="btn-primary login-button"
+      bindtap="onLogin"
+      loading="{{logging}}"
+      disabled="{{logging || !consent}}"
+    >
+      {{logging ? '验证中…' : (hasAccount ? '微信快捷登录' : '微信登录并注册')}}
+    </button>
+
+    <view class="security-strip">
+      <view class="security-mark">安</view>
+      <view>
+        <view class="security-title">临时凭证不落盘</view>
+        <view class="muted security-copy">wx.login 的临时 code 不保存在手机；第一版资料仅存本机，不会上传。</view>
+      </view>
+    </view>
+
+    <view class="foot muted">暂不登录也可正常起卦、排盘和查看研习内容。</view>
+  </view>
+</view>

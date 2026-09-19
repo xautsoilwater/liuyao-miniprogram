@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "选择所问",
+  "usingComponents": {
+    "nav-back": "/components/nav-back/nav-back"
+  },
+  "disableSwipeBack": false
+}

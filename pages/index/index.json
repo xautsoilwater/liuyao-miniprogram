@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "luopan": "/components/luopan/luopan"
+  },
+  "navigationStyle": "custom"
+}

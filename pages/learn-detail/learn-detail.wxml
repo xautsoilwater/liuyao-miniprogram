@@ -1,0 +1,34 @@
+<view
+  class="page detail"
+  wx:if="{{article}}"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="seal-tag">{{article.categoryLabel || article.category}}</view>
+  <view class="title-zh" style="margin-top:16rpx">{{article.title}}</view>
+  <view class="subtitle">{{article.summary}}</view>
+  <view class="divider"></view>
+
+  <block wx:for="{{article.blocks}}" wx:key="index">
+    <view class="para" wx:if="{{item.type==='p'}}">{{item.text}}</view>
+
+    <view class="quote" wx:elif="{{item.type==='quote'}}">
+      <view class="quote-text">{{item.text}}</view>
+      <view class="quote-from" wx:if="{{item.from}}">—— {{item.from}}</view>
+    </view>
+
+    <view class="list" wx:elif="{{item.type==='list'}}">
+      <view class="list-item" wx:for="{{item.items}}" wx:for-item="li" wx:for-index="j" wx:key="j">
+        <text class="bullet">·</text>
+        <text class="list-text">{{li}}</text>
+      </view>
+    </view>
+
+    <learn-figure wx:elif="{{item.type==='figure'}}" name="{{item.key}}" caption="{{item.caption}}" />
+
+    <view class="note" wx:elif="{{item.type==='note'}}">{{item.text}}</view>
+  </block>
+
+  <view class="detail-foot muted">读竟可回首「研习」续篇，或以卜卦印证时位。</view>
+</view>

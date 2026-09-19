@@ -1,0 +1,63 @@
+<view
+  class="page meihua has-fixed-footer"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="section-head">
+    <view class="title-zh">梅花</view>
+    <view class="subtitle">体用生克 · 本互变</view>
+  </view>
+
+  <view class="mode-row">
+    <view class="mode {{mode==='number'?'on':''}}" data-mode="number" bindtap="setMode">报数</view>
+    <view class="mode {{mode==='time'?'on':''}}" data-mode="time" bindtap="setMode">时间</view>
+    <view class="mode {{mode==='random'?'on':''}}" data-mode="random" bindtap="setMode">随机</view>
+  </view>
+
+  <view class="stage" wx:if="{{mode==='number'}}">
+    <view class="hint muted">静心片刻，随口报两个正整数：先上卦、后下卦。两数不是算出来的，宜诚敬一念，报后勿改。</view>
+    <view class="num-row">
+      <view class="num-field">
+        <view class="field-label">上卦数</view>
+        <input class="num-input" type="number" value="{{numA}}" bindinput="onNumA" placeholder="如 5" />
+      </view>
+      <view class="num-field">
+        <view class="field-label">下卦数</view>
+        <input class="num-input" type="number" value="{{numB}}" bindinput="onNumB" placeholder="如 7" />
+      </view>
+    </view>
+    <view class="tip muted">先天：乾1兑2离3震4巽5坎6艮7坤8；两数之和取动爻。</view>
+    <view class="howto">
+      <view class="howto-title">数一般如何取</view>
+      <view class="howto-item">触目成数：眼前人、车、字数、楼层等随手所见</view>
+      <view class="howto-item">闻声成数：鸟叫几声、敲门几下、旁人报出的数字</view>
+      <view class="howto-item">时间成数：此刻时、分，或手表上跳入眼帘的数</view>
+      <view class="howto-item">心念成数：静心时脑海中自然浮现的两数</view>
+    </view>
+  </view>
+
+  <view class="stage" wx:elif="{{mode==='time'}}">
+    <view class="hint muted">以此时此刻的农历年支、农历月日、时支起卦。宜诚敬一念，一事一问。</view>
+    <view class="time-card">
+      <view class="time-lab">此刻</view>
+      <view class="time-val">{{nowText}}</view>
+    </view>
+    <view class="tip muted">上卦＝农历年支数＋农历月＋农历日；下卦再加时支数；总数取动爻。</view>
+  </view>
+
+  <view class="stage" wx:else>
+    <view class="hint muted">随机得两数起卦，便于练习体用；正式决疑仍宜报数或时间。</view>
+  </view>
+
+  <view class="foot muted">教学演示 · 与六爻铜钱法对照学习</view>
+</view>
+
+<view class="footer-actions">
+  <button class="btn-ghost half" bindtap="onBack">返回</button>
+  <button wx:if="{{mode === 'number'}}" class="btn-primary half" bindtap="submitNumber">起卦</button>
+  <button wx:elif="{{mode === 'time'}}" class="btn-primary half" bindtap="submitTime">按此刻起卦</button>
+  <button wx:else class="btn-primary half" bindtap="submitRandom" disabled="{{rolling}}">
+    {{rolling ? '起卦中…' : '随机起卦'}}
+  </button>
+</view>

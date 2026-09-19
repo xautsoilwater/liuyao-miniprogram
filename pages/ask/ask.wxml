@@ -1,0 +1,69 @@
+<view
+  class="page ask has-fixed-footer"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="section-head">
+    <view class="title-zh ask-title-center">所问</view>
+    <view class="ask-before-note">
+      <view>占贵诚敬，一事一问；毋以戏筮，毋再三渎问。</view>
+      <view>澄心定念，明所求而后起卦。</view>
+    </view>
+  </view>
+
+  <view class="field" wx:if="{{!selectedGroup}}">
+    <view class="field-label">先选类别</view>
+    <view class="ask-category-grid">
+      <view
+        wx:for="{{askGroups}}"
+        wx:key="key"
+        class="ask-category"
+        data-key="{{item.key}}"
+        bindtap="onSelectGroup"
+      >
+        <view class="ask-category-name">{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="field" wx:else>
+    <view class="ask-category-head">
+      <view class="field-label">当前类别</view>
+      <view class="ask-category-row">
+        <view class="ask-current-category">{{selectedGroup.label}}</view>
+        <view class="change-link" bindtap="onChangeGroup">返回上一层</view>
+      </view>
+    </view>
+    <view class="field-label detail-label">选择具体事项</view>
+    <view class="ask-option-list">
+      <view
+        wx:for="{{selectedGroup.options}}"
+        wx:key="id"
+        class="ask-option {{item.wide ? 'wide' : ''}} {{selectedOptionId === item.id ? 'on' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onSelectOption"
+      >{{item.label}}</view>
+    </view>
+
+    <view class="field-label time-label">时间范围</view>
+    <view class="ask-time-grid">
+      <view
+        wx:for="{{timeScopes}}"
+        wx:key="key"
+        class="ask-chip {{selectedTimeKey === item.key ? 'on' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onSelectTime"
+      >{{item.label}}</view>
+    </view>
+    <view class="ask-hint muted">{{selectedQuestion || '请点选一项'}}</view>
+  </view>
+
+</view>
+
+<view class="footer-actions">
+  <button class="btn-ghost half" bindtap="onBack">返回</button>
+  <button class="btn-primary half {{!canConfirm ? 'is-disabled' : ''}}" bindtap="onConfirm" disabled="{{!canConfirm}}">
+    {{canConfirm ? confirmLabel : '选择所问'}}
+  </button>
+</view>

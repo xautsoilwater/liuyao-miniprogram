@@ -1,0 +1,39 @@
+<view
+  class="page interpret has-fixed-footer"
+  wx:if="{{result}}"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="section-head">
+    <view class="title-zh">断卦</view>
+    <view class="subtitle">明所问 · 察卦变 · 定进退</view>
+  </view>
+
+  <view class="ask-box" wx:if="{{result.question}}">
+    <view class="ask-lab">所问</view>
+    <view class="ask-q">{{result.question}}</view>
+  </view>
+
+  <view class="verdict {{result.tendency.tone}}">
+    <view class="summary">结论：{{result.summary}}</view>
+    <view class="reply" wx:if="{{result.reply}}">{{result.reply}}</view>
+    <view class="judgment">{{result.summaryNote}}</view>
+    <view class="advice" wx:if="{{result.advice}}">{{result.advice}}</view>
+    <view class="pointer" wx:if="{{result.pointer}}">
+      <text class="pointer-label">断曰</text>
+      <text>{{result.pointer}}</text>
+    </view>
+  </view>
+
+  <view class="section" wx:for="{{result.sections}}" wx:key="title">
+    <view class="sec-title">{{item.title}}</view>
+    <view class="sec-item" wx:for="{{item.items}}" wx:for-item="line" wx:key="*this">{{line}}</view>
+  </view>
+
+</view>
+
+<view class="footer-actions" wx:if="{{result}}">
+  <button class="btn-ghost half" bindtap="goResult">返回排盘</button>
+  <button class="btn-primary half" bindtap="goHome">返回首页</button>
+</view>

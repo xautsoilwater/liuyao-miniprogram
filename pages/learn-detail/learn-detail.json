@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "nav-back": "/components/nav-back/nav-back",
+    "learn-figure": "/components/learn-figure/learn-figure"
+  },
+  "navigationBarTitleText": "典要",
+  "disableSwipeBack": false
+}

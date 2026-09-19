@@ -1,0 +1,7 @@
+{
+  "description": "本地私有配置",
+  "projectname": "liuyao",
+  "setting": {
+    "compileHotReLoad": true
+  }
+}

@@ -1,0 +1,141 @@
+<view class="fig">
+  <view class="fig-stage">
+    <!-- 太极 -->
+    <view class="taiji" wx:if="{{name==='taiji'}}">
+      <view class="half yang"></view>
+      <view class="half yin"></view>
+      <view class="eye top"></view>
+      <view class="eye bot"></view>
+      <view class="dot top"></view>
+      <view class="dot bot"></view>
+    </view>
+
+    <!-- 三才 -->
+    <view class="sancai" wx:elif="{{name==='sancai'}}">
+      <view class="sc-row t"><text class="sc-lab">天</text><view class="bar yang"></view><view class="bar yin"></view><text class="sc-yx">五·上</text></view>
+      <view class="sc-row m"><text class="sc-lab">人</text><view class="bar yang"></view><view class="bar yin"></view><text class="sc-yx">三·四</text></view>
+      <view class="sc-row b"><text class="sc-lab">地</text><view class="bar yang"></view><view class="bar yin"></view><text class="sc-yx">初·二</text></view>
+    </view>
+
+    <!-- 三义 -->
+    <view class="tri" wx:elif="{{name==='three-yi'}}">
+      <view class="tri-item"><text class="k">变</text><text class="v">迁流不息</text></view>
+      <view class="tri-item"><text class="k">简</text><text class="v">执简驭繁</text></view>
+      <view class="tri-item"><text class="k">常</text><text class="v">变中有则</text></view>
+    </view>
+
+    <!-- 象数理 -->
+    <view class="rings" wx:elif="{{name==='xiang-shu-li'}}">
+      <view class="rg r1">理</view>
+      <view class="rg r2">数</view>
+      <view class="rg r3">象</view>
+    </view>
+
+    <!-- 八卦环 -->
+    <view class="bagua" wx:elif="{{name==='bagua' || name==='bagua-table'}}">
+      <view class="bg-item" style="transform:rotate(0deg)"><text class="bg-in" style="transform:rotate(0deg)">☲离</text></view>
+      <view class="bg-item" style="transform:rotate(45deg)"><text class="bg-in" style="transform:rotate(-45deg)">☷坤</text></view>
+      <view class="bg-item" style="transform:rotate(90deg)"><text class="bg-in" style="transform:rotate(-90deg)">☱兑</text></view>
+      <view class="bg-item" style="transform:rotate(135deg)"><text class="bg-in" style="transform:rotate(-135deg)">☰乾</text></view>
+      <view class="bg-item" style="transform:rotate(180deg)"><text class="bg-in" style="transform:rotate(-180deg)">☵坎</text></view>
+      <view class="bg-item" style="transform:rotate(225deg)"><text class="bg-in" style="transform:rotate(-225deg)">☶艮</text></view>
+      <view class="bg-item" style="transform:rotate(270deg)"><text class="bg-in" style="transform:rotate(-270deg)">☳震</text></view>
+      <view class="bg-item" style="transform:rotate(315deg)"><text class="bg-in" style="transform:rotate(-315deg)">☴巽</text></view>
+      <view class="bg-core">南↑</view>
+    </view>
+
+    <!-- 四爻 -->
+    <view class="yao4" wx:elif="{{name==='yao-four'}}">
+      <view class="y4"><view class="yao-bar yang"></view><text>少阳 —</text></view>
+      <view class="y4"><view class="yao-bar yin"></view><text>少阴 --</text></view>
+      <view class="y4"><view class="yao-bar yang moving"></view><text>老阳 ○</text></view>
+      <view class="y4"><view class="yao-bar yin moving"></view><text>老阴 ×</text></view>
+    </view>
+
+    <!-- 动变 -->
+    <view class="chg" wx:elif="{{name==='change-demo'}}">
+      <view class="chg-col">
+        <text class="chg-h">本</text>
+        <view class="yao-bar yin"></view>
+        <view class="yao-bar yang moving"></view>
+        <view class="yao-bar yin"></view>
+      </view>
+      <text class="chg-arrow">→</text>
+      <view class="chg-col">
+        <text class="chg-h">变</text>
+        <view class="yao-bar yin"></view>
+        <view class="yao-bar yin"></view>
+        <view class="yao-bar yin"></view>
+      </view>
+    </view>
+
+    <!-- 铜钱 -->
+    <view class="coins-row" wx:elif="{{name==='coins' || name==='coin-score'}}">
+      <image class="c-img" src="/assets/coins/qianlong-yang.jpg" mode="aspectFit" />
+      <image class="c-img" src="/assets/coins/qianlong-yin.jpg" mode="aspectFit" />
+      <image class="c-img" src="/assets/coins/qianlong-yang.jpg" mode="aspectFit" />
+    </view>
+
+    <!-- 世应 -->
+    <view class="sy" wx:elif="{{name==='shiying' || name==='zhongzheng'}}">
+      <view class="sy-row"><text>上</text><view class="yao-bar yang"></view><text class="tag"></text></view>
+      <view class="sy-row"><text>五</text><view class="yao-bar yin"></view><text class="tag mid">中</text></view>
+      <view class="sy-row"><text>四</text><view class="yao-bar yang"></view><text class="tag ying">应</text></view>
+      <view class="sy-row"><text>三</text><view class="yao-bar yin"></view><text class="tag"></text></view>
+      <view class="sy-row"><text>二</text><view class="yao-bar yang"></view><text class="tag mid">中</text></view>
+      <view class="sy-row"><text>初</text><view class="yao-bar yin"></view><text class="tag shi">世</text></view>
+    </view>
+
+    <!-- 六亲 -->
+    <view class="lq" wx:elif="{{name==='liuqin' || name==='yongshen'}}">
+      <view class="lq-core">我</view>
+      <view class="lq-item a">父母</view>
+      <view class="lq-item b">兄弟</view>
+      <view class="lq-item c">子孙</view>
+      <view class="lq-item d">妻财</view>
+      <view class="lq-item e">官鬼</view>
+    </view>
+
+    <!-- 六神 -->
+    <view class="ls" wx:elif="{{name==='liushen'}}">
+      <text>玄武</text><text>白虎</text><text>螣蛇</text><text>勾陈</text><text>朱雀</text><text>青龙</text>
+      <view class="ls-arrow">↑ 初爻起</view>
+    </view>
+
+    <!-- 旺衰 -->
+    <view class="ws" wx:elif="{{name==='wangshuai'}}">
+      <view class="ws-i on">旺</view>
+      <view class="ws-i on">相</view>
+      <view class="ws-i">休</view>
+      <view class="ws-i">囚</view>
+      <view class="ws-i">死</view>
+    </view>
+
+    <!-- 伏神 -->
+    <view class="fu" wx:elif="{{name==='fushen'}}">
+      <view class="fu-row"><text>飞</text><view class="yao-bar yang"></view><text class="muted">兄弟</text></view>
+      <view class="fu-under">伏 · 妻财</view>
+    </view>
+
+    <!-- 合冲 -->
+    <view class="hc" wx:elif="{{name==='he-chong'}}">
+      <view class="hc-chip">合</view>
+      <view class="hc-chip">冲</view>
+      <view class="hc-chip">生</view>
+      <view class="hc-chip">克</view>
+    </view>
+
+    <!-- 应期 / 路径 -->
+    <view class="path" wx:elif="{{name==='path' || name==='yingqi'}}">
+      <text>易理</text><text class="sep">→</text>
+      <text>象数</text><text class="sep">→</text>
+      <text>卜卦</text><text class="sep">→</text>
+      <text>回证</text>
+    </view>
+
+    <view class="fallback" wx:else>
+      <text class="gua-big">☯</text>
+    </view>
+  </view>
+  <view class="fig-cap" wx:if="{{caption}}">{{caption}}</view>
+</view>

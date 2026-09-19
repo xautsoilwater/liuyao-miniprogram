@@ -1,0 +1,599 @@
+.section-head {
+  margin-bottom: 28rpx;
+}
+
+.cast-title {
+  text-align: center;
+  font-size: 64rpx;
+  line-height: 1.25;
+}
+
+.cast-subtitle {
+  margin-top: 10rpx;
+  text-align: center;
+  font-size: 30rpx;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+}
+
+.field {
+  margin-bottom: 24rpx;
+}
+
+.field-label {
+  letter-spacing: 0.28em;
+  font-size: 26rpx;
+  color: var(--bronze);
+  margin-bottom: 10rpx;
+}
+
+.q-input {
+  padding: 18rpx 0;
+  border: none;
+  border-bottom: 1rpx solid var(--line-strong);
+  background: transparent;
+  font-size: 32rpx;
+  letter-spacing: 0.08em;
+}
+
+.ask-summary {
+  margin-bottom: 28rpx;
+  padding-bottom: 18rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.ask-summary .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.ask-summary .field-label {
+  margin-bottom: 0;
+}
+
+.change-link {
+  font-size: 24rpx;
+  letter-spacing: 0.16em;
+  color: var(--cinnabar);
+}
+
+.ask-q {
+  margin-top: 12rpx;
+  font-size: 32rpx;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.mode-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.mode {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  font-size: 30rpx;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  border-bottom: 4rpx solid transparent;
+  margin-bottom: -1rpx;
+}
+
+.mode.on {
+  color: var(--cinnabar);
+  border-bottom-color: var(--cinnabar);
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 20rpx 24rpx 32rpx;
+  border: 1rpx solid var(--line-strong);
+  background: rgba(250, 246, 234, 0.72);
+  box-shadow: inset 0 0 0 10rpx rgba(250, 246, 234, 0.28);
+  overflow: visible;
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 10rpx;
+  border: 1rpx solid rgba(28, 24, 20, 0.08);
+  pointer-events: none;
+}
+
+.stage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.progress-row {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+  height: 28rpx;
+  margin: 2rpx 0 0;
+}
+
+.progress-bead {
+  width: 18rpx;
+  height: 18rpx;
+  border: 2rpx solid var(--bronze);
+  transform: rotate(45deg);
+  box-sizing: border-box;
+}
+
+.progress-bead.on {
+  border-color: var(--cinnabar);
+  background: var(--cinnabar);
+}
+
+.cast-shake-slot {
+  position: relative;
+  display: block;
+  width: 300rpx;
+  height: 112rpx;
+  min-height: 0;
+  margin: 2rpx auto 0;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-width: 4rpx;
+  border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+  color: #fff8e8;
+  border-color: #56442f;
+  background: linear-gradient(180deg, #8b7451, #655139);
+  box-shadow:
+    inset 0 0 0 8rpx rgba(255, 248, 225, 0.12),
+    inset 0 2rpx 0 rgba(255, 255, 255, 0.2),
+    0 6rpx 16rpx rgba(73, 54, 34, 0.14);
+}
+
+.cast-shake-slot .shell-inset {
+  position: absolute;
+  left: 36rpx;
+  right: 36rpx;
+  top: 14rpx;
+  bottom: 14rpx;
+  border: 2rpx solid rgba(255, 244, 211, 0.45);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cast-shake-slot .shell-inset::before,
+.cast-shake-slot .shell-inset::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -5%;
+  width: 2rpx;
+  height: 110%;
+  background: rgba(255, 244, 211, 0.24);
+  transform-origin: 50% 50%;
+}
+
+.cast-shake-slot .shell-inset::before {
+  transform: rotate(34deg);
+}
+
+.cast-shake-slot .shell-inset::after {
+  transform: rotate(-34deg);
+}
+
+.cast-shake-slot .shell-label {
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.22em;
+}
+
+
+/*
+ * 左列：铜钱（仅硬币高度）→ 爻结果 → 摇铜钱按钮
+ * 右列卦象：顶边 = 铜钱顶边，底边 = 按钮底边
+ * 抛掷动画向上溢出，不占布局高度
+ */
+.stage-live {
+  display: flex;
+  gap: 16rpx;
+  align-items: stretch;
+  overflow: visible;
+  padding-top: 200rpx; /* 略收紧留白，仍保留抛起空间 */
+}
+
+.stage-live .gua-side {
+  transform: translateY(-20rpx);
+}
+
+.coin-stage {
+  flex: 1.15;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.coin-stage .btn-primary {
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gua-side {
+  flex: 0.85;
+  min-width: 120rpx;
+  padding: 0 4rpx 0 12rpx;
+  border-left: 1rpx dashed var(--line);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* 「卦象」标题放在铜钱上方空档，不占六爻对齐高度 */
+.gua-side .gua-lab {
+  position: absolute;
+  left: 12rpx;
+  right: 4rpx;
+  top: -48rpx;
+  margin: 0;
+  letter-spacing: 0.36em;
+  text-indent: 0.36em;
+  color: var(--bronze);
+  font-size: 28rpx;
+}
+
+.gua-side .gua-lines {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+}
+
+.gua-side .gua-slot {
+  min-height: 0;
+}
+
+/* 铜钱区：高度=硬币本身；动画向上溢出 */
+.coins {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 18rpx;
+  margin: 0 0 6rpx;
+  height: 128rpx;
+  min-height: 128rpx;
+  align-items: flex-end;
+  padding-bottom: 16rpx;
+  box-sizing: border-box;
+  overflow: visible;
+  perspective: 1200rpx;
+  transform-style: preserve-3d;
+}
+
+.coins::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 10rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, rgba(90, 70, 40, 0.28), transparent);
+  pointer-events: none;
+}
+
+/* 自然抛落：抛起 → 加速下落 → 触地弹跳衰减 → 回正 */
+.shake .coin-body {
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  animation: toss-drop 1.35s cubic-bezier(0.33, 0.02, 0.2, 1) both;
+  will-change: transform;
+}
+
+.shake .coin:nth-child(1) .coin-body {
+  animation-name: toss-drop-a;
+  animation-duration: 1.32s;
+  animation-delay: 0ms;
+}
+.shake .coin:nth-child(2) .coin-body {
+  animation-name: toss-drop-b;
+  animation-duration: 1.4s;
+  animation-delay: 55ms;
+}
+.shake .coin:nth-child(3) .coin-body {
+  animation-name: toss-drop-c;
+  animation-duration: 1.48s;
+  animation-delay: 110ms;
+}
+
+.shake .coin-shadow {
+  animation: toss-shadow 1.35s cubic-bezier(0.33, 0.02, 0.2, 1) both;
+  will-change: transform, opacity;
+}
+.shake .coin:nth-child(1) .coin-shadow {
+  animation-name: toss-shadow-a;
+  animation-duration: 1.32s;
+  animation-delay: 0ms;
+}
+.shake .coin:nth-child(2) .coin-shadow {
+  animation-name: toss-shadow-b;
+  animation-duration: 1.4s;
+  animation-delay: 55ms;
+}
+.shake .coin:nth-child(3) .coin-shadow {
+  animation-name: toss-shadow-c;
+  animation-duration: 1.48s;
+  animation-delay: 110ms;
+}
+
+/* 左钱：略偏左，顺时针翻 */
+@keyframes toss-drop-a {
+  0% {
+    transform: translate3d(-8rpx, -40rpx, 0) rotateX(12deg) rotateY(0deg) rotateZ(-28deg) scale(0.94);
+  }
+  12% {
+    transform: translate3d(-18rpx, -210rpx, 0) rotateX(-8deg) rotateY(110deg) rotateZ(-12deg) scale(0.9);
+  }
+  36% {
+    transform: translate3d(-22rpx, 4rpx, 0) rotateX(6deg) rotateY(290deg) rotateZ(16deg) scale(1.04);
+  }
+  48% {
+    transform: translate3d(-14rpx, -72rpx, 0) rotateX(-4deg) rotateY(400deg) rotateZ(-10deg) scale(0.97);
+  }
+  62% {
+    transform: translate3d(-10rpx, 2rpx, 0) rotateX(3deg) rotateY(500deg) rotateZ(8deg) scale(1.02);
+  }
+  74% {
+    transform: translate3d(-6rpx, -28rpx, 0) rotateX(-2deg) rotateY(580deg) rotateZ(-4deg) scale(0.99);
+  }
+  86% {
+    transform: translate3d(-2rpx, 1rpx, 0) rotateX(1deg) rotateY(660deg) rotateZ(2deg) scale(1.005);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(720deg) rotateZ(0deg) scale(1);
+  }
+}
+
+/* 中钱：少飘移，翻得更快 */
+@keyframes toss-drop-b {
+  0% {
+    transform: translate3d(0, -28rpx, 0) rotateX(8deg) rotateY(20deg) rotateZ(10deg) scale(0.95);
+  }
+  10% {
+    transform: translate3d(4rpx, -230rpx, 0) rotateX(-12deg) rotateY(160deg) rotateZ(4deg) scale(0.88);
+  }
+  34% {
+    transform: translate3d(6rpx, 5rpx, 0) rotateX(8deg) rotateY(340deg) rotateZ(-14deg) scale(1.05);
+  }
+  46% {
+    transform: translate3d(2rpx, -82rpx, 0) rotateX(-6deg) rotateY(450deg) rotateZ(10deg) scale(0.96);
+  }
+  60% {
+    transform: translate3d(2rpx, 3rpx, 0) rotateX(4deg) rotateY(540deg) rotateZ(-6deg) scale(1.02);
+  }
+  72% {
+    transform: translate3d(0, -32rpx, 0) rotateX(-2deg) rotateY(610deg) rotateZ(4deg) scale(0.99);
+  }
+  85% {
+    transform: translate3d(0, 1rpx, 0) rotateX(1deg) rotateY(680deg) rotateZ(-1deg) scale(1.005);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(720deg) rotateZ(0deg) scale(1);
+  }
+}
+
+/* 右钱：偏右，反向翻 */
+@keyframes toss-drop-c {
+  0% {
+    transform: translate3d(10rpx, -36rpx, 0) rotateX(10deg) rotateY(-15deg) rotateZ(24deg) scale(0.93);
+  }
+  13% {
+    transform: translate3d(22rpx, -200rpx, 0) rotateX(-6deg) rotateY(-130deg) rotateZ(8deg) scale(0.9);
+  }
+  38% {
+    transform: translate3d(26rpx, 4rpx, 0) rotateX(5deg) rotateY(-300deg) rotateZ(-18deg) scale(1.04);
+  }
+  50% {
+    transform: translate3d(16rpx, -66rpx, 0) rotateX(-3deg) rotateY(-410deg) rotateZ(12deg) scale(0.97);
+  }
+  64% {
+    transform: translate3d(10rpx, 2rpx, 0) rotateX(2deg) rotateY(-510deg) rotateZ(-7deg) scale(1.02);
+  }
+  76% {
+    transform: translate3d(6rpx, -24rpx, 0) rotateX(-1deg) rotateY(-590deg) rotateZ(3deg) scale(0.99);
+  }
+  88% {
+    transform: translate3d(2rpx, 1rpx, 0) rotateX(1deg) rotateY(-670deg) rotateZ(-1deg) scale(1.005);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(-720deg) rotateZ(0deg) scale(1);
+  }
+}
+
+@keyframes toss-shadow-a {
+  0% { transform: translateX(-4rpx) scaleX(0.55); opacity: 0.12; }
+  12% { transform: translateX(-10rpx) scaleX(0.28); opacity: 0.05; }
+  36% { transform: translateX(-12rpx) scaleX(1.18); opacity: 0.42; }
+  48% { transform: translateX(-8rpx) scaleX(0.48); opacity: 0.12; }
+  62% { transform: translateX(-6rpx) scaleX(1.1); opacity: 0.36; }
+  74% { transform: translateX(-4rpx) scaleX(0.62); opacity: 0.16; }
+  86% { transform: translateX(-2rpx) scaleX(1.04); opacity: 0.3; }
+  100% { transform: translateX(0) scaleX(1); opacity: 0.28; }
+}
+@keyframes toss-shadow-b {
+  0% { transform: scaleX(0.55); opacity: 0.12; }
+  10% { transform: scaleX(0.24); opacity: 0.04; }
+  34% { transform: scaleX(1.22); opacity: 0.44; }
+  46% { transform: scaleX(0.42); opacity: 0.1; }
+  60% { transform: scaleX(1.12); opacity: 0.38; }
+  72% { transform: scaleX(0.58); opacity: 0.14; }
+  85% { transform: scaleX(1.05); opacity: 0.3; }
+  100% { transform: scaleX(1); opacity: 0.28; }
+}
+@keyframes toss-shadow-c {
+  0% { transform: translateX(4rpx) scaleX(0.55); opacity: 0.12; }
+  13% { transform: translateX(12rpx) scaleX(0.28); opacity: 0.05; }
+  38% { transform: translateX(14rpx) scaleX(1.18); opacity: 0.42; }
+  50% { transform: translateX(9rpx) scaleX(0.48); opacity: 0.12; }
+  64% { transform: translateX(6rpx) scaleX(1.1); opacity: 0.36; }
+  76% { transform: translateX(4rpx) scaleX(0.64); opacity: 0.16; }
+  88% { transform: translateX(2rpx) scaleX(1.04); opacity: 0.3; }
+  100% { transform: translateX(0) scaleX(1); opacity: 0.28; }
+}
+
+/* 兼容旧名（若别处引用） */
+@keyframes toss-drop {
+  0% { transform: translate3d(0, -40rpx, 0) rotateY(0) scale(0.94); }
+  100% { transform: translate3d(0, 0, 0) rotateY(720deg) scale(1); }
+}
+@keyframes toss-shadow {
+  0% { transform: scaleX(0.4); opacity: 0.1; }
+  100% { transform: scaleX(1); opacity: 0.28; }
+}
+
+/* 结果区定高，避免有无爻象时框体跳动 */
+.result-line {
+  margin: 12rpx 0 24rpx;
+  min-height: 100rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  box-sizing: border-box;
+}
+
+.yao-label {
+  font-size: 36rpx;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+}
+
+.mark {
+  color: var(--cinnabar);
+  margin-left: 8rpx;
+}
+
+.hint {
+  margin: 0;
+  letter-spacing: 0.12em;
+}
+
+.manual-live {
+  display: flex;
+  gap: 18rpx;
+  align-items: stretch;
+  margin-top: 12rpx;
+}
+
+.manual-left {
+  flex: 1.2;
+  min-width: 0;
+}
+
+.manual-left .hint {
+  margin: 0 0 12rpx;
+}
+
+.manual-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12rpx;
+}
+
+.manual-item {
+  min-height: 80rpx;
+  padding: 12rpx 10rpx;
+  text-align: center;
+  border: 1rpx solid var(--line-strong);
+  letter-spacing: 0.12em;
+  background: rgba(244, 234, 214, 0.55);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  box-sizing: border-box;
+}
+
+.manual-lab {
+  font-size: 26rpx;
+  white-space: nowrap;
+}
+
+.manual-live .gua-side {
+  flex: 0.8;
+  min-width: 132rpx;
+  min-height: 368rpx;
+  padding: 0 4rpx 0 16rpx;
+}
+
+.manual-live .gua-side .gua-lab {
+  position: static;
+  margin: 0 0 18rpx;
+}
+
+.manual-live .gua-side .gua-lines {
+  min-height: 316rpx;
+  justify-content: space-between;
+}
+
+.gua-lab {
+  letter-spacing: 0.36em;
+  text-indent: 0.36em;
+  color: var(--bronze);
+  font-size: 28rpx;
+  margin-bottom: 18rpx;
+}
+
+.gua-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18rpx;
+}
+
+.gua-slot {
+  min-height: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gua-panel .yao-bar.moving::after {
+  right: -18rpx;
+  width: 10rpx;
+  height: 10rpx;
+  margin-top: -5rpx;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+.half {
+  flex: 1;
+}
+
+.cast-return {
+  width: 100%;
+  margin: 24rpx 0 20rpx;
+  box-sizing: border-box;
+}

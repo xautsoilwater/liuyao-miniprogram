@@ -1,0 +1,110 @@
+<view
+  class="page cast has-fixed-footer"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="section-head">
+    <view class="title-zh cast-title">卜卦</view>
+    <view class="subtitle cast-subtitle">六次成爻 · 自下而上</view>
+  </view>
+
+  <view class="mode-row">
+    <view class="mode {{mode==='shake'?'on':''}}" data-mode="shake" bindtap="setMode">摇铜钱</view>
+    <view class="mode {{mode==='manual'?'on':''}}" data-mode="manual" bindtap="setMode">手记爻象</view>
+  </view>
+
+  <view class="stage" wx:if="{{mode==='shake'}}">
+    <view class="stage-head">
+      <text class="seal-tag">第 {{step < 6 ? step + 1 : 6}} 爻</text>
+      <text class="muted">{{step}} / 6</text>
+    </view>
+    <button class="btn-primary cast-shake-slot" bindtap="shake" disabled="{{shaking || finished}}">
+      <view class="shell-inset" aria-hidden="true"></view>
+      <text class="shell-label">{{finished ? '六爻已成' : shaking ? '摇卦中…' : '摇铜钱'}}</text>
+    </button>
+    <view class="stage-live">
+      <view class="coin-stage">
+        <view class="coins {{shaking ? 'shake' : ''}}">
+          <view
+            wx:for="{{coinSlots}}"
+            wx:key="*this"
+            class="coin {{displayCoins[item] === 'yin' ? 'yin' : (displayCoins[item] === 'yang' ? 'yang' : 'yang idle')}}"
+          >
+            <view class="coin-shadow"></view>
+            <view class="coin-body">
+              <image class="coin-face coin-obverse" src="/assets/coins/qianlong-yang.jpg" mode="aspectFit" />
+              <image class="coin-face coin-reverse" src="/assets/coins/qianlong-yin.jpg" mode="aspectFit" />
+            </view>
+          </view>
+        </view>
+        <view class="result-line">
+          <block wx:if="{{current}}">
+            <view class="yao-bar lg {{current.yinYang ? 'yang' : 'yin'}} {{current.changing ? 'moving' : ''}}"></view>
+            <view class="yao-label">{{current.type}}<text class="mark">{{current.mark}}</text></view>
+          </block>
+          <view class="muted hint" wx:else>静心片刻，然后摇卦</view>
+        </view>
+      </view>
+      <view class="gua-side">
+        <view class="gua-lab">卦象</view>
+        <view class="gua-lines">
+          <view class="gua-slot" wx:for="{{guaLines}}" wx:key="index">
+            <view
+              class="yao-bar xl {{item.filled ? (item.yinYang ? 'yang' : 'yin') : 'empty'}} {{item.changing ? 'moving' : ''}}"
+            ></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="stage" wx:else>
+    <view class="stage-head">
+      <text class="seal-tag">第 {{step < 6 ? step + 1 : 6}} 爻</text>
+      <text class="muted">{{step}} / 6</text>
+    </view>
+    <view class="progress-row">
+      <view class="progress-bead {{step > item ? 'on' : ''}}" wx:for="{{progressSlots}}" wx:key="*this"></view>
+    </view>
+    <view class="manual-live">
+      <view class="manual-left">
+        <view class="muted hint">按实摇结果点选</view>
+        <view class="manual-grid">
+          <view class="manual-item" wx:for="{{manualOptions}}" wx:key="key" data-key="{{item.key}}" bindtap="pickManual">
+            <view class="yao-bar {{item.score === 9 || item.score === 7 ? 'yang' : 'yin'}} {{item.score === 9 || item.score === 6 ? 'moving' : ''}}"></view>
+            <view class="manual-lab">{{item.label}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="gua-side">
+        <view class="gua-lab">卦象</view>
+        <view class="gua-lines">
+          <view class="gua-slot" wx:for="{{guaLines}}" wx:key="index">
+            <view
+              class="yao-bar xl {{item.filled ? (item.yinYang ? 'yang' : 'yin') : 'empty'}} {{item.changing ? 'moving' : ''}}"
+            ></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>
+
+<view class="footer-actions">
+  <block wx:if="{{finished}}">
+    <button class="btn-ghost half" bindtap="onBack">返回</button>
+    <button class="btn-primary half" bindtap="submit">排卦</button>
+  </block>
+  <block wx:elif="{{mode === 'shake'}}">
+    <button class="btn-ghost half" bindtap="onBack">返回</button>
+    <button class="btn-primary half" bindtap="submit" disabled>排卦</button>
+  </block>
+  <block wx:else>
+    <button class="btn-ghost half" bindtap="onBack">返回</button>
+    <button class="btn-primary half" bindtap="undoLast" disabled="{{step === 0}}">
+      {{step ? '撤回一爻' : '请选择爻象'}}
+    </button>
+  </block>
+</view>

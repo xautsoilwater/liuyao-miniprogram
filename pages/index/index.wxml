@@ -1,0 +1,33 @@
+<view class="page index">
+  <view class="hero" style="padding-top: {{homeHeaderTop}}px">
+    <view class="brand" aria-label="周易">
+      <image class="brand-img" src="/assets/images/brand-zhouyi.png" mode="widthFix" />
+    </view>
+    <view class="brand-sub">
+      <text>敬卜以问道</text><text class="brand-dot">·</text>
+      <text>观变以知几</text><text class="brand-dot">·</text>
+      <text>明理而不惑</text>
+    </view>
+  </view>
+
+  <view class="luopan-stage">
+    <luopan />
+  </view>
+
+  <view class="actions">
+    <view class="act" bindtap="goLearn" hover-class="act-hover">研习典要</view>
+    <view class="act" bindtap="goCast" hover-class="act-hover">六爻卜卦</view>
+    <view class="act" bindtap="goMeihua" hover-class="act-hover">梅花易数</view>
+  </view>
+
+  <view class="foot-links">
+    <view class="text-link" bindtap="goAccount">{{accountLabel}}</view>
+    <view class="dot">·</view>
+    <view class="text-link" bindtap="goHistory">历史卦例</view>
+    <view class="dot">·</view>
+    <view class="text-link feedback-cell">
+      <text>问题留言</text>
+      <button class="feedback-link" open-type="feedback" aria-label="问题留言"></button>
+    </view>
+  </view>
+</view>

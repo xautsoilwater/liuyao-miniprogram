@@ -1,0 +1,91 @@
+<view
+  class="page result has-fixed-footer"
+  wx:if="{{cast}}"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="head">
+    <view class="gua-name">{{cast.ben.name}}</view>
+    <view class="gua-meta">{{cast.ben.upper.symbol}}{{cast.ben.upper.name}}{{cast.ben.upper.nature}}／{{cast.ben.lower.symbol}}{{cast.ben.lower.name}}{{cast.ben.lower.nature}}</view>
+    <view class="gua-meta">{{cast.ben.palaceName}}宫{{cast.ben.palaceWuxing}}</view>
+    <view class="ornament" wx:if="{{cast.calendar}}">{{cast.calendar.year.text}} · {{cast.calendar.month.text}} · {{cast.calendar.day.text}} · 空{{cast.calendar.kongwang.text}}</view>
+    <view class="muted q">动爻 {{cast.changingIndexes.length || '无'}}</view>
+  </view>
+
+  <view class="pan-board">
+    <view class="pan-heads">
+      <view class="ph ben">
+        <text class="ph-lab">本卦</text>
+        <text class="ph-name">{{cast.ben.name}}</text>
+      </view>
+      <view class="ph bian">
+        <text class="ph-lab">变卦</text>
+        <text class="ph-name">{{cast.bian ? cast.bian.name : '无动'}}</text>
+      </view>
+    </view>
+
+    <view class="pan-row pan-head">
+      <text class="c-shen">神</text>
+      <text class="c-qin">亲</text>
+      <text class="c-yao">本爻</text>
+      <text class="c-role">位</text>
+      <text class="c-gz">支</text>
+      <text class="c-byao">变爻</text>
+      <text class="c-bqin">亲</text>
+    </view>
+
+    <view
+      class="pan-row {{item.ben.changing ? 'moving' : ''}} {{item.ben.kong ? 'kong' : ''}}"
+      wx:for="{{rows}}"
+      wx:key="key"
+    >
+      <text class="c-shen">{{item.ben.liushen}}</text>
+      <text class="c-qin">{{item.ben.liuqin}}</text>
+      <view class="c-yao">
+        <view class="yao-bar sm {{item.ben.yinYang ? 'yang' : 'yin'}}"></view>
+        <text class="yao-mark">{{item.ben.mark || ''}}</text>
+      </view>
+      <text class="c-role">{{item.ben.role || ''}}</text>
+      <text class="c-gz">{{item.ben.ganZhi}}{{item.ben.wuxing}}</text>
+      <view class="c-byao" wx:if="{{item.bian}}">
+        <view class="yao-bar sm {{item.bian.yinYang ? 'yang' : 'yin'}}"></view>
+      </view>
+      <view class="c-byao muted-dash" wx:else>—</view>
+      <text class="c-bqin">{{item.bian ? item.bian.liuqin : ''}}{{item.bian && item.bian.role ? item.bian.role : ''}}</text>
+    </view>
+  </view>
+
+  <view class="block" wx:if="{{fushenList.length}}">
+    <view class="block-title">伏神</view>
+    <view class="block-line" wx:for="{{fushenList}}" wx:key="liuqin">{{item.text}}</view>
+  </view>
+
+  <view class="block" wx:if="{{relationTexts.length}}">
+    <view class="block-title">动爻关系</view>
+    <view class="chips">
+      <text class="chip" wx:for="{{relationTexts}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="block" wx:if="{{changeLines.length}}">
+    <view class="block-title">动化</view>
+    <view class="change-line" wx:for="{{changeLines}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <view class="guide" wx:if="{{guide.length}}">
+    <view class="guide-head">
+      <view class="guide-title">本卦象辞解读</view>
+      <view class="muted">取象释名与盘面说明；动爻优先，再参世应纳甲。</view>
+    </view>
+    <view class="guide-sec" wx:for="{{guide}}" wx:key="title">
+      <view class="guide-sec-title">{{item.title}}</view>
+      <view class="guide-item" wx:for="{{item.items}}" wx:for-item="line" wx:for-index="li" wx:key="li">{{line}}</view>
+    </view>
+  </view>
+</view>
+
+<view class="footer-actions" wx:if="{{cast}}">
+  <button class="btn-ghost half" bindtap="recast">再起</button>
+  <button class="btn-primary half" bindtap="goInterpret">断卦</button>
+</view>

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "学习卜卦",
+  "usingComponents": {
+    "nav-back": "/components/nav-back/nav-back"
+  },
+  "disableSwipeBack": false
+}

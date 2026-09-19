@@ -1,0 +1,26 @@
+.nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4rpx;
+  padding: 8rpx 16rpx 8rpx 4rpx;
+  margin-bottom: 16rpx;
+  color: var(--ink-soft);
+}
+
+.nav-back-hover {
+  opacity: 0.55;
+}
+
+.chev {
+  font-size: 38rpx;
+  line-height: 1;
+  color: var(--cinnabar);
+  margin-top: -2rpx;
+  font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+}
+
+.txt {
+  font-size: 28rpx;
+  letter-spacing: 0.12em;
+  text-indent: 0.04em;
+}

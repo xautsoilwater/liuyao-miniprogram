@@ -1,0 +1,25 @@
+<view
+  class="page history"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="section-head">
+    <view class="title-zh">历史卦例</view>
+    <view class="muted">本地保存，点开可回看排盘</view>
+  </view>
+
+  <view class="muted" wx:if="{{!list.length}}" style="margin-top:24rpx">暂无历史记录。</view>
+
+  <view class="item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="openItem">
+    <view class="row">
+      <text class="name">{{item.name}}</text>
+      <text class="seal-tag" wx:if="{{item.type==='meihua'}}">梅花</text>
+      <text class="seal-tag" wx:elif="{{item.changingCount}}">动{{item.changingCount}}</text>
+      <text class="muted" wx:else>静卦</text>
+    </view>
+    <view class="muted time">{{item.time}}</view>
+  </view>
+
+  <button class="btn-ghost" wx:if="{{list.length}}" bindtap="clearAll" style="margin-top:28rpx">清空历史</button>
+</view>

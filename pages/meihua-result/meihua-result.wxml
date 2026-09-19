@@ -1,0 +1,66 @@
+<view
+  class="page meihua-result has-fixed-footer"
+  wx:if="{{cast}}"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+  <view class="head">
+    <view class="gua-name">{{cast.ben.name}}</view>
+    <view class="gua-meta">{{cast.ben.text}}</view>
+    <view class="ornament">{{cast.methodLabel}} · 动{{cast.dongLabel}}</view>
+  </view>
+
+  <view class="verdict {{cast.verdict.tone}}">
+    <view class="summary">判断：{{cast.summary}}</view>
+    <view class="reply" wx:if="{{cast.reply}}">{{cast.reply}}</view>
+    <view class="judgment">{{cast.judgment || cast.verdict.note}}</view>
+    <view class="advice" wx:if="{{cast.advice}}">{{cast.advice}}</view>
+  </view>
+
+  <view class="tri-board">
+    <view class="tri-col">
+      <view class="tri-lab">本卦</view>
+      <view class="tri-name">{{cast.ben.alias || cast.ben.name}}</view>
+      <view class="tri-sym">{{cast.ben.upper.symbol}}{{cast.ben.lower.symbol}}</view>
+      <view class="tri-sub">体{{cast.tiYong.ti.name}} · 用{{cast.tiYong.yong.name}}</view>
+    </view>
+    <view class="tri-col">
+      <view class="tri-lab">互卦</view>
+      <view class="tri-name">{{cast.hu.alias || cast.hu.name}}</view>
+      <view class="tri-sym">{{cast.hu.upper.symbol}}{{cast.hu.lower.symbol}}</view>
+      <view class="tri-sub">过程</view>
+    </view>
+    <view class="tri-col">
+      <view class="tri-lab">变卦</view>
+      <view class="tri-name">{{cast.bian.alias || cast.bian.name}}</view>
+      <view class="tri-sym">{{cast.bian.upper.symbol}}{{cast.bian.lower.symbol}}</view>
+      <view class="tri-sub">趋向</view>
+    </view>
+  </view>
+
+  <view class="yao-board">
+    <view class="yao-row" wx:for="{{yaoRows}}" wx:key="idx">
+      <text class="y-name">{{item.name}}</text>
+      <view class="yao-bar {{item.yang ? 'yang' : 'yin'}} {{item.dong ? 'moving' : ''}}"></view>
+      <text class="y-tag">{{item.tag}}</text>
+    </view>
+  </view>
+
+  <view class="guide" wx:if="{{cast.guide.length}}">
+    <view class="guide-head">
+      <view class="guide-title">梅花体用解读</view>
+      <view class="muted">专业说法并附说明；先本卦，再互、变。</view>
+    </view>
+    <view class="guide-sec" wx:for="{{cast.guide}}" wx:key="title">
+      <view class="guide-sec-title">{{item.title}}</view>
+      <view class="guide-item" wx:for="{{item.items}}" wx:for-item="line" wx:for-index="li" wx:key="li">{{line}}</view>
+    </view>
+  </view>
+
+</view>
+
+<view class="footer-actions" wx:if="{{cast}}">
+  <button class="btn-ghost half" bindtap="recast">再起</button>
+  <button class="btn-primary half" bindtap="goHome">返回首页</button>
+</view>

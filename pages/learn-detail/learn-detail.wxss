@@ -1,0 +1,89 @@
+.para {
+  margin-bottom: 22rpx;
+  color: var(--ink-soft);
+  font-size: 32rpx;
+  text-align: justify;
+  line-height: 1.95;
+  letter-spacing: 0.05em;
+}
+
+.quote {
+  position: relative;
+  margin: 24rpx 0 32rpx;
+  padding: 22rpx 24rpx 22rpx 28rpx;
+  border-left: 4rpx solid var(--cinnabar);
+  background: linear-gradient(90deg, rgba(155, 45, 36, 0.06), rgba(155, 45, 36, 0.015));
+}
+
+.quote::before {
+  content: "「";
+  position: absolute;
+  left: 8rpx;
+  top: 4rpx;
+  font-size: 38rpx;
+  color: rgba(155, 45, 36, 0.22);
+  font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+  line-height: 1;
+}
+
+.quote-text {
+  font-size: 32rpx;
+  line-height: 1.9;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  font-family: "Songti SC", "STSong", "Noto Serif SC", serif;
+}
+
+.quote-from {
+  margin-top: 14rpx;
+  text-align: right;
+  font-size: 26rpx;
+  color: var(--bronze);
+  letter-spacing: 0.12em;
+}
+
+.list {
+  margin: 8rpx 0 26rpx;
+}
+
+.list-item {
+  display: flex;
+  gap: 12rpx;
+  padding: 12rpx 0;
+  border-bottom: 1rpx dashed var(--line);
+  font-size: 30rpx;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+.bullet {
+  color: var(--cinnabar);
+  flex-shrink: 0;
+  font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+}
+
+.list-text {
+  flex: 1;
+  text-align: justify;
+  letter-spacing: 0.04em;
+}
+
+.note {
+  margin: 14rpx 0 28rpx;
+  padding: 18rpx 20rpx;
+  border: 1rpx dashed rgba(110, 90, 62, 0.45);
+  background: rgba(250, 246, 234, 0.5);
+  font-size: 28rpx;
+  color: var(--mist);
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+}
+
+.detail-foot {
+  margin-top: 40rpx;
+  text-align: center;
+  letter-spacing: 0.2em;
+  font-size: 26rpx;
+  color: var(--bronze);
+  font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+}

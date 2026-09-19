@@ -1,0 +1,51 @@
+<view
+  class="page learn"
+  bindtouchstart="onSwipeTouchStart"
+  bindtouchend="onSwipeTouchEnd"
+>
+  <nav-back />
+
+  <view class="learn-hero">
+    <view class="seal-tag">读易八卷</view>
+    <view class="title-zh">研习典要</view>
+    <view class="lede">由理入术，由术回理 · 表诀卦例备齐，可当教材用</view>
+    <view class="ornament">观象玩辞</view>
+  </view>
+
+  <view class="track-hint">
+    <text class="th" wx:for="{{track}}" wx:key="*this">{{item}}</text>
+  </view>
+
+  <view class="group" wx:for="{{groups}}" wx:key="category">
+    <view class="cat-row">
+      <view class="cat-block">
+        <view class="cat">{{item.label || item.category}}</view>
+        <view class="cat-sub muted" wx:if="{{item.subtitle}}">{{item.subtitle}}</view>
+      </view>
+      <view class="cat-line"></view>
+      <view class="cat-count muted">{{item.items.length}}篇</view>
+    </view>
+    <view
+      class="article"
+      wx:for="{{item.items}}"
+      wx:for-item="article"
+      wx:for-index="aidx"
+      wx:key="id"
+      data-id="{{article.id}}"
+      bindtap="openArticle"
+      hover-class="article-hover"
+    >
+      <view class="a-idx">{{aidx + 1}}</view>
+      <view class="a-main">
+        <view class="a-title">{{article.title}}</view>
+        <view class="muted">{{article.summary}}</view>
+      </view>
+      <view class="a-side">
+        <text class="a-cover">{{article.cover === 'taiji' ? '☯' : article.cover === 'bagua' || article.cover === 'bagua-table' ? '☰' : article.cover === 'coins' || article.cover === 'coin-score' ? '錢' : '◇'}}</text>
+        <view class="a-go">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="learn-foot muted">占以决疑，学以修身。断语仅供推演练习。</view>
+</view>

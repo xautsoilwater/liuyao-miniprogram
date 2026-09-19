@@ -1,0 +1,375 @@
+/* 周易研习 · 全局视觉
+ * 气质：宣纸 · 玄墨 · 朱砂印 · 青铜礼器
+ * 字体：正文宋体；仅首页「周易」用篆意 ZhouYiZhuan
+ */
+
+page {
+  /* 玄墨 */
+  --ink: #1c1814;
+  --ink-2: #2e261f;
+  --ink-soft: #5c5146;
+  --mist: rgba(28, 24, 20, 0.5);
+  /* 宣纸：茶晕旧卷，非奶油扁平底 */
+  --paper: #ebe0c8;
+  --paper-2: #f5edd9;
+  --paper-deep: #d9c9a8;
+  --cream: #faf6ea;
+  /* 朱砂印泥 */
+  --cinnabar: #9b2d24;
+  --cinnabar-deep: #7a221c;
+  --cinnabar-soft: rgba(155, 45, 36, 0.1);
+  /* 青铜 */
+  --bronze: #6e5a3e;
+  --bronze-soft: rgba(110, 90, 62, 0.14);
+  --bronze-light: #a08a62;
+  /* 黛青（仅作沉色点缀，非主色） */
+  --teal-ink: #3a4543;
+  --line: rgba(28, 24, 20, 0.1);
+  --line-strong: rgba(28, 24, 20, 0.2);
+  --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --display: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 32rpx;
+  line-height: 1.8;
+  min-height: 100%;
+  letter-spacing: 0.02em;
+}
+
+@font-face {
+  font-family: "ZhouYiZhuan";
+  src: url("/assets/fonts/zhouyi-zhuan.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: calc(32rpx + env(safe-area-inset-top)) 32rpx 72rpx;
+  background:
+    radial-gradient(ellipse 110% 58% at 50% -14%, rgba(250, 246, 234, 0.95), transparent 58%),
+    radial-gradient(ellipse 48% 36% at 0% 88%, rgba(155, 45, 36, 0.04), transparent 52%),
+    radial-gradient(ellipse 42% 32% at 100% 18%, rgba(110, 90, 62, 0.1), transparent 50%),
+    linear-gradient(180deg, #f5edd9 0%, #ebe0c8 46%, #dccdb0 100%);
+  overflow: visible;
+}
+
+/* 纸纹底噪 */
+.page.has-fixed-footer {
+  padding-bottom: calc(230rpx + env(safe-area-inset-bottom));
+}
+
+.footer-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch;
+  gap: 16rpx;
+  position: fixed !important;
+  left: 32rpx !important;
+  right: 32rpx !important;
+  bottom: 0 !important;
+  z-index: 30;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 24rpx 0 max(22rpx, env(safe-area-inset-bottom));
+  border-top: 1rpx solid rgba(110, 90, 62, 0.2);
+  background: linear-gradient(
+    180deg,
+    rgba(235, 224, 200, 0.9),
+    rgba(235, 224, 200, 0.98) 22rpx,
+    #dccdb0 100%
+  );
+  box-shadow: 0 -16rpx 36rpx rgba(28, 24, 20, 0.08);
+}
+
+.footer-actions button {
+  flex: 1;
+  width: auto !important;
+  min-width: 0;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 侧边淡卦线：不再使用大字水印，避免与正文争抢视觉 */
+.page::after {
+  content: "";
+  position: absolute;
+  right: 18rpx;
+  top: 24%;
+  width: 150rpx;
+  height: 118rpx;
+  opacity: 0.035;
+  background:
+    linear-gradient(90deg, rgba(28,24,20,.75) 0 42%, transparent 42% 58%, rgba(28,24,20,.75) 58%) 0 0 / 100% 10rpx no-repeat,
+    linear-gradient(90deg, rgba(28,24,20,.75) 0 42%, transparent 42% 58%, rgba(28,24,20,.75) 58%) 0 36rpx / 100% 10rpx no-repeat,
+    linear-gradient(90deg, rgba(28,24,20,.75), rgba(28,24,20,.75)) 0 72rpx / 100% 10rpx no-repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 36rpx;
+  box-shadow: none;
+}
+
+/* 册页框：双边线 + 角饰感 */
+.panel {
+  position: relative;
+  background: rgba(250, 246, 234, 0.72);
+  border: 1rpx solid var(--line-strong);
+  padding: 30rpx 26rpx;
+  margin-bottom: 28rpx;
+  box-shadow: inset 0 0 0 1rpx rgba(250, 246, 234, 0.4);
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 10rpx;
+  border: 1rpx solid rgba(28, 24, 20, 0.07);
+  pointer-events: none;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  top: -1rpx;
+  left: -1rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border-top: 2rpx solid var(--bronze-light);
+  border-left: 2rpx solid var(--bronze-light);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.title-zh {
+  font-family: var(--display);
+  font-size: 42rpx;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+.subtitle {
+  margin-top: 10rpx;
+  color: var(--ink-soft);
+  font-size: 28rpx;
+  letter-spacing: 0.18em;
+  text-indent: 0.06em;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #9d9588 0%, #81796e 100%);
+  color: #ffffff;
+  border-radius: 0;
+  font-size: 32rpx;
+  letter-spacing: 0.4em;
+  padding: 26rpx 0;
+  border: 1rpx solid #756e64;
+  text-indent: 0.4em;
+  box-shadow: 0 12rpx 28rpx rgba(28, 24, 20, 0.12);
+  font-family: var(--display);
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-ghost {
+  background: linear-gradient(180deg, #9d9588 0%, #81796e 100%);
+  color: #ffffff;
+  border: 1rpx solid #756e64;
+  border-radius: 0;
+  font-size: 30rpx;
+  letter-spacing: 0.3em;
+  padding: 22rpx 0;
+  text-indent: 0.3em;
+}
+
+.btn-ghost::after {
+  border: none;
+}
+
+/* 朱砂印鉴 */
+.seal-tag {
+  display: inline-block;
+  color: var(--cinnabar);
+  border: 2rpx solid rgba(155, 45, 36, 0.78);
+  background: rgba(155, 45, 36, 0.04);
+  padding: 8rpx 16rpx;
+  font-size: 26rpx;
+  letter-spacing: 0.28em;
+  text-indent: 0.08em;
+  border-radius: 0;
+  font-family: var(--display);
+  transform: rotate(-1.5deg);
+  box-shadow: inset 0 0 0 1rpx rgba(155, 45, 36, 0.15);
+}
+
+.muted {
+  color: var(--mist);
+  font-size: 28rpx;
+  line-height: 1.85;
+}
+
+.divider {
+  height: 1rpx;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+  margin: 28rpx 0;
+}
+
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin: 24rpx 0;
+  color: var(--bronze);
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  font-size: 24rpx;
+  font-family: var(--display);
+}
+
+.ornament::before,
+.ornament::after {
+  content: "";
+  width: 56rpx;
+  height: 1rpx;
+  background: linear-gradient(90deg, transparent, var(--bronze-light), transparent);
+  opacity: 0.7;
+}
+
+/* 定宽爻画：阴阳总宽一致 */
+.yao-bar {
+  display: block;
+  width: 120rpx;
+  height: 10rpx;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+}
+.yao-bar.sm { width: 72rpx; height: 7rpx; }
+.yao-bar.lg { width: 160rpx; height: 12rpx; }
+.yao-bar.xl { width: 200rpx; height: 18rpx; }
+.yao-bar.empty {
+  background: rgba(28, 24, 20, 0.1);
+}
+.yao-bar.yang {
+  background: var(--ink);
+}
+.yao-bar.yin {
+  background: linear-gradient(
+    90deg,
+    var(--ink) 0%,
+    var(--ink) 42%,
+    transparent 42%,
+    transparent 58%,
+    var(--ink) 58%,
+    var(--ink) 100%
+  );
+}
+.yao-bar.moving::after {
+  content: "";
+  position: absolute;
+  right: -18rpx;
+  top: 50%;
+  width: 10rpx;
+  height: 10rpx;
+  margin-top: -5rpx;
+  border-radius: 50%;
+  background: var(--cinnabar);
+  box-shadow: 0 0 0 3rpx rgba(155, 45, 36, 0.15);
+}
+.yao-mark {
+  display: inline-block;
+  min-width: 24rpx;
+  margin-left: 8rpx;
+  color: var(--cinnabar);
+  font-size: 26rpx;
+  vertical-align: middle;
+}
+
+/* 乾隆通宝实物图：正面汉字 / 背面满文 */
+.coin {
+  width: 112rpx;
+  height: 112rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.coin-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -8rpx;
+  width: 68%;
+  height: 10rpx;
+  margin-left: -34%;
+  border-radius: 50%;
+  background: rgba(28, 24, 20, 0.2);
+  filter: blur(3rpx);
+  z-index: 0;
+  transform-origin: center;
+}
+.coin-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transform-style: preserve-3d;
+}
+.coin-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: block;
+}
+.coin-obverse {
+  opacity: 1;
+  z-index: 2;
+  box-shadow: 0 8rpx 16rpx rgba(28, 24, 20, 0.16);
+}
+.coin-reverse {
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow: 0 8rpx 16rpx rgba(28, 24, 20, 0.16);
+}
+.coin.yin .coin-obverse {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.coin.yin .coin-reverse {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+}
+.coin.idle .coin-obverse { opacity: 1; }
