@@ -31,7 +31,7 @@ liuyao-miniprogram/
 │   └── account/                    # 账户登录
 │
 ├── components/
-│   ├── luopan/                     # 首页罗盘（指南针 + 拖盘 + 方位助手）
+│   ├── luopan/                     # 首页罗盘（指南针 + 拖盘）
 │   ├── nav-back/                   # 自定义返回
 │   └── learn-figure/               # 研习文稿插图
 │
@@ -105,7 +105,6 @@ liuyao-miniprogram/
 | **罗盘样式** | `components/luopan/luopan.wxss` | `.luopan` 段 |
 | **罗盘跟手机转 / 指南针** | `components/luopan/luopan.js` → `startCompass` · `queueSensorHeading` · `plateFromHeading` | `applyLiveHeading`、`DeviceOrientation` |
 | 罗盘拖动手势 | `luopan.js` → `onPlateTouch*` · `setManualPlate` | `dragMove` |
-| 方位助手弹层 | `luopan.wxml` 中 `direction-card` · `luopan.js` 中 `onToggleDirection` | `direction-card` |
 | 二十四山 / 八卦位数据 | `luopan.js` 顶部 `MOUNTAIN_NAMES` · `data.bagua` | `MOUNTAIN` |
 | 左上角返回首页 | `components/nav-back/`（文案与 `reLaunch` 首页） | 预览顶栏 `#navBack` |
 | 左划返回 | `behaviors/swipe-back.js` | — |
