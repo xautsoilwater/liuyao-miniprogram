@@ -70,8 +70,27 @@ function testLuopanControlsRemoved() {
   assert.ok(!js.includes('方位助手'), 'luopan.js 仍含方位助手')
 }
 
+function testLuopanWuxingStripRemoved() {
+  const root = path.join(__dirname, '..')
+  const wxml = fs.readFileSync(path.join(root, 'components/luopan/luopan.wxml'), 'utf8')
+  const js = fs.readFileSync(path.join(root, 'components/luopan/luopan.js'), 'utf8')
+  const wxss = fs.readFileSync(path.join(root, 'components/luopan/luopan.wxss'), 'utf8')
+  assert.ok(!wxml.includes('wx-row'), 'luopan.wxml 仍含五行条 wx-row')
+  assert.ok(!wxml.includes('wx-item'), 'luopan.wxml 仍含五行条 wx-item')
+  assert.ok(!wxml.includes('wx-name'), 'luopan.wxml 仍含五行条 wx-name')
+  assert.ok(!js.includes("wx: '木'"), 'luopan.js 仍含五行条数据')
+  assert.ok(!wxss.includes('.wx-row'), 'luopan.wxss 仍含五行条样式')
+  assert.ok(!wxss.includes('.wx-item'), 'luopan.wxss 仍含 .wx-item')
+  ;['preview/app-preview.js', 'preview/liuyao-standalone.html'].forEach((rel) => {
+    const text = fs.readFileSync(path.join(root, rel), 'utf8')
+    assert.ok(!text.includes('const wxRow'), `${rel} 仍含罗盘下五行条 wxRow`)
+    assert.ok(!text.includes("const wuxing = ['木', '火', '土', '金', '水']"), `${rel} 仍含罗盘下五行数组`)
+  })
+}
+
 testGanSong()
 testBuildLuckyDirections()
 testPreviewStrings()
 testLuopanControlsRemoved()
+testLuopanWuxingStripRemoved()
 console.log('jixiang: all checks passed')
