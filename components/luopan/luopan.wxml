@@ -106,10 +106,9 @@
     </view>
   </view>
 
-  <view class="gan-row">
-    <view class="gan-item tone-{{item.tone}}" wx:for="{{tiangan}}" wx:key="gan">
-      <text class="gan-txt">{{item.gan}}</text>
-      <text class="gan-wx">{{item.wx}}</text>
+  <view class="wx-row">
+    <view class="wx-item tone-{{item.tone}}" wx:for="{{wuxing}}" wx:key="wx">
+      <text class="wx-name">{{item.wx}}</text>
     </view>
   </view>
 </view>
