@@ -8,6 +8,8 @@
  */
 
 const { EXTRA_ARTICLES } = require('./learning-extra')
+const { buildGuadianArticles } = require('./gua64-xiangjie')
+const { applyLearningBoosts } = require('./learning-boost')
 
 const CATEGORY_ORDER = ['开宗', '易理', '象数', '卜卦', '排盘', '断卦', '梅花', '附录']
 
@@ -28,7 +30,7 @@ function list(items) { return { type: 'list', items } }
 function figure(key, caption) { return { type: 'figure', key, caption: caption || '' } }
 function note(text) { return { type: 'note', text } }
 
-const ARTICLES = [
+const ARTICLES_RAW = [
   /* ───────── 卷一 · 开宗 ───────── */
   {
     id: 'xueyi-lujing',
@@ -44,12 +46,12 @@ const ARTICLES = [
       list([
         '卷一开宗：为何学、如何学；卜与修身的边界；教材用法',
         '卷二易理：太极阴阳、三义、象数理、三才、时位中正、观象玩辞',
-        '卷三象数：八卦取象、六十四卦、爻位内外、老少阴阳、本变互卦、类象与先后天',
+        '卷三象数：八卦取象、六十四卦详说、分宫一览、爻位内外、本变互卦、类象与先后天',
         '卷四卜卦：一事一问、诚敬、铜钱成爻成卦',
-        '卷五排盘：世应八宫、纳甲全表、六亲、六神起例、旬空旺衰、伏神',
+        '卷五排盘：世应与八宫、京房八宫详解、纳甲全表、六亲、六神、旬空旺衰、伏神',
         '卷六断卦：入门六步、用神原忌细表、合冲刑害、应期口诀、主客、常见问事',
         '卷七梅花：先天数、报数时间物象起卦、体用生克、本互变、与六爻对照',
-        '卷八附录：断卦口诀、术语速查、求财婚恋求职卦例——随时查阅，相当于书后索引与习题'
+        '卷八附录：六十四卦卦典（八宫总图点选详解）、断卦口诀、术语速查、卦例练习——随时查阅'
       ]),
       p('与纸书如何分工：入门阶段以本八卷为唯一教材即可。需要原典全文时，再备《周易》白文或权威注本；需要清代六爻名著原文时，再开《增删卜易》《卜筮正宗》。本程序不替代原典，但替代「入门小册 + 散乱笔记」。'),
       p('三条学习纪律特别重要：'),
@@ -334,7 +336,7 @@ const ARTICLES = [
       p('「六十四卦略说」讲重卦与八宫骨架；本篇是辞典。六十四卦的取象释名、卦辞与六爻爻辞，与排盘结果页所引同源，便于读盘时对照玩辞。'),
       p('上经三十卦（乾至离）偏天道与创始；下经三十四卦（咸至未济）偏人道与成终。检索可用卦名、卦辞字句或八宫名。点开一卦，可见卦画、卦辞与爻辞。'),
       quote('圣人设卦观象，系辞焉而明吉凶。', '《系辞上》'),
-      note('不必一次读完。卜得何卦，即来此篇核对卦辞爻辞；与「六十四卦略说」合参，象与辞才不致分离。')
+      note('不必一次读完。卜得何卦，即来此篇核对卦辞爻辞；与「六十四卦略说」合参，象与辞才不致分离。八宫点选总图见研习页「京房八宫」横幅。')
     ]
   },
   {
@@ -907,7 +909,10 @@ const ARTICLES = [
       note('首页「梅花」结果页按上述口径分节说明；互变细则见「互变中的体用」。')
     ]
   }
-].concat(EXTRA_ARTICLES)
+].concat(buildGuadianArticles()).concat(EXTRA_ARTICLES)
+
+/** 加厚正文与图示后的最终篇目 */
+const ARTICLES = applyLearningBoosts(ARTICLES_RAW)
 
 function normalizeArticle(article) {
   if (!article) return null

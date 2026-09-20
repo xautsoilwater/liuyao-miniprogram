@@ -42,20 +42,27 @@
     luckyPack: null,
     topicKey: 'general',
     articleId: null,
+    guaAlias: null,
     feedbackText: ''
   }
-  const stack = [{ page: 'index', articleId: null, topicKey: 'general' }]
+  const stack = [{ page: 'index', articleId: null, topicKey: 'general', guaAlias: null }]
   let touchStartX = 0
   let touchStartY = 0
   let touchStartT = 0
 
   function snapshot() {
-    return { page: state.page, articleId: state.articleId, topicKey: state.topicKey }
+    return {
+      page: state.page,
+      articleId: state.articleId,
+      topicKey: state.topicKey,
+      guaAlias: state.guaAlias
+    }
   }
   function applySnap(snap) {
     state.page = snap.page
     state.articleId = snap.articleId
     state.topicKey = snap.topicKey || state.topicKey
+    state.guaAlias = snap.guaAlias != null ? snap.guaAlias : state.guaAlias
   }
   function updateBackUi() {
     if (!navBack) return
@@ -98,7 +105,7 @@
       stack[Math.max(stack.length - 1, 0)] = snapshot()
     } else {
       const top = stack[stack.length - 1]
-      const same = top && top.page === state.page && top.articleId === state.articleId
+      const same = top && top.page === state.page && top.articleId === state.articleId && top.guaAlias === state.guaAlias
       if (!same) {
         stack.push(snapshot())
       } else {
@@ -123,6 +130,7 @@
     stack.length = 0
     state.page = 'index'
     state.articleId = null
+    state.guaAlias = null
     stack.push(snapshot())
     animatePage()
     render()
@@ -141,6 +149,8 @@
       history: renderHistory,
       learn: renderLearn,
       detail: renderDetail,
+      guadian: renderGuadian,
+      guadianDetail: renderGuadianDetail,
       feedback: renderFeedback
     })[state.page]()
     updateBackUi()
@@ -1741,16 +1751,30 @@
   let learnActiveAnchor = ''
 
   function learnVolumeGroups() {
-    if (window.LiuYao.groupByCategory) return window.LiuYao.groupByCategory()
-    const g = {}
-    window.LiuYao.ARTICLES.forEach((a) => { (g[a.category] = g[a.category] || []).push(a) })
-    const order = window.LiuYao.CATEGORY_ORDER || Object.keys(g)
-    return order.filter((category) => g[category]).map((category, i) => ({
-      category,
-      label: category,
-      anchorId: `learn-vol-${i + 1}`,
-      items: g[category]
-    }))
+    let groups
+    if (window.LiuYao.groupByCategory) {
+      groups = window.LiuYao.groupByCategory()
+    } else {
+      const g = {}
+      window.LiuYao.ARTICLES.forEach((a) => { (g[a.category] = g[a.category] || []).push(a) })
+      const order = window.LiuYao.CATEGORY_ORDER || Object.keys(g)
+      groups = order.filter((category) => g[category]).map((category, i) => ({
+        category,
+        label: category,
+        anchorId: `learn-vol-${i + 1}`,
+        items: g[category]
+      }))
+    }
+    return groups.map((grp) => {
+      if (grp.category !== '象数') return grp
+      const items = (grp.items || []).slice()
+      const gi = items.findIndex((a) => a.id === 'guadian-catalog')
+      if (gi < 0) return grp
+      const [entry] = items.splice(gi, 1)
+      const after = items.findIndex((a) => a.id === 'liushisi-gua')
+      items.splice(after >= 0 ? after + 1 : 0, 0, entry)
+      return Object.assign({}, grp, { items })
+    })
   }
 
   function learnJumpOffset() {
@@ -1823,6 +1847,14 @@
               </button>`).join('')}
           </div>
         </nav>
+        <div class="guadian-banner" id="openGuadianBanner">
+          <span class="gb-seal">京房八宫</span>
+          <div class="gb-main">
+            <div class="gb-title">六十四卦卦典</div>
+            <div class="muted" style="font-size:13px;margin-top:4px">卦画 + 卦名总图 · 点选任意一卦详解</div>
+          </div>
+          <span class="gb-go">›</span>
+        </div>
         ${groups.map((grp, i) => `
           <div class="frame learn-vol" id="${grp.anchorId || `learn-vol-${i + 1}`}" style="margin-top:14px">
             ${corners()}
@@ -1852,7 +1884,137 @@
       <button class="btn btn-ghost" data-back style="margin-top:12px">返回</button>`
     bindNav()
     bindLearnVolumeNav()
-    app.querySelectorAll('[data-id]').forEach((el) => { el.onclick = () => go('detail', { articleId: el.dataset.id }) })
+    const banner = app.querySelector('#openGuadianBanner')
+    if (banner) banner.onclick = () => go('guadian')
+    app.querySelectorAll('[data-id]').forEach((el) => {
+      el.onclick = () => {
+        const id = el.dataset.id
+        if (id === 'guadian-catalog' || id === 'guadian-daodu' || /^guadian-/.test(id)) {
+          go('guadian')
+          return
+        }
+        go('detail', { articleId: id })
+      }
+    })
+  }
+
+  function renderGuadian() {
+    setNav('六十四卦卦典')
+    const palaces = (window.LiuYao.buildPalaceCatalog && window.LiuYao.buildPalaceCatalog()) || []
+    const stages = window.LiuYao.GUA_STAGE || ['本宫', '一世', '二世', '三世', '四世', '五世', '游魂', '归魂']
+    app.innerHTML = `
+      <div class="gd-hero">
+        <span class="seal">京房八宫</span>
+        <div class="title-zh cast-title" style="margin-top:10px">六十四卦卦典</div>
+        <div class="subtitle cast-subtitle">八宫总图 · 点选任意一卦查看详解</div>
+      </div>
+      <div class="gd-legend">${stages.map((s) => `<span>${s}</span>`).join('')}</div>
+      <div class="gd-map">
+        ${palaces.map((p) => `
+          <div class="palace-card">
+            <div class="palace-head">
+              <span class="palace-sym">${p.symbol || ''}</span>
+              <div class="palace-line">
+                <span class="palace-name">${p.title}·${p.wuxing}</span>
+                ${p.tip ? `<span class="palace-tip muted">${p.tip}</span>` : ''}
+              </div>
+            </div>
+            <div class="gua-grid">
+              ${(p.guas || []).map((g) => `
+                <div class="gua-cell" data-alias="${g.alias}">
+                  <div class="gua-stage">${g.stage}</div>
+                  <div class="mini-gua">${(g.yaoView || []).map((row) => row.yang
+                    ? '<div class="mini-yao yang"></div>'
+                    : '<div class="mini-yao yin"><i class="seg"></i><i class="gap"></i><i class="seg"></i></div>').join('')}</div>
+                  <div class="gua-alias">${g.alias}</div>
+                  <div class="muted gua-full">${g.fullName}</div>
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="muted" style="text-align:center;margin:16px 0;font-size:13px;letter-spacing:.12em">点选卦名进入详解</div>
+      <button class="btn btn-ghost" id="gdBackLearn" style="margin-top:12px">返回研习</button>`
+    bindNav()
+    const backLearn = app.querySelector('#gdBackLearn')
+    if (backLearn) {
+      backLearn.onclick = () => {
+        back()
+        if (state.page !== 'learn') go('learn', {}, { replace: true })
+      }
+    }
+    app.querySelectorAll('[data-alias]').forEach((el) => {
+      el.onclick = () => go('guadianDetail', { guaAlias: el.dataset.alias })
+    })
+  }
+
+  function xiangExplainHtml(xe) {
+    if (!xe) return ''
+    return `
+      <div class="gd-section-head">卦象解释</div>
+      <div class="plain-block xiang-block">
+        ${xe.structure ? `<div class="xiang-structure">${xe.structure}</div>` : ''}
+        ${xe.nameWhy ? `<div class="xiang-classic">${xe.nameWhy}</div>` : ''}
+        ${xe.readTip ? `<div class="plain-text xiang-plain">${xe.readTip}</div>` : ''}
+      </div>`
+  }
+
+  function renderGuadianDetail() {
+    const alias = state.guaAlias
+    const a = window.LiuYao.getGuaXiangjie && window.LiuYao.getGuaXiangjie(alias)
+    if (!a) { go('guadian', {}, { replace: true }); return }
+    setNav(a.title || a.fullName || a.alias)
+    const board = (a.yaoBoard || []).map((row) => `
+      <div class="yao-row ${row.isShi ? 'is-shi' : ''} ${row.isYing ? 'is-ying' : ''}">
+        <div class="yao-pos">
+          <span class="pos-label">${row.posLabel}</span>
+          ${row.isShi ? '<span class="pos-tag">世</span>' : (row.isYing ? '<span class="pos-tag ying">应</span>' : '')}
+        </div>
+        <div class="yao-bar-wrap">
+          ${row.yang
+            ? '<div class="yao-bar yang"></div>'
+            : '<div class="yao-bar yin"><i class="seg"></i><i class="gap"></i><i class="seg"></i></div>'}
+        </div>
+        <div class="yao-ci">${row.classic || ''}</div>
+      </div>`).join('')
+    const plainYao = (a.plainYao || []).map((py) => {
+      const classic = py.classic || ''
+      const rest = py.rest || [py.tip, py.sage].filter(Boolean).join('')
+      return `
+      <div class="plain-yao">
+        <span class="py-pos">${py.posLabel}</span>
+        <div class="py-flow"><span class="py-classic">${classic}</span><span class="py-rest">${rest}</span></div>
+      </div>`
+    }).join('')
+    const plainZhan = (a.plainZhan || []).map((z) => `<div class="plain-zhan">· ${z}</div>`).join('')
+    app.innerHTML = `
+      <div class="frame gd-detail-frame">
+        ${corners()}
+        <span class="seal">${a.categoryLabel || '卦典'}</span>
+        <div class="title-zh cast-title" style="margin-top:12px">${a.title}</div>
+        <div class="gd-struct muted">${a.structureText || a.summary || ''}</div>
+        <div class="gd-theme">${a.theme || ''}</div>
+        <div class="gd-section-head">卦辞</div>
+        ${a.guaci ? `<div class="gd-guaci-box"><div class="gd-guaci-classic">${a.guaci}</div><div class="gd-guaci-from">—— ${a.alias}·卦辞</div></div>` : ''}
+        <div class="gd-section-head">卦象 · 爻辞</div>
+        <div class="yao-board">${board}</div>
+        <div class="yao-board-tip muted">自上而下为上爻→初爻；阳连阴断</div>
+        ${xiangExplainHtml(a.xiangExplain)}
+        <div class="gd-section-head">卦辞解释</div>
+        <div class="plain-block">
+          <div class="plain-text">${a.plainGuaci || ''}</div>
+        </div>
+        <div class="gd-section-head">爻辞解释</div>
+        <div class="plain-block">
+          ${plainYao}
+        </div>
+        ${a.plainYili ? `<div class="plain-block"><div class="plain-label">义理提要</div><div class="plain-text">${a.plainYili}</div></div>` : ''}
+        ${plainZhan ? `<div class="plain-block"><div class="plain-label">占事要点</div>${plainZhan}</div>` : ''}
+        <div class="detail-note muted">断具体人事仍须合用神、动变、日月。解释以十翼为骨，行文中对照儒家与墨家；本篇为卦德与辞象教材，不作绝对预言。</div>
+      </div>
+      <button class="btn btn-ghost" id="gdBackCatalog" style="margin-top:12px">‹ 返回八宫目录</button>`
+    bindNav()
+    const backBtn = app.querySelector('#gdBackCatalog')
+    if (backBtn) backBtn.onclick = () => go('guadian', {}, { replace: true })
   }
 
   const guaDianUi = { query: '', part: '全部', palace: '', open: '' }
@@ -1944,6 +2106,10 @@
   }
 
   function renderDetail() {
+    if (state.articleId === 'guadian-catalog' || state.articleId === 'guadian-daodu' || /^guadian-/.test(state.articleId || '')) {
+      go('guadian', {}, { replace: true })
+      return
+    }
     const raw = window.LiuYao.ARTICLES.find((x) => x.id === state.articleId)
     if (!raw) { go('learn', {}, { replace: true }); return }
     const a = window.LiuYao.getArticle

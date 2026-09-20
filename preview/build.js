@@ -8,6 +8,11 @@ const root = path.join(__dirname, '..')
 const order = [
   '../data/bagua',
   '../data/guaci',
+  './gua64-baihua',
+  './gua64-xiaoxiang',
+  './gua64-mojia',
+  './gua64-xiangjie',
+  './learning-boost',
   './learning-extra',
   '../data/learning',
   './ganzhi',
@@ -25,6 +30,11 @@ const order = [
 const fileOf = {
   '../data/bagua': 'data/bagua.js',
   '../data/guaci': 'data/guaci.js',
+  './gua64-baihua': 'data/gua64-baihua.js',
+  './gua64-xiaoxiang': 'data/gua64-xiaoxiang.js',
+  './gua64-mojia': 'data/gua64-mojia.js',
+  './gua64-xiangjie': 'data/gua64-xiangjie.js',
+  './learning-boost': 'data/learning-boost.js',
   './learning-extra': 'data/learning-extra.js',
   '../data/learning': 'data/learning.js',
   './ganzhi': 'utils/ganzhi.js',
@@ -39,6 +49,11 @@ const fileOf = {
   './meihua': 'utils/meihua.js'
 }
 
+const aliases = {
+  './bagua': '../data/bagua',
+  './guaci': '../data/guaci'
+}
+
 const modules = {}
 order.forEach((id) => {
   modules[id] = fs.readFileSync(path.join(root, fileOf[id]), 'utf8')
@@ -49,7 +64,8 @@ window.LiuYao = {};
 ;(function(){
 var __mods = {};
 function __require(id){
-  if(__mods[id]) return __mods[id].exports;
+  var resolved = (${JSON.stringify(aliases)})[id] || id;
+  if(__mods[resolved]) return __mods[resolved].exports;
   throw new Error('module not ready '+id);
 }
 ${order.map((id) => {
@@ -71,6 +87,7 @@ var askOptions = __require('./ask-options');
 var learning = __require('../data/learning');
 var bagua = __require('../data/bagua');
 var guaci = __require('../data/guaci');
+var guadian = __require('./gua64-xiangjie');
 window.LiuYao = {
   tossThreeCoins: coin.tossThreeCoins,
   manualYao: coin.manualYao,
@@ -100,7 +117,10 @@ window.LiuYao = {
   HOUTIAN_LAYOUT: bagua.HOUTIAN_LAYOUT,
   listGuaDian: guaci.listGuaDian,
   filterGuaDian: guaci.filterGuaDian,
-  PALACE_CHIP_ORDER: guaci.PALACE_CHIP_ORDER
+  PALACE_CHIP_ORDER: guaci.PALACE_CHIP_ORDER,
+  buildPalaceCatalog: guadian.buildPalaceCatalog,
+  getGuaXiangjie: guadian.getGuaXiangjie,
+  GUA_STAGE: guadian.STAGE
 };
 })();
 `
@@ -109,9 +129,19 @@ fs.writeFileSync(path.join(__dirname, 'engine.bundle.js'), engine)
 console.log('wrote engine.bundle.js', engine.length)
 
 const standalonePath = path.join(__dirname, 'liuyao-standalone.html')
+const appPreview = fs.readFileSync(path.join(__dirname, 'app-preview.js'), 'utf8')
 if (fs.existsSync(standalonePath)) {
   const html = fs.readFileSync(standalonePath, 'utf8')
-  const packed = html.replace(/<script>([\s\S]*?)<\/script>/, `<script>\n${engine}\n</script>`)
+  let n = 0
+  const packed = html.replace(/<script>([\s\S]*?)<\/script>/g, () => {
+    n += 1
+    if (n === 1) return `<script>\n${engine}\n</script>`
+    if (n === 2) return `<script>\n/* synced from app-preview.js by preview/build.js */\n${appPreview}\n</script>`
+    return arguments[0]
+  })
+  if (n < 2) {
+    throw new Error('liuyao-standalone.html expected two inline <script> tags, found ' + n)
+  }
   fs.writeFileSync(standalonePath, packed)
-  console.log('packed engine into liuyao-standalone.html')
+  console.log('packed engine + app-preview into liuyao-standalone.html')
 }

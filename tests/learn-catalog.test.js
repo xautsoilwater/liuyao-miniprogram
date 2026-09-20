@@ -86,6 +86,12 @@ function testGuaDianCatalog() {
   const qianGong = filterGuaDian(list, { palace: '乾' })
   assert.strictEqual(qianGong.length, 8, '乾宫应为八卦')
 
+  const palaceEntry = getArticle('guadian-catalog')
+  assert.ok(palaceEntry, '缺少八宫卦典总图入口 guadian-catalog')
+  assert.strictEqual(palaceEntry.openPage, 'guadian')
+  assert.ok(getArticle('jingfang-bagong'), '缺少京房八宫详解')
+  assert.ok(getArticle('liushisi-fengong'), '缺少六十四卦分宫一览')
+
   const previewFiles = [
     'preview/app-preview.js',
     'preview/liuyao-standalone.html',
