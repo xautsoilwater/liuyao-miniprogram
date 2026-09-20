@@ -4,6 +4,7 @@
  */
 const { buildBaguaDisk } = require('../../data/bagua')
 
+/** 研习文稿里所有罗盘八卦图都走这一套：先天盘 / 后天盘 / 对照双盘 */
 const DISK_KEYS = {
   'xiantian-bagua': ['xiantian'],
   'houtian-bagua': ['houtian'],

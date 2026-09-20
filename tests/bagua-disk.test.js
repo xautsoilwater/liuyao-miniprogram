@@ -8,6 +8,9 @@ const {
   buildBaguaDisk
 } = require('../data/bagua')
 const { EXTRA_ARTICLES } = require('../data/learning-extra')
+const { ARTICLES } = require('../data/learning')
+
+const COMPASS_KEYS = ['xiantian-bagua', 'houtian-bagua', 'bagua', 'bagua-table']
 
 function testOrientations() {
   const xianExpect = { qian: 0, xun: 45, kan: 90, gen: 135, kun: 180, zhen: 225, li: 270, dui: 315 }
@@ -120,8 +123,56 @@ function testPreviewWiring() {
   })
 }
 
+function collectCompassFigures() {
+  const rows = []
+  ARTICLES.forEach((article) => {
+    ;(article.blocks || []).forEach((block) => {
+      if (block.type === 'figure' && COMPASS_KEYS.includes(block.key)) {
+        rows.push({
+          key: block.key,
+          id: article.id,
+          title: article.title,
+          caption: block.caption || ''
+        })
+      }
+    })
+  })
+  return rows
+}
+
+function testAllCompassFiguresShareDisk() {
+  const rows = collectCompassFigures()
+  assert.ok(rows.length >= 12, `研习罗盘图过少：只扫到 ${rows.length} 处`)
+  const used = new Set(rows.map((row) => row.key))
+  COMPASS_KEYS.forEach((key) => {
+    assert.ok(used.has(key), `文稿未再引用 ${key}，盘点清单需更新`)
+  })
+  rows.forEach((row) => {
+    assert.ok(COMPASS_KEYS.includes(row.key), `${row.title} 的 ${row.key} 未纳入共享盘面`)
+  })
+
+  const root = path.join(__dirname, '..')
+  const js = fs.readFileSync(path.join(root, 'components/learn-figure/learn-figure.js'), 'utf8')
+  const wxml = fs.readFileSync(path.join(root, 'components/learn-figure/learn-figure.wxml'), 'utf8')
+  const previewJs = fs.readFileSync(path.join(root, 'preview/app-preview.js'), 'utf8')
+  COMPASS_KEYS.forEach((key) => {
+    assert.match(js, new RegExp(key === 'bagua' ? 'bagua:' : `'${key}'`), `learn-figure.js 未把 ${key} 接入 DISK_KEYS`)
+    assert.match(wxml, new RegExp(key), `WXML 未处理 ${key}`)
+  })
+  assert.match(previewJs, /key === 'xiantian-bagua'/, '预览未处理 xiantian-bagua')
+  assert.match(previewJs, /houtian-bagua' \|\| key === 'bagua'/, '预览未把 bagua / houtian-bagua 接到同一盘面')
+  assert.match(previewJs, /key === 'bagua-table'/, '预览未处理 bagua-table')
+  assert.doesNotMatch(
+    previewJs,
+    /key === 'bagua'[\s\S]{0,200}fig-bagua/,
+    '预览仍用旧 fig-bagua 文字环画 bagua'
+  )
+  assert.doesNotMatch(wxml, /fig-bagua/, '小程序不应再保留旧文字环')
+}
+
 testOrientations()
 testArticleKeys()
 testComponentWiring()
 testPreviewWiring()
+testAllCompassFiguresShareDisk()
 console.log('bagua-disk: all checks passed')
