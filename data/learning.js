@@ -911,6 +911,11 @@ function getArticle(id) {
   })
 }
 
+function volumeAnchorId(category) {
+  const idx = CATEGORY_ORDER.indexOf(category)
+  return idx >= 0 ? `learn-vol-${idx + 1}` : `learn-vol-${category}`
+}
+
 function groupByCategory() {
   const map = {}
   ARTICLES.forEach((item) => {
@@ -927,6 +932,7 @@ function groupByCategory() {
       vol: meta.vol || '',
       subtitle: meta.subtitle || '',
       label: meta.vol ? `${meta.vol} · ${category}` : category,
+      anchorId: volumeAnchorId(category),
       items: map[category]
     }
   })
@@ -938,5 +944,6 @@ module.exports = {
   CATEGORY_META,
   getArticle,
   groupByCategory,
+  volumeAnchorId,
   normalizeArticle
 }

@@ -1260,77 +1260,244 @@ const EXTRA_ARTICLES = [
   {
     id: 'xian-hou-tian',
     category: '象数',
-    title: '先天与后天方位',
-    summary: '伏羲先天八卦与文王后天八卦的方位排布、对应关系及在六爻中的应用辨析。',
+    title: '先天八卦与后天八卦详解',
+    summary: '伏羲先天八卦与文王后天八卦的方位排布、对待结构、先天数与洛书、体用之分及在六爻与梅花中的应用——教材级系统解说。',
     cover: 'bagua-table',
     blocks: [
       figure('bagua-table', '先天（伏羲）方位 与 后天（文王）方位对照'),
-      p('八卦有两套经典方位系统：伏羲先天卦与文王后天卦。两套方位各有功用，不可混淆：先天方位多用于梅花易数起卦与天地本体论；后天方位用于六爻纳甲排盘与风水实践。'),
+      p('八卦有两套经典方位系统：伏羲先天卦与文王后天卦。两套方位各有功用，不可混淆。先天卦重「对待」，体现宇宙本体的阴阳对称；后天卦重「流行」，体现四时五行的运行次序。学易者须明白：先天为体、后天为用，梅花起卦用先天数，六爻纳甲走后天方位，两者并行不悖，混用则象乱。'),
       quote('易有太极，是生两仪，两仪生四象，四象生八卦。', '《系辞上》'),
+      
+      p('本篇系统解说：一、伏羲先天八卦的方位与对待；二、邵雍先天数与梅花起卦；三、文王后天八卦的方位与流行；四、后天八卦与洛书、四时的关系；五、先天为体、后天为用的理论与实践；六、六爻与梅花的边界；七、学习对照表与练习提示。'),
 
-      p('先天八卦（伏羲）方位口诀：乾南坤北，离东坎西，震东北，兑东南，巽西南，艮西北。'),
+      /* ─────── 一、伏羲先天八卦 ─────── */
+      p('【一、伏羲先天八卦：乾南坤北，对待而立】'),
+      quote('天地定位，山泽通气，雷风相薄，水火不相射。', '《说卦传》'),
+      
+      p('伏羲先天八卦的核心是「对待」：八卦两两相对，阴阳互补。乾坤为天地之对，坎离为水火之对，震巽为雷风之对，艮兑为山泽之对。此八卦方位传说为伏羲所画，代表宇宙的本体秩序——非时间流转，而是空间结构的对称与和谐。'),
+      
+      p('先天八卦方位口诀（伏羲图，上南下北）：'),
       list([
-        '乾(☰)：正南（上、尊位、天）',
-        '坤(☷)：正北（下、地）',
-        '离(☲)：正东（日出）',
-        '坎(☵)：正西（日落）',
-        '震(☳)：东北',
-        '兑(☱)：东南',
-        '巽(☴)：西南',
-        '艮(☶)：西北'
+        '乾☰ 正南（天，纯阳，上）',
+        '坤☷ 正北（地，纯阴，下）',
+        '离☲ 正东（火，中虚，日出）',
+        '坎☵ 正西（水，中满，日落）',
+        '震☳ 东北（雷，初阳动）',
+        '兑☱ 东南（泽，少阴悦）',
+        '巽☴ 西南（风，长阴入）',
+        '艮☶ 西北（山，少阳止）'
       ]),
-
-      p('先天卦的数（邵雍先天数，用于梅花起卦）：乾1、兑2、离3、震4、巽5、坎6、艮7、坤8。'),
+      
+      p('对待结构的深意：'),
       list([
-        '先天数是梅花易数报数取卦的基础',
-        '以两数分别取上卦和下卦',
-        '先天数主体用之象，不直接参与六爻纳甲',
-        '先天方位体现宇宙本体的对称结构（乾坤相对、坎离相对）'
+        '乾南坤北：天地定位，上下对立而统一全局',
+        '离东坎西：日出东方为火明，日落西方为水暗，水火不相射（不相侵，各司其位）',
+        '震东北兑东南：震为初阳（雷动），兑为少阴（泽说），对待而和',
+        '巽西南艮西北：巽为长阴（风入），艮为少阳（山止），亦对待呼应',
+        '山泽通气：艮为山，兑为泽，山高泽低，气脉相通',
+        '雷风相薄：震雷巽风，相激相薄（摩荡），生化万物'
       ]),
+      
+      p('「天地定位」四句是先天卦最经典的描述。它不是讲四时变化，而是讲宇宙结构：天地既立，山泽既分，雷风既动，水火既济，八卦各归其位，道之全体于是备矣。此为「先天」——先于时间流转的本体秩序。'),
+      
+      p('先天卦的阴阳排列：按卦画阴阳爻数，乾纯阳居南（阳极），坤纯阴居北（阴极），其余六卦按阴阳消长分布四隅，形成一个完美的阴阳对称图。此图也称「伏羲八卦次序图」。'),
 
-      p('后天八卦（文王）方位口诀：坎北离南，震东兑西，乾西北坤西南，巽东南艮东北。'),
+      /* ─────── 二、邵雍先天数与梅花 ─────── */
+      p('【二、邵雍先天数与梅花易数】'),
+      p('宋代邵雍（康节先生）依先天卦次序配数，得「先天数」：乾1、兑2、离3、震4、巽5、坎6、艮7、坤8。此数序与伏羲先天卦方位呼应，用于梅花易数的报数起卦。'),
+      
+      p('先天数口诀（必背）：'),
       list([
-        '坎(☵)：正北',
-        '离(☲)：正南',
-        '震(☳)：正东',
-        '兑(☱)：正西',
-        '乾(☰)：西北',
-        '坤(☷)：西南',
-        '巽(☴)：东南',
-        '艮(☶)：东北'
+        '乾一，兑二，离三，震四',
+        '巽五，坎六，艮七，坤八'
       ]),
-
-      p('后天卦对应五行与季节：'),
+      
+      p('为什么梅花用先天数？梅花易数追求「触机即占、感通天地」，以两个任意数字（报数、物数、时间数）取上下卦，动爻定体用，再看五行生克。这套方法继承了邵雍《皇极经世》的象数哲学，重「体」（本体之象）而轻「用」（纳甲干支之用）。先天数简洁直观，乾1坤8首尾呼应，符合梅花「以简驭繁」的精神。'),
+      
+      p('先天数与先天卦方位的对应：'),
       list([
-        '坎（水）：北，冬，属水',
-        '离（火）：南，夏，属火',
-        '震（木）：东，春，属木',
-        '兑（金）：西，秋，属金',
-        '乾（金）：西北，初冬，属金',
-        '坤（土）：西南，长夏，属土',
-        '巽（木）：东南，初夏，属木',
-        '艮（土）：东北，冬末，属土'
+        '乾1 南方，离3 东方，震4 东北，兑2 东南',
+        '巽5 西南，坎6 西方，艮7 西北，坤8 北方',
+        '先天数的奇偶：乾1离3震4艮7为阳数区间；兑2巽5坎6坤8为阴阳交界',
+        '梅花报数时，两数分别除8取余得卦序，再按先天数反查卦名'
       ]),
+      
+      p('梅花起卦示例：报数3和5 → 上卦3为离，下卦5为巽 → 风火家人卦；3+5=8，8÷6余2 → 二爻动。动在下卦巽，故巽为用卦，离为体卦。梅花断卦只看体用五行生克与本互变，不走六爻纳甲世应那套系统。'),
+      
+      note('先天数专用于梅花起卦，不参与六爻纳甲排盘。两套体系各有字典，勿混用。'),
 
-      p('六爻纳甲排盘使用后天方位：八宫卦宫属按后天五行分配，六十四卦皆归属八宫。取象问方位时，亦以后天八卦定东西南北。'),
-      list([
-        '六爻问方位：以后天八卦对应方向判断',
-        '梅花起卦：以先天数报两个数取卦',
-        '六爻与梅花并用时：各自的取卦、数字系统不混用',
-        '梅花体用之象可参考后天五行生克，但数字来源是先天数'
-      ]),
-
-      p('两套系统的核心差异：'),
-      list([
-        '先天：体现宇宙对称本体，乾坤统领，重卦体结构与先天数',
-        '后天：体现流行之用，五行四时运行，重纳甲干支与世应',
-        '先天为体（体现道体），后天为用（体现时用）',
-        '邵雍重先天，京房/纳甲重后天；两者并行不悖'
-      ]),
-
+      /* ─────── 三、文王后天八卦 ─────── */
+      p('【三、文王后天八卦：坎北离南，流行四时】'),
       quote('帝出乎震，齐乎巽，相见乎离，致役乎坤，说言乎兑，战乎乾，劳乎坎，成言乎艮。', '《说卦传》'),
-      p('此段正是后天八卦运行之序的经典描述：万物从震（春）启动，历离（夏）、坤（长夏）、兑（秋），至坎（冬），成于艮。六爻排盘中用神旺衰所依据的四季旺相，正以此为背景。'),
-      note('六爻排盘遵循后天系统；梅花起卦使用先天数。混用则象乱。')
+      
+      p('文王后天八卦的核心是「流行」：八卦不再对称相对，而是按四时运转的次序排布。坎北离南、震东兑西，代表一年四季、一日昼夜的循环往复。此为「后天」——天地既开之后，万物流行于时空之中，有生有长、有收有藏，周而复始。'),
+      
+      p('后天八卦方位口诀（文王图，上南下北）：'),
+      list([
+        '离☲ 正南（火，夏，午）',
+        '坎☵ 正北（水，冬，子）',
+        '震☳ 正东（木，春，卯）',
+        '兑☱ 正西（金，秋，酉）',
+        '乾☰ 西北（金，初冬，戌亥）',
+        '坤☷ 西南（土，长夏，未申）',
+        '巽☴ 东南（木，初夏，辰巳）',
+        '艮☶ 东北（土，冬春交，丑寅）'
+      ]),
+      
+      p('后天方位为何如此排布？依《说卦传》「帝出乎震」一节，万物生于春震（东），长于巽（东南），盛于离（南），收于坤（西南），悦于兑（西），藏于乾（西北），潜于坎（北），成于艮（东北），再归震而新一轮循环。此为天道运行之序，四时五行之用，故称「后天」。'),
+      
+      p('「帝出乎震」八卦运行详解：'),
+      list([
+        '震（东方，春，卯月）：万物出乎震，雷动而生，草木萌发，帝王施令',
+        '巽（东南，初夏，辰巳月）：齐乎巽，风行而齐，万物齐整成形',
+        '离（南方，夏，午月）：相见乎离，日丽中天，万物显明繁茂',
+        '坤（西南，长夏，未申月）：致役乎坤，地厚载物，万物成实',
+        '兑（西方，秋，酉月）：说言乎兑，秋收悦喜，万物成熟',
+        '乾（西北，初冬，戌亥月）：战乎乾，天行健刚，肃杀收藏',
+        '坎（北方，冬，子月）：劳乎坎，水寒劳苦，万物潜藏休养',
+        '艮（东北，冬末春初，丑寅月）：成言乎艮，山止而成，万物终始交替'
+      ]),
+      
+      p('后天八卦与五行、季节、方位的完整对应，是六爻纳甲排盘中「月令旺衰」的理论根基。例如木旺春（震巽方），火旺夏（离方），金旺秋（兑乾方），水旺冬（坎方），土旺四季末（坤艮方）。用神在月令的旺相休囚死，正是依此后天流行次序而论。'),
+
+      /* ─────── 四、后天与洛书 ─────── */
+      p('【四、后天八卦与洛书、方位用事】'),
+      p('后天八卦与「洛书九宫」密切相关。洛书数：戴九履一，左三右七，二四为肩，六八为足，五居中央。后天八卦按此九宫方位排布（中宫空或寄坤艮），形成「后天八卦洛书图」。'),
+      
+      p('洛书数与后天八卦对照：'),
+      list([
+        '坎1（北，冬，子水）',
+        '坤2（西南，未坤土）',
+        '震3（东，春，卯木）',
+        '巽4（东南，辰巽木）',
+        '中5（寄坤艮土，或空）',
+        '乾6（西北，戌亥金）',
+        '兑7（西，秋，酉金）',
+        '艮8（东北，丑艮土）',
+        '离9（南，夏，午火）'
+      ]),
+      
+      p('洛书奇偶、纵横相加皆为15，体现后天运行的数理秩序。六爻八宫归属、纳甲干支、月令旺衰，皆以此后天洛书为蓝本。风水罗盘的后天盘、奇门遁甲的九宫，也都依后天八卦洛书排布。'),
+      
+      p('后天方位用事示例：'),
+      list([
+        '问方位：用神属震卦（寅卯木），后天震居东，故所问方向在东方',
+        '问季节：卦得离火旺相，后天离主夏午月，应期或旺时在夏季',
+        '问人事：乾宫属金居西北，主父、君、首领；坤宫属土居西南，主母、众、田产',
+        '六爻纳甲：各宫五行依后天方位定（乾兑金、震巽木、坎水、离火、坤艮土）'
+      ]),
+      
+      note('洛书九宫与后天八卦是六爻排盘的「地图」，初学可先记八卦后天方位，再深入洛书数理。'),
+
+      /* ─────── 五、先天为体 后天为用 ─────── */
+      p('【五、先天为体，后天为用——两者如何并行不悖】'),
+      p('「先天为体，后天为用」是易学的重要原则。先天卦讲本体、讲道之全，不涉时间流转，故为「体」；后天卦讲流行、讲气之运，依四时而变，故为「用」。两套系统不是互相替代，而是互相补充：先天给「理」，后天给「数」。'),
+      
+      p('为什么六爻纳甲走后天？'),
+      list([
+        '六爻纳甲是京房易的占筮体系，重「用事」与「时令」',
+        '用神旺衰以月令论，月令即四时流转，正是后天流行',
+        '八宫卦宫五行（乾兑金、震巽木等）依后天方位与五行对应',
+        '世应、纳甲干支、空亡旬空，皆在时间轴上推演，故必走后天',
+        '六爻问「何时应验、能否成事」，答案在流行之用，不在本体之理'
+      ]),
+      
+      p('为什么梅花起卦用先天数？'),
+      list([
+        '梅花易数追求「感通」与「取象」，不走纳甲干支那套细密系统',
+        '先天数乾1坤8，简洁对称，便于报数与心算',
+        '梅花重体用生克（五行），不重世应旺衰（干支月令）',
+        '邵雍象数学宗先天，梅花继承此脉，故用先天数定体用',
+        '梅花问「气势顺逆、体用关系」，答案在本体之象，故走先天'
+      ]),
+      
+      p('两者并行不悖的实践：'),
+      list([
+        '同一问题可分别用六爻与梅花起卦，各走各的系统，互相印证',
+        '六爻给出细致的用神旺衰、动变合冲、应期推算',
+        '梅花给出简洁的体用关系、本互变三层气势',
+        '两卦象意若一致（如皆示吉或皆示凶），可信度更高',
+        '两卦若矛盾，以六爻为主（因六爻信息密度更高），梅花作参考'
+      ]),
+
+      /* ─────── 六、常见混用错误 ─────── */
+      p('【六、常见混用错误与边界提示】'),
+      p('初学者最易犯的错误，就是把先天后天的概念、数字、方位混用。以下列举常见错误，供自查：'),
+      
+      p('错误一：用先天数推六爻用神旺衰'),
+      list([
+        '误：「乾1，所以乾宫用神在1月最旺」——错！',
+        '正：六爻用神旺衰看月令（后天流行），乾兑属金，金旺秋（申酉月）',
+        '先天数只用于梅花报数起卦，与六爻月令无关'
+      ]),
+      
+      p('错误二：用后天方位推梅花体用数'),
+      list([
+        '误：「震居东方，震为3，所以报数3得震卦」——错！',
+        '正：梅花先天数震为4（不是3），报数4或4的倍数除8余4得震卦',
+        '后天方位用于六爻取象问方向，不用于梅花起卦'
+      ]),
+      
+      p('错误三：把梅花体用套到六爻世应'),
+      list([
+        '误：「六爻中体卦生用卦，所以耗泄」——错！',
+        '正：六爻只有世应、用神原神忌神，没有「体用」概念',
+        '世应关系看五行生克（世生应、应生世等），但不叫「体用」',
+        '体用是梅花专用术语，六爻专用术语是世应与用神'
+      ]),
+      
+      p('错误四：混淆先天对待与后天流行的意涵'),
+      list([
+        '误：「先天乾南坤北，所以夏天乾卦最旺」——错！',
+        '正：先天讲本体对待，不讲四时；后天才讲流行，乾居西北主初冬',
+        '乾金旺于秋冬之交（后天戌亥方），与先天「乾居南」无关'
+      ]),
+      
+      p('边界提示：'),
+      list([
+        '用六爻时：只记后天方位、八宫五行、月令旺衰，先天数用不上',
+        '用梅花时：只记先天数1-8、体用生克，不管月令旬空世应',
+        '两套体系可以「同一问题各起一卦」，但不可「一卦中混用两套规则」',
+        '本工具首页「六爻排盘」与「梅花起卦」是两个独立入口，结果页各自独立'
+      ]),
+
+      /* ─────── 七、对照表与学习提示 ─────── */
+      p('【七、对照表与学习提示】'),
+      p('以下给出完整的对照表，供背诵与查阅：'),
+      
+      p('先天八卦与先天数对照表：'),
+      list([
+        '乾☰ 1 | 正南 | 金 | 天、父',
+        '兑☱ 2 | 东南 | 金 | 泽、少女',
+        '离☲ 3 | 正东 | 火 | 火、中女',
+        '震☳ 4 | 东北 | 木 | 雷、长男',
+        '巽☴ 5 | 西南 | 木 | 风、长女',
+        '坎☵ 6 | 正西 | 水 | 水、中男',
+        '艮☶ 7 | 西北 | 土 | 山、少男',
+        '坤☷ 8 | 正北 | 土 | 地、母'
+      ]),
+      
+      p('后天八卦与方位五行季节对照表：'),
+      list([
+        '坎☵ | 正北 | 水 | 冬 | 子月',
+        '艮☶ | 东北 | 土 | 冬末春初 | 丑寅月',
+        '震☳ | 正东 | 木 | 春 | 卯月',
+        '巽☴ | 东南 | 木 | 初夏 | 辰巳月',
+        '离☲ | 正南 | 火 | 夏 | 午月',
+        '坤☷ | 西南 | 土 | 长夏 | 未申月',
+        '兑☱ | 正西 | 金 | 秋 | 酉月',
+        '乾☰ | 西北 | 金 | 初冬 | 戌亥月'
+      ]),
+      
+      p('学习提示（如何用本程序对照练习）：'),
+      list([
+        '提示一：打开首页「梅花易数」，随机起卦，观察先天数如何转为上下卦。例如报数1和8，得乾上坤下（天地否），体会乾1坤8的先天对待。',
+        '提示二：打开首页「六爻排盘」，摇一卦，查看卦宫与纳甲。例如得震宫卦，对照后天震居东方、属木、春旺，理解后天流行如何落在月令旺衰上。',
+        '提示三：同一问题分别用六爻与梅花各起一卦，对照两套结果。注意：六爻看用神旺衰动变世应，梅花看体用生克本互变，各走各的逻辑，互相印证而不混用。'
+      ]),
+      
+      quote('先天者，伏羲之易，天地之撰也；后天者，文王之易，人事之用也。两者不可偏废，亦不可混同。', '（后人总结）'),
+      note('此篇宜反复对照卦例练习。卷三「八卦取象」、卷五「纳甲全表」、卷七「梅花入门」可与本篇互参。')
     ]
   },
 
@@ -3381,6 +3548,11 @@ function getArticle(id) {
   })
 }
 
+function volumeAnchorId(category) {
+  const idx = CATEGORY_ORDER.indexOf(category)
+  return idx >= 0 ? `learn-vol-${idx + 1}` : `learn-vol-${category}`
+}
+
 function groupByCategory() {
   const map = {}
   ARTICLES.forEach((item) => {
@@ -3397,6 +3569,7 @@ function groupByCategory() {
       vol: meta.vol || '',
       subtitle: meta.subtitle || '',
       label: meta.vol ? `${meta.vol} · ${category}` : category,
+      anchorId: volumeAnchorId(category),
       items: map[category]
     }
   })
@@ -3408,6 +3581,7 @@ module.exports = {
   CATEGORY_META,
   getArticle,
   groupByCategory,
+  volumeAnchorId,
   normalizeArticle
 }
 
@@ -4600,13 +4774,13 @@ const DOMAINS = [
     key: 'emotion',
     label: '感情婚姻',
     topicHint: 'marriage',
-    re: /婚|恋|感情|对象|分手|复合|相亲|女友|男友|老婆|丈夫|表白|相处|桃花|姻缘|第三者|喜不喜欢/
+    re: /婚|恋|感情|对象|分手|复合|相亲|女友|男友|老婆|丈夫|表白|相处|桃花|姻缘|第三者|喜不喜欢|见家长|断联|彩礼|嫁妆|条件/
   },
   {
     key: 'family',
     label: '家庭亲眷',
     topicHint: 'general',
-    re: /家里|家和|父母|父亲|母亲|孩子|子女|亲眷|家人|婆媳|家事/
+    re: /家里|家和|父母|父亲|母亲|孩子|子女|亲眷|家人|婆媳|家事|择校|长辈/
   },
   {
     key: 'pregnancy',
@@ -4618,31 +4792,31 @@ const DOMAINS = [
     key: 'exam',
     label: '学业考试',
     topicHint: 'exam',
-    re: /考试|考研|考公|面试|录取|论文|答辩|过关|上岸|分数|笔试|升学|证书|执照/
+    re: /考试|考研|考公|面试|录取|论文|答辩|过关|上岸|分数|笔试|升学|证书|执照|事业编|调剂|留学|驾考|资格考/
   },
   {
     key: 'career',
     label: '事业职场',
     topicHint: 'career',
-    re: /升职|晋升|工作|跳槽|入职|转正|岗位|职称|项目|官运|功名|辞职|上级|职场/
+    re: /升职|晋升|工作|跳槽|入职|转正|岗位|职称|项目|官运|功名|辞职|上级|职场|裁员|降薪|创业|副业|续约|绩效|考核/
   },
   {
     key: 'wealth',
     label: '求财经营',
     topicHint: 'wealth',
-    re: /财|钱|回款|进账|生意|合同|签约|成交|利润|赚|亏|货款|收债|求财/
+    re: /财|钱|回款|进账|生意|合同|签约|成交|利润|赚|亏|货款|收债|求财|借款|借出|担保|尾款|毁约/
   },
   {
     key: 'invest',
     label: '投资理财',
     topicHint: 'wealth',
-    re: /投资|理财|股票|基金|收益|出手|入场/
+    re: /投资|理财|股票|基金|收益|出手|入场|加仓|减仓|止损/
   },
   {
     key: 'property',
     label: '置业买卖',
     topicHint: 'wealth',
-    re: /买房|卖房|买车|卖车|置业|房产|车子/
+    re: /买房|卖房|买车|卖车|置业|房产|车子|租金|收租/
   },
   {
     key: 'partner',
@@ -4654,7 +4828,7 @@ const DOMAINS = [
     key: 'health',
     label: '疾病健康',
     topicHint: 'health',
-    re: /病|疾|疼|痛|手术|住院|康复|治疗|身体|发烧|炎症|体检|痊愈|好转|严重|病情|就医|调养/
+    re: /病|疾|疼|痛|手术|住院|康复|治疗|身体|发烧|炎症|体检|痊愈|好转|严重|病情|就医|调养|复查|慢性/
   },
   {
     key: 'visit',
@@ -4702,13 +4876,13 @@ const DOMAINS = [
     key: 'document',
     label: '文书审批',
     topicHint: 'exam',
-    re: /申请|签证|审批|批复|手续|办证|证件|贷款批|公文/
+    re: /申请|签证|审批|批复|手续|办证|证件|贷款批|公文|落户|理赔|报销|再签/
   },
   {
     key: 'home',
     label: '家宅迁居',
     topicHint: 'travel',
-    re: /搬家|迁居|租房|装修|动土|家宅|居住|住这里/
+    re: /搬家|迁居|租房|装修|动土|家宅|居住|住这里|开业|安床|邻里|物业/
   },
   {
     key: 'social',
@@ -4726,13 +4900,13 @@ const DOMAINS = [
     key: 'lawsuit',
     label: '官司是非',
     topicHint: 'lawsuit',
-    re: /官司|诉讼|起诉|纠纷|是非|仲裁|法院|警察|告状|口舌|和解|报警/
+    re: /官司|诉讼|起诉|纠纷|是非|仲裁|法院|警察|告状|口舌|和解|报警|诈骗|被骗|劳动仲裁|离婚/
   },
   {
     key: 'lost',
     label: '失物寻人',
     topicHint: 'lost',
-    re: /丢|失物|找回|找不着|遗失|钥匙|手机丢|找得到|寻物|寻人|失踪/
+    re: /丢|失物|找回|找不着|遗失|钥匙|手机丢|找得到|寻物|寻人|失踪|宠物|账号/
   }
 ]
 
@@ -4873,6 +5047,17 @@ const ZHI_DIR = {
 const GUA_DIR = {
   坎: '正北', 坤: '西南', 震: '正东', 巽: '东南',
   乾: '西北', 兑: '正西', 艮: '东北', 离: '正南'
+}
+
+const GUA_SCENE = {
+  乾: '高处、开阔处、金属器物或管理区域',
+  兑: '低洼、开口、近水或有缺口之处',
+  离: '明亮、显眼、电器或热源附近',
+  震: '道路、出入口、移动物或有声响之处',
+  巽: '门窗、通风口、狭长通道或木器附近',
+  坎: '低处、暗处、水边、管线或凹陷处',
+  艮: '墙角、门槛、柜架、台阶或静止之处',
+  坤: '地面、储物处、柔软织物或承载物附近'
 }
 
 /** 地支 → 时辰（传统十二时辰，供「几点」类作答） */
@@ -5618,6 +5803,7 @@ module.exports = {
   WHEN_KIND_LABEL,
   ZHI_DIR,
   GUA_DIR,
+  GUA_SCENE,
   ZHI_SHICHEN,
   DONG_PERIOD,
   parseQuestion,
@@ -5655,46 +5841,20 @@ __mods["./ask-options"] = { exports: {} };
  */
 
 const TIME_SCOPES = [
-  {
-    key: "",
-    label: "不限时"
-  },
-  {
-    key: "今天",
-    label: "今天"
-  },
-  {
-    key: "今晚",
-    label: "今晚"
-  },
-  {
-    key: "明天",
-    label: "明天"
-  },
-  {
-    key: "本周",
-    label: "本周"
-  },
-  {
-    key: "周末",
-    label: "周末"
-  },
-  {
-    key: "本月",
-    label: "本月"
-  },
-  {
-    key: "近期",
-    label: "近期"
-  },
-  {
-    key: "今年",
-    label: "今年"
-  }
+  { key: '', label: '不限时' },
+  { key: '今天', label: '今天' },
+  { key: '今晚', label: '今晚' },
+  { key: '明天', label: '明天' },
+  { key: '本周', label: '本周' },
+  { key: '周末', label: '周末' },
+  { key: '本月', label: '本月' },
+  { key: '近期', label: '近期' },
+  { key: '今年', label: '今年' }
 ]
 
 /** @type {{ key: string, label: string, tip?: string, options: object[] }[]} */
-const ASK_GROUPS = [
+const ASK_GROUPS = 
+[
   {
     key: "emotion",
     label: "感情婚姻",
@@ -7667,6 +7827,7 @@ const {
   directReply,
   ZHI_DIR,
   GUA_DIR,
+  GUA_SCENE,
   modeLabelList,
   yesNoLevel,
   yesNoJudgmentLine,
@@ -7678,6 +7839,7 @@ const {
   safetyLevel,
   safetyJudgmentLine
 } = require('./ask')
+const { getGuaCi } = require('../data/guaci')
 
 /** 问事类别：用神=主要看什么；元神=帮你的；忌神=碍事的 */
 const TOPIC_YONGSHEN = [
@@ -7697,6 +7859,75 @@ const TOPIC_YONGSHEN = [
   { key: 'lost', label: '失物寻人', yongshen: '妻财', yuanShen: '子孙', jiShen: '兄弟', tip: '失物常看「妻财」（所失之物）；寻人亦可参所求对应的六亲。玄武多主隐匿。' },
   { key: 'general', label: '综合问事', yongshen: '世爻', yuanShen: '', jiShen: '', useShiYing: true, tip: '问事不明确时，先看「世爻」（自己）与「应爻」（事体/对方），再合看动变。' }
 ]
+
+/** 六十四卦的叙事主旨：用于把卦名、卦辞和所问连成自然断语。 */
+const HEXAGRAM_THEME = {
+  乾: '势在自强开创，但盛极之时尤其不可亢进',
+  坤: '以承载和顺势成事，先安其位，再有所往',
+  屯: '开端多阻，先立根基，不能急着求结果',
+  蒙: '信息尚昧，宜先求明、求教，不可凭想当然行事',
+  需: '条件未齐，等待是蓄势，不是无所作为',
+  讼: '彼此意见相争，宜止争求理，不宜把冲突推到极处',
+  师: '众事须有主次和纪律，靠组织而非一人逞强',
+  比: '成事在亲近可信之人，关系是否相应尤为关键',
+  小畜: '力量正在积蓄，眼下宜小步收拢，不宜一下铺开',
+  履: '前路可行，但每一步都要守礼、知险、谨慎落脚',
+  泰: '上下相通，宜把握交流顺畅之机推动事情',
+  否: '上下不交，强推无益，先保存实力、等待闭塞松动',
+  同人: '求同存异，转机来自公开合作而非私下猜度',
+  大有: '资源与机会已聚，贵在善用，不可因有所得而自满',
+  谦: '退一步并非示弱，守谦反而更容易得到承接',
+  豫: '人心已有发动之意，但乐观之前仍要做好准备',
+  随: '顺势而行可以通达，但所随之人、所随之势必须选对',
+  蛊: '旧弊不除，新事难成，眼下重在整顿与修复',
+  临: '机会正在靠近，宜亲自面对，也要防盛势不能长久',
+  观: '先看清全局与人心，再决定是否介入',
+  噬嗑: '中间有物相隔，必须先咬开具体障碍，事情才能重新合上',
+  贲: '形式可以润色事情，但根本内容比表面好看更重要',
+  剥: '基础正在受损，宜止损固本，不可再向外扩张',
+  复: '转机已经萌生，宜循原路归正，不必急于求大',
+  无妄: '守真守常可免过失，不宜以侥幸或妄念求成',
+  大畜: '力量虽足仍须蓄养，待能力与时机一同成熟再发',
+  颐: '成败取决于如何养其根本，也要谨慎言语与所求',
+  大过: '承担已超过常度，必须调整结构，不能继续勉强支撑',
+  坎: '险阻相重，宜辨路而行，切忌因急躁再入一险',
+  离: '事情需要有所依附，越是明亮显眼，越要守住内在清醒',
+  咸: '彼此感应是事情的起点，真变化来自双方相互触动',
+  恒: '贵在持续与守常，短时热度不足以决定长久结果',
+  遯: '退避是保存主动，不与眼前不利之势正面相争',
+  遁: '退避是保存主动，不与眼前不利之势正面相争',
+  大壮: '力量虽强，也要守正有节，强而失度反会受阻',
+  晋: '局面正在向前显明，宜让成果被看见并顺势进阶',
+  明夷: '光明受伤，眼下宜藏锋守正，不可把底牌尽露',
+  家人: '先正内部次序与各自位置，外部事情才有根基',
+  睽: '人心或方向暂不一致，小事可调，大事不宜强合',
+  蹇: '前路有难，宜反身修整并求助，不宜孤身犯险',
+  解: '紧张正在松动，宜及时处理余患，不可解除后又拖延',
+  损: '有所减才能保全根本，眼下宜舍次要、守关键',
+  益: '增益之机已现，利于行动，也要让所得真正流向要处',
+  夬: '事情到了必须决断之时，但决断要公开、审慎，不可躁进',
+  姤: '突来的相遇或机会不可轻忽，也不宜因一时相逢便全盘投入',
+  萃: '人和资源正在聚集，关键在有没有共同中心',
+  升: '积小而高，宜循序上升，不求一步登顶',
+  困: '外在受困，先守住心志和根本，少作无效消耗',
+  井: '资源一直都在，关键是能否修好取用它的路径',
+  革: '旧局已难维持，变化宜顺时而作，并先取得信任',
+  鼎: '事情进入更新与定型阶段，重在用人和安定结构',
+  震: '变化来得突然，先定神应变，惊后反能看清方向',
+  艮: '该止时止，先停住错误惯性，再决定下一步',
+  渐: '事情只能渐进，次序比速度更重要',
+  归妹: '关系或安排尚未正位，急于落定容易留下后患',
+  丰: '声势与信息都很充足，宜在盛时办事，也要防盛极转衰',
+  旅: '身在不稳定之局，宜守分寸，不把暂时状态当成长久归宿',
+  巽: '以柔入事、反复沟通，才能逐渐进入核心',
+  兑: '沟通能开局，但喜悦与口舌并存，言语必须真诚有度',
+  涣: '原有束缚正在散开，宜重新聚心，不可任其离散',
+  节: '有所节制才能长久，规则宜适度，不可过严也不可无度',
+  中孚: '核心在真实可信，内外相应之后，事情才会由虚转实',
+  小过: '可以处理小处、修正细节，大事不宜越级冒进',
+  既济: '事情看似已成，后段反要防松懈与细小失序',
+  未济: '已经接近结果，但最后一步最易失误，仍不可掉以轻心'
+}
 
 /** 根据所问文字自动匹配问事类别，便于断语对准所问 */
 function guessTopicKey(question) {
@@ -7953,32 +8184,14 @@ function choicePickFromParsed(parsed, tone) {
 }
 
 function philosophyGuidance(tone, focus, parsed) {
-  if (parsed && parsed.negativeEvent) {
-    return tone === 'good'
-      ? '明理之道：风险之象偏弱，也不可据卦指认他人或放弃核验；以事实、坦诚沟通与清楚边界守住关系。'
-      : tone === 'bad'
-        ? '避凶之道：风险之象偏强，先核事实、留证据、定边界；不以猜疑伤人，也不以侥幸纵患。'
-        : '指迷之要：风险未明时，不猜、不纵、不武断；以事实核验和可执行的边界减少后悔。'
-  }
-  if (parsed && (parsed.domain === 'health' || parsed.domain === 'pregnancy')) {
-    return '明理之道：安其心而不轻其患，尽人事而遵医理；能控制的是就医、复查、作息与支持，不能控制的结果不以一卦强求。'
-  }
-  if (parsed && parsed.domain === 'weather') {
-    return '明理之道：天时有变，备而不惧；以预报和现场为据，卦象只提醒人保留余地。'
-  }
-  if (parsed && parsed.domain === 'lost' && /寻人|人/.test(String(parsed.focus || ''))) {
-    return '寻人之要：以行动争取时间，以事实缩小范围；卦象不可替代联络、搜索与必要的报警求助。'
-  }
-  if (parsed && parsed.mode === 'choice') {
-    return '取舍之道：不求卦替人承担后果，只求看清得失；所选若有据、可承受、能修正，进退皆可少悔。'
-  }
-  if (tone === 'good') {
-    return `趋吉之道：势顺可为，却不可恃吉冒进；守正、守信、留有余地，方能使「${focus}」之吉得以长久。得意时能自省，便是以谦受益。`
-  }
-  if (tone === 'bad') {
-    return `避凶之道：先止其损，再求其变；不困于一时成败，也不以执念强求「${focus}」。穷则变，变则通，退一步整顿条件，往往正是转机之始。`
-  }
-  return `指迷之要：事未明时，先定其心，再辨可控与不可控；对「${focus}」小步求证、随势修正。知进退而不失其正，便是在变化中自求其安。`
+  if (parsed && parsed.negativeEvent) return '先核事实，再定边界，不以卦象替代证据。'
+  if (parsed && (parsed.domain === 'health' || parsed.domain === 'pregnancy')) return '卦可定心，不可代医；以检查、复诊和专业意见为准。'
+  if (parsed && parsed.domain === 'weather') return '以官方预报和现场情况为准，卦象只作趋避提醒。'
+  if (parsed && parsed.domain === 'lost' && /寻人|人/.test(String(parsed.focus || ''))) return '先联络、查找和报警，勿因卦象耽误行动。'
+  if (parsed && parsed.mode === 'choice') return '先做可逆的小步验证，再决定是否重注。'
+  if (tone === 'good') return '可进，但以守正、守信并留有余地为度。'
+  if (tone === 'bad') return `宜先止损换势，不与「${focus}」的逆势硬争。`
+  return `先小步求证「${focus}」，条件明朗后再定。`
 }
 
 /** 按问题类型组织判断与建议 */
@@ -8064,7 +8277,7 @@ function buildJudgment(ctx) {
     : `本次按「${topic.label}·${parsed.modeLabel}」来断`
   const evidence = evidenceLine(ctx)
 
-  let judgment = `${askRef}。`
+  let judgment = ''
 
   const guardedJudgment = safetyJudgmentLine(
     parsed,
@@ -8222,6 +8435,1120 @@ function buildJudgment(ctx) {
     choicePick,
     answerTone
   }
+}
+
+function uniqueText(items) {
+  return (items || []).filter((item, index, list) => item && list.indexOf(item) === index)
+}
+
+function guaCiOf(gua) {
+  if (!gua) return null
+  return getGuaCi(gua.alias || gua.name) || null
+}
+
+/**
+ * 所问推理画像：同一卦用于不同问题时，证据权重必须不同。
+ * 每个轴都对应一个现实问题，同时指定要观察的卦爻角色。
+ */
+function questionProfile(ctx, judgment) {
+  const parsed = judgment.parsed || {}
+  const id = (ctx.askMeta && ctx.askMeta.optionId) || ''
+  const domain = parsed.domain || 'general'
+  const base = {
+    kind: 'general',
+    result: parsed.focus || '此事',
+    premise: '这不是只看一个“吉凶分数”，而要分别判断你、目标、外部承接与实际阻力。',
+    axes: [
+      { key: 'self', label: '你的承接能力', role: 'shi', purpose: '你是否有能力把事情接住' },
+      { key: 'target', label: '目标是否成形', role: 'yong', purpose: '所求结果是否已有现实基础' },
+      { key: 'outside', label: '外部是否配合', role: 'ying', purpose: '对方或环境是否愿意配合' }
+    ],
+    action: `先验证「${parsed.focus || '此事'}」最关键的现实条件，再决定是否继续投入。`
+  }
+
+  if (/^em-(have|like)$/.test(id)) return {
+    kind: 'emotion-feeling', result: '对方心意',
+    premise: '问“有没有感情”，不能只看关系吉凶；要分开看对方心里是否有你、是否愿意向你靠近，以及这种心意能否变成持续行动。',
+    axes: [
+      { key: 'other', label: '对方真实心意', role: 'ying', purpose: '对方是否有稳定回应' },
+      { key: 'mutual', label: '双方是否相向', role: 'shi-ying', purpose: '感情是双向流动还是单方投入' },
+      { key: 'interference', label: '外部干扰', role: 'liuqin:兄弟', polarity: 'risk', purpose: '竞争、旁人或资源分流是否介入' }
+    ],
+    action: '不要继续猜“喜欢不喜欢”；观察对方是否主动联系、安排见面并承担关系责任。只有连续行动，才算卦上心意真正落地。'
+  }
+  if (/^em-(together|back)$/.test(id)) return {
+    kind: 'emotion-union', result: id === 'em-back' ? '复合' : '在一起',
+    premise: '问能否走到一起，重点不是还剩多少情绪，而是旧有冲突能否解除、双方能否重新对接并形成新的相处方式。',
+    axes: [
+      { key: 'mutual', label: '双方重新对接', role: 'shi-ying', purpose: '双方是否仍有牵引并愿意靠近' },
+      { key: 'other', label: '对方是否落实', role: 'ying', purpose: '对方是否会把态度变成行动' },
+      { key: 'interference', label: '旧问题与旁人干扰', role: 'liuqin:兄弟', polarity: 'risk', purpose: '原有矛盾或第三方是否继续分散关系' }
+    ],
+    action: '先谈清导致分离或迟迟不能确定关系的那个具体问题，并约定一个可验证的下一步；只有态度、时间和行动同时出现，才宜继续投入。'
+  }
+  if (id === 'em-marry') return {
+    kind: 'emotion-marriage', result: '成婚',
+    premise: '成婚是“关系落地”，除感情外还要看双方意愿、家庭与证件礼仪能否承接，不能把有感情直接等同于能结婚。',
+    axes: [
+      { key: 'mutual', label: '双方婚意', role: 'shi-ying', purpose: '双方是否真正同向' },
+      { key: 'other', label: '对方落实程度', role: 'ying', purpose: '对方是否愿意承担婚姻责任' },
+      { key: 'formal', label: '家庭与手续', role: 'liuqin:父母', purpose: '家庭、礼仪、证件和现实安排是否具备' }
+    ],
+    action: '把婚期、家庭意见、居住与经济安排逐项谈清。若只有口头承诺而没有时间表和实际准备，应把它视为尚未成形。'
+  }
+  if (id === 'em-third') return {
+    kind: 'emotion-third', result: '第三者迹象', negativeOutcome: true,
+    premise: '卦象只能提示关系中是否存在竞争、隐情或资源分流，不能把某一爻直接当作“第三者证据”。',
+    axes: [
+      { key: 'mutual', label: '双方关系稳定度', role: 'shi-ying', purpose: '双方是否仍然相向' },
+      { key: 'interference', label: '竞争与分心信号', role: 'liuqin:兄弟', polarity: 'risk', purpose: '是否出现明显竞争或资源分流' },
+      { key: 'hidden', label: '隐情信号', role: 'liushen:玄武', polarity: 'risk', purpose: '是否有隐瞒、暧昧或信息不透明' }
+    ],
+    action: '不要凭卦指认任何人。先核对可验证事实：联系是否异常、承诺是否反复、时间去向是否无法解释；没有事实证据，不宜下“有第三者”的结论。'
+  }
+  if (domain === 'emotion') return {
+    kind: 'emotion', result: parsed.focus || '这段感情',
+    premise: '感情题不能把“有感情、愿行动、能长期相处”混成一个答案；要分别看双方是否相向、对方是否落实，以及现实阻力是否能被处理。',
+    axes: [
+      { key: 'mutual', label: '双方关系方向', role: 'shi-ying', purpose: '双方是相向、单方投入还是彼此牵制' },
+      { key: 'other', label: '对方行动', role: 'ying', purpose: '对方是否会把态度变成持续行动' },
+      { key: 'interference', label: '关系阻力', role: 'liuqin:兄弟', polarity: 'risk', purpose: '旁人、旧问题或资源分流是否持续干扰' },
+      { key: 'formal', label: '现实承接', role: 'liuqin:父母', purpose: '见面、家庭、承诺和实际安排是否能落地' }
+    ],
+    action: '把问题落到一个可验证的行动上：是否主动联系、是否安排见面、是否给出明确承诺。若只有情绪表达而没有连续行动，应降低预期。'
+  }
+  if (/^ex-paper$/.test(id)) return {
+    kind: 'research-paper', result: '论文接收',
+    premise: '论文能否接收，要同时看稿件本身、评审或编辑的裁量，以及修改回应能否消除关键质疑。',
+    axes: [
+      { key: 'paper', label: '稿件与证据链', role: 'liuqin:父母', purpose: '论文、数据和论证是否站得住' },
+      { key: 'review', label: '评审与录用门槛', role: 'liuqin:官鬼', purpose: '评审标准和正式决定是否承接' },
+      { key: 'editor', label: '编辑或评审态度', role: 'ying', purpose: '决定方是否愿意继续推进' },
+      { key: 'author', label: '修改执行力', role: 'shi', purpose: '你是否能把关键问题改到位' }
+    ],
+    action: '不要平均用力润色全文；先找出最可能导致拒稿的一条核心质疑，补证据或收缩结论，再逐条建立“意见—修改—证据位置”的闭环。'
+  }
+  if (/^ex-(pass|score|admit|school|interview|jx|how)$/.test(id)) return {
+    kind: 'exam', result: parsed.focus || '考试结果',
+    premise: '考试题要把“会不会”拆成三件事：你的发挥、知识与答卷是否成形，以及录取或评分门槛是否对你有利。',
+    axes: [
+      { key: 'self', label: '临场承接与发挥', role: 'shi', purpose: '你能否稳定发挥已有能力' },
+      { key: 'paper', label: '知识与答卷', role: 'liuqin:父母', purpose: '复习、答题和材料是否扎实' },
+      { key: 'rank', label: '名次与录取门槛', role: 'liuqin:官鬼', purpose: '评分、竞争和录取环节是否承接' },
+      { key: 'gate', label: '决定方反馈', role: 'ying', purpose: '考官、学校或用人方是否放行' }
+    ],
+    action: '把剩余准备集中到最薄弱且最影响得分的一项；同时逐项核对报名、材料、时间与答题规范，避免能力够而在程序环节失分。'
+  }
+  if (/^ex-(project|experiment)$/.test(id)) return {
+    kind: 'research-project', result: parsed.focus || '科研事项',
+    premise: '科研事项不能只问“做不做得成”，要区分方案是否成立、证据能否复现，以及评审或资源是否愿意支持。',
+    axes: [
+      { key: 'method', label: '方案与材料', role: 'liuqin:父母', purpose: '方法、数据和申请材料是否完整' },
+      { key: 'result', label: '可见成果', role: 'liuqin:子孙', purpose: '实验结果或项目产出是否能出现' },
+      { key: 'gate', label: '评审与管理门槛', role: 'liuqin:官鬼', purpose: '审批、规范和评价体系是否承接' },
+      { key: 'self', label: '执行能力', role: 'shi', purpose: '你能否持续推进并处理偏差' }
+    ],
+    action: '先验证最关键假设，保留失败判据和替代路线；若涉及申报，把创新点、证据、预算和执行人对应到同一条逻辑链。'
+  }
+  if (/^ca-/.test(id) || domain === 'career') return {
+    kind: 'career', result: parsed.focus || '事业事项',
+    premise: '事业题要区分你的能力、职位名分、组织决定和合同手续；其中任何一环没有承接，都可能出现“有机会但不落地”。',
+    axes: [
+      { key: 'self', label: '你的筹码', role: 'shi', purpose: '能力、业绩和主动权是否足够' },
+      { key: 'position', label: '职位与名分', role: 'liuqin:官鬼', purpose: '岗位、提拔或正式认可是否存在' },
+      { key: 'organization', label: '组织决定', role: 'ying', purpose: '上级或用人方是否愿意承接' },
+      { key: 'formal', label: '合同与手续', role: 'liuqin:父母', purpose: '通知、合同和流程是否能够落地' }
+    ],
+    action: '先确认真正的决策人和决定节点，再把可量化成果递到对方手里；若只是口头认可而没有岗位、时间表或书面流程，不宜当作已经落实。'
+  }
+  if (/^we-(back|debt)$/.test(id)) return {
+    kind: 'receivable', result: parsed.focus || '回款',
+    premise: '回款不只是“有没有财”，还要看付款方是否行动、合同凭据是否完整，以及资金是否被其他支出或争议分流。',
+    axes: [
+      { key: 'money', label: '款项本身', role: 'liuqin:妻财', purpose: '资金是否真实存在并可调动' },
+      { key: 'payer', label: '付款方意愿', role: 'ying', purpose: '对方是否会实际付款' },
+      { key: 'contract', label: '合同与凭据', role: 'liuqin:父母', purpose: '付款条件、票据和证据是否完整' },
+      { key: 'diversion', label: '分流与拖欠', role: 'liuqin:兄弟', polarity: 'risk', purpose: '竞争性支出、争议或他人分财是否阻碍回款' }
+    ],
+    action: '立即确认付款责任人、金额、触发条件和确切日期，并形成书面记录；若对方只说“尽快”而不给日期，应按拖延处理。'
+  }
+  if (/^we-/.test(id) || domain === 'wealth' || domain === 'partner') return {
+    kind: 'wealth', result: parsed.focus || '求财经营',
+    premise: '求财要分清钱是否存在、客户是否成交、合同能否锁定，以及成本和竞争是否吞掉利润。',
+    axes: [
+      { key: 'money', label: '真实财源', role: 'liuqin:妻财', purpose: '收入或利润是否有现实来源' },
+      { key: 'customer', label: '客户与对手方', role: 'ying', purpose: '对方是否愿意成交和履约' },
+      { key: 'contract', label: '合同与交付', role: 'liuqin:父母', purpose: '条款、凭据和交付是否锁得住' },
+      { key: 'cost', label: '成本与分利', role: 'liuqin:兄弟', polarity: 'risk', purpose: '竞争、成本和分成是否侵蚀收益' }
+    ],
+    action: '先算净收益而不是只看成交额；把付款节点、违约责任和退出条件写入合同，利润不足以覆盖最坏损失时不宜勉强成交。'
+  }
+  if (/^in-/.test(id) || domain === 'invest' || domain === 'property') return {
+    kind: 'investment', result: parsed.focus || '投资置业', guarded: true,
+    premise: '投资题必须把资产、收益、风险和退出分开判断；“财爻有气”不等于价格合理，更不等于适合重仓。',
+    axes: [
+      { key: 'value', label: '资产与合同基础', role: 'liuqin:父母', purpose: '标的、产权、合同和信息是否可靠' },
+      { key: 'return', label: '收益来源', role: 'liuqin:妻财', purpose: '收益是否真实且可持续' },
+      { key: 'risk', label: '债务与潜在风险', role: 'liuqin:官鬼', polarity: 'risk', purpose: '杠杆、责任和隐藏风险是否放大' },
+      { key: 'cost', label: '成本与竞争', role: 'liuqin:兄弟', polarity: 'risk', purpose: '价格、费用和竞争是否侵蚀回报' }
+    ],
+    action: '先做现金流、最坏损失和退出测试，再核产权、合同和负债；即使卦象偏顺，也只应在承受得起损失的范围内行动。'
+  }
+  if (/^do-/.test(id) || domain === 'document') return {
+    kind: 'document', result: parsed.focus || '审批事项',
+    premise: '审批能否通过，关键在材料是否合规、经办或决定方是否承接，以及申请人能否及时补正。',
+    axes: [
+      { key: 'file', label: '材料完整度', role: 'liuqin:父母', purpose: '申请、证明和格式是否合规' },
+      { key: 'authority', label: '审批门槛', role: 'liuqin:官鬼', purpose: '规则、审核和正式决定是否放行' },
+      { key: 'handler', label: '经办方反馈', role: 'ying', purpose: '经办人或机构是否愿意推进' },
+      { key: 'self', label: '补正与跟进', role: 'shi', purpose: '你能否及时回应并补齐条件' }
+    ],
+    action: '按清单逐项复核材料，并直接询问经办人“目前缺哪一项、下一节点是什么、何时反馈”；不要只等系统状态变化。'
+  }
+  if (/^la-/.test(id) || domain === 'lawsuit') return {
+    kind: 'lawsuit', result: parsed.focus || '纠纷', guarded: true,
+    premise: '纠纷不能只比世应强弱；证据是否成立、程序是否启动、对方是否有反制，才决定现实走向。',
+    axes: [
+      { key: 'self', label: '你方位置', role: 'shi', purpose: '你方是否站得住并能持续应对' },
+      { key: 'opponent', label: '对方力量', role: 'ying', polarity: 'risk', purpose: '对方是否占有资源或形成反制' },
+      { key: 'evidence', label: '证据与文书', role: 'liuqin:父母', purpose: '证据链和书面材料是否完整' },
+      { key: 'procedure', label: '程序与公权力', role: 'liuqin:官鬼', purpose: '正式程序是否真正介入并有效运转' }
+    ],
+    action: '先固定证据、梳理时间线并确认法定时限，再咨询专业人士。卦象只能帮助整理风险，不能替代法律判断或决定是否报警、起诉。'
+  }
+  if (/^fa-/.test(id) || domain === 'family') return {
+    kind: 'family', result: parsed.focus || '家事',
+    premise: '家事不能只看一方旺衰，要分清所问亲人的状态、你能否承接、家庭环境是否配合，以及矛盾是否正在被激化。',
+    axes: [
+      { key: 'person', label: '所问亲人或家事', role: 'yong', purpose: '所问对象是否稳定并有承接' },
+      { key: 'self', label: '你的照应能力', role: 'shi', purpose: '你是否能有效沟通和处理' },
+      { key: 'family', label: '家庭环境', role: 'ying', purpose: '其他家人和现实环境是否配合' },
+      { key: 'conflict', label: '矛盾压力', role: 'liuqin:官鬼', polarity: 'risk', purpose: '担忧、冲突或现实压力是否加剧' }
+    ],
+    action: '先找出家庭中最具体的一处矛盾，分别确认各方真实诉求和可接受底线；不要把所有问题一次解决，先处理最容易引发连锁反应的一项。'
+  }
+  if (/^he-/.test(id) || domain === 'health' || domain === 'pregnancy') return {
+    kind: 'health', result: parsed.focus || '健康事项', safe: true,
+    premise: '健康题只能把卦象当作风险提醒：世爻看承受状态，官鬼看病气压力，子孙看治疗与缓解；不能用来诊断或预测医学结果。',
+    axes: [
+      { key: 'body', label: '身体承受状态', role: 'shi', purpose: '当前是否有足够恢复与承受能力' },
+      { key: 'illness', label: '病气与压力', role: 'liuqin:官鬼', polarity: 'risk', purpose: '症状或风险压力是否明显' },
+      { key: 'care', label: '治疗与缓解条件', role: 'liuqin:子孙', purpose: '就医、治疗和照护是否有承接' }
+    ],
+    action: '记录症状、持续时间、用药和检查结果，按医生建议复诊；出现加重或警示症状立即就医，不等待卦象应期。'
+  }
+  if (/^tr-/.test(id) || domain === 'travel' || domain === 'arrival') return {
+    kind: 'travel', result: parsed.focus || '出行',
+    premise: '出行题要分开看人是否能动、路线与交通是否可靠、目的地是否承接，以及途中风险是否发动。',
+    axes: [
+      { key: 'traveler', label: '行人状态', role: 'shi', purpose: '人是否有力按计划行动' },
+      { key: 'route', label: '路线与交通', role: 'liuqin:父母', purpose: '道路、票务和行程信息是否可靠' },
+      { key: 'destination', label: '目的地承接', role: 'ying', purpose: '目的地或接应方是否顺畅' },
+      { key: 'hazard', label: '途中风险', role: 'liuqin:官鬼', polarity: 'risk', purpose: '延误、阻碍或安全压力是否明显' }
+    ],
+    action: '先核实票务、天气、道路和接应信息，并准备可替代路线；实际交通信息与安全预警优先于卦象。'
+  }
+  if (/^so-/.test(id) || ['visit', 'seek', 'message', 'meeting', 'social'].includes(domain)) return {
+    kind: 'social', result: parsed.focus || '往来事项',
+    premise: '人际往来题要分清对方有没有行动、联系路径是否畅通、双方是否相向，以及约定是否会被临时因素打断。',
+    axes: [
+      { key: 'other', label: '来人或对方动作', role: 'ying', purpose: '对方是否真正准备行动' },
+      { key: 'contact', label: '联系与行程信息', role: 'liuqin:父母', purpose: '消息、约定和路线是否清楚' },
+      { key: 'mutual', label: '双方承接', role: 'shi-ying', purpose: '双方是否能顺利对接' },
+      { key: 'trigger', label: '实际触发', role: 'moving', purpose: '事情是否已进入行动阶段' }
+    ],
+    action: '不要空等。主动确认对方是否出发、何时到达、在哪里见面；若没有明确回复和行程信息，就按尚未落实准备。'
+  }
+  if (/^dl-/.test(id) || domain === 'delivery') return {
+    kind: 'delivery', result: parsed.focus || '送达',
+    premise: '送达题要看物流路径、承运方动作、收件端是否能接，以及中途是否出现滞留或遗失信号。',
+    axes: [
+      { key: 'route', label: '物流路径', role: 'liuqin:父母', purpose: '运单、路线和运输状态是否正常' },
+      { key: 'carrier', label: '承运方动作', role: 'ying', purpose: '配送方是否真正推进' },
+      { key: 'delay', label: '滞留与遗失风险', role: 'liuqin:兄弟', polarity: 'risk', purpose: '分流、错投或延误是否增强' }
+    ],
+    action: '先查最新扫描节点并直接联系承运方；若超过承诺时限，立即留存运单与沟通记录并发起查询或理赔。'
+  }
+  if (/^lo-/.test(id) || domain === 'lost') return {
+    kind: 'lost', result: parsed.focus || '失物寻人', guarded: /寻人|人/.test(parsed.focus || ''),
+    premise: '失物题要看物是否仍有气、是否被人或环境遮蔽，以及搜索行动能否触及正确线索；方位只能辅助，不能替代回溯。',
+    axes: [
+      { key: 'object', label: '失物或目标状态', role: 'yong', purpose: '所寻对象是否仍可接触' },
+      { key: 'search', label: '搜索行动', role: 'shi', purpose: '当前查找方式是否有效' },
+      { key: 'hidden', label: '遮蔽与隐匿', role: 'liushen:玄武', polarity: 'risk', purpose: '是否存在被遮挡、遗忘或信息不透明' },
+      { key: 'outside', label: '外部线索', role: 'ying', purpose: '场所、他人或监控是否能提供线索' }
+    ],
+    action: '按最后出现时间、行动路线、接触人员和监控记录倒序排查；人员失联或存在危险时立即报警，不等待卦象应期。'
+  }
+  if (/^ho-/.test(id) || domain === 'home') return {
+    kind: 'home', result: parsed.focus || '家宅事项',
+    premise: '家宅题不只看居住吉凶，还要看房屋与合同、居住者承受、外部环境，以及维修或债务风险。',
+    axes: [
+      { key: 'house', label: '房屋与合同', role: 'liuqin:父母', purpose: '房屋本体、产权或租约是否可靠' },
+      { key: 'resident', label: '居住者状态', role: 'shi', purpose: '你是否真正适应并能承担' },
+      { key: 'environment', label: '环境与邻里', role: 'ying', purpose: '外部环境是否配合' },
+      { key: 'risk', label: '维修与隐患', role: 'liuqin:官鬼', polarity: 'risk', purpose: '结构、费用或纠纷风险是否显现' }
+    ],
+    action: '实地核查采光、噪声、结构、费用和合同退出条款；搬迁或签约前，把最难逆转的一项风险先查清。'
+  }
+  if (domain === 'weather') return {
+    kind: 'weather', result: parsed.focus || '天气变化',
+    premise: '天气占只能作传统象意：父母多取云雨，子孙多取晴霁，再看发动与时辰；实际安排必须服从官方预报和预警。',
+    axes: [
+      { key: 'rain', label: '云雨信号', role: 'liuqin:父母', purpose: '雨雪云气是否增强' },
+      { key: 'clear', label: '晴霁信号', role: 'liuqin:子孙', polarity: /停|晴/.test(parsed.focus || '') ? 'support' : 'risk', purpose: '天气是否转晴或削弱雨势' },
+      { key: 'time', label: '触发时段', role: 'moving', purpose: '天气变化何时容易被触发' }
+    ],
+    action: '把卦象时段只当作观察窗口，并立即对照雷达、短临预报和预警；涉及出行与安全时以官方信息为准。'
+  }
+  if (parsed.mode === 'choice') return {
+    kind: 'choice', result: parsed.focus || '当前抉择',
+    premise: '二选一不能靠选项顺序硬判。此卦先判断你是否适合变动、外部是否承接和变化成本；若要严格比较两个具体方案，仍应给两项同一评价标准。',
+    axes: [
+      { key: 'self', label: '你的准备程度', role: 'shi', purpose: '你是否已经具备作出改变的条件' },
+      { key: 'outside', label: '外部承接', role: 'ying', purpose: '新选择或外部环境是否真正接得住' },
+      { key: 'change', label: '变化动能', role: 'moving', purpose: '局面是否已经进入必须改变的阶段' },
+      { key: 'cost', label: '选择代价', role: 'liuqin:兄弟', polarity: 'risk', purpose: '机会成本、竞争或损失是否过大' }
+    ],
+    action: '用同一张表比较两项的收益、代价、可逆性和最坏结果；先做低成本、可回退的验证，不要用一次占问替代必要的信息核对。'
+  }
+  return base
+}
+
+function linePower(y) {
+  if (!y) return -2
+  let score = ({ 旺: 2, 相: 1, 休: 0, 囚: -1, 死: -2 })[y.wangshuai] || 0
+  if (y.kong) score -= y.changing ? 1 : 2
+  if (y.dayMonth) {
+    if (y.dayMonth.tags && (y.dayMonth.tags.includes('临日') || y.dayMonth.tags.includes('临月'))) score += 1
+    if (y.dayMonth.chongYue && !(y.dayMonth.tags || []).includes('临日')) score -= 2
+    if (y.dayMonth.heRi) score -= 1
+    if (y.dayMonth.chongRi) score += y.changing ? 1 : 0
+  }
+  if (y.changeTo && y.changeTo.analysis) {
+    const a = y.changeTo.analysis
+    if (a.huiTou && a.huiTou.type === '回头生') score += 2
+    if (a.huiTou && a.huiTou.type === '回头克') score -= 2
+    if (a.jinTui && a.jinTui.type === '化进神') score += 1
+    if (a.jinTui && a.jinTui.type === '化退神') score -= 1
+  }
+  return Math.max(-3, Math.min(3, score))
+}
+
+function pickProfileLine(ctx, axis) {
+  const role = axis.role || ''
+  if (role === 'shi') return ctx.shi || null
+  if (role === 'ying') return ctx.ying || null
+  if (role === 'yong') return ctx.primaryYong || (ctx.yongList && ctx.yongList[0]) || null
+  if (role === 'moving') {
+    return (ctx.ben.yaos || []).filter((y) => y.changing).sort((a, b) => Math.abs(linePower(b)) - Math.abs(linePower(a)))[0] || null
+  }
+  if (role.indexOf('liuqin:') === 0) {
+    const name = role.slice(7)
+    return (ctx.ben.yaos || []).filter((y) => y.liuqin === name).sort((a, b) => {
+      const activeA = a.changing ? 1 : 0
+      const activeB = b.changing ? 1 : 0
+      return (linePower(b) + activeB) - (linePower(a) + activeA)
+    })[0] || null
+  }
+  if (role.indexOf('liushen:') === 0) {
+    const name = role.slice(8)
+    return (ctx.ben.yaos || []).filter((y) => y.liushen === name).sort((a, b) => (b.changing ? 2 : 0) + linePower(b) - (a.changing ? 2 : 0) - linePower(a))[0] || null
+  }
+  return null
+}
+
+function powerPhrase(y) {
+  if (!y) return '卦中未见明确落点'
+  const parts = []
+  if (y.wangshuai) parts.push(y.wangshuai)
+  if (y.kong) parts.push('空亡')
+  if (y.changing) parts.push('发动')
+  if (y.dayMonth && y.dayMonth.chongYue) parts.push('月破')
+  if (y.dayMonth && y.dayMonth.heRi) parts.push('被日合住')
+  if (y.dayMonth && y.dayMonth.chongRi) parts.push('受日冲触发')
+  if (y.changeTo && y.changeTo.analysis && y.changeTo.analysis.huiTou) parts.push(y.changeTo.analysis.huiTou.type)
+  if (y.changeTo && y.changeTo.analysis && y.changeTo.analysis.jinTui) parts.push(y.changeTo.analysis.jinTui.type)
+  return parts.length ? parts.join('、') : '力量平常'
+}
+
+function deepYaoName(y) {
+  if (!y) return '—'
+  const num = ['初', '二', '三', '四', '五', '上'][y.index] || ''
+  const yinYang = y.yinYang ? '九' : '六'
+  const label = y.index === 0 ? `${num}${yinYang}` : y.index === 5 ? `${num}${yinYang}` : `${yinYang}${num}`
+  return `${label}·${y.liuqin}（${y.ganZhi}${y.wuxing}）`
+}
+
+function shiYingReading(ctx) {
+  if (!ctx.shi || !ctx.ying) return { value: 0, text: '世应有一方未明，双方是否相向暂难坐实' }
+  const rel = relationWuxing(ctx.shi.wuxing, ctx.ying.wuxing)
+  const map = {
+    被生: { value: 2, text: '应爻生世，对方或环境有向你回流、扶助之意' },
+    生: { value: 0, text: '世爻生应，主要是你在向对方投入，关系能否成立仍要看对方回应' },
+    被克: { value: -2, text: '应爻克世，对方或环境掌握更多主动权，你方承压' },
+    克: { value: 0, text: '世爻克应，你能推动局面，但过度用力也容易让对方退避' },
+    比和: { value: 1, text: '世应比和，双方处在相近位置，有协商与并行空间' }
+  }
+  const base = map[rel] || { value: 0, text: '世应生克不显，双方关系需看实际互动' }
+  if (ctx.shi.kong || ctx.ying.kong) return { value: Math.min(0, base.value - 1), text: `${base.text}；但${ctx.shi.kong ? '世' : '应'}爻空亡，承诺尚未落实` }
+  return base
+}
+
+function analyzeProfileAxis(ctx, axis) {
+  if (axis.role === 'shi-ying') {
+    const r = shiYingReading(ctx)
+    return Object.assign({}, axis, { value: r.value, line: null, text: `${axis.label}：${r.text}；就本题而言，要看${axis.purpose}。` })
+  }
+  const line = pickProfileLine(ctx, axis)
+  let raw = linePower(line)
+  const risk = axis.polarity === 'risk'
+  if (!line) raw = risk ? -1 : -2
+  let value = risk ? -raw : raw
+  value = Math.max(-2, Math.min(2, value))
+  let effect = ''
+  if (risk) {
+    if (!line) effect = `${axis.purpose}的信号不强`
+    else if (raw >= 1) effect = `${axis.purpose}，已经构成实际阻力`
+    else if (raw <= -1) effect = `${axis.purpose}，虽有其象但目前力量有限`
+    else effect = `${axis.purpose}，仍需核实，不能夸大`
+  } else if (!line) {
+    effect = `${axis.purpose}尚未在卦中形成清楚承接`
+  } else if (raw >= 1) {
+    effect = `${axis.purpose}，卦上已有承接`
+  } else if (raw <= -1) {
+    effect = `${axis.purpose}，目前偏弱，尚难落实`
+  } else {
+    effect = `${axis.purpose}，已有基础但还不稳定`
+  }
+  let relation = ''
+  if (line && ctx.shi && line.index !== ctx.shi.index && (axis.role === 'ying' || axis.role === 'yong')) {
+    const rel = relationWuxing(ctx.shi.wuxing, line.wuxing)
+    if (rel === '被生') relation = '；该爻生世，力量能回到你方'
+    else if (rel === '生') relation = '；世去生它，当前更多靠你投入'
+    else if (rel === '被克') relation = '；该爻克世，你方受其约束'
+    else if (rel === '克') relation = '；世能克它，你方可推动但不宜过刚'
+    else if (rel === '比和') relation = '；与世比和，双方较易并行'
+  }
+  const where = line ? `${deepYaoName(line)}（${powerPhrase(line)}）` : '未见明确对应爻'
+  return Object.assign({}, axis, { value, line, text: `${axis.label}：${where}${relation}；就本题而言，${effect}。` })
+}
+
+function deepSummary(profile, judgment, total) {
+  const parsed = judgment.parsed || {}
+  if (profile.safe || profile.guarded) return judgment.level
+  if (parsed.mode === 'when' || parsed.mode === 'where' || parsed.mode === 'who' || parsed.mode === 'choice') return judgment.level
+  if (profile.negativeOutcome) {
+    if (total >= 2) return '暂未见强迹象'
+    if (total <= -2) return '风险信号偏强'
+    return '有疑点但不能坐实'
+  }
+  if (parsed.mode === 'how') return total >= 2 ? '可主动推进' : total <= -2 ? '先止损补条件' : '先验证再行动'
+  if (parsed.mode === 'jixiong') return total >= 2 ? '偏吉但有条件' : total <= -2 ? '偏凶宜收缩' : '吉凶取决于关键条件'
+  if (total >= 3) return '偏能成'
+  if (total >= 1) return '有机会，但须补一环'
+  if (total <= -3) return '当前难成'
+  if (total <= -1) return '把握偏小'
+  return '尚未定局'
+}
+
+function toneFromDeepTotal(total) {
+  if (total >= 2) return 'good'
+  if (total <= -2) return 'bad'
+  return 'mid'
+}
+
+function axisEvidence(axis) {
+  if (!axis) return ''
+  if (axis.role === 'shi-ying') {
+    const fact = String(axis.text || '')
+      .replace(new RegExp(`^${axis.label}：`), '')
+      .replace(/；就本题而言.*$/, '')
+      .replace(/。$/, '')
+    return `「${axis.label}」所见：${fact}`
+  }
+  if (!axis.line) return `「${axis.label}」在卦中未见明确承接`
+  return `「${axis.label}」落${deepYaoName(axis.line)}，呈${powerPhrase(axis.line)}之势`
+}
+
+function classicalProfileCounsel(kind) {
+  const counsel = {
+    general: '凡事都有时机与位置。条件未成时宜守，条件成熟时再进。',
+    'emotion-feeling': '感情贵在真诚，也贵在持续行动；应观察对方是否长期回应，不要因一句话便下结论。',
+    'emotion-union': '两人相合，重在同心。旧有矛盾若不化解，即使复合也容易再散；应先解旧结，再谈重新开始。',
+    'emotion-marriage': '婚姻贵在有始有终。感情、家庭、礼节与现实安排都能安顿，关系才容易真正落定。',
+    'emotion-third': '心中有疑，最易伤情。应先查明事实、守住边界，不可仅凭卦象便指认他人。',
+    emotion: '感情重在彼此回应；若只有一方不断用力，关系便难以长久。',
+    'research-paper': '文章贵在论证端正、证据扎实；与其处处润色，不如先补最关键的一处薄弱。',
+    exam: '学业贵在日积月累，临事则要专一守正；补足短板、谨守规则，所下的功夫才不会落空。',
+    'research-project': '谋事要先验证根本条件，知道边界之后才能定下方向；关键假设尚未查明，不宜全面铺开。',
+    career: '事业进退，贵在名实相符。官鬼有力，多见职位或责任可承接；若应爻迟滞，则机会虽在，决定仍会延后。',
+    receivable: '回款先看财爻是否有气，再看付款方是否发动。财有气而应爻迟，多是款在而迟；财弱受制，则要防周期拉长或金额折减。',
+    wealth: '求财不只看有没有机会，还要看财能否聚、兄弟爻是否分耗。财旺可进，分耗重则宜收；重点在财势能否聚，不在表面上的热闹。',
+    investment: '见到收益时，也要想到潜在风险；先算清最坏损失与退出办法，再考虑可能所得。',
+    document: '文书审批看父母爻与官鬼爻能否相承。父母旺，多见材料可用；官鬼发动，则常是审核、规则或决定节点正在起作用。',
+    lawsuit: '争讼不宜久拖，重点在证据清楚、时限不误、程序合规；声势不能代替事实，有理也要有据。',
+    family: '家人相处，贵在各安其位、彼此体谅；应先处理最关键的一件事，避免小矛盾累积成大争执。',
+    health: '《易》重在防患于未然；身体有不适应及时就医、谨慎调养，不可用卦象代替检查与诊断。',
+    travel: '行动与停留各有时机。动爻有力多主行程将启，静而受合则多见等待；内外卦的变化还可判断是近行还是远行。',
+    social: '人与人相应，贵在信息真实、约定明确；没有具体时间和行动，往来便仍未落实。',
+    delivery: '物品流转自有次序，也会留下路径；应先查明停留节点，再判断何时送达。',
+    lost: '失物必有其迹。应从最后出现的时间与路线向前回溯，不要只执着于一个方位。',
+    home: '安宅先要审察根基，慎重开始，才能减少后忧；越是难以改变的条件，越应优先核实。',
+    weather: '天时不可强求，应观察变化并提前防备；卦象只作参考，仍以正式预报为依据。',
+    choice: '《易》讲“见几而作”，但行动也要留有余地；先选择可验证、可回退的路径，进退才有依据。'
+  }
+  return counsel[kind] || counsel.general
+}
+
+function classicalTurnFromCast(ctx, driver, blocker, profile) {
+  const benCi = guaCiOf(ctx.ben)
+  const bianCi = guaCiOf(ctx.bian)
+  const moving = (ctx.ben && ctx.ben.yaos ? ctx.ben.yaos : []).filter((y) => y.changing)
+  const relatedIndexes = [blocker, driver]
+    .filter((axis) => axis && axis.line)
+    .map((axis) => axis.line.index)
+  const keyMoving = moving.find((y) => relatedIndexes.includes(y.index)) || moving[0]
+  const lineText = keyMoving && benCi && benCi.yaoci ? benCi.yaoci[keyMoving.index] : ''
+  const text = [lineText, benCi && benCi.guaci, bianCi && bianCi.guaci].filter(Boolean).join('；')
+  if (/利见大人/.test(text) && /朋来|得朋/.test(text)) return '本卦有“利见大人”“朋来”之意：遇到阻力时不宜独自硬闯，找到能作主、能相助的人，并守正行事，事情才有转机。'
+  if (/利见大人/.test(text)) return '本卦取“利见大人”之意：事情有困难时，宜求助于有经验、有决定权的人，不宜独断。'
+  if (/朋来|得朋/.test(text)) return '本卦取“朋来”之意：困局的化解在于得到同道相助，不在独自强撑。'
+  if (/有孚/.test(text)) {
+    if (profile && profile.kind === 'lost') return '本卦重“有孚”：线索须前后相应。方位、最后动线与现场物象若能相合，查找范围便可进一步收窄。'
+    if (profile && profile.kind === 'lawsuit') return '本卦重“有孚”：判断应以证据、书面记录与程序事实为凭，不能只听口头说法。'
+    if (profile && ['wealth', 'receivable'].includes(profile.kind)) return '本卦重“有孚”：财来要有真实承接。若财爻得力，多为迟而可见；若受克受空，则表面有意，实际仍虚。'
+    if (profile && profile.kind === 'investment') return '本卦重“有孚”：所见收益要能前后相应。卦象可看进退之势，但不替代对风险与退出条件的判断。'
+    if (profile && /^emotion/.test(profile.kind)) return '本卦重“有孚”：真心要由持续行动来证明，不能只听一时表态。'
+    return '本卦重“有孚”：前后能够相应、所言能够见于行动，事情才容易由虚转实。'
+  }
+  if (/勿用|不利|征凶|凶|厉|灾|眚/.test(text)) return '本卦有戒进之意：时机未到，不宜硬推；先把位置站稳，等待条件变化再行动。'
+  if (/利涉大川|利有攸往/.test(text)) return '本卦有利往之意：先把路径与准备做实，再采取行动，才能较稳地渡过风险。'
+  if (/贞吉|利贞|安贞|无咎/.test(text)) return '本卦以守正为吉：守规则、守次序、守信用，进退才不容易失当。'
+  if (/悔|吝/.test(text)) return '本卦提醒知错能改：及时反省并纠正偏差，仍可减少后悔。'
+  if (/亨|吉|元亨/.test(text)) return '本卦已有亨通之机，但吉意仍要靠行动落实，不能只看一个“吉”字。'
+  return '《易》重视时机与位置；应先审势、守正、知变，再决定进退。'
+}
+
+function trendRangeItems(ctx, judgment, deep) {
+  const parsed = judgment.parsed || {}
+  const y = ctx.primaryYong || (ctx.yongList && ctx.yongList[0]) || (deep.driver && deep.driver.line) || ctx.ying || ctx.shi
+  const moving = (ctx.ben && ctx.ben.yaos ? ctx.ben.yaos : []).filter((item) => item.changing)
+  const items = []
+  const reasons = []
+  let trend = deep.total >= 2 ? '后势偏向推进' : deep.total <= -2 ? '短期仍以迟滞、收缩为主' : '先有反复，随后才会逐渐明朗'
+
+  if (y && y.changeTo && y.changeTo.analysis) {
+    const analysis = y.changeTo.analysis
+    if (analysis.jinTui && analysis.jinTui.type === '化进神') {
+      reasons.push(`${deepYaoName(y)}化进神`)
+      trend = '后势比当前更有推进力，往往先小后大、由近及远'
+    } else if (analysis.jinTui && analysis.jinTui.type === '化退神') {
+      reasons.push(`${deepYaoName(y)}化退神`)
+      trend = '后势有回缩或降温之象，宜防先有消息、随后放缓'
+    }
+    if (analysis.huiTou && analysis.huiTou.type === '回头生') {
+      reasons.push('动而回头生')
+      trend = '变化之后反得助力，转机多出现在行动以后'
+    } else if (analysis.huiTou && analysis.huiTou.type === '回头克') {
+      reasons.push('动而回头克')
+      trend = '越往后阻力越明显，宜防事情启动后再生掣肘'
+    }
+  }
+  if (y && y.kong) reasons.push(`${deepYaoName(y)}逢空，眼下有象未实`)
+  if (ctx.yinPattern && ctx.yinPattern.fanYin) {
+    reasons.push('卦见反吟')
+    trend = '过程容易往返反复，不宜把一次进展当作最终结果'
+  } else if (ctx.yinPattern && ctx.yinPattern.fuYin) {
+    reasons.push('卦见伏吟')
+    trend = '局面暂时停滞，变化多在原处酝酿，不会一下跨得很远'
+  } else if (!moving.length) {
+    reasons.push('六爻俱静')
+    trend = deep.total >= 2 ? '有利条件能够维持，但进展偏慢' : deep.total <= -2 ? '阻力短期延续，局面不易骤变' : '原有状态仍将延续，变化幅度不会太大'
+  } else if (moving.length === 1 && !reasons.length) {
+    reasons.push(`仅${deepYaoName(moving[0])}发动`)
+    trend = '变化集中在一个环节，先看这一点发生转折，再看全局'
+  }
+  items.push(`趋势：${reasons.length ? reasons.join('；') + '，所以' : '综合用神旺衰与动变，'}${trend}。`)
+
+  if (y) {
+    const position = y.index <= 1
+      ? '爻位属初、二层，取近、取内、取事情初段'
+      : y.index <= 3
+        ? '爻位属三、四层，正处内外交接和事情中段'
+        : '爻位属五、上层，取远、取外、取事情后段'
+    const breadth = moving.length >= 3
+      ? '多爻发动，牵涉面较宽，结果不宜锁在单一节点'
+      : moving.length === 2
+        ? '两爻发动，多见前后两步或两个环节相继变化'
+        : moving.length === 1
+          ? '一爻独发，变化范围相对集中'
+          : '静卦主守成，可能范围以原有人事和环境为主'
+    items.push(`可能范围：${deepYaoName(y)}${position}；${breadth}。`)
+  }
+
+  const dir = y && y.zhi && ZHI_DIR[y.zhi]
+  const trigram = y && ctx.ben ? (y.index <= 2 ? ctx.ben.lower : ctx.ben.upper) : null
+  const guaName = trigram && trigram.name
+  const guaDir = guaName && GUA_DIR[guaName]
+  const physical = ['lost', 'travel', 'delivery', 'home'].includes(deep.profile.kind) || parsed.mode === 'where'
+  if (dir || guaDir) {
+    const mainDir = dir || guaDir
+    const supportDir = dir && guaDir && dir !== guaDir ? guaDir : ''
+    let direction = `方位取象：${y && y.zhi ? `${deepYaoName(y)}临「${y.zhi}」，地支取${dir}` : `${guaName}卦后天位取${guaDir}`}`
+    if (supportDir) direction += `；其所在${guaName}卦又取${supportDir}作第二层参考。两象不一时，以${mainDir}为主并连同相邻方位观察，不把两个方向硬拼成一条直线`
+    else if (dir && guaDir === dir) direction += `，又与${guaName}卦的${guaDir}相合，此方向信号较集中`
+    else direction += '，宜连同相邻方位一起观察'
+    if (physical && guaName && GUA_SCENE[guaName]) direction += `；${guaName}象还可参${GUA_SCENE[guaName]}`
+    else direction += '；若所问并非地点，此方位只作人物来源、机会来向或行动方向的辅助象'
+    items.push(`${direction}。`)
+  }
+  return uniqueText(items).slice(0, 3)
+}
+
+function tailoredAction(ctx, profile, driver, blocker) {
+  let first = '宜先小范围尝试，观察反馈后再决定是否推进。'
+  if (blocker && blocker.value < 0 && driver && driver.value > 0 && blocker.key !== driver.key) {
+    first = blocker.polarity === 'risk'
+      ? `应先降低「${blocker.label}」带来的风险，再借「${driver.label}」之力推进。`
+      : `应先补足「${blocker.label}」，再借「${driver.label}」之力推进。`
+  } else if (blocker && blocker.value < 0) {
+    first = blocker.polarity === 'risk'
+      ? `应先控制「${blocker.label}」这一风险，不宜强行推进。`
+      : `应先化解「${blocker.label}」这一阻碍，不宜强行推进。`
+  } else if (driver && driver.value > 0) {
+    first = `应守住「${driver.label}」这一有利条件，顺势推进。`
+  }
+  return `${first}${classicalProfileCounsel(profile.kind)}${classicalTurnFromCast(ctx, driver, blocker, profile)}`
+}
+
+function pointerFromDeep(ctx, deep) {
+  const benCi = guaCiOf(ctx.ben)
+  const bianCi = guaCiOf(ctx.bian)
+  const moving = (ctx.ben && ctx.ben.yaos ? ctx.ben.yaos : []).filter((y) => y.changing)
+  const keyMoving = moving.slice().sort((a, b) => {
+    const hit = (y) => (deep.axes.some((axis) => axis.line && axis.line.index === y.index) ? 10 : 0)
+      + (ctx.primaryYong && ctx.primaryYong.index === y.index ? 6 : 0)
+    return hit(b) - hit(a)
+  })[0]
+  const lineText = keyMoving && benCi && benCi.yaoci ? benCi.yaoci[keyMoving.index] : ''
+  const classicText = [lineText, bianCi && bianCi.guaci, benCi && benCi.guaci].filter(Boolean).join('；')
+  let classicTurn = '先把现实条件做实，再谈成败'
+  if (/利见大人/.test(classicText)) classicTurn = '门在能作主、能担责的人'
+  else if (/朋来|得朋/.test(classicText)) classicTurn = '转机在可信助力，不在独力硬撑'
+  else if (/有孚/.test(classicText)) classicTurn = '关键在前后相应、言行相符'
+  else if (/勿用|不利|征凶|凶|厉|灾|眚/.test(classicText)) classicTurn = '风险未除，不可硬推'
+  else if (/贞吉|利贞|安贞|无咎/.test(classicText)) classicTurn = '守正守序，吉意才有落处'
+  else if (/亨|吉|元亨/.test(classicText)) classicTurn = '有路可走，但须用行动落实'
+
+  const driver = deep.driver && deep.driver.value > 0 ? deep.driver : null
+  const blocker = deep.blocker && deep.blocker.value < 0 ? deep.blocker : null
+  if (deep.profile.kind === 'health') return '卦可提醒轻重缓急，不可替代检查与诊断；身体有警讯，先就医。'
+  if (deep.profile.kind === 'lawsuit') return '先固定证据、守住时限，再谈胜负；卦象不能替代法律判断。'
+  if (deep.profile.kind === 'investment') return '先算最坏损失与退出路径，再谈收益；卦顺也不可替代尽调。'
+  if (deep.profile.kind === 'lost') return '先回溯最后出现的时间与动线，逐处核实；方位只作辅助。'
+  if (deep.profile.kind === 'emotion-third') return '卦只提示疑点，不替你指认任何人；先看事实，再定关系边界。'
+  if (driver && blocker && driver.key !== blocker.key) {
+    return `先解「${blocker.label}」，再借「${driver.label}」；${classicTurn}。`
+  }
+  if (blocker) return `先解「${blocker.label}」；${classicTurn}。`
+  if (driver) return `守住「${driver.label}」这一支点；${classicTurn}。`
+  return `${classicTurn}。`
+}
+
+function buildDeepReading(ctx, judgment) {
+  const profile = questionProfile(ctx, judgment)
+  const axes = profile.axes.map((axis) => analyzeProfileAxis(ctx, axis))
+  const baseTone = judgment.parsed && judgment.parsed.mode === 'yesno' ? judgment.answerTone : judgment.tone
+  let total = axes.reduce((sum, axis) => sum + axis.value, 0)
+  total += baseTone === 'good' ? 1 : baseTone === 'bad' ? -1 : 0
+  const driverPool = axes.filter((axis) => axis.polarity !== 'risk')
+  const driver = (driverPool.length ? driverPool : axes).slice().sort((a, b) => b.value - a.value)[0]
+  const blocker = axes.slice().sort((a, b) => a.value - b.value)[0]
+  const summary = deepSummary(profile, judgment, total)
+  let thesis = ''
+  if (profile.safe) {
+    thesis = `卦上只可把${axisEvidence(blocker || driver)}看作风险提醒，不能据此诊断、承诺疗效或预测医学结果；真正的判断必须回到症状、检查与医生意见。`
+  } else if (profile.guarded) {
+    thesis = `卦上，${axisEvidence(driver)}；同时${axisEvidence(blocker)}。这些只能用来整理风险和核查重点，不能替代现实证据、专业评估或必要处置。`
+  } else if (profile.negativeOutcome) {
+    thesis = total <= -2
+      ? `卦上，${axisEvidence(blocker)}，所以疑点偏强；但这仍只是风险信号，不足以据此认定${profile.result}已经发生。`
+      : `卦上未见足以坐实${profile.result}的完整证据链。即使${axisEvidence(blocker)}，也只能说明关系中有卡点，不能把疑点直接当事实。`
+  } else if (driver && driver.value > 0 && blocker && blocker.value < 0) {
+    thesis = `卦上，${axisEvidence(driver)}，这是可用的支点；但${axisEvidence(blocker)}，这是当前卡点。${profile.result}并非全无机会，成败取决于能否先解后者。`
+  } else if (blocker && blocker.value < 0) {
+    thesis = `当前主要矛盾是${axisEvidence(blocker)}。若这一点不改变，其他吉象也难把${profile.result}落到实处。`
+  } else if (driver && driver.value > 0) {
+    thesis = `${axisEvidence(driver)}，这是${profile.result}最有力的支点。卦上已有承接，但仍须以现实行动确认，不能把有利之象当成既成结果。`
+  } else {
+    thesis = `${profile.result}目前没有出现一锤定音的力量，关键条件彼此牵制。此时最重要的不是继续问吉凶，而是找出哪一项现实条件先发生变化。`
+  }
+  const mode = judgment.parsed && judgment.parsed.mode
+  const deepTone = toneFromDeepTotal(total)
+  const replyTone = profile.negativeOutcome ? invertTone(deepTone) : deepTone
+  const keepGuardedReply = profile.safe || profile.guarded || ['when', 'where', 'who', 'choice'].includes(mode)
+  const answer = keepGuardedReply
+    ? judgment.reply
+    : directReply(judgment.parsed, replyTone, Math.abs(total) < 3 ? `偏·${summary}` : summary, {
+      place: judgment.place,
+      whenHint: judgment.whenHint,
+      clockHint: judgment.clockHint,
+      whoHint: judgment.whoHint,
+      choicePick: judgment.choicePick,
+      outcomeTone: deepTone
+    })
+  const action = tailoredAction(ctx, profile, driver, blocker)
+  return { profile, axes, total, tone: deepTone, summary, thesis, answer, driver, blocker, action }
+}
+
+function classicLanding(text, deep, axis) {
+  const raw = String(text || '')
+  const anchor = axis ? axis.label : ((deep.blocker && deep.blocker.value < 0) ? deep.blocker.label : (deep.driver && deep.driver.label))
+  const target = anchor ? `“${anchor}”` : `“${deep.profile.result}”`
+  if (/利见大人/.test(raw)) return `据此辞看${target}：关键要通过有决定权的人、正式制度或专业帮助来解决。`
+  if (/朋来|得朋/.test(raw)) return `据此辞看${target}：困局的转机来自可信同伴或内部助力，不宜独力硬撑。`
+  if (/有孚/.test(raw)) {
+    if (deep.profile.kind === 'lost') return `据此辞看${target}：方位、最后动线与现场物象能够前后相应时，查找范围才可由宽转窄。`
+    if (deep.profile.kind === 'lawsuit') return `据此辞看${target}：以证据、书面记录和程序事实为凭，不能只凭口头说法。`
+    if (deep.profile.kind === 'wealth' || deep.profile.kind === 'receivable') return `据此辞看${target}：先看财爻能否由虚转实，再看对方是否真正发动；不能只凭一句承诺判断财会到手。`
+    if (deep.profile.kind === 'investment') return `据此辞看${target}：收益之象须前后相应，卦可提示进退，但不能替代风险与退出判断。`
+    if (/^emotion/.test(deep.profile.kind)) return `据此辞看${target}：真心要由持续行动兑现，不能只听一时表态。`
+    return `据此辞看${target}：关键在言行相符、前后相应，事情才会由虚转实。`
+  }
+  if (/勿用|不利|征凶|凶|厉|灾|眚/.test(raw)) return `据此辞看${target}：条件未稳时不可硬推，先除去已经显出的风险。`
+  if (/利涉大川|利有攸往/.test(raw)) return `据此辞看${target}：可以行动，但要有明确路径、准备和承担，不宜盲动。`
+  if (/贞吉|利贞|安贞|无咎/.test(raw)) return `据此辞看${target}：守规则、守承诺并按次序推进，吉意才有落处。`
+  if (/悔|吝/.test(raw)) return `据此辞看${target}：已有偏差仍可修正，但拖延或固执会把小问题累积成后悔。`
+  if (/亨|吉|元亨/.test(raw)) return `据此辞看${target}：通达条件已经出现，但必须化为具体行动，不能只取“吉”字。`
+  return `此辞重在辨明${target}所处阶段，再定进退。`
+}
+
+function classicMeaning(text, judgment) {
+  const parsed = judgment.parsed || {}
+  const focus = parsed.focus || '所问之事'
+  const raw = String(text || '')
+  let principle = ''
+  if (/勿用|不利|征凶|凶|厉|灾|眚/.test(raw)) {
+    principle = '经文主戒进与防失，眼下不宜凭一时冲动强求。'
+  } else if (/利见大人|利有攸往|利涉大川/.test(raw)) {
+    principle = '经文提示可借助可信之人、制度或成熟路径推动，不宜独断。'
+  } else if (/贞吉|利贞|安贞|无咎/.test(raw)) {
+    principle = '经文所许不在侥幸，而在守正、守约、按次序行事。'
+  } else if (/悔|吝/.test(raw)) {
+    principle = '经文提示已有偏差，但及时收敛、纠正，仍可减少后悔。'
+  } else if (/亨|吉|元亨/.test(raw)) {
+    principle = '经文显示有通达条件，可以推进，但吉意须靠行动落实。'
+  } else {
+    principle = '经文重在审时度势：看清所处阶段，再决定进退。'
+  }
+
+  let landing = ''
+  if (parsed.domain === 'emotion') landing = `落到「${focus}」，应看对方是否持续回应，而不是只听一时表态。`
+  else if (['wealth', 'invest', 'property'].includes(parsed.domain)) landing = `落到「${focus}」，先核现金、合同、成本与退出条件，再谈得失。`
+  else if (['career', 'exam'].includes(parsed.domain)) landing = `落到「${focus}」，关键在资格、文书、节点和能真正作主的人。`
+  else if (parsed.domain === 'lawsuit') landing = `落到「${focus}」，证据、程序和时限比口头胜负更要紧。`
+  else if (parsed.domain === 'health' || parsed.domain === 'pregnancy') landing = `落到「${focus}」，宜把提醒转为检查、复诊和照护，不以吉凶替代医学判断。`
+  else if (parsed.domain === 'lost') landing = `落到「${focus}」，应按动线、时间点和可核实线索立即排查。`
+  else if (parsed.domain === 'travel' || parsed.domain === 'weather') landing = `落到「${focus}」，以行程、天气和现场信息校正卦上提示。`
+  else landing = `落到「${focus}」，先处理最关键且可控的一步，再观察局势是否应卦。`
+  return principle + landing
+}
+
+function classicItems(ctx, judgment, deep) {
+  const { ben, bian, primaryYong } = ctx
+  const benCi = guaCiOf(ben)
+  const bianCi = guaCiOf(bian)
+  const moving = (ben && ben.yaos ? ben.yaos : []).filter((y) => y.changing)
+  const picked = moving.slice().sort((a, b) => {
+    const score = (y) => (deep && deep.axes.some((axis) => axis.line && axis.line.index === y.index) ? 10 : 0)
+      + (primaryYong && y.index === primaryYong.index ? 6 : 0)
+      + (y.role === '世' || y.role === '应' ? 3 : 0)
+      + (y.wangshuai === '旺' || y.wangshuai === '相' ? 1 : 0)
+    return score(b) - score(a)
+  }).slice(0, 1)
+  const items = []
+  if (benCi && benCi.guaci) {
+    items.push(`本卦《${ben.alias || ben.name}》：“${benCi.guaci}”`)
+    items.push(classicLanding(benCi.guaci, deep, null))
+  }
+  picked.forEach((y) => {
+    const line = benCi && benCi.yaoci ? benCi.yaoci[y.index] : ''
+    if (line) {
+      const axis = deep && deep.axes.find((item) => item.line && item.line.index === y.index)
+      items.push(`关键动爻${axis ? `（${axis.label}）` : ''}：${line}`)
+      items.push(classicLanding(line, deep, axis || null))
+    }
+  })
+  if (bian && bianCi && bianCi.guaci) {
+    items.push(`变卦《${bian.alias || bian.name}》：“${bianCi.guaci}”`)
+    const landingAxis = (deep.blocker && deep.blocker.value < 0) ? deep.blocker : deep.driver
+    const image = bianCi.nameWhy ? `${bianCi.nameWhy}` : ''
+    items.push(`后势取象：${image}${classicLanding(bianCi.guaci, deep, landingAxis)}`)
+  }
+  return uniqueText(items).slice(0, 6)
+}
+
+function keyEvidenceItems(ctx) {
+  const { topic, primaryYong, yongList, fu, shi, ying, ben, relations, yinPattern } = ctx
+  const items = []
+  const y = primaryYong || (yongList && yongList[0])
+  if (y) {
+    const state = [y.wangshuai, y.kong ? '空亡' : '', y.changing ? '发动' : ''].filter(Boolean).join('、')
+    let line = `用神「${topic.yongshen}」落${yaoName(y)}，当前${state || '平常'}`
+    if (y.changeTo) line += `，并化${y.changeTo.text}`
+    items.push(line + '。')
+  } else if (fu) {
+    items.push(`用神「${topic.yongshen}」伏藏，事情尚未完全显露；须待引出或冲开后才容易落实。`)
+  } else if (topic.yongshen !== '世爻') {
+    items.push(`用神「${topic.yongshen}」未现，说明题中条件尚未齐备，不宜过早下死结论。`)
+  }
+  if (shi && ying && topic.useShiYing) {
+    const sy = relationWuxing(shi.wuxing, ying.wuxing)
+    items.push(`世应关系为「${sy}」：${SY_PLAIN[sy] || '双方力量需结合具体爻位判断'}。`)
+  }
+  const moving = (ben && ben.yaos ? ben.yaos : []).filter((item) => item.changing)
+  if (!moving.length) {
+    items.push('六爻俱静，局面短期不易骤变，成败更取决于现有条件是否成熟。')
+  } else {
+    const relevant = relations && relations.links
+      ? relations.links.find((link) => y && (link.to.index === y.index || link.from.index === y.index))
+      : null
+    items.push(relevant
+      ? `关键变化：${relevant.text}，这是推动或牵制所问的直接力量。`
+      : `${moving.length}爻发动，事情已进入变化期；以关键动爻和变卦定后势。`)
+  }
+  if (yinPattern && yinPattern.fanYin) items.push('卦见反吟，过程容易反复，口头承诺须等事实落地。')
+  if (yinPattern && yinPattern.fuYin) items.push('卦见伏吟，局面容易停滞或原地打转，宜主动改变条件。')
+  return uniqueText(items).slice(0, 4)
+}
+
+function timingSummary(ctx, judgment) {
+  const parsed = judgment.parsed || {}
+  const items = []
+  if (parsed.mode === 'when') {
+    if (parsed.whenKind === 'clock' && judgment.clockHint) items.push(`重点时段：${judgment.clockHint}。`)
+    else (judgment.timingTips || []).slice(0, 2).forEach((tip) => items.push(tip))
+  } else {
+    const y = ctx.primaryYong || (ctx.yongList && ctx.yongList[0])
+    if (y && y.kong) items.push(`用神逢空，宜等「${y.zhi}」出空或被冲实后再看落实。`)
+    if (y && y.dayMonth && y.dayMonth.heRi) items.push('用神被合住，当前有牵绊；待破合时更容易有明确进展。')
+    if (y && y.dayMonth && y.dayMonth.chongRi) items.push('日辰冲动用神，近期容易出现消息或转折。')
+    if (!ctx.changingIndexes.length) items.push('静卦主缓，先看既定节奏，不宜频繁催逼或重复起卦。')
+  }
+  return uniqueText(items).slice(0, 2)
+}
+
+function shortGuaName(gua) {
+  if (!gua) return ''
+  return gua.alias || gua.shortName || String(gua.name || '').replace(/^[乾坤震巽坎离艮兑天地雷风水火山泽]{2}/, '') || gua.name || ''
+}
+
+function hexagramTheme(gua) {
+  const name = shortGuaName(gua)
+  return HEXAGRAM_THEME[name] || '先辨清眼下所处的时位，再决定应进还是应守'
+}
+
+function naturalAxisFact(axis) {
+  if (!axis) return ''
+  const power = axis.line ? linePower(axis.line) : 0
+  const at = axis.line ? `，所落之爻力量${power >= 1 ? '较足' : power <= -1 ? '偏弱' : '平常'}` : ''
+  const riskAt = axis.line ? `，其象${power >= 1 ? '较强' : power <= -1 ? '偏弱' : '尚未坐实'}` : ''
+  if (axis.polarity === 'risk') {
+    if (axis.value <= -1) return `${axis.label}已经形成牵制${riskAt}`
+    if (axis.value >= 1) return `${axis.label}虽有其象，但眼下力量有限`
+    return `${axis.label}仍是隐忧，却还没有强到足以定局`
+  }
+  if (axis.value >= 2) return `${axis.label}这一边最有力${at}`
+  if (axis.value >= 1) return `${axis.label}已有支撑${at}`
+  if (axis.value <= -2) return `${axis.label}明显接不住${at}`
+  if (axis.value <= -1) return `${axis.label}仍偏弱${at}`
+  return `${axis.label}尚未显出明确倾向`
+}
+
+function domainOutcome(profile, total) {
+  const kind = profile.kind || 'general'
+  const tone = total >= 2 ? 'good' : total <= -2 ? 'bad' : 'mid'
+  const table = {
+    emotion: { good: '双方仍有继续靠近的空间', mid: '心意与实际行动还没有完全同步', bad: '关系短期更容易疏远或反复' },
+    career: { good: '机会有望从接触走向真正落位', mid: '机会与职位名分还没有同步', bad: '短期难见明确落位，强争反而更耗' },
+    wealth: { good: '财势有聚拢的可能', mid: '有财机，但从机会到进账还隔着一层', bad: '财气容易被拖延、分耗或落空' },
+    receivable: { good: '款项并非无望，更像迟中有回', mid: '钱与付款动作尚未接上', bad: '回款容易继续拖延，甚至出现折减' },
+    investment: { good: '传统象意偏顺，但收益仍有条件', mid: '进退得失尚未拉开', bad: '风险一侧更重，不宜因一时之象加码' },
+    exam: { good: '已有过关或取得进展的基础', mid: '能力与结果之间还差临门一环', bad: '眼下短板更容易影响结果' },
+    'research-paper': { good: '稿件仍有被接住和继续推进的可能', mid: '论文价值与评审门槛尚在拉扯', bad: '关键质疑若不解，结果难以扭转' },
+    'research-project': { good: '方案有继续推进并形成结果的空间', mid: '方法、资源与结果还没有真正合拢', bad: '根本条件不足，全面铺开只会增加消耗' },
+    document: { good: '审批或文书事项有望继续过关', mid: '材料与决定节点尚未衔接', bad: '程序阻力仍重，短期不易放行' },
+    lawsuit: { good: '传统象意稍有承接，但不能据此预断输赢', mid: '双方力量仍在拉扯，胜负不可由卦代断', bad: '风险压力偏重，更应回到法律程序处置' },
+    family: { good: '家事仍有缓和与重新协调的余地', mid: '各方立场尚未真正安定', bad: '矛盾短期容易继续累积' },
+    health: { good: '传统象意稍见缓和，但不构成医学判断', mid: '卦上轻重未定，仍须以检查和医生意见为准', bad: '卦只提示应提高警觉，不能据此判断病情' },
+    travel: { good: '行程有望启动并逐步顺开', mid: '人想动，但路线或接应还没有接好', bad: '延误与阻隔偏重，宜先缓一步' },
+    social: { good: '双方有重新接上或见面的可能', mid: '有往来之意，尚未化成明确行动', bad: '对方动作偏弱，空等难有结果' },
+    delivery: { good: '流转仍在继续，后续有到达可能', mid: '物品尚在途中或节点之间', bad: '滞留、错转或延误的可能偏高' },
+    lost: { good: '线索仍能收拢，所寻之物并非全无着落', mid: '线索有方向，但范围还没有缩到一点', bad: '遮蔽较重，短期查找会费周折' },
+    home: { good: '家宅之事有安定或改善的空间', mid: '房屋条件与居住感受尚在权衡', bad: '隐患一侧偏重，不宜仓促落定' },
+    weather: { good: '传统天气象偏向所问变化', mid: '天气之象尚不集中', bad: '所问天气变化的象偏弱或受阻' },
+    choice: { good: '局面允许往前试一步', mid: '两个方向尚未拉开明显差距', bad: '眼下不适合做不可逆的重注' },
+    general: { good: '事情已有可以借力向前的地方', mid: '几股力量互相牵制，尚未定局', bad: '阻力暂时压过助力，硬推不利' }
+  }
+  let key = kind
+  if (/^emotion/.test(kind)) key = 'emotion'
+  else if (['wealth'].includes(kind)) key = 'wealth'
+  else if (!table[key]) key = 'general'
+  return table[key][tone]
+}
+
+function narrativeHeadline(judgment, deep) {
+  const mode = judgment.parsed && judgment.parsed.mode
+  if (deep.profile.safe || deep.profile.guarded || ['where', 'when', 'who', 'choice'].includes(mode)) return deep.summary
+  if (deep.profile.negativeOutcome) return deep.summary
+  if (deep.total >= 3) return '可望推进，但宜循序而进'
+  if (deep.total >= 1) return '有转机，尚未完全落定'
+  if (deep.total <= -3) return '眼下难进，宜先退后谋'
+  if (deep.total <= -1) return '阻力偏重，不宜硬推'
+  return '局面未定，关键在下一步'
+}
+
+function narrativeDirectAnswer(judgment, deep) {
+  const parsed = judgment.parsed || {}
+  const focus = parsed.focus || deep.profile.result || '这件事'
+  const mode = parsed.mode || 'outlook'
+  if (deep.profile.safe || deep.profile.guarded || deep.profile.negativeOutcome || ['where', 'when', 'who', 'choice'].includes(mode)) return deep.answer
+  if (mode === 'yesno') {
+    if (deep.total >= 2) return `“${focus}”偏向能成，但仍要经过眼前这一处转折。`
+    if (deep.total <= -2) return `“${focus}”眼下偏难，继续硬推只会增加消耗。`
+    return `“${focus}”目前还不能断成或不成，关键条件尚未接上。`
+  }
+  if (mode === 'jixiong') {
+    if (deep.total >= 2) return `“${focus}”利多于弊，但吉处有条件。`
+    if (deep.total <= -2) return `“${focus}”阻力重于助力，宜收不宜放。`
+    return `“${focus}”吉凶相杂，下一步的选择会改变结果。`
+  }
+  if (mode === 'how') return deep.total >= 2 ? `“${focus}”可以主动推进，但要沿最有力的一环发力。` : deep.total <= -2 ? `“${focus}”先不要正面硬攻，换条件比加力更重要。` : `“${focus}”宜先做一步可回退的试探，再看反馈。`
+  return `“${focus}”${domainOutcome(deep.profile, deep.total)}。`
+}
+
+function narrativeOpening(ctx, judgment, deep) {
+  const focus = (judgment.parsed && judgment.parsed.focus) || deep.profile.result || '所问之事'
+  const guaName = shortGuaName(ctx.ben)
+  const driver = deep.driver && deep.driver.value > 0 ? deep.driver : null
+  const blocker = deep.blocker && deep.blocker.value < 0 ? deep.blocker : null
+  let text = `本卦为《${guaName}》，它的主旨是${hexagramTheme(ctx.ben)}。`
+  if (driver && blocker && driver.key !== blocker.key) {
+    text += `落到你问的“${focus}”，卦里的矛盾不在“全有”或“全无”，而在两股力量还没有接上：${naturalAxisFact(driver)}；但${naturalAxisFact(blocker)}。这正是眼下有机会却还不能直接落定的原因。`
+  } else if (blocker) {
+    text += `落到你问的“${focus}”，眼下的主因不在运气，而在${naturalAxisFact(blocker)}。这一处不松动，其他吉象也难真正接上。`
+  } else if (driver) {
+    text += `落到你问的“${focus}”，${naturalAxisFact(driver)}，这是事情能够继续向前的主要支点。`
+  } else {
+    text += `落到你问的“${focus}”，用神、世应与动爻之间尚未形成一股足以定局的力量，因此现在不宜把一时现象当作最终结果。`
+  }
+  return text
+}
+
+function classicalLineName(y) {
+  if (!y) return ''
+  const value = y.yinYang ? '九' : '六'
+  const position = ['初', '二', '三', '四', '五', '上'][y.index] || ''
+  if (y.index === 0 || y.index === 5) return `${position}${value}`
+  return `${value}${position}`
+}
+
+function keyMovingForNarrative(ctx, deep) {
+  const moving = (ctx.ben && ctx.ben.yaos ? ctx.ben.yaos : []).filter((y) => y.changing)
+  if (!moving.length) return null
+  const related = deep.axes.filter((axis) => axis.line && axis.line.changing).map((axis) => axis.line.index)
+  if (ctx.primaryYong && ctx.primaryYong.changing) return ctx.primaryYong
+  return moving.find((y) => related.includes(y.index)) || moving[0]
+}
+
+function movingMeaning(y) {
+  if (!y) return ''
+  const parts = []
+  const phase = [
+    '事情刚起，尚在试探',
+    '基础正在形成，还没有走到决定层',
+    '事情走到内外转换的关口',
+    '外部条件开始真正介入',
+    '事情已到决定与落实的位置',
+    '事情走到极处，容易转向'
+  ][y.index] || '事情正在变化'
+  parts.push(phase)
+  const a = y.changeTo && y.changeTo.analysis
+  if (a && a.jinTui && a.jinTui.type === '化进神') parts.push('又化进，说明后劲强于眼下，常见先小后大')
+  else if (a && a.jinTui && a.jinTui.type === '化退神') parts.push('却化退，说明后劲不足，容易先动后缓')
+  if (a && a.huiTou && a.huiTou.type === '回头生') parts.push('变化之后反得生扶，转机多在行动以后')
+  else if (a && a.huiTou && a.huiTou.type === '回头克') parts.push('变化之后反受克制，启动以后仍会遇到掣肘')
+  if (y.kong) parts.push('同时逢空，眼下所见还虚，消息未必马上成为事实')
+  if (y.dayMonth && y.dayMonth.heRi) parts.push('又被日辰合住，当前有牵绊，进展不会很快')
+  else if (y.dayMonth && y.dayMonth.chongRi) parts.push('又受日辰冲动，近期较容易出现消息或转折')
+  return parts.join('；')
+}
+
+function processNarrative(ctx, deep) {
+  const moving = (ctx.ben && ctx.ben.yaos ? ctx.ben.yaos : []).filter((y) => y.changing)
+  const key = keyMovingForNarrative(ctx, deep)
+  let text = ''
+  if (!moving.length) {
+    text = `六爻俱静，这件事短期不会突然翻转。${deep.total >= 2 ? '有利条件可以维持，但进展多半是缓慢累积。' : deep.total <= -2 ? '眼前阻力仍会延续，先改变条件比反复催促更重要。' : '局面更像维持现状，真正变化要等外部条件介入。'}`
+  } else if (key) {
+    text = `关键变化落在${classicalLineName(key)}。${movingMeaning(key)}。`
+    if (moving.length > 1) text += `全卦共有${moving.length}爻发动，说明事情不是一条直线推进，还会有其他环节先后加入。`
+  }
+  if (ctx.yinPattern && ctx.yinPattern.fanYin) text += '卦又见反吟，过程容易往返；一次好转或一次受阻，都不能当作最终结果。'
+  else if (ctx.yinPattern && ctx.yinPattern.fuYin) text += '卦又见伏吟，变化多在原处酝酿；若现实条件不变，局面容易反复停在同一点。'
+  if (ctx.bian) {
+    text += `事情往后变为《${shortGuaName(ctx.bian)}》，后势的重点是${hexagramTheme(ctx.bian)}。`
+  }
+  return text
+}
+
+function naturalClassicBridge(raw, profile, gua) {
+  const text = String(raw || '')
+  if (/利见大人/.test(text)) return '这不是泛泛地说“找贵人”，而是说转机要经过真正能作主、能承担结果的人。'
+  if (/朋来|得朋/.test(text)) return '它指向同道相助：靠可信的配合，比一个人硬撑更容易打开局面。'
+  if (/有孚/.test(text)) {
+    if (profile.kind === 'lost') return '这里的“孚”是线索前后相应；方位、动线与现场物象能够互相印证，范围才会收窄。'
+    if (/^emotion/.test(profile.kind)) return '这里的“孚”是心意能够见于持续行动，不是一时说得好听。'
+    if (['wealth', 'receivable'].includes(profile.kind)) return '这里的“孚”是财与行动能够真正相接；财爻有气还要看对方是否发动。'
+    return '这里的“孚”是内外相应、言行相符，事情才会由虚转实。'
+  }
+  if (/勿用|不利|征凶|凶|厉|灾|眚/.test(text)) return '经文所戒的不是永远不能做，而是眼下时位不对，继续硬推会把小阻力放大。'
+  if (/利涉大川|利有攸往/.test(text)) return '经文许其前往，但前提是路径清楚、准备足够，不能把“可行”理解成“可以冒进”。'
+  if (/贞吉|利贞|安贞|无咎/.test(text)) return '吉处落在守正与守序；做法不偏，才能把卦里的有利条件接住。'
+  if (/悔|吝/.test(text)) return '它说明已有偏差，但还来得及调整；越早回头，代价越小。'
+  if (/亨|吉|元亨/.test(text)) return '卦里确有可通之处，但“吉”只说明有路，不等于结果已经到手。'
+  return `这句不能只按表面的吉凶来读，它把《${shortGuaName(gua)}》的主旨落到了这一爻：${hexagramTheme(gua)}。`
+}
+
+function classicQuote(text) {
+  return String(text || '').replace(/[。；;，,]+$/g, '')
+}
+
+function classicNarrative(ctx, deep) {
+  const benCi = guaCiOf(ctx.ben)
+  if (!benCi) return ''
+  const key = keyMovingForNarrative(ctx, deep)
+  const line = key && benCi.yaoci ? benCi.yaoci[key.index] : ''
+  if (line) {
+    return `本卦卦辞为“${classicQuote(benCi.guaci)}”，但真正主变化的是${classicalLineName(key)}。爻辞说“${classicQuote(line)}”。${naturalClassicBridge(line || benCi.guaci, deep.profile, ctx.ben)}`
+  }
+  if (benCi.guaci) {
+    return `此卦没有动爻，主要依本卦卦辞“${classicQuote(benCi.guaci)}”来定调。${naturalClassicBridge(benCi.guaci, deep.profile, ctx.ben)}`
+  }
+  return ''
+}
+
+function locationNarrative(ctx, deep) {
+  const y = ctx.primaryYong || (ctx.yongList && ctx.yongList[0]) || (deep.driver && deep.driver.line) || ctx.ying
+  if (!y) return ''
+  const dir = y.zhi && ZHI_DIR[y.zhi]
+  const trigram = ctx.ben && (y.index <= 2 ? ctx.ben.lower : ctx.ben.upper)
+  const guaName = trigram && trigram.name
+  const guaDir = guaName && GUA_DIR[guaName]
+  const scene = guaName && GUA_SCENE[guaName]
+  const range = y.index <= 1 ? '范围偏近、偏内，多在身边或原有环境' : y.index <= 3 ? '范围在内外交界，常见门口、通道或往返动线' : '范围偏外、偏远，也可能在较高位置或由他人经手'
+  if (!dir && !guaDir) return ''
+  let text = `方位以${classicalLineName(y)}${y.zhi ? `临“${y.zhi}”` : ''}为主，先看${dir || guaDir}`
+  if (guaDir && guaDir !== dir) text += `；它所在的${guaName}卦取${guaDir}，作为相邻方向和环境的辅助，不与主方向硬拼`
+  if (scene) text += `。${guaName}象还指向${scene}`
+  text += `。从爻位看，${range}。`
+  return text
+}
+
+function timeNarrative(ctx, judgment) {
+  const parsed = judgment.parsed || {}
+  const y = ctx.primaryYong || (ctx.yongList && ctx.yongList[0])
+  if (parsed.mode === 'when') {
+    if (parsed.whenKind === 'clock' && judgment.clockHint) return `时段上重点留意${judgment.clockHint}，这是用神或动爻地支所对应的时辰范围，不是精确到分钟。`
+    if (judgment.whenHint) return `应期不取一个死日期，先看${judgment.whenHint}；若此前条件没有变化，时间仍会顺延。`
+  }
+  if (y && y.kong) return `时间上不会立刻落实。用神逢空，要等“${y.zhi}”出空或被冲实后，事情才更容易由虚转实。`
+  if (y && y.dayMonth && y.dayMonth.heRi) return '时间上当前仍被牵住，等破合之后，进展会比现在明显。'
+  if (y && y.dayMonth && y.dayMonth.chongRi) return '日辰已经冲动用神，消息或转折偏近，近期比远期更值得留意。'
+  return ''
+}
+
+function adviceNarrative(ctx, deep) {
+  if (deep.profile.safe || deep.profile.guarded || deep.profile.negativeOutcome) return deep.profile.action
+  const kind = deep.profile.kind || 'general'
+  const action = deep.profile.action || ''
+  if (/^emotion/.test(kind)) return `先不要继续猜对方心意，把卦里的“有无”交给一次具体行动验证。${action}`
+  if (kind === 'career') return `眼下不宜同时追逐多个可能，先让机会从口头认可变成明确的位置和节点。${action}`
+  if (['wealth', 'receivable'].includes(kind)) return `财上要先分清“看见机会”与“真正落袋”，不要被表面的热度带着走。${action}`
+  if (kind === 'investment') return `先把可得与可失分开，不因卦象偏顺就放大投入。${action}`
+  if (['exam', 'research-paper', 'research-project', 'document'].includes(kind)) return `不要平均用力，先处理最可能改变结果的一环。${action}`
+  if (kind === 'lost') return `不要漫无目的扩大查找范围，先按主方向和内外交界处查一轮，再沿最后动线往回收。${action}`
+  if (kind === 'family') return `先把家事拆开，不要试图一次说清所有旧账。${action}`
+  if (kind === 'travel') return `这卦更重行程是否真正接上，不在于勉强赶路。${action}`
+  const driver = deep.driver && deep.driver.value > 0 ? deep.driver : null
+  const blocker = deep.blocker && deep.blocker.value < 0 ? deep.blocker : null
+  let lead = ''
+  if (driver && blocker && driver.key !== blocker.key) {
+    lead = `现在不要平均用力。先处理${blocker.label}，待这一处不再牵制，再顺着${driver.label}推进；顺序颠倒，越用力越容易空耗。`
+  } else if (blocker) {
+    lead = `眼下先别急着求结果，先把${blocker.label}这一处松开；它不变，局面就难变。`
+  } else if (driver) {
+    lead = `可以往前走，但要沿着${driver.label}这一支点发力，不必同时铺开所有方向。`
+  } else {
+    lead = '此时最合适的是做一步可观察、可回退的动作，让现实反馈替你缩小判断范围。'
+  }
+  return `${lead}${action}`
+}
+
+function progressSectionTitle(kind) {
+  if (/^emotion/.test(kind)) return '这段关系会怎样走'
+  if (kind === 'career') return '事业上的转折在哪里'
+  if (['wealth', 'receivable', 'investment'].includes(kind)) return '财势接下来如何变化'
+  if (['exam', 'research-paper', 'research-project', 'document'].includes(kind)) return '成败会落在哪一环'
+  if (kind === 'lost') return '线索会怎样收拢'
+  if (kind === 'travel') return '行程会怎样发展'
+  if (kind === 'family') return '家事会怎样演变'
+  return '事情接下来会怎样'
+}
+
+function adviceSectionTitle(kind) {
+  if (/^emotion/.test(kind)) return '这段关系如何拿捏'
+  if (kind === 'career') return '此时宜进还是宜守'
+  if (['wealth', 'receivable', 'investment'].includes(kind)) return '财上如何取舍'
+  if (kind === 'lost') return '查找应从哪里下手'
+  if (kind === 'family') return '家事如何处置'
+  return '你现在最该做什么'
+}
+
+function buildConciseSections(ctx, judgment) {
+  const deep = buildDeepReading(ctx, judgment)
+  deep.summary = narrativeHeadline(judgment, deep)
+  deep.thesis = narrativeOpening(ctx, judgment, deep)
+  deep.answer = narrativeDirectAnswer(judgment, deep)
+  deep.action = adviceNarrative(ctx, deep)
+  deep.pointer = ''
+  const sections = []
+  const process = processNarrative(ctx, deep)
+  if (process) sections.push({ title: progressSectionTitle(deep.profile.kind), items: [process] })
+  const classic = classicNarrative(ctx, deep)
+  if (classic) sections.push({ title: '卦爻为什么这样说', items: [classic] })
+  const parsed = judgment.parsed || {}
+  const hints = []
+  let hasPlace = false
+  let hasTime = false
+  if (parsed.mode === 'where' || deep.profile.kind === 'lost') {
+    const place = locationNarrative(ctx, deep)
+    if (place) { hints.push(place); hasPlace = true }
+  }
+  if (parsed.mode === 'when') {
+    const time = timeNarrative(ctx, judgment)
+    if (time) { hints.push(time); hasTime = true }
+  } else if (parsed.mode !== 'where') {
+    const time = timeNarrative(ctx, judgment)
+    if (time) { hints.push(time); hasTime = true }
+  }
+  if (hints.length) sections.push({ title: hasPlace && hasTime ? '方位、范围与应期' : hasPlace ? '方位与范围' : '应期怎么看', items: hints })
+  sections.push({
+    title: adviceSectionTitle(deep.profile.kind),
+    items: [deep.action]
+  })
+  return { sections, deep }
 }
 
 function buildPlainLead(topic, judgment, yongList, fu, changingIndexes, yinPattern) {
@@ -8573,8 +9900,39 @@ function interpret(cast, topicKey = 'general') {
   if (yinPattern && yinPattern.fanYin) focus.push('反吟')
   if (yinPattern && yinPattern.fuYin) focus.push('伏吟')
 
+  const concise = buildConciseSections({
+    topic,
+    ben,
+    bian,
+    question,
+    askMeta: cast.askMeta || null,
+    yongList,
+    primaryYong,
+    fu,
+    shi,
+    ying,
+    relations,
+    yinPattern,
+    changingIndexes,
+    calendar
+  }, judgment)
+  const conciseSections = concise.sections
+  const deep = concise.deep
+  const finalJudgment = Object.assign({}, judgment, {
+    level: deep.summary,
+    label: deep.summary,
+    reply: deep.answer,
+    judgment: deep.thesis,
+    advice: deep.action
+  })
+  const finalTendency = {
+    level: deep.summary,
+    tone: deep.tone,
+    note: deep.thesis
+  }
+
   const points = []
-  sections.forEach((sec) => {
+  conciseSections.forEach((sec) => {
     points.push(`【${sec.title}】`)
     sec.items.forEach((it) => points.push(it))
   })
@@ -8583,15 +9941,17 @@ function interpret(cast, topicKey = 'general') {
     topic,
     yongList,
     fushen: fu,
-    sections,
-    tendency: shownTendency,
-    judgment,
+    question: question || '',
+    sections: conciseSections,
+    tendency: finalTendency,
+    judgment: finalJudgment,
     score,
     points,
-    summary: judgment.level,
-    summaryNote: judgment.judgment,
-    reply: judgment.reply,
-    advice: judgment.advice
+    summary: deep.summary,
+    summaryNote: deep.thesis,
+    reply: deep.answer,
+    advice: deep.action,
+    pointer: deep.pointer
   }
 }
 
@@ -9461,6 +10821,7 @@ window.LiuYao = {
   ARTICLES: learning.ARTICLES,
   getArticle: learning.getArticle,
   groupByCategory: learning.groupByCategory,
+  volumeAnchorId: learning.volumeAnchorId,
   CATEGORY_ORDER: learning.CATEGORY_ORDER,
   CATEGORY_META: learning.CATEGORY_META,
   normalizeArticle: learning.normalizeArticle

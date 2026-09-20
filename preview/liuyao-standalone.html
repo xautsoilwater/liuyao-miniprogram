@@ -1023,6 +1023,42 @@
       font-size: 14px; letter-spacing: .14em; color: var(--bronze);
     }
     .track-hint .sep { color: var(--line-strong); font-size: 13px; }
+    .learn-catalog { position: relative; }
+    .vol-nav {
+      position: sticky; top: 46px; z-index: 16;
+      margin: 4px -4px 10px; padding: 10px 8px 12px;
+      background: linear-gradient(180deg, rgba(245,237,217,.98), rgba(235,224,200,.96));
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+      box-shadow: 0 6px 14px rgba(28,24,20,.05);
+    }
+    .vol-nav-label {
+      text-align: center; font-size: 12px; letter-spacing: .36em;
+      color: var(--cinnabar); margin-bottom: 8px;
+    }
+    .vol-nav-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    }
+    .vol-chip {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 46px; padding: 5px 2px 6px;
+      border: 1px solid rgba(110,90,62,.22);
+      background: rgba(250,246,234,.58);
+      color: inherit; font: inherit; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .vol-chip.on {
+      border-color: rgba(155,45,36,.72);
+      background: rgba(155,45,36,.09);
+      box-shadow: inset 0 0 0 1px rgba(155,45,36,.12);
+    }
+    .vol-chip-vol { font-size: 11px; letter-spacing: .12em; color: var(--bronze); line-height: 1.3; }
+    .vol-chip.on .vol-chip-vol { color: var(--cinnabar); }
+    .vol-chip-name {
+      font-size: 14px; letter-spacing: .14em; color: var(--ink); line-height: 1.35;
+    }
+    .vol-chip.on .vol-chip-name { color: var(--cinnabar); }
+    .learn-vol { scroll-margin-top: 170px; }
     .home-brand {
       display: flex; justify-content: center; align-items: center; line-height: 1;
     }
@@ -4574,6 +4610,11 @@ function getArticle(id) {
   })
 }
 
+function volumeAnchorId(category) {
+  const idx = CATEGORY_ORDER.indexOf(category)
+  return idx >= 0 ? `learn-vol-${idx + 1}` : `learn-vol-${category}`
+}
+
 function groupByCategory() {
   const map = {}
   ARTICLES.forEach((item) => {
@@ -4590,6 +4631,7 @@ function groupByCategory() {
       vol: meta.vol || '',
       subtitle: meta.subtitle || '',
       label: meta.vol ? `${meta.vol} · ${category}` : category,
+      anchorId: volumeAnchorId(category),
       items: map[category]
     }
   })
@@ -4601,6 +4643,7 @@ module.exports = {
   CATEGORY_META,
   getArticle,
   groupByCategory,
+  volumeAnchorId,
   normalizeArticle
 }
 
@@ -11865,6 +11908,7 @@ window.LiuYao = {
   ARTICLES: learning.ARTICLES,
   getArticle: learning.getArticle,
   groupByCategory: learning.groupByCategory,
+  volumeAnchorId: learning.volumeAnchorId,
   CATEGORY_ORDER: learning.CATEGORY_ORDER,
   CATEGORY_META: learning.CATEGORY_META,
   normalizeArticle: learning.normalizeArticle
@@ -13571,16 +13615,74 @@ window.LiuYao = {
     }).join('')
   }
 
+  let learnJumping = false
+  let learnActiveAnchor = ''
+
+  function learnVolumeGroups() {
+    if (window.LiuYao.groupByCategory) return window.LiuYao.groupByCategory()
+    const g = {}
+    window.LiuYao.ARTICLES.forEach((a) => { (g[a.category] = g[a.category] || []).push(a) })
+    const order = window.LiuYao.CATEGORY_ORDER || Object.keys(g)
+    return order.filter((category) => g[category]).map((category, i) => ({
+      category,
+      label: category,
+      anchorId: `learn-vol-${i + 1}`,
+      items: g[category]
+    }))
+  }
+
+  function learnJumpOffset() {
+    const pageNav = document.querySelector('.nav')
+    const volNav = document.querySelector('.vol-nav')
+    const navH = pageNav && !pageNav.classList.contains('home-hidden')
+      ? pageNav.getBoundingClientRect().height
+      : 0
+    const volH = volNav ? volNav.getBoundingClientRect().height : 0
+    return navH + volH + 8
+  }
+
+  function setLearnActive(anchorId) {
+    if (!anchorId || anchorId === learnActiveAnchor) return
+    learnActiveAnchor = anchorId
+    app.querySelectorAll('.vol-chip[data-anchor]').forEach((el) => {
+      el.classList.toggle('on', el.dataset.anchor === anchorId)
+    })
+  }
+
+  function jumpLearnVolume(anchorId) {
+    const el = document.getElementById(anchorId)
+    if (!el) return
+    learnJumping = true
+    setLearnActive(anchorId)
+    const top = window.scrollY + el.getBoundingClientRect().top - learnJumpOffset()
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+    setTimeout(() => { learnJumping = false }, 420)
+  }
+
+  function syncLearnActiveFromScroll() {
+    if (state.page !== 'learn' || learnJumping) return
+    const sections = [...app.querySelectorAll('.learn-vol[id]')]
+    if (!sections.length) return
+    const y = window.scrollY + learnJumpOffset()
+    let current = sections[0].id
+    sections.forEach((section) => {
+      const top = window.scrollY + section.getBoundingClientRect().top
+      if (top <= y + 2) current = section.id
+    })
+    setLearnActive(current)
+  }
+
+  function bindLearnVolumeNav() {
+    app.querySelectorAll('.vol-chip[data-anchor]').forEach((el) => {
+      el.onclick = () => jumpLearnVolume(el.dataset.anchor)
+    })
+    const first = app.querySelector('.vol-chip[data-anchor]')
+    setLearnActive((first && first.dataset.anchor) || '')
+  }
+
   function renderLearn() {
     setNav('研习典要')
-    const track = window.LiuYao.CATEGORY_ORDER || ['开宗', '易理', '象数', '卜卦', '排盘', '断卦']
-    const groups = window.LiuYao.groupByCategory
-      ? window.LiuYao.groupByCategory()
-      : (() => {
-          const g = {}
-          window.LiuYao.ARTICLES.forEach((a) => { (g[a.category] = g[a.category] || []).push(a) })
-          return Object.keys(g).map((category) => ({ category, label: category, items: g[category] }))
-        })()
+    const groups = learnVolumeGroups()
     app.innerHTML = `
       <div class="learn-hero">
         <span class="seal">读易八卷</span>
@@ -13588,34 +13690,46 @@ window.LiuYao = {
         <div class="subtitle" style="text-align:center">由理入术，由术回理 · 表诀卦例备齐，可当教材用</div>
         <div class="ornament">观象玩辞</div>
       </div>
-      <div class="track-hint">${track.map((t) => `<span>${t}</span>`).join('<span class="sep">→</span>')}</div>
-      ${groups.map((grp) => `
-        <div class="frame" style="margin-top:14px">
-          ${corners()}
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px">
-            <div>
-              <div class="block-title" style="margin-top:0;color:var(--cinnabar)">${grp.label || grp.category}</div>
-              ${grp.subtitle ? `<div class="muted" style="font-size:14px;letter-spacing:.1em;margin-top:2px">${grp.subtitle}</div>` : ''}
-            </div>
-            <div class="muted" style="font-size:14px;flex-shrink:0">${(grp.items || []).length}篇</div>
+      <div class="learn-catalog">
+        <nav class="vol-nav" aria-label="八卷跳转">
+          <div class="vol-nav-label">八卷跳转</div>
+          <div class="vol-nav-grid">
+            ${groups.map((grp, i) => `
+              <button type="button" class="vol-chip${i === 0 ? ' on' : ''}" data-anchor="${grp.anchorId || `learn-vol-${i + 1}`}">
+                <span class="vol-chip-vol">${grp.vol || `卷${i + 1}`}</span>
+                <span class="vol-chip-name">${grp.category}</span>
+              </button>`).join('')}
           </div>
-          ${(grp.items || []).map((a, i) => `
-            <div class="article" data-id="${a.id}">
-              <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-                <div style="display:flex;gap:10px;flex:1;min-width:0;align-items:flex-start">
-                  <span style="color:var(--bronze);opacity:.7;font-size:14px;min-width:14px">${i + 1}</span>
-                  <div style="flex:1;min-width:0">
-                    <div style="letter-spacing:.12em;margin-bottom:4px;font-weight:600">${a.title}</div>
-                    <div class="muted">${a.summary}</div>
-                  </div>
-                </div>
-                <span style="color:var(--bronze);opacity:.8">◇</span>
+        </nav>
+        ${groups.map((grp, i) => `
+          <div class="frame learn-vol" id="${grp.anchorId || `learn-vol-${i + 1}`}" style="margin-top:14px">
+            ${corners()}
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px">
+              <div>
+                <div class="block-title" style="margin-top:0;color:var(--cinnabar)">${grp.label || grp.category}</div>
+                ${grp.subtitle ? `<div class="muted" style="font-size:14px;letter-spacing:.1em;margin-top:2px">${grp.subtitle}</div>` : ''}
               </div>
-            </div>`).join('')}
-        </div>`).join('')}
+              <div class="muted" style="font-size:14px;flex-shrink:0">${(grp.items || []).length}篇</div>
+            </div>
+            ${(grp.items || []).map((a, idx) => `
+              <div class="article" data-id="${a.id}">
+                <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+                  <div style="display:flex;gap:10px;flex:1;min-width:0;align-items:flex-start">
+                    <span style="color:var(--bronze);opacity:.7;font-size:14px;min-width:14px">${idx + 1}</span>
+                    <div style="flex:1;min-width:0">
+                      <div style="letter-spacing:.12em;margin-bottom:4px;font-weight:600">${a.title}</div>
+                      <div class="muted">${a.summary}</div>
+                    </div>
+                  </div>
+                  <span style="color:var(--bronze);opacity:.8">◇</span>
+                </div>
+              </div>`).join('')}
+          </div>`).join('')}
+      </div>
       <div class="muted" style="text-align:center;margin-top:18px;letter-spacing:.1em;font-size:14px">占以决疑，学以修身</div>
       <button class="btn btn-ghost" data-back style="margin-top:12px">返回</button>`
     bindNav()
+    bindLearnVolumeNav()
     app.querySelectorAll('[data-id]').forEach((el) => { el.onclick = () => go('detail', { articleId: el.dataset.id }) })
   }
 
@@ -13909,6 +14023,7 @@ window.LiuYao = {
   armCompassOnGesture()
 
   hydratePreviewAccount()
+  window.addEventListener('scroll', syncLearnActiveFromScroll, { passive: true })
   window.__liuyaoPreview = {
     state, go, back, render, stack,
     requestCompassPermission,

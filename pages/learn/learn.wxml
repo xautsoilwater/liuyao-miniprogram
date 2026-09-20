@@ -12,37 +12,57 @@
     <view class="ornament">观象玩辞</view>
   </view>
 
-  <view class="track-hint">
-    <text class="th" wx:for="{{track}}" wx:key="*this">{{item}}</text>
-  </view>
-
-  <view class="group" wx:for="{{groups}}" wx:key="category">
-    <view class="cat-row">
-      <view class="cat-block">
-        <view class="cat">{{item.label || item.category}}</view>
-        <view class="cat-sub muted" wx:if="{{item.subtitle}}">{{item.subtitle}}</view>
+  <view class="learn-catalog">
+    <view class="vol-nav" style="top: {{volNavTop}}px">
+      <view class="vol-nav-label">八卷跳转</view>
+      <view class="vol-nav-grid">
+        <view
+          class="vol-chip {{activeAnchor === item.anchorId ? 'on' : ''}}"
+          wx:for="{{volumes}}"
+          wx:key="anchorId"
+          data-anchor="{{item.anchorId}}"
+          bindtap="jumpToVolume"
+          hover-class="vol-chip-hover"
+        >
+          <text class="vol-chip-vol">{{item.vol}}</text>
+          <text class="vol-chip-name">{{item.category}}</text>
+        </view>
       </view>
-      <view class="cat-line"></view>
-      <view class="cat-count muted">{{item.items.length}}篇</view>
     </view>
+
     <view
-      class="article"
-      wx:for="{{item.items}}"
-      wx:for-item="article"
-      wx:for-index="aidx"
-      wx:key="id"
-      data-id="{{article.id}}"
-      bindtap="openArticle"
-      hover-class="article-hover"
+      class="group"
+      id="{{item.anchorId}}"
+      wx:for="{{groups}}"
+      wx:key="category"
     >
-      <view class="a-idx">{{aidx + 1}}</view>
-      <view class="a-main">
-        <view class="a-title">{{article.title}}</view>
-        <view class="muted">{{article.summary}}</view>
+      <view class="cat-row">
+        <view class="cat-block">
+          <view class="cat">{{item.label || item.category}}</view>
+          <view class="cat-sub muted" wx:if="{{item.subtitle}}">{{item.subtitle}}</view>
+        </view>
+        <view class="cat-line"></view>
+        <view class="cat-count muted">{{item.items.length}}篇</view>
       </view>
-      <view class="a-side">
-        <text class="a-cover">{{article.cover === 'taiji' ? '☯' : article.cover === 'bagua' || article.cover === 'bagua-table' ? '☰' : article.cover === 'coins' || article.cover === 'coin-score' ? '錢' : '◇'}}</text>
-        <view class="a-go">›</view>
+      <view
+        class="article"
+        wx:for="{{item.items}}"
+        wx:for-item="article"
+        wx:for-index="aidx"
+        wx:key="id"
+        data-id="{{article.id}}"
+        bindtap="openArticle"
+        hover-class="article-hover"
+      >
+        <view class="a-idx">{{aidx + 1}}</view>
+        <view class="a-main">
+          <view class="a-title">{{article.title}}</view>
+          <view class="muted">{{article.summary}}</view>
+        </view>
+        <view class="a-side">
+          <text class="a-cover">{{article.cover === 'taiji' ? '☯' : article.cover === 'bagua' || article.cover === 'bagua-table' ? '☰' : article.cover === 'coins' || article.cover === 'coin-score' ? '錢' : '◇'}}</text>
+          <view class="a-go">›</view>
+        </view>
       </view>
     </view>
   </view>
