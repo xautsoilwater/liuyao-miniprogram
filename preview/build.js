@@ -83,6 +83,7 @@ window.LiuYao = {
   ARTICLES: learning.ARTICLES,
   getArticle: learning.getArticle,
   groupByCategory: learning.groupByCategory,
+  volumeAnchorId: learning.volumeAnchorId,
   CATEGORY_ORDER: learning.CATEGORY_ORDER,
   CATEGORY_META: learning.CATEGORY_META,
   normalizeArticle: learning.normalizeArticle

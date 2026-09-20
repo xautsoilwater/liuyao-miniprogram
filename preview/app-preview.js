@@ -1618,16 +1618,74 @@
     }).join('')
   }
 
+  let learnJumping = false
+  let learnActiveAnchor = ''
+
+  function learnVolumeGroups() {
+    if (window.LiuYao.groupByCategory) return window.LiuYao.groupByCategory()
+    const g = {}
+    window.LiuYao.ARTICLES.forEach((a) => { (g[a.category] = g[a.category] || []).push(a) })
+    const order = window.LiuYao.CATEGORY_ORDER || Object.keys(g)
+    return order.filter((category) => g[category]).map((category, i) => ({
+      category,
+      label: category,
+      anchorId: `learn-vol-${i + 1}`,
+      items: g[category]
+    }))
+  }
+
+  function learnJumpOffset() {
+    const pageNav = document.querySelector('.nav')
+    const volNav = document.querySelector('.vol-nav')
+    const navH = pageNav && !pageNav.classList.contains('home-hidden')
+      ? pageNav.getBoundingClientRect().height
+      : 0
+    const volH = volNav ? volNav.getBoundingClientRect().height : 0
+    return navH + volH + 8
+  }
+
+  function setLearnActive(anchorId) {
+    if (!anchorId || anchorId === learnActiveAnchor) return
+    learnActiveAnchor = anchorId
+    app.querySelectorAll('.vol-chip[data-anchor]').forEach((el) => {
+      el.classList.toggle('on', el.dataset.anchor === anchorId)
+    })
+  }
+
+  function jumpLearnVolume(anchorId) {
+    const el = document.getElementById(anchorId)
+    if (!el) return
+    learnJumping = true
+    setLearnActive(anchorId)
+    const top = window.scrollY + el.getBoundingClientRect().top - learnJumpOffset()
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+    setTimeout(() => { learnJumping = false }, 420)
+  }
+
+  function syncLearnActiveFromScroll() {
+    if (state.page !== 'learn' || learnJumping) return
+    const sections = [...app.querySelectorAll('.learn-vol[id]')]
+    if (!sections.length) return
+    const y = window.scrollY + learnJumpOffset()
+    let current = sections[0].id
+    sections.forEach((section) => {
+      const top = window.scrollY + section.getBoundingClientRect().top
+      if (top <= y + 2) current = section.id
+    })
+    setLearnActive(current)
+  }
+
+  function bindLearnVolumeNav() {
+    app.querySelectorAll('.vol-chip[data-anchor]').forEach((el) => {
+      el.onclick = () => jumpLearnVolume(el.dataset.anchor)
+    })
+    const first = app.querySelector('.vol-chip[data-anchor]')
+    setLearnActive((first && first.dataset.anchor) || '')
+  }
+
   function renderLearn() {
     setNav('研习典要')
-    const track = window.LiuYao.CATEGORY_ORDER || ['开宗', '易理', '象数', '卜卦', '排盘', '断卦']
-    const groups = window.LiuYao.groupByCategory
-      ? window.LiuYao.groupByCategory()
-      : (() => {
-          const g = {}
-          window.LiuYao.ARTICLES.forEach((a) => { (g[a.category] = g[a.category] || []).push(a) })
-          return Object.keys(g).map((category) => ({ category, label: category, items: g[category] }))
-        })()
+    const groups = learnVolumeGroups()
     app.innerHTML = `
       <div class="learn-hero">
         <span class="seal">读易八卷</span>
@@ -1635,34 +1693,46 @@
         <div class="subtitle" style="text-align:center">由理入术，由术回理 · 表诀卦例备齐，可当教材用</div>
         <div class="ornament">观象玩辞</div>
       </div>
-      <div class="track-hint">${track.map((t) => `<span>${t}</span>`).join('<span class="sep">→</span>')}</div>
-      ${groups.map((grp) => `
-        <div class="frame" style="margin-top:14px">
-          ${corners()}
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px">
-            <div>
-              <div class="block-title" style="margin-top:0;color:var(--cinnabar)">${grp.label || grp.category}</div>
-              ${grp.subtitle ? `<div class="muted" style="font-size:14px;letter-spacing:.1em;margin-top:2px">${grp.subtitle}</div>` : ''}
-            </div>
-            <div class="muted" style="font-size:14px;flex-shrink:0">${(grp.items || []).length}篇</div>
+      <div class="learn-catalog">
+        <nav class="vol-nav" aria-label="八卷跳转">
+          <div class="vol-nav-label">八卷跳转</div>
+          <div class="vol-nav-grid">
+            ${groups.map((grp, i) => `
+              <button type="button" class="vol-chip${i === 0 ? ' on' : ''}" data-anchor="${grp.anchorId || `learn-vol-${i + 1}`}">
+                <span class="vol-chip-vol">${grp.vol || `卷${i + 1}`}</span>
+                <span class="vol-chip-name">${grp.category}</span>
+              </button>`).join('')}
           </div>
-          ${(grp.items || []).map((a, i) => `
-            <div class="article" data-id="${a.id}">
-              <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-                <div style="display:flex;gap:10px;flex:1;min-width:0;align-items:flex-start">
-                  <span style="color:var(--bronze);opacity:.7;font-size:14px;min-width:14px">${i + 1}</span>
-                  <div style="flex:1;min-width:0">
-                    <div style="letter-spacing:.12em;margin-bottom:4px;font-weight:600">${a.title}</div>
-                    <div class="muted">${a.summary}</div>
-                  </div>
-                </div>
-                <span style="color:var(--bronze);opacity:.8">◇</span>
+        </nav>
+        ${groups.map((grp, i) => `
+          <div class="frame learn-vol" id="${grp.anchorId || `learn-vol-${i + 1}`}" style="margin-top:14px">
+            ${corners()}
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px">
+              <div>
+                <div class="block-title" style="margin-top:0;color:var(--cinnabar)">${grp.label || grp.category}</div>
+                ${grp.subtitle ? `<div class="muted" style="font-size:14px;letter-spacing:.1em;margin-top:2px">${grp.subtitle}</div>` : ''}
               </div>
-            </div>`).join('')}
-        </div>`).join('')}
+              <div class="muted" style="font-size:14px;flex-shrink:0">${(grp.items || []).length}篇</div>
+            </div>
+            ${(grp.items || []).map((a, idx) => `
+              <div class="article" data-id="${a.id}">
+                <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+                  <div style="display:flex;gap:10px;flex:1;min-width:0;align-items:flex-start">
+                    <span style="color:var(--bronze);opacity:.7;font-size:14px;min-width:14px">${idx + 1}</span>
+                    <div style="flex:1;min-width:0">
+                      <div style="letter-spacing:.12em;margin-bottom:4px;font-weight:600">${a.title}</div>
+                      <div class="muted">${a.summary}</div>
+                    </div>
+                  </div>
+                  <span style="color:var(--bronze);opacity:.8">◇</span>
+                </div>
+              </div>`).join('')}
+          </div>`).join('')}
+      </div>
       <div class="muted" style="text-align:center;margin-top:18px;letter-spacing:.1em;font-size:14px">占以决疑，学以修身</div>
       <button class="btn btn-ghost" data-back style="margin-top:12px">返回</button>`
     bindNav()
+    bindLearnVolumeNav()
     app.querySelectorAll('[data-id]').forEach((el) => { el.onclick = () => go('detail', { articleId: el.dataset.id }) })
   }
 
@@ -1818,6 +1888,7 @@
   enableCompassOnFirstGesture()
 
   hydratePreviewAccount()
+  window.addEventListener('scroll', syncLearnActiveFromScroll, { passive: true })
   window.__liuyaoPreview = { state, go, back, render, stack }
   render()
 })()

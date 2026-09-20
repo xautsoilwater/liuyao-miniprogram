@@ -64,7 +64,7 @@
       display: flex; align-items: center;
       min-height: 46px;
       padding: 4px 12px;
-      background: transparent;
+      background: linear-gradient(180deg, rgba(245,237,217,0.98), rgba(235,224,200,0.96));
       color: var(--ink-soft);
       font-size: 15px;
       font-family: "Songti SC", serif;
@@ -936,6 +936,42 @@
       font-size: 14px; letter-spacing: .14em; color: var(--bronze);
     }
     .track-hint .sep { color: var(--line-strong); font-size: 13px; }
+    .learn-catalog { position: relative; }
+    .vol-nav {
+      position: sticky; top: 46px; z-index: 16;
+      margin: 4px -4px 10px; padding: 10px 8px 12px;
+      background: linear-gradient(180deg, rgba(245,237,217,.98), rgba(235,224,200,.96));
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+      box-shadow: 0 6px 14px rgba(28,24,20,.05);
+    }
+    .vol-nav-label {
+      text-align: center; font-size: 12px; letter-spacing: .36em;
+      color: var(--cinnabar); margin-bottom: 8px;
+    }
+    .vol-nav-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    }
+    .vol-chip {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 46px; padding: 5px 2px 6px;
+      border: 1px solid rgba(110,90,62,.22);
+      background: rgba(250,246,234,.58);
+      color: inherit; font: inherit; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .vol-chip.on {
+      border-color: rgba(155,45,36,.72);
+      background: rgba(155,45,36,.09);
+      box-shadow: inset 0 0 0 1px rgba(155,45,36,.12);
+    }
+    .vol-chip-vol { font-size: 11px; letter-spacing: .12em; color: var(--bronze); line-height: 1.3; }
+    .vol-chip.on .vol-chip-vol { color: var(--cinnabar); }
+    .vol-chip-name {
+      font-size: 14px; letter-spacing: .14em; color: var(--ink); line-height: 1.35;
+    }
+    .vol-chip.on .vol-chip-name { color: var(--cinnabar); }
+    .learn-vol { scroll-margin-top: 170px; }
     .home-brand {
       display: flex; justify-content: center; align-items: center; line-height: 1;
     }
