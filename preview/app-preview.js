@@ -1855,6 +1855,94 @@
     app.querySelectorAll('[data-id]').forEach((el) => { el.onclick = () => go('detail', { articleId: el.dataset.id }) })
   }
 
+  const guaDianUi = { query: '', part: '全部', palace: '', open: '' }
+
+  function buildGuaDianHtml() {
+    const all = window.LiuYao.listGuaDian ? window.LiuYao.listGuaDian() : []
+    const list = window.LiuYao.filterGuaDian
+      ? window.LiuYao.filterGuaDian(all, guaDianUi)
+      : all
+    const palaces = window.LiuYao.PALACE_CHIP_ORDER || ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑']
+    const parts = ['全部', '上经', '下经'].map((part) =>
+      `<button type="button" class="gd-chip${guaDianUi.part === part ? ' on' : ''}" data-gd-part="${part}">${part}</button>`
+    ).join('')
+    const palaceChips = palaces.map((palace) =>
+      `<button type="button" class="gd-chip${guaDianUi.palace === palace ? ' on' : ''}" data-gd-palace="${palace}">${palace}宫</button>`
+    ).join('')
+    const cards = list.map((g) => {
+      const open = guaDianUi.open === g.alias
+      const rows = open
+        ? `<div class="gd-why">${g.nameWhy}</div>${(g.yaoRows || []).map((yao) =>
+          `<div class="gd-yao"><i class="yao-bar sm ${yao.yang ? 'yang' : 'yin'}"></i><span>${yao.text}</span></div>`
+        ).join('')}`
+        : ''
+      return `<div class="gd-card${open ? ' open' : ''}" data-gd-open="${g.alias}">
+        <div class="gd-head">
+          <b class="gd-idx">${g.idx}</b>
+          <div class="gd-main">
+            <div class="gd-title">${g.name} · ${g.alias}</div>
+            <div class="gd-meta">${g.part} · ${g.palace}宫${g.palaceStep} · ${g.palaceWx}</div>
+          </div>
+          <em>${open ? '收' : '开'}</em>
+        </div>
+        <div class="gd-ci">${g.guaci}</div>
+        ${open ? `<div class="gd-body">${rows}</div>` : ''}
+      </div>`
+    }).join('')
+    return `<div class="gd">
+      <div class="gd-search">
+        <input class="gd-input" type="search" value="${guaDianUi.query.replace(/"/g, '&quot;')}" placeholder="检索卦名、卦辞或宫名" />
+        ${guaDianUi.query ? '<button type="button" class="gd-clear" data-gd-clear>清除</button>' : ''}
+      </div>
+      <div class="gd-chips">${parts}</div>
+      <div class="gd-chips palace">${palaceChips}</div>
+      <div class="gd-count muted">${list.length} / ${all.length} 卦</div>
+      ${cards}
+    </div>`
+  }
+
+  function bindGuaDian() {
+    const input = app.querySelector('.gd-input')
+    if (input) {
+      input.oninput = () => {
+        guaDianUi.query = input.value || ''
+        renderDetail()
+        const next = app.querySelector('.gd-input')
+        if (next) {
+          next.focus()
+          const len = next.value.length
+          try { next.setSelectionRange(len, len) } catch (e) {}
+        }
+      }
+    }
+    const clear = app.querySelector('[data-gd-clear]')
+    if (clear) {
+      clear.onclick = () => {
+        guaDianUi.query = ''
+        renderDetail()
+      }
+    }
+    app.querySelectorAll('[data-gd-part]').forEach((el) => {
+      el.onclick = () => {
+        guaDianUi.part = el.dataset.gdPart
+        renderDetail()
+      }
+    })
+    app.querySelectorAll('[data-gd-palace]').forEach((el) => {
+      el.onclick = () => {
+        guaDianUi.palace = guaDianUi.palace === el.dataset.gdPalace ? '' : el.dataset.gdPalace
+        renderDetail()
+      }
+    })
+    app.querySelectorAll('[data-gd-open]').forEach((el) => {
+      el.onclick = () => {
+        const alias = el.dataset.gdOpen
+        guaDianUi.open = guaDianUi.open === alias ? '' : alias
+        renderDetail()
+      }
+    })
+  }
+
   function renderDetail() {
     const raw = window.LiuYao.ARTICLES.find((x) => x.id === state.articleId)
     if (!raw) { go('learn', {}, { replace: true }); return }
@@ -1863,6 +1951,13 @@
       : (window.LiuYao.normalizeArticle ? window.LiuYao.normalizeArticle(raw) : raw)
     const blocks = a.blocks || (a.content || []).map((text) => ({ type: 'p', text }))
     const seal = a.categoryLabel || a.category
+    const isGuaDian = a.kind === 'gua-dian'
+    if (!isGuaDian) {
+      guaDianUi.query = ''
+      guaDianUi.part = '全部'
+      guaDianUi.palace = ''
+      guaDianUi.open = ''
+    }
     setNav(a.title)
     app.innerHTML = `
       <div class="frame">
@@ -1871,9 +1966,11 @@
         <div class="title-zh" style="margin-top:12px">${a.title}</div>
         <div class="subtitle">${a.summary}</div>
         <div class="article-body">${renderBlocks(blocks)}</div>
+        ${isGuaDian ? buildGuaDianHtml() : ''}
       </div>
       <button class="btn btn-ghost" data-back>返回目录</button>`
     bindNav()
+    if (isGuaDian) bindGuaDian()
   }
 
   function onSwipeStart(e) {
