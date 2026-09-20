@@ -114,14 +114,14 @@
 }
 
 .lf-disk {
-  --yt: 460rpx;
+  --yt: 488rpx;
   --ink-deep: #140f0c;
   --cream: #f6eedc;
   --sight: #a03328;
   position: relative;
   width: var(--yt);
 }
-.lf-disks.is-compare .lf-disk { --yt: 300rpx; }
+.lf-disks.is-compare .lf-disk { --yt: 318rpx; }
 
 .lf-halo {
   position: absolute;
@@ -159,13 +159,13 @@
 
 .lf-band {
   position: absolute;
-  inset: 20%;
+  inset: 10%;
   border-radius: 50%;
-  border: 30rpx solid rgba(143, 38, 31, 0.06);
+  border: 18rpx solid rgba(143, 38, 31, 0.06);
   box-sizing: border-box;
   pointer-events: none;
 }
-.lf-disks.is-compare .lf-band { border-width: 20rpx; }
+.lf-disks.is-compare .lf-band { border-width: 12rpx; }
 
 .lf-ring {
   position: absolute;
@@ -174,9 +174,9 @@
   pointer-events: none;
 }
 .lf-ring.r-outer { inset: 5%; border-color: rgba(20, 15, 12, 0.2); }
-.lf-ring.r-dir { inset: 14%; border-color: rgba(143, 38, 31, 0.22); }
-.lf-ring.r-gua { inset: 36%; border-color: rgba(20, 15, 12, 0.12); }
-.lf-ring.r-core { inset: 46%; border-color: rgba(143, 38, 31, 0.16); }
+.lf-ring.r-dir { inset: 13%; border-color: rgba(143, 38, 31, 0.22); }
+.lf-ring.r-gua { inset: 27%; border-color: rgba(20, 15, 12, 0.12); }
+.lf-ring.r-core { inset: 41%; border-color: rgba(143, 38, 31, 0.16); }
 
 .lf-layer {
   position: absolute;
@@ -218,9 +218,9 @@
   left: 50%;
   top: 50%;
   width: 1rpx;
-  height: 28%;
+  height: 34%;
   margin-left: -0.5rpx;
-  margin-top: -28%;
+  margin-top: -34%;
   transform-origin: 50% 100%;
   background: rgba(20, 15, 12, 0.12);
   pointer-events: none;
@@ -229,9 +229,9 @@
 .lf-dir-lab {
   position: absolute;
   left: 0;
-  top: calc(var(--yt) * -0.43);
+  top: calc(var(--yt) * -0.435);
   transform: translateX(-50%);
-  font-size: 20rpx;
+  font-size: 22rpx;
   letter-spacing: 0.16em;
   text-indent: 0.16em;
   color: rgba(143, 38, 31, 0.78);
@@ -243,28 +243,28 @@
 .lf-gua {
   position: absolute;
   left: 0;
-  top: calc(var(--yt) * -0.27);
-  width: 88rpx;
-  margin-left: -44rpx;
+  top: calc(var(--yt) * -0.33);
+  width: 104rpx;
+  margin-left: -52rpx;
   text-align: center;
-  line-height: 1.05;
+  line-height: 1.2;
   --gua: var(--ink-deep);
 }
 .lf-disks.is-compare .lf-gua {
-  width: 64rpx;
-  margin-left: -32rpx;
-  top: calc(var(--yt) * -0.29);
+  width: 76rpx;
+  margin-left: -38rpx;
+  top: calc(var(--yt) * -0.345);
 }
 
 .lf-bars {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4rpx;
-  margin: 0 auto 6rpx;
+  gap: 5rpx;
+  margin: 0 auto 10rpx;
   width: 44rpx;
 }
-.lf-disks.is-compare .lf-bars { width: 32rpx; gap: 3rpx; margin-bottom: 4rpx; }
+.lf-disks.is-compare .lf-bars { width: 32rpx; gap: 4rpx; margin-bottom: 8rpx; }
 
 .lf-bar {
   width: 44rpx;
@@ -295,9 +295,17 @@
 }
 .lf-disks.is-compare .lf-gua-name { font-size: 20rpx; }
 
+.lf-gua-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8rpx;
+  margin-top: 6rpx;
+  white-space: nowrap;
+}
+.lf-disks.is-compare .lf-gua-meta { gap: 6rpx; margin-top: 4rpx; }
+
 .lf-gua-tip {
-  display: block;
-  margin-top: 2rpx;
   font-size: 16rpx;
   letter-spacing: 0.04em;
   font-weight: 600;
@@ -307,8 +315,6 @@
 .lf-disks.is-compare .lf-gua-tip { font-size: 13rpx; }
 
 .lf-gua-vol {
-  display: block;
-  margin-top: 2rpx;
   font-size: 18rpx;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -335,13 +341,12 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 108rpx;
-  height: 108rpx;
-  margin: -54rpx 0 0 -54rpx;
+  width: 92rpx;
+  height: 92rpx;
+  margin: -46rpx 0 0 -46rpx;
   border-radius: 50%;
   z-index: 5;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: #f0e4c8;
@@ -351,46 +356,38 @@
     0 0 0 6rpx rgba(143, 38, 31, 0.1);
 }
 .lf-disks.is-compare .lf-core {
-  width: 72rpx;
-  height: 72rpx;
-  margin: -36rpx 0 0 -36rpx;
+  width: 60rpx;
+  height: 60rpx;
+  margin: -30rpx 0 0 -30rpx;
 }
 
 .lf-taiji {
   position: relative;
-  width: 52rpx;
-  height: 52rpx;
+  width: 68rpx;
+  height: 68rpx;
   border-radius: 50%;
   overflow: hidden;
   background: var(--cream);
   box-shadow: inset 0 0 0 2rpx rgba(20, 15, 12, 0.42);
 }
-.lf-disks.is-compare .lf-taiji { width: 32rpx; height: 32rpx; }
+.lf-disks.is-compare .lf-taiji { width: 44rpx; height: 44rpx; }
 .lf-half { position: absolute; top: 0; width: 50%; height: 100%; }
 .lf-half.yang { left: 0; background: var(--cream); }
 .lf-half.yin { right: 0; background: var(--ink-deep); }
 .lf-eye {
-  position: absolute; left: 13rpx; width: 26rpx; height: 26rpx; border-radius: 50%;
+  position: absolute; left: 17rpx; width: 34rpx; height: 34rpx; border-radius: 50%;
 }
-.lf-disks.is-compare .lf-eye { left: 8rpx; width: 16rpx; height: 16rpx; }
+.lf-disks.is-compare .lf-eye { left: 11rpx; width: 22rpx; height: 22rpx; }
 .lf-eye.top { top: 0; background: var(--ink-deep); }
 .lf-eye.bot { bottom: 0; background: var(--cream); }
 .lf-dot {
-  position: absolute; left: 20rpx; width: 12rpx; height: 12rpx; border-radius: 50%; z-index: 2;
+  position: absolute; left: 26rpx; width: 16rpx; height: 16rpx; border-radius: 50%; z-index: 2;
 }
-.lf-disks.is-compare .lf-dot { left: 12rpx; width: 8rpx; height: 8rpx; }
-.lf-dot.top { top: 7rpx; background: var(--cream); }
-.lf-dot.bot { bottom: 7rpx; background: var(--ink-deep); }
-
-.lf-core-title {
-  margin-top: 4rpx;
-  font-size: 20rpx;
-  letter-spacing: 0.2em;
-  text-indent: 0.2em;
-  color: var(--sight);
-  font-weight: 700;
-}
-.lf-disks.is-compare .lf-core-title { font-size: 16rpx; margin-top: 2rpx; letter-spacing: 0.12em; }
+.lf-disks.is-compare .lf-dot { left: 17rpx; width: 10rpx; height: 10rpx; }
+.lf-dot.top { top: 9rpx; background: var(--cream); }
+.lf-disks.is-compare .lf-dot.top { top: 6rpx; }
+.lf-dot.bot { bottom: 9rpx; background: var(--ink-deep); }
+.lf-disks.is-compare .lf-dot.bot { bottom: 6rpx; }
 
 .lf-legend {
   margin-top: 12rpx;

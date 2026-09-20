@@ -156,7 +156,7 @@ function buildPalaceCatalog() {
   })
 }
 
-/** 研习列表只放一条入口，真正目录在卦典页（八宫图 + 点选） */
+/** 研习目录只挂横幅一条入口；本篇供路由打开八宫总图，不重复出现在卷三列表 */
 function buildGuadianArticles() {
   return [{
     id: 'guadian-catalog',
@@ -165,9 +165,9 @@ function buildGuadianArticles() {
     summary: '京房八宫总图：卦画+卦名，点选查看详解',
     cover: 'bagua',
     openPage: 'guadian',
+    hiddenFromCatalog: true,
     blocks: [
-      p('本卦典按京房八宫编排六十四卦。请打开「卦典总图」浏览并点选单卦。'),
-      p('若从本页进入，请返回研习目录后再次点选「六十四卦卦典」，将进入八宫可点选目录。'),
+      p('本卦典按京房八宫编排六十四卦。研习目录顶部横幅即是入口，点选进入八宫总图。'),
       note('每卦含：结构、京房定位、取象、卦辞、六爻、义理、占事。解释以十翼为骨，行文中对照儒家与墨家，不另立门户。')
     ]
   }]

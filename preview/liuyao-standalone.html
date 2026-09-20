@@ -1139,60 +1139,62 @@
     .fig-bagua em { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-style: normal; color: var(--cinnabar); font-size: 14px; }
     .lf-disks { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
     .lf-disks.is-compare { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px 6px; }
-    .lf-disk { --yt: 230px; --ink-deep: #140f0c; --cream: #f6eedc; --sight: #a03328; position: relative; width: var(--yt); }
-    .lf-disks.is-compare .lf-disk { --yt: 150px; }
+    .lf-disk { --yt: 244px; --ink-deep: #140f0c; --cream: #f6eedc; --sight: #a03328; position: relative; width: var(--yt); }
+    .lf-disks.is-compare .lf-disk { --yt: 159px; }
     .lf-halo { position: absolute; left: -9px; top: -9px; width: calc(var(--yt) + 18px); height: calc(var(--yt) + 18px); border-radius: 50%; background: rgba(122,98,64,.07); pointer-events: none; }
     .lf-plate { position: relative; width: var(--yt); height: var(--yt); border-radius: 50%; overflow: hidden; background: #e6d4b0; box-shadow: inset 0 0 0 1.5px rgba(20,15,12,.35), inset 0 0 0 6px rgba(248,240,222,.55), inset 0 0 0 8px rgba(90,70,40,.22), 0 0 0 1px rgba(70,52,28,.45), 0 6px 14px rgba(20,15,12,.14); }
     .lf-rim { position: absolute; border-radius: 50%; pointer-events: none; display: block; }
     .lf-rim.outer { inset: 1.4%; border: 1px solid rgba(20,15,12,.22); }
     .lf-rim.mid { inset: 3.4%; border: 1px solid rgba(246,237,216,.55); }
-    .lf-band { position: absolute; inset: 20%; border-radius: 50%; border: 15px solid rgba(143,38,31,.06); box-sizing: border-box; pointer-events: none; display: block; }
-    .lf-disks.is-compare .lf-band { border-width: 10px; }
+    .lf-band { position: absolute; inset: 10%; border-radius: 50%; border: 9px solid rgba(143,38,31,.06); box-sizing: border-box; pointer-events: none; display: block; }
+    .lf-disks.is-compare .lf-band { border-width: 6px; }
     .lf-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(20,15,12,.12); pointer-events: none; display: block; }
     .lf-ring.r-outer { inset: 5%; border-color: rgba(20,15,12,.2); }
-    .lf-ring.r-dir { inset: 14%; border-color: rgba(143,38,31,.22); }
-    .lf-ring.r-gua { inset: 36%; border-color: rgba(20,15,12,.12); }
-    .lf-ring.r-core { inset: 46%; border-color: rgba(143,38,31,.16); }
+    .lf-ring.r-dir { inset: 13%; border-color: rgba(143,38,31,.22); }
+    .lf-ring.r-gua { inset: 27%; border-color: rgba(20,15,12,.12); }
+    .lf-ring.r-core { inset: 41%; border-color: rgba(143,38,31,.16); }
     .lf-layer { position: absolute; inset: 0; border-radius: 50%; }
     .lf-item { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
     .lf-tick { position: absolute; left: 50%; top: 50%; width: 1px; height: calc(var(--yt) / 2 - 4px); margin-left: -0.5px; margin-top: calc(0px - var(--yt) / 2 + 4px); transform-origin: 50% calc(var(--yt) / 2 - 4px); background: linear-gradient(to bottom, rgba(20,15,12,.18) 0, rgba(20,15,12,.18) 3.5px, transparent 3.5px); pointer-events: none; display: block; }
     .lf-tick.mid { background: linear-gradient(to bottom, rgba(20,15,12,.32) 0, rgba(20,15,12,.32) 5.5px, transparent 5.5px); }
     .lf-tick.major { width: 1.5px; margin-left: -0.75px; background: linear-gradient(to bottom, rgba(143,38,31,.55) 0, rgba(143,38,31,.55) 8px, transparent 8px); }
-    .lf-spoke { position: absolute; left: 50%; top: 50%; width: 1px; height: 28%; margin-left: -0.5px; margin-top: -28%; transform-origin: 50% 100%; background: rgba(20,15,12,.12); pointer-events: none; display: block; }
-    .lf-dir-lab { position: absolute; left: 0; top: calc(var(--yt) * -0.43); transform: translateX(-50%); font-size: 10px; letter-spacing: .16em; color: rgba(143,38,31,.78); font-weight: 700; line-height: 1; font-style: normal; }
+    .lf-spoke { position: absolute; left: 50%; top: 50%; width: 1px; height: 34%; margin-left: -0.5px; margin-top: -34%; transform-origin: 50% 100%; background: rgba(20,15,12,.12); pointer-events: none; display: block; }
+    .lf-dir-lab { position: absolute; left: 0; top: calc(var(--yt) * -0.435); transform: translateX(-50%); font-size: 11px; letter-spacing: .16em; color: rgba(143,38,31,.78); font-weight: 700; line-height: 1; font-style: normal; }
     .lf-disks.is-compare .lf-dir-lab { font-size: 8px; }
-    .lf-gua { position: absolute; left: 0; top: calc(var(--yt) * -0.27); width: 44px; margin-left: -22px; text-align: center; line-height: 1.05; --gua: #140f0c; display: block; }
-    .lf-disks.is-compare .lf-gua { width: 32px; margin-left: -16px; top: calc(var(--yt) * -0.29); }
-    .lf-bars { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0 auto 3px; width: 22px; }
-    .lf-disks.is-compare .lf-bars { width: 16px; gap: 1.5px; }
+    .lf-gua { position: absolute; left: 0; top: calc(var(--yt) * -0.33); width: 52px; margin-left: -26px; text-align: center; line-height: 1.2; --gua: #140f0c; display: block; }
+    .lf-disks.is-compare .lf-gua { width: 38px; margin-left: -19px; top: calc(var(--yt) * -0.345); }
+    .lf-bars { display: flex; flex-direction: column; align-items: center; gap: 2.5px; margin: 0 auto 5px; width: 22px; }
+    .lf-disks.is-compare .lf-bars { width: 16px; gap: 2px; margin-bottom: 4px; }
     .lf-bar { width: 22px; height: 2.5px; background: var(--gua); border-radius: 1px; display: block; }
     .lf-disks.is-compare .lf-bar { width: 16px; height: 2px; }
     .lf-bar.is-yin { background: linear-gradient(to right, var(--gua) 0, var(--gua) 36%, transparent 36%, transparent 64%, var(--gua) 64%, var(--gua) 100%); }
     .lf-gua-name { display: block; font-size: 13px; letter-spacing: .16em; color: var(--gua); font-weight: 700; font-style: normal; }
     .lf-disks.is-compare .lf-gua-name { font-size: 10px; }
-    .lf-gua-tip { display: block; margin-top: 1px; font-size: 8px; letter-spacing: .04em; font-weight: 600; color: var(--gua); opacity: .88; font-style: normal; }
+    .lf-gua-meta { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin-top: 3px; white-space: nowrap; }
+    .lf-disks.is-compare .lf-gua-meta { gap: 3px; margin-top: 2px; }
+    .lf-gua-tip { font-size: 8px; letter-spacing: .04em; font-weight: 600; color: var(--gua); opacity: .88; font-style: normal; }
     .lf-disks.is-compare .lf-gua-tip { font-size: 7px; }
-    .lf-gua-vol { display: block; margin-top: 1px; font-size: 9px; font-weight: 700; color: var(--sight); font-style: normal; font-variant-numeric: tabular-nums; }
+    .lf-gua-vol { font-size: 9px; font-weight: 700; color: var(--sight); font-style: normal; font-variant-numeric: tabular-nums; }
     .lf-disks.is-compare .lf-gua-vol { font-size: 8px; }
     .lf-south { position: absolute; left: 50%; top: 5px; transform: translateX(-50%); color: var(--sight); font-size: 11px; font-weight: 700; line-height: 1; z-index: 4; font-style: normal; }
     .lf-disks.is-compare .lf-south { font-size: 8px; top: 3px; }
-    .lf-core { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f0e4c8; border: 1px solid rgba(20,15,12,.18); box-shadow: 0 0 0 2px rgba(250,243,228,.45), 0 0 0 3px rgba(143,38,31,.1); }
-    .lf-disks.is-compare .lf-core { width: 36px; height: 36px; margin: -18px 0 0 -18px; }
-    .lf-taiji { position: relative; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: var(--cream); box-shadow: inset 0 0 0 1px rgba(20,15,12,.42); }
-    .lf-disks.is-compare .lf-taiji { width: 16px; height: 16px; }
+    .lf-core { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; z-index: 5; display: flex; align-items: center; justify-content: center; background: #f0e4c8; border: 1px solid rgba(20,15,12,.18); box-shadow: 0 0 0 2px rgba(250,243,228,.45), 0 0 0 3px rgba(143,38,31,.1); }
+    .lf-disks.is-compare .lf-core { width: 30px; height: 30px; margin: -15px 0 0 -15px; }
+    .lf-taiji { position: relative; width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: var(--cream); box-shadow: inset 0 0 0 1px rgba(20,15,12,.42); }
+    .lf-disks.is-compare .lf-taiji { width: 22px; height: 22px; }
     .lf-half { position: absolute; top: 0; width: 50%; height: 100%; display: block; }
     .lf-half.yang { left: 0; background: var(--cream); }
     .lf-half.yin { right: 0; background: var(--ink-deep); }
-    .lf-eye { position: absolute; left: 6.5px; width: 13px; height: 13px; border-radius: 50%; display: block; }
-    .lf-disks.is-compare .lf-eye { left: 4px; width: 8px; height: 8px; }
+    .lf-eye { position: absolute; left: 8.5px; width: 17px; height: 17px; border-radius: 50%; display: block; }
+    .lf-disks.is-compare .lf-eye { left: 5.5px; width: 11px; height: 11px; }
     .lf-eye.top { top: 0; background: var(--ink-deep); }
     .lf-eye.bot { bottom: 0; background: var(--cream); }
-    .lf-dot { position: absolute; left: 10px; width: 6px; height: 6px; border-radius: 50%; z-index: 2; display: block; }
-    .lf-disks.is-compare .lf-dot { left: 6px; width: 4px; height: 4px; }
-    .lf-dot.top { top: 3.5px; background: var(--cream); }
-    .lf-dot.bot { bottom: 3.5px; background: var(--ink-deep); }
-    .lf-core-title { margin-top: 2px; font-size: 10px; letter-spacing: .18em; color: var(--sight); font-weight: 700; font-style: normal; }
-    .lf-disks.is-compare .lf-core-title { font-size: 8px; margin-top: 1px; }
+    .lf-dot { position: absolute; left: 13px; width: 8px; height: 8px; border-radius: 50%; z-index: 2; display: block; }
+    .lf-disks.is-compare .lf-dot { left: 8.5px; width: 5px; height: 5px; }
+    .lf-dot.top { top: 4.5px; background: var(--cream); }
+    .lf-disks.is-compare .lf-dot.top { top: 3px; }
+    .lf-dot.bot { bottom: 4.5px; background: var(--ink-deep); }
+    .lf-disks.is-compare .lf-dot.bot { bottom: 3px; }
     .lf-legend { margin-top: 6px; text-align: center; font-size: 11px; letter-spacing: .14em; color: rgba(143,38,31,.78); }
     .fig-yao4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .fig-yao4 > div { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border: 1px solid var(--line); font-size: 14px; }
@@ -4122,7 +4124,7 @@ function buildPalaceCatalog() {
   })
 }
 
-/** 研习列表只放一条入口，真正目录在卦典页（八宫图 + 点选） */
+/** 研习目录只挂横幅一条入口；本篇供路由打开八宫总图，不重复出现在卷三列表 */
 function buildGuadianArticles() {
   return [{
     id: 'guadian-catalog',
@@ -4131,9 +4133,9 @@ function buildGuadianArticles() {
     summary: '京房八宫总图：卦画+卦名，点选查看详解',
     cover: 'bagua',
     openPage: 'guadian',
+    hiddenFromCatalog: true,
     blocks: [
-      p('本卦典按京房八宫编排六十四卦。请打开「卦典总图」浏览并点选单卦。'),
-      p('若从本页进入，请返回研习目录后再次点选「六十四卦卦典」，将进入八宫可点选目录。'),
+      p('本卦典按京房八宫编排六十四卦。研习目录顶部横幅即是入口，点选进入八宫总图。'),
       note('每卦含：结构、京房定位、取象、卦辞、六爻、义理、占事。解释以十翼为骨，行文中对照儒家与墨家，不另立门户。')
     ]
   }]
@@ -6502,12 +6504,12 @@ const ARTICLES_RAW = [
       list([
         '卷一开宗：为何学、如何学；卜与修身的边界；教材用法',
         '卷二易理：太极阴阳、三义、象数理、三才、时位中正、观象玩辞',
-        '卷三象数：八卦取象、六十四卦详说、分宫一览、爻位内外、本变互卦、类象与先后天',
+        '卷三象数：八卦取象、六十四卦详说、卦典、分宫一览、爻位内外、本变互卦、类象与先后天',
         '卷四卜卦：一事一问、诚敬、铜钱成爻成卦',
         '卷五排盘：世应与八宫、京房八宫详解、纳甲全表、六亲、六神、旬空旺衰、伏神',
         '卷六断卦：入门六步、用神原忌细表、合冲刑害、应期口诀、主客、常见问事',
         '卷七梅花：先天数、报数时间物象起卦、体用生克、本互变、与六爻对照',
-        '卷八附录：六十四卦卦典（八宫总图点选详解）、断卦口诀、术语速查、卦例练习——随时查阅'
+        '卷八附录：断卦口诀、术语速查、卦例练习——随时查阅'
       ]),
       p('与纸书如何分工：入门阶段以本八卷为唯一教材即可。需要原典全文时，再备《周易》白文或权威注本；需要清代六爻名著原文时，再开《增删卜易》《卜筮正宗》。本程序不替代原典，但替代「入门小册 + 散乱笔记」。'),
       p('三条学习纪律特别重要：'),
@@ -6785,6 +6787,7 @@ const ARTICLES_RAW = [
     category: '象数',
     title: '六十四卦卦典',
     kind: 'gua-dian',
+    hiddenFromCatalog: true,
     summary: '文王卦序全表：取象释名、卦辞、爻辞，可检索、可按上下经与八宫查阅。',
     cover: 'bagua-table',
     blocks: [
@@ -7409,7 +7412,7 @@ function groupByCategory() {
       subtitle: meta.subtitle || '',
       label: meta.vol ? `${meta.vol} · ${category}` : category,
       anchorId: volumeAnchorId(category),
-      items: map[category]
+      items: (map[category] || []).filter((item) => !item.hiddenFromCatalog)
     }
   })
 }
@@ -16275,7 +16278,7 @@ window.LiuYao = {
       const bars = [2, 1, 0].map((idx) =>
         `<i class="lf-bar ${gua.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
       ).join('')
-      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span>`
+      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><span class="lf-gua-meta"><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span></span>`
     }).join('')
     return `<div class="lf-disk kind-${disk.kind}">
       <div class="lf-halo"></div>
@@ -16289,10 +16292,9 @@ window.LiuYao = {
         <b class="lf-south">▲</b>
         <div class="lf-core">
           <div class="lf-taiji"><i class="lf-half yang"></i><i class="lf-half yin"></i><i class="lf-eye top"></i><i class="lf-eye bot"></i><i class="lf-dot top"></i><i class="lf-dot bot"></i></div>
-          <em class="lf-core-title">${disk.title}</em>
         </div>
       </div>
-      <div class="lf-legend">${disk.subtitle} · ${disk.volLabel}</div>
+      <div class="lf-legend">${disk.title} · ${disk.subtitle} · ${disk.volLabel}</div>
     </div>`
   }
 
@@ -16385,19 +16387,10 @@ window.LiuYao = {
         category,
         label: category,
         anchorId: `learn-vol-${i + 1}`,
-        items: g[category]
+        items: (g[category] || []).filter((a) => !a.hiddenFromCatalog)
       }))
     }
-    return groups.map((grp) => {
-      if (grp.category !== '象数') return grp
-      const items = (grp.items || []).slice()
-      const gi = items.findIndex((a) => a.id === 'guadian-catalog')
-      if (gi < 0) return grp
-      const [entry] = items.splice(gi, 1)
-      const after = items.findIndex((a) => a.id === 'liushisi-gua')
-      items.splice(after >= 0 ? after + 1 : 0, 0, entry)
-      return Object.assign({}, grp, { items })
-    })
+    return groups
   }
 
   function learnJumpOffset() {

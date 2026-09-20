@@ -30,6 +30,15 @@
       </view>
     </view>
 
+    <view class="guadian-banner" bindtap="openGuadian" hover-class="article-hover">
+      <view class="gb-seal">京房八宫</view>
+      <view class="gb-main">
+        <view class="gb-title">六十四卦卦典</view>
+        <view class="muted gb-sub">卦画 + 卦名总图 · 点选任意一卦详解</view>
+      </view>
+      <view class="gb-go">›</view>
+    </view>
+
     <view
       class="group"
       id="{{item.anchorId}}"

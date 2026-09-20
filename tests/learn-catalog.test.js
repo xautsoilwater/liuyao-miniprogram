@@ -54,14 +54,18 @@ function testGuaDianCatalog() {
   const xiangshu = groups.find((grp) => grp.category === '象数')
   assert.ok(xiangshu, '卷三象数缺失')
   const ids = xiangshu.items.map((item) => item.id)
-  const iLue = ids.indexOf('liushisi-gua')
-  const iDian = ids.indexOf('gua-dian')
-  assert.ok(iLue >= 0, '缺少六十四卦略说')
-  assert.strictEqual(iDian, iLue + 1, '卦典应紧随六十四卦略说')
+  const titles = groups.flatMap((grp) => (grp.items || []).map((item) => item.title))
+  const dianTitles = titles.filter((title) => title === '六十四卦卦典')
+  assert.strictEqual(dianTitles.length, 0, '卷三/目录不应再列出六十四卦卦典（改走横幅单一入口）')
+  assert.ok(!ids.includes('gua-dian'), 'gua-dian 不应出现在卷三列表')
+  assert.ok(!ids.includes('guadian-catalog'), 'guadian-catalog 不应出现在卷三列表')
+  assert.ok(ids.includes('liushisi-gua'), '缺少六十四卦略说')
+
   const article = getArticle('gua-dian')
   assert.ok(article, 'getArticle(gua-dian) 失败')
   assert.strictEqual(article.kind, 'gua-dian')
   assert.strictEqual(article.title, '六十四卦卦典')
+  assert.ok(article.hiddenFromCatalog, 'gua-dian 应收进横幅，不占目录行')
   assert.ok(article.blocks && article.blocks.length >= 3, '卦典引言过短')
 
   const list = listGuaDian()
@@ -89,6 +93,7 @@ function testGuaDianCatalog() {
   const palaceEntry = getArticle('guadian-catalog')
   assert.ok(palaceEntry, '缺少八宫卦典总图入口 guadian-catalog')
   assert.strictEqual(palaceEntry.openPage, 'guadian')
+  assert.ok(palaceEntry.hiddenFromCatalog, '八宫总图入口不应重复出现在卷三')
   assert.ok(getArticle('jingfang-bagong'), '缺少京房八宫详解')
   assert.ok(getArticle('liushisi-fengong'), '缺少六十四卦分宫一览')
 
@@ -100,6 +105,17 @@ function testGuaDianCatalog() {
   previewFiles.forEach((rel) => {
     const text = fs.readFileSync(path.join(__dirname, '..', rel), 'utf8')
     assert.match(text, /gua-dian|gd-card|listGuaDian/, `${rel} 未接入卦典浏览`)
+  })
+
+  const learnUi = [
+    'pages/learn/learn.wxml',
+    'preview/app-preview.js'
+  ]
+  learnUi.forEach((rel) => {
+    const text = fs.readFileSync(path.join(__dirname, '..', rel), 'utf8')
+    assert.match(text, /openGuadianBanner|openGuadian/, `${rel} 缺少卦典横幅入口`)
+    const listing = text.match(/gb-title">六十四卦卦典/g) || []
+    assert.strictEqual(listing.length, 1, `${rel} 六十四卦卦典横幅应只出现一次`)
   })
 }
 

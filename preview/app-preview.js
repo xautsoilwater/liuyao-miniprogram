@@ -1472,7 +1472,7 @@
       const bars = [2, 1, 0].map((idx) =>
         `<i class="lf-bar ${gua.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
       ).join('')
-      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span>`
+      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><span class="lf-gua-meta"><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span></span>`
     }).join('')
     return `<div class="lf-disk kind-${disk.kind}">
       <div class="lf-halo"></div>
@@ -1486,10 +1486,9 @@
         <b class="lf-south">▲</b>
         <div class="lf-core">
           <div class="lf-taiji"><i class="lf-half yang"></i><i class="lf-half yin"></i><i class="lf-eye top"></i><i class="lf-eye bot"></i><i class="lf-dot top"></i><i class="lf-dot bot"></i></div>
-          <em class="lf-core-title">${disk.title}</em>
         </div>
       </div>
-      <div class="lf-legend">${disk.subtitle} · ${disk.volLabel}</div>
+      <div class="lf-legend">${disk.title} · ${disk.subtitle} · ${disk.volLabel}</div>
     </div>`
   }
 
@@ -1582,19 +1581,10 @@
         category,
         label: category,
         anchorId: `learn-vol-${i + 1}`,
-        items: g[category]
+        items: (g[category] || []).filter((a) => !a.hiddenFromCatalog)
       }))
     }
-    return groups.map((grp) => {
-      if (grp.category !== '象数') return grp
-      const items = (grp.items || []).slice()
-      const gi = items.findIndex((a) => a.id === 'guadian-catalog')
-      if (gi < 0) return grp
-      const [entry] = items.splice(gi, 1)
-      const after = items.findIndex((a) => a.id === 'liushisi-gua')
-      items.splice(after >= 0 ? after + 1 : 0, 0, entry)
-      return Object.assign({}, grp, { items })
-    })
+    return groups
   }
 
   function learnJumpOffset() {
