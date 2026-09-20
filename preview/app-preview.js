@@ -1492,6 +1492,26 @@
     </div>`
   }
 
+  const DISK_FIGURE_KEYS = {
+    'xiantian-bagua': true,
+    'houtian-bagua': true,
+    bagua: true,
+    'bagua-table': true
+  }
+  const BAGUA_GRID_KEYS = ['qian', 'dui', 'li', 'zhen', 'xun', 'kan', 'gen', 'kun']
+
+  function buildBaguaGridHtml() {
+    const trigrams = (window.LiuYao && window.LiuYao.TRIGRAMS) || {}
+    return `<div class="fig-bg-grid">${BAGUA_GRID_KEYS.map((k) => {
+      const t = trigrams[k]
+      if (!t) return ''
+      const bars = [2, 1, 0].map((idx) =>
+        `<i class="lf-bar ${t.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
+      ).join('')
+      return `<div class="bg-cell"><span class="lf-bars bg-bars">${bars}</span><b class="bg-name">${t.name}</b><i class="bg-meta">${t.nature} · ${t.wuxing}</i></div>`
+    }).join('')}</div>`
+  }
+
   function buildFigureHtml(key, caption) {
     const cap = caption ? `<div class="fig-cap">${caption}</div>` : ''
     let body = ''
@@ -1549,10 +1569,31 @@
       body = `<div class="fig-hc"><i>合</i><i>冲</i><i>生</i><i>克</i></div>`
     } else if (key === 'path' || key === 'yingqi') {
       body = `<div class="fig-path">易理 → 象数 → 卜卦 → 回证</div>`
+    } else if (key === 'bagua-grid') {
+      body = buildBaguaGridHtml()
+    } else if (key === 'wuxing') {
+      body = `<div class="fig-wx">${['木', '火', '土', '金', '水'].map((item, i, arr) =>
+        `<span class="wx-i">${item}</span>${i < arr.length - 1 ? '<i class="wx-arr">生</i>' : ''}`
+      ).join('')}</div>`
+    } else if (key === 'neiwai') {
+      body = `<div class="fig-nw">
+        <div class="nw-col"><b>外</b>${yaoBar('yang')}${yaoBar('yin')}${yaoBar('yang')}<em>四五上</em></div>
+        <div class="nw-col"><b>内</b>${yaoBar('yin')}${yaoBar('yang')}${yaoBar('yin')}<em>初二三</em></div>
+      </div>`
+    } else if (key === 'hugua') {
+      body = `<div class="fig-hg">
+        <div class="hg-col"><b>本</b>${yaoBar('yang')}${yaoBar('yin on')}${yaoBar('yang on')}${yaoBar('yin on')}${yaoBar('yang on')}${yaoBar('yin')}</div>
+        <em>→</em>
+        <div class="hg-col"><b>互</b>${yaoBar('yang')}${yaoBar('yin')}${yaoBar('yang')}${yaoBar('yin')}</div>
+      </div>`
+    } else if (key === 'vols8') {
+      body = `<div class="fig-path wrap">开宗 → 易理 → 象数 → 卜卦 → 排盘 → 断卦 → 梅花 → 附录</div>`
+    } else if (key === 'steps6') {
+      body = `<div class="fig-path wrap">取用 → 旺衰 → 动变 → 生克 → 应期 → 裁断</div>`
     } else {
       body = `<div class="fig-fallback">☯</div>`
     }
-    return `<div class="fig">${body}${cap}</div>`
+    return `<div class="fig${DISK_FIGURE_KEYS[key] ? ' is-disk' : ''}">${body}${cap}</div>`
   }
 
   function renderBlocks(blocks) {

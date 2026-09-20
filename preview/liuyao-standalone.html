@@ -363,6 +363,7 @@
       content: ""; position: absolute; right: -10px; top: 50%; width: 5px; height: 5px;
       margin-top: -2.5px; border-radius: 50%; background: var(--cinnabar);
     }
+    .yao-bar.on { box-shadow: 0 0 0 2px rgba(143,38,31,.28); }
     .mini-yao {
       height: 11px; margin: 0 auto; position: relative; width: 78px;
       background: rgba(20,15,12,0.1);
@@ -1102,11 +1103,12 @@
     .detail-note { font-size: 12px; line-height: 1.6; margin: 8px 0; color: var(--mist); }
 
     .fig {
-      margin: 12px 0 16px; padding: 30px 18px 24px;
+      margin: 12px 0 16px; padding: 16px 10px;
       border: 1px solid var(--line-strong);
       overflow: visible;
       background: radial-gradient(ellipse at 50% 0%, rgba(246,237,216,.9), transparent 60%), rgba(244,234,214,.55);
     }
+    .fig.is-disk { padding: 30px 18px 24px; }
     .fig-cap { margin-top: 10px; text-align: center; font-size: 13px; color: var(--mist); letter-spacing: .06em; }
     .fig-taiji {
       position: relative; width: 96px; height: 96px; margin: 0 auto; border-radius: 50%;
@@ -1218,7 +1220,24 @@
     .fig-hc { display: flex; justify-content: center; gap: 8px; }
     .fig-hc i { padding: 10px 14px; border: 1px solid var(--line-strong); font-style: normal; letter-spacing: .2em; color: var(--cinnabar); }
     .fig-path { text-align: center; letter-spacing: .16em; color: var(--bronze); font-size: 15px; }
+    .fig-path.wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 8px; line-height: 1.8; }
     .fig-fallback { text-align: center; font-size: 42px; color: var(--bronze); }
+    .fig-bg-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px 6px; }
+    .fig-bg-grid .bg-cell { text-align: center; padding: 6px 2px 8px; border: 1px solid var(--line); }
+    .fig-bg-grid .bg-bars { width: 18px; gap: 2px; margin-bottom: 5px; }
+    .fig-bg-grid .lf-bar { width: 18px; height: 2px; }
+    .fig-bg-grid .bg-name { display: block; font-size: 15px; font-weight: 700; letter-spacing: .12em; }
+    .fig-bg-grid .bg-meta { display: block; margin-top: 2px; font-size: 11px; color: var(--mist); font-style: normal; letter-spacing: .04em; }
+    .fig-wx { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; }
+    .fig-wx .wx-i { width: 30px; height: 30px; border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--cinnabar); font-weight: 700; }
+    .fig-wx .wx-arr { font-size: 12px; color: var(--bronze); font-style: normal; letter-spacing: .08em; }
+    .fig-nw { width: 100%; display: flex; justify-content: center; gap: 28px; }
+    .fig-nw .nw-col, .fig-hg .hg-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .fig-nw b, .fig-hg b { font-size: 14px; letter-spacing: .2em; color: var(--bronze); }
+    .fig-nw em { font-size: 12px; color: var(--mist); font-style: normal; letter-spacing: .08em; }
+    .fig-nw .yao-bar, .fig-hg .yao-bar { width: 48px; height: 4px; margin: 0; }
+    .fig-hg { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .fig-hg em { color: var(--cinnabar); font-style: normal; font-size: 21px; }
 
     /* home quiet */
     .hero.quiet {
@@ -16283,6 +16302,26 @@ window.LiuYao = {
     </div>`
   }
 
+  const DISK_FIGURE_KEYS = {
+    'xiantian-bagua': true,
+    'houtian-bagua': true,
+    bagua: true,
+    'bagua-table': true
+  }
+  const BAGUA_GRID_KEYS = ['qian', 'dui', 'li', 'zhen', 'xun', 'kan', 'gen', 'kun']
+
+  function buildBaguaGridHtml() {
+    const trigrams = (window.LiuYao && window.LiuYao.TRIGRAMS) || {}
+    return `<div class="fig-bg-grid">${BAGUA_GRID_KEYS.map((k) => {
+      const t = trigrams[k]
+      if (!t) return ''
+      const bars = [2, 1, 0].map((idx) =>
+        `<i class="lf-bar ${t.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
+      ).join('')
+      return `<div class="bg-cell"><span class="lf-bars bg-bars">${bars}</span><b class="bg-name">${t.name}</b><i class="bg-meta">${t.nature} · ${t.wuxing}</i></div>`
+    }).join('')}</div>`
+  }
+
   function buildFigureHtml(key, caption) {
     const cap = caption ? `<div class="fig-cap">${caption}</div>` : ''
     let body = ''
@@ -16340,10 +16379,31 @@ window.LiuYao = {
       body = `<div class="fig-hc"><i>合</i><i>冲</i><i>生</i><i>克</i></div>`
     } else if (key === 'path' || key === 'yingqi') {
       body = `<div class="fig-path">易理 → 象数 → 卜卦 → 回证</div>`
+    } else if (key === 'bagua-grid') {
+      body = buildBaguaGridHtml()
+    } else if (key === 'wuxing') {
+      body = `<div class="fig-wx">${['木', '火', '土', '金', '水'].map((item, i, arr) =>
+        `<span class="wx-i">${item}</span>${i < arr.length - 1 ? '<i class="wx-arr">生</i>' : ''}`
+      ).join('')}</div>`
+    } else if (key === 'neiwai') {
+      body = `<div class="fig-nw">
+        <div class="nw-col"><b>外</b>${yaoBar('yang')}${yaoBar('yin')}${yaoBar('yang')}<em>四五上</em></div>
+        <div class="nw-col"><b>内</b>${yaoBar('yin')}${yaoBar('yang')}${yaoBar('yin')}<em>初二三</em></div>
+      </div>`
+    } else if (key === 'hugua') {
+      body = `<div class="fig-hg">
+        <div class="hg-col"><b>本</b>${yaoBar('yang')}${yaoBar('yin on')}${yaoBar('yang on')}${yaoBar('yin on')}${yaoBar('yang on')}${yaoBar('yin')}</div>
+        <em>→</em>
+        <div class="hg-col"><b>互</b>${yaoBar('yang')}${yaoBar('yin')}${yaoBar('yang')}${yaoBar('yin')}</div>
+      </div>`
+    } else if (key === 'vols8') {
+      body = `<div class="fig-path wrap">开宗 → 易理 → 象数 → 卜卦 → 排盘 → 断卦 → 梅花 → 附录</div>`
+    } else if (key === 'steps6') {
+      body = `<div class="fig-path wrap">取用 → 旺衰 → 动变 → 生克 → 应期 → 裁断</div>`
     } else {
       body = `<div class="fig-fallback">☯</div>`
     }
-    return `<div class="fig">${body}${cap}</div>`
+    return `<div class="fig${DISK_FIGURE_KEYS[key] ? ' is-disk' : ''}">${body}${cap}</div>`
   }
 
   function renderBlocks(blocks) {

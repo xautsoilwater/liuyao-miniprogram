@@ -1,5 +1,5 @@
 <view class="fig">
-  <view class="fig-stage">
+  <view class="fig-stage {{showDisks ? 'is-disk' : ''}}">
     <!-- 太极 -->
     <view class="taiji" wx:if="{{name==='taiji'}}">
       <view class="half yang"></view>
@@ -190,6 +190,82 @@
       <text>象数</text><text class="sep">→</text>
       <text>卜卦</text><text class="sep">→</text>
       <text>回证</text>
+    </view>
+
+    <!-- 八卦速记格 -->
+    <view class="bg-grid" wx:elif="{{name==='bagua-grid'}}">
+      <view class="bg-cell" wx:for="{{baguaGrid}}" wx:key="key">
+        <view class="lf-bars bg-bars">
+          <view class="lf-bar {{item.lines[2] ? 'is-yang' : 'is-yin'}}"></view>
+          <view class="lf-bar {{item.lines[1] ? 'is-yang' : 'is-yin'}}"></view>
+          <view class="lf-bar {{item.lines[0] ? 'is-yang' : 'is-yin'}}"></view>
+        </view>
+        <text class="bg-name">{{item.name}}</text>
+        <text class="bg-meta">{{item.nature}} · {{item.wuxing}}</text>
+      </view>
+    </view>
+
+    <!-- 五行 -->
+    <view class="wx-row" wx:elif="{{name==='wuxing'}}">
+      <block wx:for="{{wuxing}}" wx:key="*this">
+        <view class="wx-i">{{item}}</view>
+        <text class="wx-arr" wx:if="{{index < wuxing.length - 1}}">生</text>
+      </block>
+    </view>
+
+    <!-- 内外 -->
+    <view class="nw" wx:elif="{{name==='neiwai'}}">
+      <view class="nw-col">
+        <text class="nw-h">外</text>
+        <view class="yao-bar yang"></view>
+        <view class="yao-bar yin"></view>
+        <view class="yao-bar yang"></view>
+        <text class="nw-t">四五上</text>
+      </view>
+      <view class="nw-col">
+        <text class="nw-h">内</text>
+        <view class="yao-bar yin"></view>
+        <view class="yao-bar yang"></view>
+        <view class="yao-bar yin"></view>
+        <text class="nw-t">初二三</text>
+      </view>
+    </view>
+
+    <!-- 互卦 -->
+    <view class="hg" wx:elif="{{name==='hugua'}}">
+      <view class="hg-col">
+        <text class="hg-h">本</text>
+        <view class="yao-bar yang"></view>
+        <view class="yao-bar yin on"></view>
+        <view class="yao-bar yang on"></view>
+        <view class="yao-bar yin on"></view>
+        <view class="yao-bar yang on"></view>
+        <view class="yao-bar yin"></view>
+      </view>
+      <text class="hg-arr">→</text>
+      <view class="hg-col">
+        <text class="hg-h">互</text>
+        <view class="yao-bar yang"></view>
+        <view class="yao-bar yin"></view>
+        <view class="yao-bar yang"></view>
+        <view class="yao-bar yin"></view>
+      </view>
+    </view>
+
+    <!-- 八卷 -->
+    <view class="path wrap" wx:elif="{{name==='vols8'}}">
+      <block wx:for="{{vols8}}" wx:key="*this">
+        <text>{{item}}</text>
+        <text class="sep" wx:if="{{index < vols8.length - 1}}">→</text>
+      </block>
+    </view>
+
+    <!-- 断卦六步 -->
+    <view class="path wrap" wx:elif="{{name==='steps6'}}">
+      <block wx:for="{{steps6}}" wx:key="*this">
+        <text>{{item}}</text>
+        <text class="sep" wx:if="{{index < steps6.length - 1}}">→</text>
+      </block>
     </view>
 
     <view class="fallback" wx:else>

@@ -170,9 +170,65 @@ function testAllCompassFiguresShareDisk() {
   assert.doesNotMatch(wxml, /fig-bagua/, '小程序不应再保留旧文字环')
 }
 
+function collectAllFigureKeys() {
+  const keys = new Set()
+  ARTICLES.forEach((article) => {
+    ;(article.blocks || []).forEach((block) => {
+      if (block && block.type === 'figure' && block.key) keys.add(block.key)
+    })
+  })
+  return keys
+}
+
+function testEveryFigureKeyHasRenderer() {
+  const keys = collectAllFigureKeys()
+  assert.ok(keys.size >= 20, `研习插图种类过少：只扫到 ${keys.size} 种`)
+
+  const root = path.join(__dirname, '..')
+  const wxml = fs.readFileSync(path.join(root, 'components/learn-figure/learn-figure.wxml'), 'utf8')
+  const js = fs.readFileSync(path.join(root, 'components/learn-figure/learn-figure.js'), 'utf8')
+  const wxss = fs.readFileSync(path.join(root, 'components/learn-figure/learn-figure.wxss'), 'utf8')
+  const previewJs = fs.readFileSync(path.join(root, 'preview/app-preview.js'), 'utf8')
+  const previewHtml = fs.readFileSync(path.join(root, 'preview/index.html'), 'utf8')
+  const standalone = fs.readFileSync(path.join(root, 'preview/liuyao-standalone.html'), 'utf8')
+
+  const MISSING_BEFORE = ['bagua-grid', 'wuxing', 'neiwai', 'hugua', 'vols8', 'steps6']
+  MISSING_BEFORE.forEach((key) => {
+    assert.ok(keys.has(key), `文稿应引用 ${key}（boost 补图）`)
+  })
+
+  keys.forEach((key) => {
+    assert.match(wxml, new RegExp(`name==='${key}'`), `小程序 WXML 未给 ${key} 专属分支，会落到☯`)
+    assert.match(previewJs, new RegExp(`key === '${key}'`), `预览未给 ${key} 专属分支，会落到☯`)
+    assert.match(standalone, new RegExp(`key === '${key}'`), `standalone 未给 ${key} 专属分支`)
+  })
+
+  assert.match(js, /baguaGrid:/, 'learn-figure.js 未准备 bagua-grid 数据')
+  assert.match(js, /vols8:/, 'learn-figure.js 未准备 vols8 数据')
+  assert.match(js, /steps6:/, 'learn-figure.js 未准备 steps6 数据')
+  assert.match(js, /wuxing:/, 'learn-figure.js 未准备 wuxing 数据')
+  assert.match(wxml, /fig-stage \{\{showDisks \? 'is-disk' : ''\}\}/, '只有罗盘图才应加 is-disk 内边距')
+  assert.match(wxss, /\.fig-stage\.is-disk/, 'WXSS 缺少盘面专用内边距')
+  assert.match(wxss, /\.taiji \.yang/, '太极阴阳色应限定在 .taiji，避免涂掉爻画')
+  assert.match(wxss, /\.bg-grid/, 'WXSS 缺少八卦格')
+  assert.match(wxss, /\.wx-row/, 'WXSS 缺少五行行')
+  assert.match(wxss, /\.nw \{/, 'WXSS 缺少内外图')
+  assert.match(wxss, /\.hg \{/, 'WXSS 缺少互卦图')
+  assert.match(previewJs, /DISK_FIGURE_KEYS/, '预览未标记盘面 fig.is-disk')
+  assert.match(previewJs, /buildBaguaGridHtml/, '预览未实现 bagua-grid')
+  assert.match(previewHtml, /\.fig\.is-disk/, '预览 CSS 缺少盘面专用内边距')
+  assert.match(previewHtml, /\.fig-bg-grid/, '预览 CSS 缺少八卦格')
+  assert.match(previewHtml, /\.fig-wx/, '预览 CSS 缺少五行行')
+  assert.match(previewHtml, /\.fig-nw/, '预览 CSS 缺少内外图')
+  assert.match(previewHtml, /\.fig-hg/, '预览 CSS 缺少互卦图')
+  assert.match(standalone, /\.fig\.is-disk/, 'standalone CSS 缺少盘面专用内边距')
+  assert.match(standalone, /\.fig-bg-grid/, 'standalone CSS 缺少八卦格')
+}
+
 testOrientations()
 testArticleKeys()
 testComponentWiring()
 testPreviewWiring()
 testAllCompassFiguresShareDisk()
+testEveryFigureKeyHasRenderer()
 console.log('bagua-disk: all checks passed')
