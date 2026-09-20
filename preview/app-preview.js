@@ -1619,6 +1619,50 @@
     return `<i class="yao-bar ${cls}"></i>`
   }
 
+  function resolveBaguaDisk(kind) {
+    if (window.LiuYao && typeof window.LiuYao.buildBaguaDisk === 'function') {
+      return window.LiuYao.buildBaguaDisk(kind)
+    }
+    return null
+  }
+
+  function buildBaguaDiskHtml(kind) {
+    const disk = resolveBaguaDisk(kind)
+    if (!disk) return '<div class="fig-fallback">☯</div>'
+    const ticks = (disk.ticks || []).map((tick) =>
+      `<i class="lf-tick${tick.major ? ' major' : ''}${tick.mid ? ' mid' : ''}" style="transform:rotate(${tick.deg}deg)"></i>`
+    ).join('')
+    const spokes = (disk.spokes || []).map((deg) =>
+      `<i class="lf-spoke" style="transform:rotate(${deg}deg)"></i>`
+    ).join('')
+    const dirs = (disk.dirs || []).map((dir) =>
+      `<span class="lf-item" style="transform:rotate(${dir.deg}deg)"><b class="lf-dir-lab">${dir.name}</b></span>`
+    ).join('')
+    const guas = (disk.bagua || []).map((gua) => {
+      const bars = [2, 1, 0].map((idx) =>
+        `<i class="lf-bar ${gua.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
+      ).join('')
+      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span>`
+    }).join('')
+    return `<div class="lf-disk kind-${disk.kind}">
+      <div class="lf-halo"></div>
+      <div class="lf-plate">
+        <i class="lf-rim outer"></i><i class="lf-rim mid"></i><i class="lf-band"></i>
+        <i class="lf-ring r-outer"></i><i class="lf-ring r-dir"></i><i class="lf-ring r-gua"></i><i class="lf-ring r-core"></i>
+        <div class="lf-layer ticks">${ticks}</div>
+        <div class="lf-layer spokes">${spokes}</div>
+        <div class="lf-layer dirs">${dirs}</div>
+        <div class="lf-layer guas">${guas}</div>
+        <b class="lf-south">▲</b>
+        <div class="lf-core">
+          <div class="lf-taiji"><i class="lf-half yang"></i><i class="lf-half yin"></i><i class="lf-eye top"></i><i class="lf-eye bot"></i><i class="lf-dot top"></i><i class="lf-dot bot"></i></div>
+          <em class="lf-core-title">${disk.title}</em>
+        </div>
+      </div>
+      <div class="lf-legend">${disk.subtitle} · ${disk.volLabel}</div>
+    </div>`
+  }
+
   function buildFigureHtml(key, caption) {
     const cap = caption ? `<div class="fig-cap">${caption}</div>` : ''
     let body = ''
@@ -1634,11 +1678,12 @@
       body = `<div class="fig-tri"><div><b>变</b><i>迁流不息</i></div><div><b>简</b><i>执简驭繁</i></div><div><b>常</b><i>变中有则</i></div></div>`
     } else if (key === 'xiang-shu-li') {
       body = `<div class="fig-rings"><span class="r3">象</span><span class="r2">数</span><span class="r1">理</span></div>`
-    } else if (key === 'bagua' || key === 'bagua-table') {
-      body = `<div class="fig-bagua">${['离☲','坤☷','兑☱','乾☰','坎☵','艮☶','震☳','巽☴'].map((t, i) => {
-        const deg = i * 45
-        return `<span style="transform:rotate(${deg}deg)"><i style="transform:rotate(${-deg}deg)">${t}</i></span>`
-      }).join('')}<em>南↑</em></div>`
+    } else if (key === 'xiantian-bagua') {
+      body = `<div class="lf-disks">${buildBaguaDiskHtml('xiantian')}</div>`
+    } else if (key === 'houtian-bagua' || key === 'bagua') {
+      body = `<div class="lf-disks">${buildBaguaDiskHtml('houtian')}</div>`
+    } else if (key === 'bagua-table') {
+      body = `<div class="lf-disks is-compare">${buildBaguaDiskHtml('xiantian')}${buildBaguaDiskHtml('houtian')}</div>`
     } else if (key === 'yao-four') {
       body = `<div class="fig-yao4">
         <div>${yaoBar('yang')}<span>少阳 —</span></div>
@@ -1810,6 +1855,94 @@
     app.querySelectorAll('[data-id]').forEach((el) => { el.onclick = () => go('detail', { articleId: el.dataset.id }) })
   }
 
+  const guaDianUi = { query: '', part: '全部', palace: '', open: '' }
+
+  function buildGuaDianHtml() {
+    const all = window.LiuYao.listGuaDian ? window.LiuYao.listGuaDian() : []
+    const list = window.LiuYao.filterGuaDian
+      ? window.LiuYao.filterGuaDian(all, guaDianUi)
+      : all
+    const palaces = window.LiuYao.PALACE_CHIP_ORDER || ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑']
+    const parts = ['全部', '上经', '下经'].map((part) =>
+      `<button type="button" class="gd-chip${guaDianUi.part === part ? ' on' : ''}" data-gd-part="${part}">${part}</button>`
+    ).join('')
+    const palaceChips = palaces.map((palace) =>
+      `<button type="button" class="gd-chip${guaDianUi.palace === palace ? ' on' : ''}" data-gd-palace="${palace}">${palace}宫</button>`
+    ).join('')
+    const cards = list.map((g) => {
+      const open = guaDianUi.open === g.alias
+      const rows = open
+        ? `<div class="gd-why">${g.nameWhy}</div>${(g.yaoRows || []).map((yao) =>
+          `<div class="gd-yao"><i class="yao-bar sm ${yao.yang ? 'yang' : 'yin'}"></i><span>${yao.text}</span></div>`
+        ).join('')}`
+        : ''
+      return `<div class="gd-card${open ? ' open' : ''}" data-gd-open="${g.alias}">
+        <div class="gd-head">
+          <b class="gd-idx">${g.idx}</b>
+          <div class="gd-main">
+            <div class="gd-title">${g.name} · ${g.alias}</div>
+            <div class="gd-meta">${g.part} · ${g.palace}宫${g.palaceStep} · ${g.palaceWx}</div>
+          </div>
+          <em>${open ? '收' : '开'}</em>
+        </div>
+        <div class="gd-ci">${g.guaci}</div>
+        ${open ? `<div class="gd-body">${rows}</div>` : ''}
+      </div>`
+    }).join('')
+    return `<div class="gd">
+      <div class="gd-search">
+        <input class="gd-input" type="search" value="${guaDianUi.query.replace(/"/g, '&quot;')}" placeholder="检索卦名、卦辞或宫名" />
+        ${guaDianUi.query ? '<button type="button" class="gd-clear" data-gd-clear>清除</button>' : ''}
+      </div>
+      <div class="gd-chips">${parts}</div>
+      <div class="gd-chips palace">${palaceChips}</div>
+      <div class="gd-count muted">${list.length} / ${all.length} 卦</div>
+      ${cards}
+    </div>`
+  }
+
+  function bindGuaDian() {
+    const input = app.querySelector('.gd-input')
+    if (input) {
+      input.oninput = () => {
+        guaDianUi.query = input.value || ''
+        renderDetail()
+        const next = app.querySelector('.gd-input')
+        if (next) {
+          next.focus()
+          const len = next.value.length
+          try { next.setSelectionRange(len, len) } catch (e) {}
+        }
+      }
+    }
+    const clear = app.querySelector('[data-gd-clear]')
+    if (clear) {
+      clear.onclick = () => {
+        guaDianUi.query = ''
+        renderDetail()
+      }
+    }
+    app.querySelectorAll('[data-gd-part]').forEach((el) => {
+      el.onclick = () => {
+        guaDianUi.part = el.dataset.gdPart
+        renderDetail()
+      }
+    })
+    app.querySelectorAll('[data-gd-palace]').forEach((el) => {
+      el.onclick = () => {
+        guaDianUi.palace = guaDianUi.palace === el.dataset.gdPalace ? '' : el.dataset.gdPalace
+        renderDetail()
+      }
+    })
+    app.querySelectorAll('[data-gd-open]').forEach((el) => {
+      el.onclick = () => {
+        const alias = el.dataset.gdOpen
+        guaDianUi.open = guaDianUi.open === alias ? '' : alias
+        renderDetail()
+      }
+    })
+  }
+
   function renderDetail() {
     const raw = window.LiuYao.ARTICLES.find((x) => x.id === state.articleId)
     if (!raw) { go('learn', {}, { replace: true }); return }
@@ -1818,6 +1951,13 @@
       : (window.LiuYao.normalizeArticle ? window.LiuYao.normalizeArticle(raw) : raw)
     const blocks = a.blocks || (a.content || []).map((text) => ({ type: 'p', text }))
     const seal = a.categoryLabel || a.category
+    const isGuaDian = a.kind === 'gua-dian'
+    if (!isGuaDian) {
+      guaDianUi.query = ''
+      guaDianUi.part = '全部'
+      guaDianUi.palace = ''
+      guaDianUi.open = ''
+    }
     setNav(a.title)
     app.innerHTML = `
       <div class="frame">
@@ -1826,9 +1966,11 @@
         <div class="title-zh" style="margin-top:12px">${a.title}</div>
         <div class="subtitle">${a.summary}</div>
         <div class="article-body">${renderBlocks(blocks)}</div>
+        ${isGuaDian ? buildGuaDianHtml() : ''}
       </div>
       <button class="btn btn-ghost" data-back>返回目录</button>`
     bindNav()
+    if (isGuaDian) bindGuaDian()
   }
 
   function onSwipeStart(e) {

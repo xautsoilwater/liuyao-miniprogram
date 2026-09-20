@@ -31,17 +31,78 @@
       <view class="rg r3">象</view>
     </view>
 
-    <!-- 八卦环 -->
-    <view class="bagua" wx:elif="{{name==='bagua' || name==='bagua-table'}}">
-      <view class="bg-item" style="transform:rotate(0deg)"><text class="bg-in" style="transform:rotate(0deg)">☲离</text></view>
-      <view class="bg-item" style="transform:rotate(45deg)"><text class="bg-in" style="transform:rotate(-45deg)">☷坤</text></view>
-      <view class="bg-item" style="transform:rotate(90deg)"><text class="bg-in" style="transform:rotate(-90deg)">☱兑</text></view>
-      <view class="bg-item" style="transform:rotate(135deg)"><text class="bg-in" style="transform:rotate(-135deg)">☰乾</text></view>
-      <view class="bg-item" style="transform:rotate(180deg)"><text class="bg-in" style="transform:rotate(-180deg)">☵坎</text></view>
-      <view class="bg-item" style="transform:rotate(225deg)"><text class="bg-in" style="transform:rotate(-225deg)">☶艮</text></view>
-      <view class="bg-item" style="transform:rotate(270deg)"><text class="bg-in" style="transform:rotate(-270deg)">☳震</text></view>
-      <view class="bg-item" style="transform:rotate(315deg)"><text class="bg-in" style="transform:rotate(-315deg)">☴巽</text></view>
-      <view class="bg-core">南↑</view>
+    <!-- 先天 / 后天卦盘：JS disks[] + WXSS 多层盘面 + 真爻画 -->
+    <view
+      class="lf-disks {{compare ? 'is-compare' : ''}}"
+      wx:elif="{{name==='xiantian-bagua' || name==='houtian-bagua' || name==='bagua' || name==='bagua-table'}}"
+    >
+      <view class="lf-disk kind-{{item.kind}}" wx:for="{{disks}}" wx:key="kind">
+        <view class="lf-halo"></view>
+        <view class="lf-plate">
+          <view class="lf-rim outer"></view>
+          <view class="lf-rim mid"></view>
+          <view class="lf-band"></view>
+          <view class="lf-ring r-outer"></view>
+          <view class="lf-ring r-dir"></view>
+          <view class="lf-ring r-gua"></view>
+          <view class="lf-ring r-core"></view>
+
+          <view class="lf-layer ticks">
+            <view
+              class="lf-tick {{tick.major ? 'major' : ''}} {{tick.mid ? 'mid' : ''}}"
+              wx:for="{{item.ticks}}"
+              wx:for-item="tick"
+              wx:key="deg"
+              style="transform:rotate({{tick.deg}}deg)"
+            ></view>
+          </view>
+
+          <view class="lf-layer spokes">
+            <view
+              class="lf-spoke"
+              wx:for="{{item.spokes}}"
+              wx:for-item="spoke"
+              wx:key="*this"
+              style="transform:rotate({{spoke}}deg)"
+            ></view>
+          </view>
+
+          <view class="lf-layer dirs">
+            <view class="lf-item" wx:for="{{item.dirs}}" wx:for-item="dir" wx:key="name" style="transform:rotate({{dir.deg}}deg)">
+              <text class="lf-dir-lab">{{dir.name}}</text>
+            </view>
+          </view>
+
+          <view class="lf-layer guas">
+            <view class="lf-item" wx:for="{{item.bagua}}" wx:for-item="gua" wx:key="key" style="transform:rotate({{gua.deg}}deg)">
+              <view class="lf-gua tone-{{gua.tone}}">
+                <view class="lf-bars">
+                  <view class="lf-bar {{gua.lines[2] ? 'is-yang' : 'is-yin'}}"></view>
+                  <view class="lf-bar {{gua.lines[1] ? 'is-yang' : 'is-yin'}}"></view>
+                  <view class="lf-bar {{gua.lines[0] ? 'is-yang' : 'is-yin'}}"></view>
+                </view>
+                <text class="lf-gua-name">{{gua.name}}</text>
+                <text class="lf-gua-tip">{{gua.tip}}</text>
+                <text class="lf-gua-vol">{{gua.vol}}</text>
+              </view>
+            </view>
+          </view>
+
+          <view class="lf-south">▲</view>
+          <view class="lf-core">
+            <view class="lf-taiji">
+              <view class="lf-half yang"></view>
+              <view class="lf-half yin"></view>
+              <view class="lf-eye top"></view>
+              <view class="lf-eye bot"></view>
+              <view class="lf-dot top"></view>
+              <view class="lf-dot bot"></view>
+            </view>
+            <text class="lf-core-title">{{item.title}}</text>
+          </view>
+        </view>
+        <view class="lf-legend">{{item.subtitle}} · {{item.volLabel}}</view>
+      </view>
     </view>
 
     <!-- 四爻 -->

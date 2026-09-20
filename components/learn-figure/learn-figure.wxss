@@ -5,7 +5,8 @@
 .fig-stage {
   position: relative;
   min-height: 220rpx;
-  padding: 28rpx 20rpx;
+  padding: 28rpx 12rpx;
+  overflow: visible;
   border: 1rpx solid var(--line-strong);
   background:
     radial-gradient(ellipse at 50% 0%, rgba(246, 237, 216, 0.9), transparent 60%),
@@ -97,22 +98,308 @@
   inset: 0; border: 2rpx solid var(--cinnabar); color: var(--cinnabar); font-size: 26rpx;
 }
 
-/* bagua */
-.bagua {
-  position: relative; width: 260rpx; height: 260rpx;
+/* 先天 / 后天卦盘 —— 对标首页 luopan：多层 rim/ring、刻度、辐条、真爻画、宣纸朱砂 */
+.lf-disks {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28rpx;
 }
-.bg-item {
-  position: absolute; left: 50%; top: 50%; width: 0; height: 0;
+.lf-disks.is-compare {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16rpx 12rpx;
 }
-.bg-in {
-  position: absolute; left: 0; top: -110rpx;
+
+.lf-disk {
+  --yt: 460rpx;
+  --ink-deep: #140f0c;
+  --cream: #f6eedc;
+  --sight: #a03328;
+  position: relative;
+  width: var(--yt);
+}
+.lf-disks.is-compare .lf-disk { --yt: 300rpx; }
+
+.lf-halo {
+  position: absolute;
+  left: -18rpx;
+  top: -18rpx;
+  width: calc(var(--yt) + 36rpx);
+  height: calc(var(--yt) + 36rpx);
+  border-radius: 50%;
+  background: rgba(122, 98, 64, 0.07);
+  pointer-events: none;
+}
+
+.lf-plate {
+  position: relative;
+  width: var(--yt);
+  height: var(--yt);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e6d4b0;
+  box-shadow:
+    inset 0 0 0 3rpx rgba(20, 15, 12, 0.35),
+    inset 0 0 0 12rpx rgba(248, 240, 222, 0.55),
+    inset 0 0 0 16rpx rgba(90, 70, 40, 0.22),
+    0 0 0 2rpx rgba(70, 52, 28, 0.45),
+    0 12rpx 28rpx rgba(20, 15, 12, 0.14);
+}
+
+.lf-rim {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.lf-rim.outer { inset: 1.4%; border: 2rpx solid rgba(20, 15, 12, 0.22); }
+.lf-rim.mid { inset: 3.4%; border: 1rpx solid rgba(246, 237, 216, 0.55); }
+
+.lf-band {
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  border: 30rpx solid rgba(143, 38, 31, 0.06);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.lf-disks.is-compare .lf-band { border-width: 20rpx; }
+
+.lf-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1rpx solid rgba(20, 15, 12, 0.12);
+  pointer-events: none;
+}
+.lf-ring.r-outer { inset: 5%; border-color: rgba(20, 15, 12, 0.2); }
+.lf-ring.r-dir { inset: 14%; border-color: rgba(143, 38, 31, 0.22); }
+.lf-ring.r-gua { inset: 36%; border-color: rgba(20, 15, 12, 0.12); }
+.lf-ring.r-core { inset: 46%; border-color: rgba(143, 38, 31, 0.16); }
+
+.lf-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.lf-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+.lf-tick {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2rpx;
+  height: calc(var(--yt) / 2 - 8rpx);
+  margin-left: -1rpx;
+  margin-top: calc(0px - var(--yt) / 2 + 8rpx);
+  transform-origin: 50% calc(var(--yt) / 2 - 8rpx);
+  background: linear-gradient(to bottom, rgba(20, 15, 12, 0.18) 0, rgba(20, 15, 12, 0.18) 7rpx, transparent 7rpx);
+  pointer-events: none;
+}
+.lf-tick.mid {
+  background: linear-gradient(to bottom, rgba(20, 15, 12, 0.32) 0, rgba(20, 15, 12, 0.32) 11rpx, transparent 11rpx);
+}
+.lf-tick.major {
+  width: 3rpx;
+  margin-left: -1.5rpx;
+  background: linear-gradient(to bottom, rgba(143, 38, 31, 0.55) 0, rgba(143, 38, 31, 0.55) 16rpx, transparent 16rpx);
+}
+
+.lf-spoke {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1rpx;
+  height: 28%;
+  margin-left: -0.5rpx;
+  margin-top: -28%;
+  transform-origin: 50% 100%;
+  background: rgba(20, 15, 12, 0.12);
+  pointer-events: none;
+}
+
+.lf-dir-lab {
+  position: absolute;
+  left: 0;
+  top: calc(var(--yt) * -0.43);
   transform: translateX(-50%);
-  font-size: 28rpx; letter-spacing: 0.06em; color: var(--ink); white-space: nowrap;
+  font-size: 20rpx;
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
+  color: rgba(143, 38, 31, 0.78);
+  font-weight: 700;
+  line-height: 1;
 }
-.bg-core {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  font-size: 26rpx; color: var(--cinnabar); letter-spacing: 0.12em;
+.lf-disks.is-compare .lf-dir-lab { font-size: 16rpx; }
+
+.lf-gua {
+  position: absolute;
+  left: 0;
+  top: calc(var(--yt) * -0.27);
+  width: 88rpx;
+  margin-left: -44rpx;
+  text-align: center;
+  line-height: 1.05;
+  --gua: var(--ink-deep);
 }
+.lf-disks.is-compare .lf-gua {
+  width: 64rpx;
+  margin-left: -32rpx;
+  top: calc(var(--yt) * -0.29);
+}
+
+.lf-bars {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  margin: 0 auto 6rpx;
+  width: 44rpx;
+}
+.lf-disks.is-compare .lf-bars { width: 32rpx; gap: 3rpx; margin-bottom: 4rpx; }
+
+.lf-bar {
+  width: 44rpx;
+  height: 5rpx;
+  background: var(--gua);
+  border-radius: 1rpx;
+}
+.lf-disks.is-compare .lf-bar { width: 32rpx; height: 4rpx; }
+.lf-bar.is-yin {
+  background: linear-gradient(
+    to right,
+    var(--gua) 0,
+    var(--gua) 36%,
+    transparent 36%,
+    transparent 64%,
+    var(--gua) 64%,
+    var(--gua) 100%
+  );
+}
+
+.lf-gua-name {
+  display: block;
+  font-size: 26rpx;
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
+  color: var(--gua);
+  font-weight: 700;
+}
+.lf-disks.is-compare .lf-gua-name { font-size: 20rpx; }
+
+.lf-gua-tip {
+  display: block;
+  margin-top: 2rpx;
+  font-size: 16rpx;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  color: var(--gua);
+  opacity: 0.88;
+}
+.lf-disks.is-compare .lf-gua-tip { font-size: 13rpx; }
+
+.lf-gua-vol {
+  display: block;
+  margin-top: 2rpx;
+  font-size: 18rpx;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--sight);
+  font-variant-numeric: tabular-nums;
+}
+.lf-disks.is-compare .lf-gua-vol { font-size: 14rpx; }
+
+.lf-south {
+  position: absolute;
+  left: 50%;
+  top: 10rpx;
+  transform: translateX(-50%);
+  color: var(--sight);
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1rpx 0 rgba(250, 243, 228, 0.8);
+  z-index: 4;
+}
+.lf-disks.is-compare .lf-south { font-size: 16rpx; top: 6rpx; }
+
+.lf-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 108rpx;
+  height: 108rpx;
+  margin: -54rpx 0 0 -54rpx;
+  border-radius: 50%;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0e4c8;
+  border: 1rpx solid rgba(20, 15, 12, 0.18);
+  box-shadow:
+    0 0 0 4rpx rgba(250, 243, 228, 0.45),
+    0 0 0 6rpx rgba(143, 38, 31, 0.1);
+}
+.lf-disks.is-compare .lf-core {
+  width: 72rpx;
+  height: 72rpx;
+  margin: -36rpx 0 0 -36rpx;
+}
+
+.lf-taiji {
+  position: relative;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--cream);
+  box-shadow: inset 0 0 0 2rpx rgba(20, 15, 12, 0.42);
+}
+.lf-disks.is-compare .lf-taiji { width: 32rpx; height: 32rpx; }
+.lf-half { position: absolute; top: 0; width: 50%; height: 100%; }
+.lf-half.yang { left: 0; background: var(--cream); }
+.lf-half.yin { right: 0; background: var(--ink-deep); }
+.lf-eye {
+  position: absolute; left: 13rpx; width: 26rpx; height: 26rpx; border-radius: 50%;
+}
+.lf-disks.is-compare .lf-eye { left: 8rpx; width: 16rpx; height: 16rpx; }
+.lf-eye.top { top: 0; background: var(--ink-deep); }
+.lf-eye.bot { bottom: 0; background: var(--cream); }
+.lf-dot {
+  position: absolute; left: 20rpx; width: 12rpx; height: 12rpx; border-radius: 50%; z-index: 2;
+}
+.lf-disks.is-compare .lf-dot { left: 12rpx; width: 8rpx; height: 8rpx; }
+.lf-dot.top { top: 7rpx; background: var(--cream); }
+.lf-dot.bot { bottom: 7rpx; background: var(--ink-deep); }
+
+.lf-core-title {
+  margin-top: 4rpx;
+  font-size: 20rpx;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  color: var(--sight);
+  font-weight: 700;
+}
+.lf-disks.is-compare .lf-core-title { font-size: 16rpx; margin-top: 2rpx; letter-spacing: 0.12em; }
+
+.lf-legend {
+  margin-top: 12rpx;
+  text-align: center;
+  font-size: 22rpx;
+  letter-spacing: 0.16em;
+  color: rgba(143, 38, 31, 0.78);
+}
+.lf-disks.is-compare .lf-legend { font-size: 20rpx; margin-top: 8rpx; }
 
 /* yao4 */
 .yao4 { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 16rpx; }

@@ -935,6 +935,32 @@
       margin: 8px 0 14px; padding: 10px 12px; border: 1px dashed var(--line-strong);
       font-size: 14px; color: var(--mist); letter-spacing: .05em; line-height: 1.75;
     }
+    .gd { margin-top: 6px; }
+    .gd-search { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--line-strong); }
+    .gd-input { margin-top: 0; padding: 10px 0; font-size: 15px; }
+    .gd-clear { border: 0; background: transparent; color: var(--cinnabar); font: inherit; letter-spacing: .12em; cursor: pointer; }
+    .gd-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .gd-chips.palace { margin-top: 6px; }
+    .gd-chip {
+      min-width: 44px; padding: 4px 8px; border: 1px solid rgba(20,15,12,.16);
+      background: rgba(250,243,228,.55); color: rgba(42,34,28,.62);
+      font: inherit; font-size: 12px; letter-spacing: .1em; cursor: pointer;
+    }
+    .gd-chip.on { border-color: rgba(160,51,40,.45); color: var(--cinnabar); background: rgba(160,51,40,.08); }
+    .gd-count { margin: 10px 0 6px; font-size: 12px; letter-spacing: .1em; }
+    .gd-card { margin: 8px 0; padding: 10px 8px; border: 1px solid rgba(20,15,12,.14); background: rgba(250,246,234,.45); cursor: pointer; }
+    .gd-card.open { border-color: rgba(160,51,40,.28); background: rgba(250,243,228,.72); }
+    .gd-head { display: flex; align-items: flex-start; gap: 8px; }
+    .gd-idx { color: var(--cinnabar); font-size: 13px; min-width: 22px; font-style: normal; }
+    .gd-main { flex: 1; min-width: 0; }
+    .gd-title { letter-spacing: .1em; font-weight: 600; }
+    .gd-meta { margin-top: 2px; font-size: 12px; color: var(--mist); letter-spacing: .06em; }
+    .gd-head em { font-style: normal; color: var(--cinnabar); font-size: 12px; letter-spacing: .16em; }
+    .gd-ci { margin-top: 6px; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+    .gd-why { margin: 8px 0; padding-top: 8px; border-top: 1px dashed var(--line); font-size: 13px; color: var(--bronze); line-height: 1.7; }
+    .gd-yao { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px dashed rgba(20,15,12,.08); }
+    .gd-yao .yao-bar { margin: 7px 0 0; }
+    .gd-yao span { flex: 1; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
     .fig {
       margin: 12px 0 16px; padding: 16px 12px;
       border: 1px solid var(--line-strong);
@@ -971,6 +997,63 @@
     .fig-bagua > span { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
     .fig-bagua i { position: absolute; left: 0; top: -62px; transform: translateX(-50%); font-style: normal; font-size: 14px; white-space: nowrap; }
     .fig-bagua em { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-style: normal; color: var(--cinnabar); font-size: 14px; }
+    .lf-disks { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .lf-disks.is-compare { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px 6px; }
+    .lf-disk { --yt: 230px; --ink-deep: #140f0c; --cream: #f6eedc; --sight: #a03328; position: relative; width: var(--yt); }
+    .lf-disks.is-compare .lf-disk { --yt: 150px; }
+    .lf-halo { position: absolute; left: -9px; top: -9px; width: calc(var(--yt) + 18px); height: calc(var(--yt) + 18px); border-radius: 50%; background: rgba(122,98,64,.07); pointer-events: none; }
+    .lf-plate { position: relative; width: var(--yt); height: var(--yt); border-radius: 50%; overflow: hidden; background: #e6d4b0; box-shadow: inset 0 0 0 1.5px rgba(20,15,12,.35), inset 0 0 0 6px rgba(248,240,222,.55), inset 0 0 0 8px rgba(90,70,40,.22), 0 0 0 1px rgba(70,52,28,.45), 0 6px 14px rgba(20,15,12,.14); }
+    .lf-rim { position: absolute; border-radius: 50%; pointer-events: none; display: block; }
+    .lf-rim.outer { inset: 1.4%; border: 1px solid rgba(20,15,12,.22); }
+    .lf-rim.mid { inset: 3.4%; border: 1px solid rgba(246,237,216,.55); }
+    .lf-band { position: absolute; inset: 20%; border-radius: 50%; border: 15px solid rgba(143,38,31,.06); box-sizing: border-box; pointer-events: none; display: block; }
+    .lf-disks.is-compare .lf-band { border-width: 10px; }
+    .lf-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(20,15,12,.12); pointer-events: none; display: block; }
+    .lf-ring.r-outer { inset: 5%; border-color: rgba(20,15,12,.2); }
+    .lf-ring.r-dir { inset: 14%; border-color: rgba(143,38,31,.22); }
+    .lf-ring.r-gua { inset: 36%; border-color: rgba(20,15,12,.12); }
+    .lf-ring.r-core { inset: 46%; border-color: rgba(143,38,31,.16); }
+    .lf-layer { position: absolute; inset: 0; border-radius: 50%; }
+    .lf-item { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+    .lf-tick { position: absolute; left: 50%; top: 50%; width: 1px; height: calc(var(--yt) / 2 - 4px); margin-left: -0.5px; margin-top: calc(0px - var(--yt) / 2 + 4px); transform-origin: 50% calc(var(--yt) / 2 - 4px); background: linear-gradient(to bottom, rgba(20,15,12,.18) 0, rgba(20,15,12,.18) 3.5px, transparent 3.5px); pointer-events: none; display: block; }
+    .lf-tick.mid { background: linear-gradient(to bottom, rgba(20,15,12,.32) 0, rgba(20,15,12,.32) 5.5px, transparent 5.5px); }
+    .lf-tick.major { width: 1.5px; margin-left: -0.75px; background: linear-gradient(to bottom, rgba(143,38,31,.55) 0, rgba(143,38,31,.55) 8px, transparent 8px); }
+    .lf-spoke { position: absolute; left: 50%; top: 50%; width: 1px; height: 28%; margin-left: -0.5px; margin-top: -28%; transform-origin: 50% 100%; background: rgba(20,15,12,.12); pointer-events: none; display: block; }
+    .lf-dir-lab { position: absolute; left: 0; top: calc(var(--yt) * -0.43); transform: translateX(-50%); font-size: 10px; letter-spacing: .16em; color: rgba(143,38,31,.78); font-weight: 700; line-height: 1; font-style: normal; }
+    .lf-disks.is-compare .lf-dir-lab { font-size: 8px; }
+    .lf-gua { position: absolute; left: 0; top: calc(var(--yt) * -0.27); width: 44px; margin-left: -22px; text-align: center; line-height: 1.05; --gua: #140f0c; display: block; }
+    .lf-disks.is-compare .lf-gua { width: 32px; margin-left: -16px; top: calc(var(--yt) * -0.29); }
+    .lf-bars { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0 auto 3px; width: 22px; }
+    .lf-disks.is-compare .lf-bars { width: 16px; gap: 1.5px; }
+    .lf-bar { width: 22px; height: 2.5px; background: var(--gua); border-radius: 1px; display: block; }
+    .lf-disks.is-compare .lf-bar { width: 16px; height: 2px; }
+    .lf-bar.is-yin { background: linear-gradient(to right, var(--gua) 0, var(--gua) 36%, transparent 36%, transparent 64%, var(--gua) 64%, var(--gua) 100%); }
+    .lf-gua-name { display: block; font-size: 13px; letter-spacing: .16em; color: var(--gua); font-weight: 700; font-style: normal; }
+    .lf-disks.is-compare .lf-gua-name { font-size: 10px; }
+    .lf-gua-tip { display: block; margin-top: 1px; font-size: 8px; letter-spacing: .04em; font-weight: 600; color: var(--gua); opacity: .88; font-style: normal; }
+    .lf-disks.is-compare .lf-gua-tip { font-size: 7px; }
+    .lf-gua-vol { display: block; margin-top: 1px; font-size: 9px; font-weight: 700; color: var(--sight); font-style: normal; font-variant-numeric: tabular-nums; }
+    .lf-disks.is-compare .lf-gua-vol { font-size: 8px; }
+    .lf-south { position: absolute; left: 50%; top: 5px; transform: translateX(-50%); color: var(--sight); font-size: 11px; font-weight: 700; line-height: 1; z-index: 4; font-style: normal; }
+    .lf-disks.is-compare .lf-south { font-size: 8px; top: 3px; }
+    .lf-core { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f0e4c8; border: 1px solid rgba(20,15,12,.18); box-shadow: 0 0 0 2px rgba(250,243,228,.45), 0 0 0 3px rgba(143,38,31,.1); }
+    .lf-disks.is-compare .lf-core { width: 36px; height: 36px; margin: -18px 0 0 -18px; }
+    .lf-taiji { position: relative; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: var(--cream); box-shadow: inset 0 0 0 1px rgba(20,15,12,.42); }
+    .lf-disks.is-compare .lf-taiji { width: 16px; height: 16px; }
+    .lf-half { position: absolute; top: 0; width: 50%; height: 100%; display: block; }
+    .lf-half.yang { left: 0; background: var(--cream); }
+    .lf-half.yin { right: 0; background: var(--ink-deep); }
+    .lf-eye { position: absolute; left: 6.5px; width: 13px; height: 13px; border-radius: 50%; display: block; }
+    .lf-disks.is-compare .lf-eye { left: 4px; width: 8px; height: 8px; }
+    .lf-eye.top { top: 0; background: var(--ink-deep); }
+    .lf-eye.bot { bottom: 0; background: var(--cream); }
+    .lf-dot { position: absolute; left: 10px; width: 6px; height: 6px; border-radius: 50%; z-index: 2; display: block; }
+    .lf-disks.is-compare .lf-dot { left: 6px; width: 4px; height: 4px; }
+    .lf-dot.top { top: 3.5px; background: var(--cream); }
+    .lf-dot.bot { bottom: 3.5px; background: var(--ink-deep); }
+    .lf-core-title { margin-top: 2px; font-size: 10px; letter-spacing: .18em; color: var(--sight); font-weight: 700; font-style: normal; }
+    .lf-disks.is-compare .lf-core-title { font-size: 8px; margin-top: 1px; }
+    .lf-legend { margin-top: 6px; text-align: center; font-size: 11px; letter-spacing: .14em; color: rgba(143,38,31,.78); }
     .fig-yao4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .fig-yao4 > div { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border: 1px solid var(--line); font-size: 14px; }
     .fig-yao4 .yao-bar { width: 56px; height: 4px; margin: 0; }
@@ -1552,6 +1635,92 @@ const DAY_GAN_LIUSHEN_START = {
 const WUXING_SHENG = { 木: '火', 火: '土', 土: '金', 金: '水', 水: '木' }
 const WUXING_KE = { 木: '土', 土: '水', 水: '火', 火: '金', 金: '木' }
 
+/**
+ * 研习卦盘方位：0° = 上 = 南，顺时针。
+ * 先天：乾南坤北、离东坎西；后天：离南坎北、震东兑西。
+ */
+const XIANTIAN_LAYOUT = [
+  { key: 'qian', deg: 0 },
+  { key: 'xun', deg: 45 },
+  { key: 'kan', deg: 90 },
+  { key: 'gen', deg: 135 },
+  { key: 'kun', deg: 180 },
+  { key: 'zhen', deg: 225 },
+  { key: 'li', deg: 270 },
+  { key: 'dui', deg: 315 }
+]
+
+const HOUTIAN_LAYOUT = [
+  { key: 'li', deg: 0 },
+  { key: 'kun', deg: 45 },
+  { key: 'dui', deg: 90 },
+  { key: 'qian', deg: 135 },
+  { key: 'kan', deg: 180 },
+  { key: 'gen', deg: 225 },
+  { key: 'zhen', deg: 270 },
+  { key: 'xun', deg: 315 }
+]
+
+const XIANTIAN_NUM = { qian: 1, dui: 2, li: 3, zhen: 4, xun: 5, kan: 6, gen: 7, kun: 8 }
+const LUOSHU_NUM = { kan: 1, kun: 2, zhen: 3, xun: 4, qian: 6, dui: 7, gen: 8, li: 9 }
+
+const DISK_DIRS = [
+  { name: '南', deg: 0 },
+  { name: '西', deg: 90 },
+  { name: '北', deg: 180 },
+  { name: '东', deg: 270 }
+]
+
+const DISK_META = {
+  xiantian: { kind: 'xiantian', title: '先天', subtitle: '伏羲 · 对待', volLabel: '先天数' },
+  houtian: { kind: 'houtian', title: '后天', subtitle: '文王 · 流行', volLabel: '洛书数' }
+}
+
+function buildDiskTicks() {
+  return Array.from({ length: 24 }, (_, i) => {
+    const deg = i * 15
+    return {
+      deg,
+      major: deg % 45 === 0,
+      mid: deg % 30 === 0 && deg % 45 !== 0
+    }
+  })
+}
+
+function buildDiskSpokes() {
+  return [22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5]
+}
+
+function buildBaguaDisk(kind) {
+  const meta = DISK_META[kind] || DISK_META.houtian
+  const layout = kind === 'xiantian' ? XIANTIAN_LAYOUT : HOUTIAN_LAYOUT
+  const volMap = kind === 'xiantian' ? XIANTIAN_NUM : LUOSHU_NUM
+  const bagua = layout.map((slot) => {
+    const t = TRIGRAMS[slot.key]
+    return {
+      key: t.key,
+      name: t.name,
+      nature: t.nature,
+      wuxing: t.wuxing,
+      tip: t.nature + '·' + t.wuxing,
+      vol: String(volMap[slot.key]),
+      lines: t.lines.slice(),
+      deg: slot.deg,
+      tone: t.key
+    }
+  })
+  return {
+    kind: meta.kind,
+    title: meta.title,
+    subtitle: meta.subtitle,
+    volLabel: meta.volLabel,
+    bagua,
+    dirs: DISK_DIRS.map((d) => ({ name: d.name, deg: d.deg })),
+    ticks: buildDiskTicks(),
+    spokes: buildDiskSpokes()
+  }
+}
+
 module.exports = {
   TRIGRAMS,
   TRIGRAM_ORDER,
@@ -1564,7 +1733,13 @@ module.exports = {
   LIUSHEN,
   DAY_GAN_LIUSHEN_START,
   WUXING_SHENG,
-  WUXING_KE
+  WUXING_KE,
+  XIANTIAN_LAYOUT,
+  HOUTIAN_LAYOUT,
+  XIANTIAN_NUM,
+  LUOSHU_NUM,
+  DISK_DIRS,
+  buildBaguaDisk
 }
 
 })(__mods["../data/bagua"], __mods["../data/bagua"].exports, __require);
@@ -2347,6 +2522,99 @@ const GUA64_CI = {
   }
 }
 
+const { GUA64_NAMES, PALACES } = require('./bagua')
+
+const PALACE_STEP = ['本宫', '一世', '二世', '三世', '四世', '五世', '游魂', '归魂']
+const PALACE_CHIP_ORDER = ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑']
+
+/** 文王卦序（上经三十、下经三十四）。不可用 Object.keys(GUA64_NAMES)：二进制键会被引擎按数字重排。 */
+const KING_WEN_ORDER = [
+  '乾', '坤', '屯', '蒙', '需', '讼', '师', '比', '小畜', '履',
+  '泰', '否', '同人', '大有', '谦', '豫', '随', '蛊', '临', '观',
+  '噬嗑', '贲', '剥', '复', '无妄', '大畜', '颐', '大过', '坎', '离',
+  '咸', '恒', '遁', '大壮', '晋', '明夷', '家人', '睽', '蹇', '解',
+  '损', '益', '夬', '姤', '萃', '升', '困', '井', '革', '鼎',
+  '震', '艮', '渐', '归妹', '丰', '旅', '巽', '兑', '涣', '节',
+  '中孚', '小过', '既济', '未济'
+]
+
+function linesToCode(lines) {
+  return lines.map((v) => (v ? '1' : '0')).join('')
+}
+
+function palaceOf(lines) {
+  const code = linesToCode(lines)
+  const keys = Object.keys(PALACES)
+  for (let i = 0; i < keys.length; i++) {
+    const pal = PALACES[keys[i]]
+    const gua = pal.gua || []
+    for (let j = 0; j < gua.length; j++) {
+      if (linesToCode(gua[j]) === code) {
+        return {
+          palace: pal.name,
+          palaceWx: pal.wuxing,
+          palaceStep: PALACE_STEP[j] || ''
+        }
+      }
+    }
+  }
+  return { palace: '', palaceWx: '', palaceStep: '' }
+}
+
+function listGuaDian() {
+  const byAlias = {}
+  Object.keys(GUA64_NAMES).forEach((code) => {
+    const meta = GUA64_NAMES[code]
+    byAlias[meta.alias] = { code, name: meta.name }
+  })
+  return KING_WEN_ORDER.map((alias, idx) => {
+    const found = byAlias[alias] || {}
+    const code = found.code || ''
+    const ci = GUA64_CI[alias] || {}
+    const lines = code.split('').map((ch) => (ch === '1' ? 1 : 0))
+    const pal = palaceOf(lines)
+    const yaoci = (ci.yaoci || []).slice()
+    return {
+      idx: idx + 1,
+      alias,
+      name: found.name || alias,
+      lines,
+      part: idx < 30 ? '上经' : '下经',
+      nameWhy: ci.nameWhy || '',
+      guaci: ci.guaci || '',
+      yaoci,
+      yaoRows: [5, 4, 3, 2, 1, 0].map((i) => ({
+        yang: !!lines[i],
+        text: yaoci[i] || ''
+      })),
+      palace: pal.palace,
+      palaceWx: pal.palaceWx,
+      palaceStep: pal.palaceStep
+    }
+  })
+}
+
+function filterGuaDian(entries, opts) {
+  const query = String((opts && opts.query) || '').trim()
+  const part = (opts && opts.part) || '全部'
+  const palace = (opts && opts.palace) || ''
+  return (entries || []).filter((g) => {
+    if (part && part !== '全部' && g.part !== part) return false
+    if (palace && g.palace !== palace) return false
+    if (!query) return true
+    const hay = [
+      g.alias,
+      g.name,
+      g.guaci,
+      g.nameWhy,
+      g.palace,
+      g.palaceStep,
+      String(g.idx)
+    ].concat(g.yaoci || []).join('·')
+    return hay.indexOf(query) !== -1
+  })
+}
+
 function getGuaCi(alias) {
   if (!alias) return null
   return GUA64_CI[alias] || null
@@ -2354,7 +2622,11 @@ function getGuaCi(alias) {
 
 module.exports = {
   GUA64_CI,
-  getGuaCi
+  getGuaCi,
+  listGuaDian,
+  filterGuaDian,
+  PALACE_CHIP_ORDER,
+  KING_WEN_ORDER
 }
 
 })(__mods["../data/guaci"], __mods["../data/guaci"].exports, __require);
@@ -2522,6 +2794,7 @@ const EXTRA_ARTICLES = [
         '巽☴ 西南（风，长阴入）',
         '艮☶ 西北（山，少阳止）'
       ]),
+      figure('xiantian-bagua', '伏羲先天八卦：乾0°南，巽45°西南，坎90°西，艮135°西北，坤180°北，震225°东北，离270°东，兑315°东南'),
       
       p('对待结构的深意：'),
       list([
@@ -2578,6 +2851,7 @@ const EXTRA_ARTICLES = [
         '巽☴ 东南（木，初夏，辰巳）',
         '艮☶ 东北（土，冬春交，丑寅）'
       ]),
+      figure('houtian-bagua', '文王后天八卦：离0°南，坤45°西南，兑90°西，乾135°西北，坎180°北，艮225°东北，震270°东，巽315°东南'),
       
       p('后天方位为何如此排布？依《说卦传》「帝出乎震」一节，万物生于春震（东），长于巽（东南），盛于离（南），收于坤（西南），悦于兑（西），藏于乾（西北），潜于坎（北），成于艮（东北），再归震而新一轮循环。此为天道运行之序，四时五行之用，故称「后天」。'),
       
@@ -4191,7 +4465,22 @@ const ARTICLES = [
       ]),
       p('本卦与变卦都是六十四卦之一。有动则成变卦：本看始，变看终。无动则静盘，以本卦世应用神与日月为主。互卦（二三四、三四五）多主中间过程，属进阶选读，见「本卦·变卦·互卦」。'),
       p('学习建议：每摇一卦，写下「内××、外××、卦名××、属×宫×世」，三五卦后自然熟悉，比死背更快。'),
-      note('排盘顶部即显示卦名与宫次。可与卷五「世应与八宫」对照。')
+      note('排盘顶部即显示卦名与宫次。可与卷五「世应与八宫」对照。续读「六十四卦卦典」查卦辞爻辞。')
+    ]
+  },
+  {
+    id: 'gua-dian',
+    category: '象数',
+    title: '六十四卦卦典',
+    kind: 'gua-dian',
+    summary: '文王卦序全表：取象释名、卦辞、爻辞，可检索、可按上下经与八宫查阅。',
+    cover: 'bagua-table',
+    blocks: [
+      figure('bagua', '六十四卦卦典：按文王序查阅卦辞与爻辞'),
+      p('「六十四卦略说」讲重卦与八宫骨架；本篇是辞典。六十四卦的取象释名、卦辞与六爻爻辞，与排盘结果页所引同源，便于读盘时对照玩辞。'),
+      p('上经三十卦（乾至离）偏天道与创始；下经三十四卦（咸至未济）偏人道与成终。检索可用卦名、卦辞字句或八宫名。点开一卦，可见卦画、卦辞与爻辞。'),
+      quote('圣人设卦观象，系辞焉而明吉凶。', '《系辞上》'),
+      note('不必一次读完。卜得何卦，即来此篇核对卦辞爻辞；与「六十四卦略说」合参，象与辞才不致分离。')
     ]
   },
   {
@@ -12155,6 +12444,8 @@ var meihua = __require('./meihua');
 var jixiang = __require('./jixiang');
 var askOptions = __require('./ask-options');
 var learning = __require('../data/learning');
+var bagua = __require('../data/bagua');
+var guaci = __require('../data/guaci');
 window.LiuYao = {
   tossThreeCoins: coin.tossThreeCoins,
   manualYao: coin.manualYao,
@@ -12177,7 +12468,14 @@ window.LiuYao = {
   volumeAnchorId: learning.volumeAnchorId,
   CATEGORY_ORDER: learning.CATEGORY_ORDER,
   CATEGORY_META: learning.CATEGORY_META,
-  normalizeArticle: learning.normalizeArticle
+  normalizeArticle: learning.normalizeArticle,
+  TRIGRAMS: bagua.TRIGRAMS,
+  buildBaguaDisk: bagua.buildBaguaDisk,
+  XIANTIAN_LAYOUT: bagua.XIANTIAN_LAYOUT,
+  HOUTIAN_LAYOUT: bagua.HOUTIAN_LAYOUT,
+  listGuaDian: guaci.listGuaDian,
+  filterGuaDian: guaci.filterGuaDian,
+  PALACE_CHIP_ORDER: guaci.PALACE_CHIP_ORDER
 };
 })();
 
@@ -13883,6 +14181,50 @@ window.LiuYao = {
     return `<i class="yao-bar ${cls}"></i>`
   }
 
+  function resolveBaguaDisk(kind) {
+    if (window.LiuYao && typeof window.LiuYao.buildBaguaDisk === 'function') {
+      return window.LiuYao.buildBaguaDisk(kind)
+    }
+    return null
+  }
+
+  function buildBaguaDiskHtml(kind) {
+    const disk = resolveBaguaDisk(kind)
+    if (!disk) return '<div class="fig-fallback">☯</div>'
+    const ticks = (disk.ticks || []).map((tick) =>
+      `<i class="lf-tick${tick.major ? ' major' : ''}${tick.mid ? ' mid' : ''}" style="transform:rotate(${tick.deg}deg)"></i>`
+    ).join('')
+    const spokes = (disk.spokes || []).map((deg) =>
+      `<i class="lf-spoke" style="transform:rotate(${deg}deg)"></i>`
+    ).join('')
+    const dirs = (disk.dirs || []).map((dir) =>
+      `<span class="lf-item" style="transform:rotate(${dir.deg}deg)"><b class="lf-dir-lab">${dir.name}</b></span>`
+    ).join('')
+    const guas = (disk.bagua || []).map((gua) => {
+      const bars = [2, 1, 0].map((idx) =>
+        `<i class="lf-bar ${gua.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
+      ).join('')
+      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span>`
+    }).join('')
+    return `<div class="lf-disk kind-${disk.kind}">
+      <div class="lf-halo"></div>
+      <div class="lf-plate">
+        <i class="lf-rim outer"></i><i class="lf-rim mid"></i><i class="lf-band"></i>
+        <i class="lf-ring r-outer"></i><i class="lf-ring r-dir"></i><i class="lf-ring r-gua"></i><i class="lf-ring r-core"></i>
+        <div class="lf-layer ticks">${ticks}</div>
+        <div class="lf-layer spokes">${spokes}</div>
+        <div class="lf-layer dirs">${dirs}</div>
+        <div class="lf-layer guas">${guas}</div>
+        <b class="lf-south">▲</b>
+        <div class="lf-core">
+          <div class="lf-taiji"><i class="lf-half yang"></i><i class="lf-half yin"></i><i class="lf-eye top"></i><i class="lf-eye bot"></i><i class="lf-dot top"></i><i class="lf-dot bot"></i></div>
+          <em class="lf-core-title">${disk.title}</em>
+        </div>
+      </div>
+      <div class="lf-legend">${disk.subtitle} · ${disk.volLabel}</div>
+    </div>`
+  }
+
   function buildFigureHtml(key, caption) {
     const cap = caption ? `<div class="fig-cap">${caption}</div>` : ''
     let body = ''
@@ -13898,11 +14240,12 @@ window.LiuYao = {
       body = `<div class="fig-tri"><div><b>变</b><i>迁流不息</i></div><div><b>简</b><i>执简驭繁</i></div><div><b>常</b><i>变中有则</i></div></div>`
     } else if (key === 'xiang-shu-li') {
       body = `<div class="fig-rings"><span class="r3">象</span><span class="r2">数</span><span class="r1">理</span></div>`
-    } else if (key === 'bagua' || key === 'bagua-table') {
-      body = `<div class="fig-bagua">${['离☲','坤☷','兑☱','乾☰','坎☵','艮☶','震☳','巽☴'].map((t, i) => {
-        const deg = i * 45
-        return `<span style="transform:rotate(${deg}deg)"><i style="transform:rotate(${-deg}deg)">${t}</i></span>`
-      }).join('')}<em>南↑</em></div>`
+    } else if (key === 'xiantian-bagua') {
+      body = `<div class="lf-disks">${buildBaguaDiskHtml('xiantian')}</div>`
+    } else if (key === 'houtian-bagua' || key === 'bagua') {
+      body = `<div class="lf-disks">${buildBaguaDiskHtml('houtian')}</div>`
+    } else if (key === 'bagua-table') {
+      body = `<div class="lf-disks is-compare">${buildBaguaDiskHtml('xiantian')}${buildBaguaDiskHtml('houtian')}</div>`
     } else if (key === 'yao-four') {
       body = `<div class="fig-yao4">
         <div>${yaoBar('yang')}<span>少阳 —</span></div>
@@ -14074,6 +14417,94 @@ window.LiuYao = {
     app.querySelectorAll('[data-id]').forEach((el) => { el.onclick = () => go('detail', { articleId: el.dataset.id }) })
   }
 
+  const guaDianUi = { query: '', part: '全部', palace: '', open: '' }
+
+  function buildGuaDianHtml() {
+    const all = window.LiuYao.listGuaDian ? window.LiuYao.listGuaDian() : []
+    const list = window.LiuYao.filterGuaDian
+      ? window.LiuYao.filterGuaDian(all, guaDianUi)
+      : all
+    const palaces = window.LiuYao.PALACE_CHIP_ORDER || ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑']
+    const parts = ['全部', '上经', '下经'].map((part) =>
+      `<button type="button" class="gd-chip${guaDianUi.part === part ? ' on' : ''}" data-gd-part="${part}">${part}</button>`
+    ).join('')
+    const palaceChips = palaces.map((palace) =>
+      `<button type="button" class="gd-chip${guaDianUi.palace === palace ? ' on' : ''}" data-gd-palace="${palace}">${palace}宫</button>`
+    ).join('')
+    const cards = list.map((g) => {
+      const open = guaDianUi.open === g.alias
+      const rows = open
+        ? `<div class="gd-why">${g.nameWhy}</div>${(g.yaoRows || []).map((yao) =>
+          `<div class="gd-yao"><i class="yao-bar sm ${yao.yang ? 'yang' : 'yin'}"></i><span>${yao.text}</span></div>`
+        ).join('')}`
+        : ''
+      return `<div class="gd-card${open ? ' open' : ''}" data-gd-open="${g.alias}">
+        <div class="gd-head">
+          <b class="gd-idx">${g.idx}</b>
+          <div class="gd-main">
+            <div class="gd-title">${g.name} · ${g.alias}</div>
+            <div class="gd-meta">${g.part} · ${g.palace}宫${g.palaceStep} · ${g.palaceWx}</div>
+          </div>
+          <em>${open ? '收' : '开'}</em>
+        </div>
+        <div class="gd-ci">${g.guaci}</div>
+        ${open ? `<div class="gd-body">${rows}</div>` : ''}
+      </div>`
+    }).join('')
+    return `<div class="gd">
+      <div class="gd-search">
+        <input class="gd-input" type="search" value="${guaDianUi.query.replace(/"/g, '&quot;')}" placeholder="检索卦名、卦辞或宫名" />
+        ${guaDianUi.query ? '<button type="button" class="gd-clear" data-gd-clear>清除</button>' : ''}
+      </div>
+      <div class="gd-chips">${parts}</div>
+      <div class="gd-chips palace">${palaceChips}</div>
+      <div class="gd-count muted">${list.length} / ${all.length} 卦</div>
+      ${cards}
+    </div>`
+  }
+
+  function bindGuaDian() {
+    const input = app.querySelector('.gd-input')
+    if (input) {
+      input.oninput = () => {
+        guaDianUi.query = input.value || ''
+        renderDetail()
+        const next = app.querySelector('.gd-input')
+        if (next) {
+          next.focus()
+          const len = next.value.length
+          try { next.setSelectionRange(len, len) } catch (e) {}
+        }
+      }
+    }
+    const clear = app.querySelector('[data-gd-clear]')
+    if (clear) {
+      clear.onclick = () => {
+        guaDianUi.query = ''
+        renderDetail()
+      }
+    }
+    app.querySelectorAll('[data-gd-part]').forEach((el) => {
+      el.onclick = () => {
+        guaDianUi.part = el.dataset.gdPart
+        renderDetail()
+      }
+    })
+    app.querySelectorAll('[data-gd-palace]').forEach((el) => {
+      el.onclick = () => {
+        guaDianUi.palace = guaDianUi.palace === el.dataset.gdPalace ? '' : el.dataset.gdPalace
+        renderDetail()
+      }
+    })
+    app.querySelectorAll('[data-gd-open]').forEach((el) => {
+      el.onclick = () => {
+        const alias = el.dataset.gdOpen
+        guaDianUi.open = guaDianUi.open === alias ? '' : alias
+        renderDetail()
+      }
+    })
+  }
+
   function renderDetail() {
     const raw = window.LiuYao.ARTICLES.find((x) => x.id === state.articleId)
     if (!raw) { go('learn', {}, { replace: true }); return }
@@ -14082,6 +14513,13 @@ window.LiuYao = {
       : (window.LiuYao.normalizeArticle ? window.LiuYao.normalizeArticle(raw) : raw)
     const blocks = a.blocks || (a.content || []).map((text) => ({ type: 'p', text }))
     const seal = a.categoryLabel || a.category
+    const isGuaDian = a.kind === 'gua-dian'
+    if (!isGuaDian) {
+      guaDianUi.query = ''
+      guaDianUi.part = '全部'
+      guaDianUi.palace = ''
+      guaDianUi.open = ''
+    }
     setNav(a.title)
     app.innerHTML = `
       <div class="frame">
@@ -14090,9 +14528,11 @@ window.LiuYao = {
         <div class="title-zh" style="margin-top:12px">${a.title}</div>
         <div class="subtitle">${a.summary}</div>
         <div class="article-body">${renderBlocks(blocks)}</div>
+        ${isGuaDian ? buildGuaDianHtml() : ''}
       </div>
       <button class="btn btn-ghost" data-back>返回目录</button>`
     bindNav()
+    if (isGuaDian) bindGuaDian()
   }
 
   function onSwipeStart(e) {

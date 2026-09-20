@@ -317,6 +317,92 @@ const DAY_GAN_LIUSHEN_START = {
 const WUXING_SHENG = { 木: '火', 火: '土', 土: '金', 金: '水', 水: '木' }
 const WUXING_KE = { 木: '土', 土: '水', 水: '火', 火: '金', 金: '木' }
 
+/**
+ * 研习卦盘方位：0° = 上 = 南，顺时针。
+ * 先天：乾南坤北、离东坎西；后天：离南坎北、震东兑西。
+ */
+const XIANTIAN_LAYOUT = [
+  { key: 'qian', deg: 0 },
+  { key: 'xun', deg: 45 },
+  { key: 'kan', deg: 90 },
+  { key: 'gen', deg: 135 },
+  { key: 'kun', deg: 180 },
+  { key: 'zhen', deg: 225 },
+  { key: 'li', deg: 270 },
+  { key: 'dui', deg: 315 }
+]
+
+const HOUTIAN_LAYOUT = [
+  { key: 'li', deg: 0 },
+  { key: 'kun', deg: 45 },
+  { key: 'dui', deg: 90 },
+  { key: 'qian', deg: 135 },
+  { key: 'kan', deg: 180 },
+  { key: 'gen', deg: 225 },
+  { key: 'zhen', deg: 270 },
+  { key: 'xun', deg: 315 }
+]
+
+const XIANTIAN_NUM = { qian: 1, dui: 2, li: 3, zhen: 4, xun: 5, kan: 6, gen: 7, kun: 8 }
+const LUOSHU_NUM = { kan: 1, kun: 2, zhen: 3, xun: 4, qian: 6, dui: 7, gen: 8, li: 9 }
+
+const DISK_DIRS = [
+  { name: '南', deg: 0 },
+  { name: '西', deg: 90 },
+  { name: '北', deg: 180 },
+  { name: '东', deg: 270 }
+]
+
+const DISK_META = {
+  xiantian: { kind: 'xiantian', title: '先天', subtitle: '伏羲 · 对待', volLabel: '先天数' },
+  houtian: { kind: 'houtian', title: '后天', subtitle: '文王 · 流行', volLabel: '洛书数' }
+}
+
+function buildDiskTicks() {
+  return Array.from({ length: 24 }, (_, i) => {
+    const deg = i * 15
+    return {
+      deg,
+      major: deg % 45 === 0,
+      mid: deg % 30 === 0 && deg % 45 !== 0
+    }
+  })
+}
+
+function buildDiskSpokes() {
+  return [22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5]
+}
+
+function buildBaguaDisk(kind) {
+  const meta = DISK_META[kind] || DISK_META.houtian
+  const layout = kind === 'xiantian' ? XIANTIAN_LAYOUT : HOUTIAN_LAYOUT
+  const volMap = kind === 'xiantian' ? XIANTIAN_NUM : LUOSHU_NUM
+  const bagua = layout.map((slot) => {
+    const t = TRIGRAMS[slot.key]
+    return {
+      key: t.key,
+      name: t.name,
+      nature: t.nature,
+      wuxing: t.wuxing,
+      tip: t.nature + '·' + t.wuxing,
+      vol: String(volMap[slot.key]),
+      lines: t.lines.slice(),
+      deg: slot.deg,
+      tone: t.key
+    }
+  })
+  return {
+    kind: meta.kind,
+    title: meta.title,
+    subtitle: meta.subtitle,
+    volLabel: meta.volLabel,
+    bagua,
+    dirs: DISK_DIRS.map((d) => ({ name: d.name, deg: d.deg })),
+    ticks: buildDiskTicks(),
+    spokes: buildDiskSpokes()
+  }
+}
+
 module.exports = {
   TRIGRAMS,
   TRIGRAM_ORDER,
@@ -329,7 +415,13 @@ module.exports = {
   LIUSHEN,
   DAY_GAN_LIUSHEN_START,
   WUXING_SHENG,
-  WUXING_KE
+  WUXING_KE,
+  XIANTIAN_LAYOUT,
+  HOUTIAN_LAYOUT,
+  XIANTIAN_NUM,
+  LUOSHU_NUM,
+  DISK_DIRS,
+  buildBaguaDisk
 }
 
 })(__mods["../data/bagua"], __mods["../data/bagua"].exports, __require);
@@ -1112,6 +1204,99 @@ const GUA64_CI = {
   }
 }
 
+const { GUA64_NAMES, PALACES } = require('./bagua')
+
+const PALACE_STEP = ['本宫', '一世', '二世', '三世', '四世', '五世', '游魂', '归魂']
+const PALACE_CHIP_ORDER = ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑']
+
+/** 文王卦序（上经三十、下经三十四）。不可用 Object.keys(GUA64_NAMES)：二进制键会被引擎按数字重排。 */
+const KING_WEN_ORDER = [
+  '乾', '坤', '屯', '蒙', '需', '讼', '师', '比', '小畜', '履',
+  '泰', '否', '同人', '大有', '谦', '豫', '随', '蛊', '临', '观',
+  '噬嗑', '贲', '剥', '复', '无妄', '大畜', '颐', '大过', '坎', '离',
+  '咸', '恒', '遁', '大壮', '晋', '明夷', '家人', '睽', '蹇', '解',
+  '损', '益', '夬', '姤', '萃', '升', '困', '井', '革', '鼎',
+  '震', '艮', '渐', '归妹', '丰', '旅', '巽', '兑', '涣', '节',
+  '中孚', '小过', '既济', '未济'
+]
+
+function linesToCode(lines) {
+  return lines.map((v) => (v ? '1' : '0')).join('')
+}
+
+function palaceOf(lines) {
+  const code = linesToCode(lines)
+  const keys = Object.keys(PALACES)
+  for (let i = 0; i < keys.length; i++) {
+    const pal = PALACES[keys[i]]
+    const gua = pal.gua || []
+    for (let j = 0; j < gua.length; j++) {
+      if (linesToCode(gua[j]) === code) {
+        return {
+          palace: pal.name,
+          palaceWx: pal.wuxing,
+          palaceStep: PALACE_STEP[j] || ''
+        }
+      }
+    }
+  }
+  return { palace: '', palaceWx: '', palaceStep: '' }
+}
+
+function listGuaDian() {
+  const byAlias = {}
+  Object.keys(GUA64_NAMES).forEach((code) => {
+    const meta = GUA64_NAMES[code]
+    byAlias[meta.alias] = { code, name: meta.name }
+  })
+  return KING_WEN_ORDER.map((alias, idx) => {
+    const found = byAlias[alias] || {}
+    const code = found.code || ''
+    const ci = GUA64_CI[alias] || {}
+    const lines = code.split('').map((ch) => (ch === '1' ? 1 : 0))
+    const pal = palaceOf(lines)
+    const yaoci = (ci.yaoci || []).slice()
+    return {
+      idx: idx + 1,
+      alias,
+      name: found.name || alias,
+      lines,
+      part: idx < 30 ? '上经' : '下经',
+      nameWhy: ci.nameWhy || '',
+      guaci: ci.guaci || '',
+      yaoci,
+      yaoRows: [5, 4, 3, 2, 1, 0].map((i) => ({
+        yang: !!lines[i],
+        text: yaoci[i] || ''
+      })),
+      palace: pal.palace,
+      palaceWx: pal.palaceWx,
+      palaceStep: pal.palaceStep
+    }
+  })
+}
+
+function filterGuaDian(entries, opts) {
+  const query = String((opts && opts.query) || '').trim()
+  const part = (opts && opts.part) || '全部'
+  const palace = (opts && opts.palace) || ''
+  return (entries || []).filter((g) => {
+    if (part && part !== '全部' && g.part !== part) return false
+    if (palace && g.palace !== palace) return false
+    if (!query) return true
+    const hay = [
+      g.alias,
+      g.name,
+      g.guaci,
+      g.nameWhy,
+      g.palace,
+      g.palaceStep,
+      String(g.idx)
+    ].concat(g.yaoci || []).join('·')
+    return hay.indexOf(query) !== -1
+  })
+}
+
 function getGuaCi(alias) {
   if (!alias) return null
   return GUA64_CI[alias] || null
@@ -1119,7 +1304,11 @@ function getGuaCi(alias) {
 
 module.exports = {
   GUA64_CI,
-  getGuaCi
+  getGuaCi,
+  listGuaDian,
+  filterGuaDian,
+  PALACE_CHIP_ORDER,
+  KING_WEN_ORDER
 }
 
 })(__mods["../data/guaci"], __mods["../data/guaci"].exports, __require);
@@ -1287,6 +1476,7 @@ const EXTRA_ARTICLES = [
         '巽☴ 西南（风，长阴入）',
         '艮☶ 西北（山，少阳止）'
       ]),
+      figure('xiantian-bagua', '伏羲先天八卦：乾0°南，巽45°西南，坎90°西，艮135°西北，坤180°北，震225°东北，离270°东，兑315°东南'),
       
       p('对待结构的深意：'),
       list([
@@ -1343,6 +1533,7 @@ const EXTRA_ARTICLES = [
         '巽☴ 东南（木，初夏，辰巳）',
         '艮☶ 东北（土，冬春交，丑寅）'
       ]),
+      figure('houtian-bagua', '文王后天八卦：离0°南，坤45°西南，兑90°西，乾135°西北，坎180°北，艮225°东北，震270°东，巽315°东南'),
       
       p('后天方位为何如此排布？依《说卦传》「帝出乎震」一节，万物生于春震（东），长于巽（东南），盛于离（南），收于坤（西南），悦于兑（西），藏于乾（西北），潜于坎（北），成于艮（东北），再归震而新一轮循环。此为天道运行之序，四时五行之用，故称「后天」。'),
       
@@ -2956,7 +3147,22 @@ const ARTICLES = [
       ]),
       p('本卦与变卦都是六十四卦之一。有动则成变卦：本看始，变看终。无动则静盘，以本卦世应用神与日月为主。互卦（二三四、三四五）多主中间过程，属进阶选读，见「本卦·变卦·互卦」。'),
       p('学习建议：每摇一卦，写下「内××、外××、卦名××、属×宫×世」，三五卦后自然熟悉，比死背更快。'),
-      note('排盘顶部即显示卦名与宫次。可与卷五「世应与八宫」对照。')
+      note('排盘顶部即显示卦名与宫次。可与卷五「世应与八宫」对照。续读「六十四卦卦典」查卦辞爻辞。')
+    ]
+  },
+  {
+    id: 'gua-dian',
+    category: '象数',
+    title: '六十四卦卦典',
+    kind: 'gua-dian',
+    summary: '文王卦序全表：取象释名、卦辞、爻辞，可检索、可按上下经与八宫查阅。',
+    cover: 'bagua-table',
+    blocks: [
+      figure('bagua', '六十四卦卦典：按文王序查阅卦辞与爻辞'),
+      p('「六十四卦略说」讲重卦与八宫骨架；本篇是辞典。六十四卦的取象释名、卦辞与六爻爻辞，与排盘结果页所引同源，便于读盘时对照玩辞。'),
+      p('上经三十卦（乾至离）偏天道与创始；下经三十四卦（咸至未济）偏人道与成终。检索可用卦名、卦辞字句或八宫名。点开一卦，可见卦画、卦辞与爻辞。'),
+      quote('圣人设卦观象，系辞焉而明吉凶。', '《系辞上》'),
+      note('不必一次读完。卜得何卦，即来此篇核对卦辞爻辞；与「六十四卦略说」合参，象与辞才不致分离。')
     ]
   },
   {
@@ -10920,6 +11126,8 @@ var meihua = __require('./meihua');
 var jixiang = __require('./jixiang');
 var askOptions = __require('./ask-options');
 var learning = __require('../data/learning');
+var bagua = __require('../data/bagua');
+var guaci = __require('../data/guaci');
 window.LiuYao = {
   tossThreeCoins: coin.tossThreeCoins,
   manualYao: coin.manualYao,
@@ -10942,6 +11150,13 @@ window.LiuYao = {
   volumeAnchorId: learning.volumeAnchorId,
   CATEGORY_ORDER: learning.CATEGORY_ORDER,
   CATEGORY_META: learning.CATEGORY_META,
-  normalizeArticle: learning.normalizeArticle
+  normalizeArticle: learning.normalizeArticle,
+  TRIGRAMS: bagua.TRIGRAMS,
+  buildBaguaDisk: bagua.buildBaguaDisk,
+  XIANTIAN_LAYOUT: bagua.XIANTIAN_LAYOUT,
+  HOUTIAN_LAYOUT: bagua.HOUTIAN_LAYOUT,
+  listGuaDian: guaci.listGuaDian,
+  filterGuaDian: guaci.filterGuaDian,
+  PALACE_CHIP_ORDER: guaci.PALACE_CHIP_ORDER
 };
 })();

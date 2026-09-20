@@ -773,6 +773,99 @@ const GUA64_CI = {
   }
 }
 
+const { GUA64_NAMES, PALACES } = require('./bagua')
+
+const PALACE_STEP = ['本宫', '一世', '二世', '三世', '四世', '五世', '游魂', '归魂']
+const PALACE_CHIP_ORDER = ['乾', '坎', '艮', '震', '巽', '离', '坤', '兑']
+
+/** 文王卦序（上经三十、下经三十四）。不可用 Object.keys(GUA64_NAMES)：二进制键会被引擎按数字重排。 */
+const KING_WEN_ORDER = [
+  '乾', '坤', '屯', '蒙', '需', '讼', '师', '比', '小畜', '履',
+  '泰', '否', '同人', '大有', '谦', '豫', '随', '蛊', '临', '观',
+  '噬嗑', '贲', '剥', '复', '无妄', '大畜', '颐', '大过', '坎', '离',
+  '咸', '恒', '遁', '大壮', '晋', '明夷', '家人', '睽', '蹇', '解',
+  '损', '益', '夬', '姤', '萃', '升', '困', '井', '革', '鼎',
+  '震', '艮', '渐', '归妹', '丰', '旅', '巽', '兑', '涣', '节',
+  '中孚', '小过', '既济', '未济'
+]
+
+function linesToCode(lines) {
+  return lines.map((v) => (v ? '1' : '0')).join('')
+}
+
+function palaceOf(lines) {
+  const code = linesToCode(lines)
+  const keys = Object.keys(PALACES)
+  for (let i = 0; i < keys.length; i++) {
+    const pal = PALACES[keys[i]]
+    const gua = pal.gua || []
+    for (let j = 0; j < gua.length; j++) {
+      if (linesToCode(gua[j]) === code) {
+        return {
+          palace: pal.name,
+          palaceWx: pal.wuxing,
+          palaceStep: PALACE_STEP[j] || ''
+        }
+      }
+    }
+  }
+  return { palace: '', palaceWx: '', palaceStep: '' }
+}
+
+function listGuaDian() {
+  const byAlias = {}
+  Object.keys(GUA64_NAMES).forEach((code) => {
+    const meta = GUA64_NAMES[code]
+    byAlias[meta.alias] = { code, name: meta.name }
+  })
+  return KING_WEN_ORDER.map((alias, idx) => {
+    const found = byAlias[alias] || {}
+    const code = found.code || ''
+    const ci = GUA64_CI[alias] || {}
+    const lines = code.split('').map((ch) => (ch === '1' ? 1 : 0))
+    const pal = palaceOf(lines)
+    const yaoci = (ci.yaoci || []).slice()
+    return {
+      idx: idx + 1,
+      alias,
+      name: found.name || alias,
+      lines,
+      part: idx < 30 ? '上经' : '下经',
+      nameWhy: ci.nameWhy || '',
+      guaci: ci.guaci || '',
+      yaoci,
+      yaoRows: [5, 4, 3, 2, 1, 0].map((i) => ({
+        yang: !!lines[i],
+        text: yaoci[i] || ''
+      })),
+      palace: pal.palace,
+      palaceWx: pal.palaceWx,
+      palaceStep: pal.palaceStep
+    }
+  })
+}
+
+function filterGuaDian(entries, opts) {
+  const query = String((opts && opts.query) || '').trim()
+  const part = (opts && opts.part) || '全部'
+  const palace = (opts && opts.palace) || ''
+  return (entries || []).filter((g) => {
+    if (part && part !== '全部' && g.part !== part) return false
+    if (palace && g.palace !== palace) return false
+    if (!query) return true
+    const hay = [
+      g.alias,
+      g.name,
+      g.guaci,
+      g.nameWhy,
+      g.palace,
+      g.palaceStep,
+      String(g.idx)
+    ].concat(g.yaoci || []).join('·')
+    return hay.indexOf(query) !== -1
+  })
+}
+
 function getGuaCi(alias) {
   if (!alias) return null
   return GUA64_CI[alias] || null
@@ -780,5 +873,9 @@ function getGuaCi(alias) {
 
 module.exports = {
   GUA64_CI,
-  getGuaCi
+  getGuaCi,
+  listGuaDian,
+  filterGuaDian,
+  PALACE_CHIP_ORDER,
+  KING_WEN_ORDER
 }

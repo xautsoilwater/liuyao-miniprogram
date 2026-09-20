@@ -306,6 +306,92 @@ const DAY_GAN_LIUSHEN_START = {
 const WUXING_SHENG = { 木: '火', 火: '土', 土: '金', 金: '水', 水: '木' }
 const WUXING_KE = { 木: '土', 土: '水', 水: '火', 火: '金', 金: '木' }
 
+/**
+ * 研习卦盘方位：0° = 上 = 南，顺时针。
+ * 先天：乾南坤北、离东坎西；后天：离南坎北、震东兑西。
+ */
+const XIANTIAN_LAYOUT = [
+  { key: 'qian', deg: 0 },
+  { key: 'xun', deg: 45 },
+  { key: 'kan', deg: 90 },
+  { key: 'gen', deg: 135 },
+  { key: 'kun', deg: 180 },
+  { key: 'zhen', deg: 225 },
+  { key: 'li', deg: 270 },
+  { key: 'dui', deg: 315 }
+]
+
+const HOUTIAN_LAYOUT = [
+  { key: 'li', deg: 0 },
+  { key: 'kun', deg: 45 },
+  { key: 'dui', deg: 90 },
+  { key: 'qian', deg: 135 },
+  { key: 'kan', deg: 180 },
+  { key: 'gen', deg: 225 },
+  { key: 'zhen', deg: 270 },
+  { key: 'xun', deg: 315 }
+]
+
+const XIANTIAN_NUM = { qian: 1, dui: 2, li: 3, zhen: 4, xun: 5, kan: 6, gen: 7, kun: 8 }
+const LUOSHU_NUM = { kan: 1, kun: 2, zhen: 3, xun: 4, qian: 6, dui: 7, gen: 8, li: 9 }
+
+const DISK_DIRS = [
+  { name: '南', deg: 0 },
+  { name: '西', deg: 90 },
+  { name: '北', deg: 180 },
+  { name: '东', deg: 270 }
+]
+
+const DISK_META = {
+  xiantian: { kind: 'xiantian', title: '先天', subtitle: '伏羲 · 对待', volLabel: '先天数' },
+  houtian: { kind: 'houtian', title: '后天', subtitle: '文王 · 流行', volLabel: '洛书数' }
+}
+
+function buildDiskTicks() {
+  return Array.from({ length: 24 }, (_, i) => {
+    const deg = i * 15
+    return {
+      deg,
+      major: deg % 45 === 0,
+      mid: deg % 30 === 0 && deg % 45 !== 0
+    }
+  })
+}
+
+function buildDiskSpokes() {
+  return [22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5]
+}
+
+function buildBaguaDisk(kind) {
+  const meta = DISK_META[kind] || DISK_META.houtian
+  const layout = kind === 'xiantian' ? XIANTIAN_LAYOUT : HOUTIAN_LAYOUT
+  const volMap = kind === 'xiantian' ? XIANTIAN_NUM : LUOSHU_NUM
+  const bagua = layout.map((slot) => {
+    const t = TRIGRAMS[slot.key]
+    return {
+      key: t.key,
+      name: t.name,
+      nature: t.nature,
+      wuxing: t.wuxing,
+      tip: t.nature + '·' + t.wuxing,
+      vol: String(volMap[slot.key]),
+      lines: t.lines.slice(),
+      deg: slot.deg,
+      tone: t.key
+    }
+  })
+  return {
+    kind: meta.kind,
+    title: meta.title,
+    subtitle: meta.subtitle,
+    volLabel: meta.volLabel,
+    bagua,
+    dirs: DISK_DIRS.map((d) => ({ name: d.name, deg: d.deg })),
+    ticks: buildDiskTicks(),
+    spokes: buildDiskSpokes()
+  }
+}
+
 module.exports = {
   TRIGRAMS,
   TRIGRAM_ORDER,
@@ -318,5 +404,11 @@ module.exports = {
   LIUSHEN,
   DAY_GAN_LIUSHEN_START,
   WUXING_SHENG,
-  WUXING_KE
+  WUXING_KE,
+  XIANTIAN_LAYOUT,
+  HOUTIAN_LAYOUT,
+  XIANTIAN_NUM,
+  LUOSHU_NUM,
+  DISK_DIRS,
+  buildBaguaDisk
 }

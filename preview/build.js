@@ -69,6 +69,8 @@ var meihua = __require('./meihua');
 var jixiang = __require('./jixiang');
 var askOptions = __require('./ask-options');
 var learning = __require('../data/learning');
+var bagua = __require('../data/bagua');
+var guaci = __require('../data/guaci');
 window.LiuYao = {
   tossThreeCoins: coin.tossThreeCoins,
   manualYao: coin.manualYao,
@@ -91,7 +93,14 @@ window.LiuYao = {
   volumeAnchorId: learning.volumeAnchorId,
   CATEGORY_ORDER: learning.CATEGORY_ORDER,
   CATEGORY_META: learning.CATEGORY_META,
-  normalizeArticle: learning.normalizeArticle
+  normalizeArticle: learning.normalizeArticle,
+  TRIGRAMS: bagua.TRIGRAMS,
+  buildBaguaDisk: bagua.buildBaguaDisk,
+  XIANTIAN_LAYOUT: bagua.XIANTIAN_LAYOUT,
+  HOUTIAN_LAYOUT: bagua.HOUTIAN_LAYOUT,
+  listGuaDian: guaci.listGuaDian,
+  filterGuaDian: guaci.filterGuaDian,
+  PALACE_CHIP_ORDER: guaci.PALACE_CHIP_ORDER
 };
 })();
 `

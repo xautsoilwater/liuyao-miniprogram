@@ -30,5 +30,59 @@
     <view class="note" wx:elif="{{item.type==='note'}}">{{item.text}}</view>
   </block>
 
+  <view class="gd" wx:if="{{isGuaDian}}">
+    <view class="gd-search">
+      <input
+        class="gd-input"
+        value="{{query}}"
+        placeholder="检索卦名、卦辞或宫名"
+        placeholder-class="gd-ph"
+        confirm-type="search"
+        bindinput="onSearch"
+      />
+      <view class="gd-clear" wx:if="{{query}}" bindtap="onClearSearch">清除</view>
+    </view>
+    <view class="gd-chips">
+      <view class="gd-chip {{part==='全部' ? 'on' : ''}}" data-part="全部" bindtap="onPart">全部</view>
+      <view class="gd-chip {{part==='上经' ? 'on' : ''}}" data-part="上经" bindtap="onPart">上经</view>
+      <view class="gd-chip {{part==='下经' ? 'on' : ''}}" data-part="下经" bindtap="onPart">下经</view>
+    </view>
+    <view class="gd-chips palace">
+      <view
+        class="gd-chip {{palace===item ? 'on' : ''}}"
+        wx:for="{{palaceChips}}"
+        wx:key="*this"
+        data-palace="{{item}}"
+        bindtap="onPalace"
+      >{{item}}宫</view>
+    </view>
+    <view class="gd-count muted">{{shown}} / {{total}} 卦</view>
+
+    <view
+      class="gd-card {{openAlias===item.alias ? 'open' : ''}}"
+      wx:for="{{list}}"
+      wx:key="alias"
+      data-alias="{{item.alias}}"
+      bindtap="onToggle"
+    >
+      <view class="gd-head">
+        <view class="gd-idx">{{item.idx}}</view>
+        <view class="gd-main">
+          <view class="gd-title">{{item.name}} · {{item.alias}}</view>
+          <view class="gd-meta">{{item.part}} · {{item.palace}}宫{{item.palaceStep}} · {{item.palaceWx}}</view>
+        </view>
+        <view class="gd-mark">{{openAlias===item.alias ? '收' : '开'}}</view>
+      </view>
+      <view class="gd-ci">{{item.guaci}}</view>
+      <view class="gd-body" wx:if="{{openAlias===item.alias}}">
+        <view class="gd-why">{{item.nameWhy}}</view>
+        <view class="gd-yao" wx:for="{{item.yaoRows}}" wx:for-item="yao" wx:key="text">
+          <view class="yao-bar sm {{yao.yang ? 'yang' : 'yin'}}"></view>
+          <view class="gd-yao-text">{{yao.text}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <view class="detail-foot muted">读竟可回首「研习」续篇，或以卜卦印证时位。</view>
 </view>

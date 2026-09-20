@@ -5,8 +5,10 @@ const {
   CATEGORY_ORDER,
   CATEGORY_META,
   groupByCategory,
-  volumeAnchorId
+  volumeAnchorId,
+  getArticle
 } = require('../data/learning')
+const { listGuaDian, filterGuaDian } = require('../data/guaci')
 
 function testVolumeAnchors() {
   assert.deepStrictEqual(
@@ -47,6 +49,55 @@ function testPreviewJumpMarkup() {
   })
 }
 
+function testGuaDianCatalog() {
+  const groups = groupByCategory()
+  const xiangshu = groups.find((grp) => grp.category === '象数')
+  assert.ok(xiangshu, '卷三象数缺失')
+  const ids = xiangshu.items.map((item) => item.id)
+  const iLue = ids.indexOf('liushisi-gua')
+  const iDian = ids.indexOf('gua-dian')
+  assert.ok(iLue >= 0, '缺少六十四卦略说')
+  assert.strictEqual(iDian, iLue + 1, '卦典应紧随六十四卦略说')
+  const article = getArticle('gua-dian')
+  assert.ok(article, 'getArticle(gua-dian) 失败')
+  assert.strictEqual(article.kind, 'gua-dian')
+  assert.strictEqual(article.title, '六十四卦卦典')
+  assert.ok(article.blocks && article.blocks.length >= 3, '卦典引言过短')
+
+  const list = listGuaDian()
+  assert.strictEqual(list.length, 64, '卦典不是六十四卦')
+  assert.strictEqual(list[0].alias, '乾')
+  assert.strictEqual(list[29].alias, '离')
+  assert.strictEqual(list[30].alias, '咸')
+  assert.strictEqual(list[63].alias, '未济')
+  list.forEach((g) => {
+    assert.ok(g.guaci, `${g.alias} 缺卦辞`)
+    assert.strictEqual(g.yaoci.length, 6, `${g.alias} 爻辞不是六条`)
+    assert.ok(g.nameWhy, `${g.alias} 缺取象释名`)
+    assert.ok(g.palace, `${g.alias} 缺八宫`)
+    assert.strictEqual(g.yaoRows.length, 6)
+  })
+  const qianHits = filterGuaDian(list, { query: '潜龙' })
+  assert.ok(qianHits.some((g) => g.alias === '乾'), '检索爻辞/释名未命中乾')
+  const shang = filterGuaDian(list, { part: '上经' })
+  const xia = filterGuaDian(list, { part: '下经' })
+  assert.strictEqual(shang.length, 30)
+  assert.strictEqual(xia.length, 34)
+  const qianGong = filterGuaDian(list, { palace: '乾' })
+  assert.strictEqual(qianGong.length, 8, '乾宫应为八卦')
+
+  const previewFiles = [
+    'preview/app-preview.js',
+    'preview/liuyao-standalone.html',
+    'pages/learn-detail/learn-detail.wxml'
+  ]
+  previewFiles.forEach((rel) => {
+    const text = fs.readFileSync(path.join(__dirname, '..', rel), 'utf8')
+    assert.match(text, /gua-dian|gd-card|listGuaDian/, `${rel} 未接入卦典浏览`)
+  })
+}
+
 testVolumeAnchors()
 testPreviewJumpMarkup()
+testGuaDianCatalog()
 console.log('learn-catalog: all checks passed')
