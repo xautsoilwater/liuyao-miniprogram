@@ -34,10 +34,6 @@
     compassHeading: 0,
     compassReady: false,
     plateDeg: -180,
-    locked: false,
-    compassInfoOpen: false,
-    compassInfoTab: 'measure',
-    compassStability: '等待感应',
     luckyOpen: false,
     luckyPack: null,
     topicKey: 'general',
@@ -314,75 +310,6 @@
     const d = ((deg % 360) + 360) % 360
     return MOUNTAIN_NAMES[Math.round(d / 15) % 24]
   }
-  function directionInfoOf(deg) {
-    const d = ((deg % 360) + 360) % 360
-    const infos = [
-      ['坎', '水', '冬', '子时', '静藏蓄势'],
-      ['艮', '土', '冬春之交', '丑寅时', '止而后动'],
-      ['震', '木', '春', '卯时', '发动生长'],
-      ['巽', '木', '春夏之交', '辰巳时', '入而渐进'],
-      ['离', '火', '夏', '午时', '明察显达'],
-      ['坤', '土', '夏秋之交', '未申时', '厚载包容'],
-      ['兑', '金', '秋', '酉时', '和悦收敛'],
-      ['乾', '金', '秋冬之交', '戌亥时', '刚健自强']
-    ]
-    const mountainIndex = Math.round(d / 15) % 24
-    const center = mountainIndex * 15
-    const start = ((center - 7.5) % 360 + 360) % 360
-    const end = (center + 7.5) % 360
-    const sitDeg = (d + 180) % 360
-    const info = infos[Math.round(d / 45) % 8]
-    return {
-      sitDir: dirNameOf(sitDeg),
-      sitDeg: Math.round(sitDeg * 10) / 10,
-      sitMountain: mountainOf(sitDeg),
-      range: `${start}°—${end}°`,
-      trigram: info[0],
-      element: info[1],
-      season: info[2],
-      shichen: info[3],
-      meaning: info[4],
-      adjacent: `${MOUNTAIN_NAMES[(mountainIndex + 23) % 24]}山 · ${MOUNTAIN_NAMES[(mountainIndex + 1) % 24]}山`
-    }
-  }
-  function placeDegreeOf(place) {
-    const p = String(place || '')
-    if (p.includes('东北')) return 45
-    if (p.includes('东南')) return 135
-    if (p.includes('西南')) return 225
-    if (p.includes('西北')) return 315
-    if (p.includes('东')) return 90
-    if (p.includes('南')) return 180
-    if (p.includes('西')) return 270
-    if (p.includes('北')) return 0
-    return null
-  }
-  function turnHintOf(current, target) {
-    let delta = target - current
-    while (delta > 180) delta -= 360
-    while (delta < -180) delta += 360
-    if (Math.abs(delta) < 4) return '已对准目标方向'
-    return `${delta > 0 ? '向右' : '向左'}转约 ${Math.round(Math.abs(delta))}°`
-  }
-  function currentDirectionGuide(heading) {
-    const candidates = [state.cast, state.meihua]
-      .filter(item => item && item.askMeta && item.askMeta.mode === 'where')
-      .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
-    const cast = candidates[0]
-    if (!cast) return null
-    let place = cast.ask && cast.ask.place
-    if (!place && cast.changingIndexes) {
-      const reading = window.LiuYao.interpret(cast, cast.askMeta.topicKey || 'general')
-      place = reading && reading.judgment && reading.judgment.place
-    }
-    const target = placeDegreeOf(place)
-    if (target == null) return null
-    return {
-      focus: cast.askMeta.focus || '所问之事',
-      place,
-      turn: turnHintOf(heading, target)
-    }
-  }
   function headingFromPlate(plateDeg) {
     return (((-plateDeg - 180) % 360) + 360) % 360
   }
@@ -404,11 +331,6 @@
     const hudDir = document.getElementById('hud-dir')
     const hudDeg = document.getElementById('hud-deg')
     const hudMountain = document.getElementById('hud-mountain')
-    const infoFacing = document.getElementById('info-facing')
-    const infoSitting = document.getElementById('info-sitting')
-    const infoRange = document.getElementById('info-range')
-    const infoTrigram = document.getElementById('info-trigram')
-    const lockBtn = document.getElementById('compass-lock')
     const h = state.compassReady
       ? state.compassHeading
       : headingFromPlate(state.plateDeg)
@@ -416,32 +338,11 @@
     if (hudDir) hudDir.textContent = dirNameOf(h)
     if (hudDeg) hudDeg.textContent = `${(Math.round(h * 10) / 10)}°`
     if (hudMountain) hudMountain.textContent = `${mountainOf(h)}山`
-    const info = directionInfoOf(h)
-    if (infoFacing) infoFacing.textContent = `${dirNameOf(h)} · ${Math.round(h * 10) / 10}° · ${mountainOf(h)}山`
-    if (infoSitting) infoSitting.textContent = `${info.sitDir} · ${info.sitDeg}° · ${info.sitMountain}山`
-    if (infoRange) infoRange.textContent = info.range
-    if (infoTrigram) infoTrigram.textContent = `${info.trigram}卦 · ${info.element}`
-    if (lockBtn) {
-      lockBtn.textContent = state.locked ? '已锁' : '锁定'
-      lockBtn.classList.toggle('on', !!state.locked)
-    }
   }
 
   function applyLiveHeading(heading) {
-    if (state._dragging || state.locked) return
+    if (state._dragging) return
     const h = ((Number(heading) % 360) + 360) % 360
-    state._headingSamples = state._headingSamples || []
-    state._headingSamples.push(h)
-    if (state._headingSamples.length > 8) state._headingSamples.shift()
-    let motion = 0
-    for (let i = 1; i < state._headingSamples.length; i += 1) {
-      let delta = state._headingSamples[i] - state._headingSamples[i - 1]
-      while (delta > 180) delta -= 360
-      while (delta < -180) delta += 360
-      motion += Math.abs(delta)
-    }
-    const avg = state._headingSamples.length > 1 ? motion / (state._headingSamples.length - 1) : 99
-    state.compassStability = avg < 1.5 ? '读数稳定' : avg < 4 ? '轻微波动' : '请远离磁性与金属物'
     state.compassHeading = h
     state.compassReady = true
     state.plateDeg = plateFromHeading(h)
@@ -451,49 +352,12 @@
   function bindLuopanInteractions() {
     const wrap = document.getElementById('luopan-wrap')
     if (!wrap) return
-    const lockBtn = document.getElementById('compass-lock')
-    const infoBtn = document.getElementById('compass-info')
-    const directionDismiss = document.getElementById('direction-dismiss')
-    if (directionDismiss) {
-      directionDismiss.onclick = (ev) => {
-        ev.preventDefault()
-        state.compassInfoOpen = false
-        render()
-      }
-    }
-    if (infoBtn) {
-      infoBtn.onclick = (ev) => {
-        ev.preventDefault()
-        ev.stopPropagation()
-        state.compassInfoOpen = !state.compassInfoOpen
-        render()
-        requestCompassPermission(true)
-      }
-    }
-    app.querySelectorAll('[data-direction-tab]').forEach((el) => {
-      el.onclick = (ev) => {
-        ev.preventDefault()
-        ev.stopPropagation()
-        state.compassInfoTab = el.dataset.directionTab || 'measure'
-        render()
-      }
-    })
-    if (lockBtn) {
-      lockBtn.onclick = (ev) => {
-        ev.preventDefault()
-        ev.stopPropagation()
-        state.locked = !state.locked
-        paintLuopanLive()
-        if (!state.locked) requestCompassPermission(false)
-      }
-    }
     const centerOf = () => compassCenter(wrap)
     const angleAt = (clientX, clientY, c) =>
       (Math.atan2(clientY - c.y, clientX - c.x) * 180) / Math.PI
 
     wrap.onmousedown = (e) => {
       if (isLuckyHit(e.target)) return
-      if (state.locked) return
       e.preventDefault()
       state._didDrag = false
       state._dragging = true
@@ -519,7 +383,6 @@
         return
       }
       state._luckyTap = false
-      if (state.locked) return
       state._dragging = true
       state._lastDragAng = angleAt(t.clientX, t.clientY, centerOf())
     }
@@ -572,7 +435,7 @@
   }
 
   function dragMove(clientX, clientY, centerOf) {
-    if (!state._dragging || state.locked || state._lastDragAng == null) return
+    if (!state._dragging || state._lastDragAng == null) return
     const ang = (Math.atan2(clientY - centerOf().y, clientX - centerOf().x) * 180) / Math.PI
     let delta = ang - state._lastDragAng
     if (delta > 180) delta -= 360
@@ -589,7 +452,7 @@
     if (!state._dragging) return
     state._dragging = false
     state._lastDragAng = null
-    if (state.compassReady && !state.locked) applyLiveHeading(state.compassHeading)
+    if (state.compassReady) applyLiveHeading(state.compassHeading)
     else {
       state._dragHint = '拖动转盘调整方位'
       paintLuopanLive()
@@ -611,11 +474,8 @@
   function renderIndex() {
     setNav('', true)
     const accountLabel = state.user && state.user.nickName ? state.user.nickName : '登录'
-    if (state.compassReady && !state.locked) state.plateDeg = plateFromHeading(state.compassHeading)
+    if (state.compassReady) state.plateDeg = plateFromHeading(state.compassHeading)
     const h = state.compassReady ? state.compassHeading : headingFromPlate(state.plateDeg)
-    const directionInfo = directionInfoOf(h)
-    const directionGuide = currentDirectionGuide(h)
-    if (!directionGuide && state.compassInfoTab === 'guide') state.compassInfoTab = 'measure'
     const luckyHint = state.luckyOpen && state.luckyPack
       ? `今日${state.luckyPack.dayText} · ${state.luckyPack.summary}`
       : '点中间八卦 · 看今日吉位'
@@ -632,37 +492,6 @@
           <div class="hud-sub"><span id="hud-mountain">${mountainOf(h)}山</span></div>
           <div class="lucky-hint ${state.luckyOpen ? 'on' : ''}" id="lucky-hint">${luckyHint}</div>
         </div>
-        <div class="luopan-tools">
-          <button type="button" class="lp-tool ${state.compassInfoOpen ? 'on' : ''}" id="compass-info">方位</button>
-          <button type="button" class="lp-tool ${state.locked ? 'on' : ''}" id="compass-lock">${state.locked ? '已锁' : '锁定'}</button>
-        </div>
-        ${state.compassInfoOpen ? `
-          <div class="direction-dismiss" id="direction-dismiss" aria-label="关闭方位助手"></div>
-          <div class="direction-card" aria-label="方位助手">
-            <div class="direction-title">方位助手</div>
-            <div class="direction-tabs">
-              <button class="${state.compassInfoTab === 'measure' ? 'on' : ''}" data-direction-tab="measure">测向</button>
-              <button class="${state.compassInfoTab === 'symbol' ? 'on' : ''}" data-direction-tab="symbol">象意</button>
-              ${directionGuide ? `<button class="${state.compassInfoTab === 'guide' ? 'on' : ''}" data-direction-tab="guide">卦引</button>` : ''}
-            </div>
-            ${state.compassInfoTab === 'measure' ? `<div class="direction-grid">
-              <div class="direction-item"><span>当前向</span><strong id="info-facing">${dirNameOf(h)} · ${Math.round(h * 10) / 10}° · ${mountainOf(h)}山</strong></div>
-              <div class="direction-item"><span>相反坐向</span><strong id="info-sitting">${directionInfo.sitDir} · ${directionInfo.sitDeg}° · ${directionInfo.sitMountain}山</strong></div>
-              <div class="direction-item"><span>山向范围</span><strong id="info-range">${directionInfo.range}</strong></div>
-              <div class="direction-item"><span>测量状态</span><strong>${state.locked ? '朝向已锁定' : state.compassStability}</strong></div>
-            </div>` : state.compassInfoTab === 'symbol' ? `<div class="direction-grid">
-              <div class="direction-item"><span>卦与五行</span><strong id="info-trigram">${directionInfo.trigram}卦 · ${directionInfo.element}</strong></div>
-              <div class="direction-item"><span>时令</span><strong>${directionInfo.season} · ${directionInfo.shichen}</strong></div>
-              <div class="direction-item"><span>相邻山向</span><strong>${directionInfo.adjacent}</strong></div>
-              <div class="direction-item"><span>传统象意</span><strong>${directionInfo.meaning}</strong></div>
-            </div>` : `<div class="direction-guide">
-              <div>${directionGuide.focus} · ${directionGuide.place}</div>
-              <strong>${directionGuide.turn}</strong>
-              <p>到达目标方向后请结合现场核验，勿只认一个点。</p>
-            </div>`}
-            ${state.compassInfoTab !== 'guide' ? '<div class="direction-note">方位用于测向和传统文化参考，不直接判断吉凶。</div>' : ''}
-          </div>
-        ` : ''}
       </div>
       <div class="luopan-wrap slim" id="luopan-wrap">
         ${buildLuopanSvg(state.plateDeg)}

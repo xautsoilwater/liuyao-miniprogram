@@ -7,7 +7,6 @@ const MOUNTAIN_NAMES = [
   '子', '癸', '丑', '艮', '寅', '甲', '卯', '乙', '辰', '巽', '巳', '丙',
   '午', '丁', '未', '坤', '申', '庚', '酉', '辛', '戌', '乾', '亥', '壬'
 ]
-const { interpret } = require('../../utils/duangu')
 
 function buildMountains() {
   // 地磁 0°=正北为子；盘面角 = (地磁角 + 180) % 360
@@ -44,26 +43,7 @@ Component({
     headingDeg: 0,
     headingDir: '北',
     mountain: '子',
-    headingText: '正在开启指南针…',
     compassReady: false,
-    locked: false,
-    detailOpen: false,
-    directionTab: 'measure',
-    stability: '等待感应',
-    sitDir: '南',
-    sitDeg: 180,
-    sitMountain: '午',
-    mountainRange: '352.5°—7.5°',
-    trigram: '坎',
-    element: '水',
-    season: '冬',
-    shichen: '子时',
-    directionMeaning: '静藏蓄势',
-    adjacentMountains: '壬山 · 癸山',
-    guideAvailable: false,
-    guideFocus: '',
-    guidePlace: '',
-    guideTurn: '',
     bagua: [
       { name: '离', tip: '火', lines: [1, 0, 1], deg: 0, tone: 'li' },
       { name: '坤', tip: '地·土', lines: [0, 0, 0], deg: 45, tone: 'kun' },
@@ -115,7 +95,7 @@ Component({
       this._gyroHeading = null
       this._lastGyroTs = 0
       this._onCompass = (res) => {
-        if (this._dragging || this.data.locked) return
+        if (this._dragging) return
         const dir = res && res.direction
         if (dir == null || Number.isNaN(Number(dir))) return
         const n = ((Number(dir) % 360) + 360) % 360
@@ -131,7 +111,7 @@ Component({
       }
       // 姿态 alpha + 陀螺积分：与指南针并行，保证手机一转盘就转
       this._onMotion = (res) => {
-        if (this._dragging || this.data.locked) return
+        if (this._dragging) return
         if (!res) return
         const now = Date.now()
         // 地磁刚有明显变化时优先用地磁，避免两路打架
@@ -169,7 +149,6 @@ Component({
         }
       }
       this.startSensors(true)
-      this.loadDirectionGuide()
     },
     detached() {
       this.clearTimers()
@@ -183,7 +162,6 @@ Component({
       this._compassLiveAt = 0
       this._hasSample = false
       this.startSensors(true)
-      this.loadDirectionGuide()
     },
     hide() {
       this.clearTimers()
@@ -219,94 +197,13 @@ Component({
       return MOUNTAIN_NAMES[Math.round(d / 15) % 24]
     },
 
-    directionInfo(deg) {
-      const d = ((deg % 360) + 360) % 360
-      const infos = [
-        { trigram: '坎', element: '水', season: '冬', shichen: '子时', meaning: '静藏蓄势' },
-        { trigram: '艮', element: '土', season: '冬春之交', shichen: '丑寅时', meaning: '止而后动' },
-        { trigram: '震', element: '木', season: '春', shichen: '卯时', meaning: '发动生长' },
-        { trigram: '巽', element: '木', season: '春夏之交', shichen: '辰巳时', meaning: '入而渐进' },
-        { trigram: '离', element: '火', season: '夏', shichen: '午时', meaning: '明察显达' },
-        { trigram: '坤', element: '土', season: '夏秋之交', shichen: '未申时', meaning: '厚载包容' },
-        { trigram: '兑', element: '金', season: '秋', shichen: '酉时', meaning: '和悦收敛' },
-        { trigram: '乾', element: '金', season: '秋冬之交', shichen: '戌亥时', meaning: '刚健自强' }
-      ]
-      const mountainIndex = Math.round(d / 15) % 24
-      const center = mountainIndex * 15
-      const start = ((center - 7.5) % 360 + 360) % 360
-      const end = (center + 7.5) % 360
-      const sitDeg = (d + 180) % 360
-      const info = infos[Math.round(d / 45) % 8]
-      return {
-        sitDir: this.dirName(sitDeg),
-        sitDeg: Math.round(sitDeg * 10) / 10,
-        sitMountain: this.mountainName(sitDeg),
-        mountainRange: `${start}°—${end}°`,
-        trigram: info.trigram,
-        element: info.element,
-        season: info.season,
-        shichen: info.shichen,
-        directionMeaning: info.meaning,
-        adjacentMountains: `${MOUNTAIN_NAMES[(mountainIndex + 23) % 24]}山 · ${MOUNTAIN_NAMES[(mountainIndex + 1) % 24]}山`
-      }
-    },
-
-    placeDegree(place) {
-      const p = String(place || '')
-      if (p.indexOf('东北') >= 0) return 45
-      if (p.indexOf('东南') >= 0) return 135
-      if (p.indexOf('西南') >= 0) return 225
-      if (p.indexOf('西北') >= 0) return 315
-      if (p.indexOf('东') >= 0) return 90
-      if (p.indexOf('南') >= 0) return 180
-      if (p.indexOf('西') >= 0) return 270
-      if (p.indexOf('北') >= 0) return 0
-      return null
-    },
-
-    turnHint(current, target) {
-      const delta = this.shortestDelta(current, target)
-      if (Math.abs(delta) < 4) return '已对准目标方向'
-      return `${delta > 0 ? '向右' : '向左'}转约 ${Math.round(Math.abs(delta))}°`
-    },
-
-    loadDirectionGuide() {
-      try {
-        const globalData = getApp().globalData
-        const candidates = [globalData.lastCast, globalData.lastMeihua]
-          .filter(item => item && item.askMeta && item.askMeta.mode === 'where')
-          .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
-        const cast = candidates[0]
-        if (!cast) return
-        let place = cast.ask && cast.ask.place
-        if (!place && cast.changingIndexes) {
-          const reading = interpret(cast, cast.askMeta.topicKey || 'general')
-          place = reading && reading.judgment && reading.judgment.place
-        }
-        const target = this.placeDegree(place)
-        if (target == null) return
-        this._guideTarget = target
-        this.setData({
-          guideAvailable: true,
-          guideFocus: cast.askMeta.focus || '所问之事',
-          guidePlace: place,
-          guideTurn: this.turnHint(this._heading || 0, target)
-        })
-      } catch (e) {
-        // 无方位类卦题时保持隐藏
-      }
-    },
-
     hudFromHeading(heading) {
       const h = ((heading % 360) + 360) % 360
-      return Object.assign({
+      return {
         headingDeg: Math.round(h * 10) / 10,
         headingDir: this.dirName(h),
-        mountain: this.mountainName(h),
-        headingText: this.data.locked
-          ? '已锁定朝向 · 再点解锁'
-          : (this.data.compassReady ? '准星所指为当前朝向' : '正在读取指南针 · 也可拖动转盘')
-      }, this.directionInfo(h))
+        mountain: this.mountainName(h)
+      }
     },
 
     /** 地磁/姿态朝向 → 盘面旋转：屏顶准星=手机朝向 */
@@ -325,7 +222,7 @@ Component({
      * 传感器跟手专用：少 setData 字段、少节流，避免「收到方向但盘不动」
      */
     applyHeadingFast(heading) {
-      if (this._dragging || this.data.locked) return
+      if (this._dragging) return
       const h = ((heading % 360) + 360) % 360
       this._heading = h
       this._smoothHeading = h
@@ -349,7 +246,7 @@ Component({
     },
 
     _flushHeadingPaint() {
-      if (this._dragging || this.data.locked) return
+      if (this._dragging) return
       const h = this._heading
       let norm = this._plateDeg
       this._lastPaint = Date.now()
@@ -363,8 +260,7 @@ Component({
         headingDeg: Math.round(h * 10) / 10,
         headingDir: this.dirName(h),
         mountain: this.mountainName(h),
-        compassReady: true,
-        stability: this._compassLiveAt && Date.now() - this._compassLiveAt < 800 ? '读数稳定' : '姿态跟随'
+        compassReady: true
       })
     },
 
@@ -403,18 +299,7 @@ Component({
         compassReady: true,
         headingDeg: hud.headingDeg,
         headingDir: hud.headingDir,
-        mountain: hud.mountain,
-        sitDir: hud.sitDir,
-        sitDeg: hud.sitDeg,
-        sitMountain: hud.sitMountain,
-        mountainRange: hud.mountainRange,
-        trigram: hud.trigram,
-        element: hud.element,
-        season: hud.season,
-        shichen: hud.shichen,
-        directionMeaning: hud.directionMeaning,
-        adjacentMountains: hud.adjacentMountains,
-        guideTurn: this._guideTarget == null ? this.data.guideTurn : this.turnHint(h, this._guideTarget)
+        mountain: hud.mountain
       }, extra || {}))
     },
 
@@ -445,20 +330,7 @@ Component({
         force: true,
         headingDeg: hud.headingDeg,
         headingDir: hud.headingDir,
-        mountain: hud.mountain,
-        headingText: '拖动转盘中 · 松手后继续跟手机',
-        sitDir: hud.sitDir,
-        sitDeg: hud.sitDeg,
-        sitMountain: hud.sitMountain,
-        mountainRange: hud.mountainRange,
-        trigram: hud.trigram,
-        element: hud.element,
-        season: hud.season,
-        shichen: hud.shichen,
-        directionMeaning: hud.directionMeaning,
-        adjacentMountains: hud.adjacentMountains,
-        stability: '手动转盘',
-        guideTurn: this._guideTarget == null ? this.data.guideTurn : this.turnHint(h, this._guideTarget)
+        mountain: hud.mountain
       })
     },
 
@@ -604,40 +476,6 @@ Component({
       }
     },
 
-    onRetryCompass() {
-      if (this.data.locked) {
-        this.onToggleLock()
-        return
-      }
-      this._hasSample = false
-      this._compassLiveAt = 0
-      this.startSensors(true)
-    },
-
-    onToggleDirection() {
-      this.setData({ detailOpen: !this.data.detailOpen })
-      if (!this.data.compassReady && !this.data.locked) this.startSensors(true)
-    },
-
-    onCloseDirection() {
-      this.setData({ detailOpen: false })
-    },
-
-    onDirectionTab(e) {
-      this.setData({ directionTab: e.currentTarget.dataset.tab || 'measure' })
-    },
-
-    onToggleLock() {
-      const locked = !this.data.locked
-      this.setData({
-        locked,
-        headingText: locked
-          ? '已锁定朝向 · 再点解锁'
-          : (this.data.compassReady ? '准星所指为当前朝向' : '正在读取指南针 · 也可拖动转盘')
-      })
-      if (!locked) this.startSensors(true)
-    },
-
     touchAngleFromEvent(e) {
       const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0])
       if (!t || !this._center) return null
@@ -660,7 +498,6 @@ Component({
     },
 
     onPlateTouchStart(e) {
-      if (this.data.locked) return
       this._dragging = true
       this._lastTouchAngle = null
       const t = (e.touches && e.touches[0]) || null
@@ -675,7 +512,7 @@ Component({
     },
 
     onPlateTouchMove(e) {
-      if (!this._dragging || this.data.locked) return
+      if (!this._dragging) return
       if (!this._center) {
         this.cacheCenter()
         return
@@ -696,7 +533,6 @@ Component({
     onPlateTouchEnd() {
       this._dragging = false
       this._lastTouchAngle = null
-      if (this.data.locked) return
       if (this._hasSample) {
         this.applyHeadingFast(this._heading)
       } else {

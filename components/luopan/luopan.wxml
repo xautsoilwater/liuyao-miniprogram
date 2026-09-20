@@ -10,64 +10,6 @@
     </view>
   </view>
 
-  <view class="tool-row">
-    <view class="tool-btn {{detailOpen ? 'on' : ''}}" bindtap="onToggleDirection">方位</view>
-    <view class="tool-btn {{locked ? 'on' : ''}}" bindtap="onToggleLock">{{locked ? '已锁' : '锁定'}}</view>
-  </view>
-
-  <view class="direction-dismiss" wx:if="{{detailOpen}}" bindtap="onCloseDirection"></view>
-
-  <view class="direction-card" wx:if="{{detailOpen}}">
-    <view class="direction-title">方位助手</view>
-    <view class="direction-tabs">
-      <view class="direction-tab {{directionTab === 'measure' ? 'on' : ''}}" data-tab="measure" bindtap="onDirectionTab">测向</view>
-      <view class="direction-tab {{directionTab === 'symbol' ? 'on' : ''}}" data-tab="symbol" bindtap="onDirectionTab">象意</view>
-      <view class="direction-tab {{directionTab === 'guide' ? 'on' : ''}}" wx:if="{{guideAvailable}}" data-tab="guide" bindtap="onDirectionTab">卦引</view>
-    </view>
-    <view class="direction-grid" wx:if="{{directionTab === 'measure'}}">
-      <view class="direction-item">
-        <text class="direction-lab">当前向</text>
-        <text class="direction-val">{{headingDir}} · {{headingDeg}}° · {{mountain}}山</text>
-      </view>
-      <view class="direction-item">
-        <text class="direction-lab">相反坐向</text>
-        <text class="direction-val">{{sitDir}} · {{sitDeg}}° · {{sitMountain}}山</text>
-      </view>
-      <view class="direction-item">
-        <text class="direction-lab">山向范围</text>
-        <text class="direction-val">{{mountainRange}}</text>
-      </view>
-      <view class="direction-item">
-        <text class="direction-lab">测量状态</text>
-        <text class="direction-val">{{locked ? '朝向已锁定' : stability}}</text>
-      </view>
-    </view>
-    <view class="direction-grid" wx:elif="{{directionTab === 'symbol'}}">
-      <view class="direction-item">
-        <text class="direction-lab">卦与五行</text>
-        <text class="direction-val">{{trigram}}卦 · {{element}}</text>
-      </view>
-      <view class="direction-item">
-        <text class="direction-lab">时令</text>
-        <text class="direction-val">{{season}} · {{shichen}}</text>
-      </view>
-      <view class="direction-item">
-        <text class="direction-lab">相邻山向</text>
-        <text class="direction-val">{{adjacentMountains}}</text>
-      </view>
-      <view class="direction-item">
-        <text class="direction-lab">传统象意</text>
-        <text class="direction-val">{{directionMeaning}}</text>
-      </view>
-    </view>
-    <view class="direction-guide" wx:else>
-      <view class="direction-guide-focus">卦象目标：{{guideFocus}} · {{guidePlace}}</view>
-      <view class="direction-guide-turn">{{guideTurn}}</view>
-      <view class="direction-note">到达目标方向后请结合现场核验，勿只认一个点。</view>
-    </view>
-    <view class="direction-note" wx:if="{{directionTab !== 'guide'}}">方位用于测向和传统文化参考，不直接判断吉凶。</view>
-  </view>
-
   <view class="dial-stage">
     <view class="halo"></view>
 
