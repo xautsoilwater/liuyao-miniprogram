@@ -1,4 +1,4 @@
-const { groupByCategory } = require('../../data/learning')
+const { groupByCategory, getArticle } = require('../../data/learning')
 const swipeBack = require('../../behaviors/swipe-back')
 
 Page({
@@ -129,8 +129,17 @@ Page({
     }
   },
 
+  openGuadian() {
+    wx.navigateTo({ url: '/pages/learn-detail/learn-detail?id=gua-dian' })
+  },
+
   openArticle(e) {
     const id = e.currentTarget.dataset.id
+    const article = getArticle(id)
+    if (article && (article.openPage === 'guadian' || article.id === 'guadian-catalog' || /^guadian-/.test(article.id || ''))) {
+      this.openGuadian()
+      return
+    }
     wx.navigateTo({ url: `/pages/learn-detail/learn-detail?id=${id}` })
   }
 })

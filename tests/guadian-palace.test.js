@@ -52,6 +52,8 @@ function testPreviewShell() {
       assert.match(text, /今日吉位/, `${rel} 缺少今日吉位`)
       assert.match(text, /点中间八卦/, `${rel} 缺少点中间八卦`)
       assert.match(text, /八卷跳转/, `${rel} 缺少八卷跳转`)
+      const banners = text.match(/gb-title">六十四卦卦典/g) || []
+      assert.strictEqual(banners.length, 1, `${rel} 卦典横幅应只出现一次`)
     }
   })
   const standalone = fs.readFileSync(path.join(__dirname, '..', 'preview/liuyao-standalone.html'), 'utf8')

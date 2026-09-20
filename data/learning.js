@@ -46,12 +46,12 @@ const ARTICLES_RAW = [
       list([
         '卷一开宗：为何学、如何学；卜与修身的边界；教材用法',
         '卷二易理：太极阴阳、三义、象数理、三才、时位中正、观象玩辞',
-        '卷三象数：八卦取象、六十四卦详说、分宫一览、爻位内外、本变互卦、类象与先后天',
+        '卷三象数：八卦取象、六十四卦详说、卦典、分宫一览、爻位内外、本变互卦、类象与先后天',
         '卷四卜卦：一事一问、诚敬、铜钱成爻成卦',
         '卷五排盘：世应与八宫、京房八宫详解、纳甲全表、六亲、六神、旬空旺衰、伏神',
         '卷六断卦：入门六步、用神原忌细表、合冲刑害、应期口诀、主客、常见问事',
         '卷七梅花：先天数、报数时间物象起卦、体用生克、本互变、与六爻对照',
-        '卷八附录：六十四卦卦典（八宫总图点选详解）、断卦口诀、术语速查、卦例练习——随时查阅'
+        '卷八附录：断卦口诀、术语速查、卦例练习——随时查阅'
       ]),
       p('与纸书如何分工：入门阶段以本八卷为唯一教材即可。需要原典全文时，再备《周易》白文或权威注本；需要清代六爻名著原文时，再开《增删卜易》《卜筮正宗》。本程序不替代原典，但替代「入门小册 + 散乱笔记」。'),
       p('三条学习纪律特别重要：'),
@@ -329,6 +329,7 @@ const ARTICLES_RAW = [
     category: '象数',
     title: '六十四卦卦典',
     kind: 'gua-dian',
+    hiddenFromCatalog: true,
     summary: '文王卦序全表：取象释名、卦辞、爻辞，可检索、可按上下经与八宫查阅。',
     cover: 'bagua-table',
     blocks: [
@@ -953,7 +954,7 @@ function groupByCategory() {
       subtitle: meta.subtitle || '',
       label: meta.vol ? `${meta.vol} · ${category}` : category,
       anchorId: volumeAnchorId(category),
-      items: map[category]
+      items: (map[category] || []).filter((item) => !item.hiddenFromCatalog)
     }
   })
 }

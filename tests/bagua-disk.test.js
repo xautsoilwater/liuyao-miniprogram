@@ -60,6 +60,9 @@ function testComponentWiring() {
   assert.match(wxml, /lf-tick/, 'WXML 未使用刻度')
   assert.match(wxml, /lf-spoke/, 'WXML 未使用辐条')
   assert.doesNotMatch(wxml, /☰|☱|☲|☳|☴|☵|☶|☷/, 'WXML 仍以 unicode 卦符作主图')
+  assert.doesNotMatch(wxml, /lf-core-title/, '盘心不应再写先天/后天')
+  assert.match(wxml, /lf-gua-meta/, '卦名下应变为一行象·数，减轻拥挤')
+  assert.match(wxml, /lf-legend/, '盘外仍需图例标明先后天')
   assert.match(wxss, /\.lf-disk\s*\{/, 'WXSS 缺少 .lf-disk')
   assert.match(wxss, /\.lf-bar\.is-yin/, 'WXSS 缺少阴爻分段样式')
   assert.match(wxss, /\.lf-tick\.major/, 'WXSS 缺少主刻度')
@@ -79,6 +82,8 @@ function testPreviewWiring() {
       assert.match(text, /xiantian-bagua/, `${rel} 未处理 xiantian-bagua`)
       assert.match(text, /houtian-bagua/, `${rel} 未处理 houtian-bagua`)
       assert.match(text, /buildBaguaDiskHtml/, `${rel} 缺少盘面 HTML 构建`)
+      assert.doesNotMatch(text, /lf-core-title/, `${rel} 盘心仍写先天/后天`)
+      assert.match(text, /lf-gua-meta/, `${rel} 未把卦内信息收成一行`)
     }
   })
   const standalone = fs.readFileSync(path.join(__dirname, '..', 'preview/liuyao-standalone.html'), 'utf8')

@@ -23,6 +23,10 @@ Page({
       wx.showToast({ title: '篇章不存在', icon: 'none' })
       return
     }
+    if (article.openPage === 'guadian' || article.id === 'guadian-catalog' || /^guadian-/.test(article.id || '')) {
+      wx.redirectTo({ url: '/pages/learn-detail/learn-detail?id=gua-dian' })
+      return
+    }
     wx.setNavigationBarTitle({ title: article.title })
     const isGuaDian = article.kind === 'gua-dian'
     this._all = isGuaDian ? listGuaDian() : []

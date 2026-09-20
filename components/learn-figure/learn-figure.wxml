@@ -82,8 +82,10 @@
                   <view class="lf-bar {{gua.lines[0] ? 'is-yang' : 'is-yin'}}"></view>
                 </view>
                 <text class="lf-gua-name">{{gua.name}}</text>
-                <text class="lf-gua-tip">{{gua.tip}}</text>
-                <text class="lf-gua-vol">{{gua.vol}}</text>
+                <view class="lf-gua-meta">
+                  <text class="lf-gua-tip">{{gua.tip}}</text>
+                  <text class="lf-gua-vol">{{gua.vol}}</text>
+                </view>
               </view>
             </view>
           </view>
@@ -98,10 +100,9 @@
               <view class="lf-dot top"></view>
               <view class="lf-dot bot"></view>
             </view>
-            <text class="lf-core-title">{{item.title}}</text>
           </view>
         </view>
-        <view class="lf-legend">{{item.subtitle}} · {{item.volLabel}}</view>
+        <view class="lf-legend">{{item.title}} · {{item.subtitle}} · {{item.volLabel}}</view>
       </view>
     </view>
 
