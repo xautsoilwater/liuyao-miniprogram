@@ -38,6 +38,8 @@
     compassInfoOpen: false,
     compassInfoTab: 'measure',
     compassStability: '等待感应',
+    luckyOpen: false,
+    luckyPack: null,
     topicKey: 'general',
     articleId: null,
     feedbackText: ''
@@ -219,12 +221,26 @@
       const p = polar(cx, cy, 152, d.deg)
       return `<text x="${p.x}" y="${p.y + 4}" text-anchor="middle" transform="rotate(${d.deg} ${p.x} ${p.y})" fill="rgba(143,38,31,0.75)" font-size="10" font-weight="700">${d.n}</text>`
     }).join('')
+    const guaFill = '#3a3028'
     const guaTexts = bagua.map((b) => {
       const p = polar(cx, cy, 112, b.deg)
-      return `<g transform="translate(${p.x.toFixed(2)},${p.y.toFixed(2)}) rotate(${b.deg})">
-        ${guaBarsSvg(b.lines, 0, -10, b.color)}
-        <text x="0" y="14" text-anchor="middle" fill="${b.color}" font-size="13" font-weight="700">${b.n}</text>
-        <text x="0" y="26" text-anchor="middle" fill="${b.color}" font-size="8" font-weight="600">${b.tip}</text>
+      return `<g data-lucky-toggle="1" transform="translate(${p.x.toFixed(2)},${p.y.toFixed(2)}) rotate(${b.deg})" style="cursor:pointer">
+        <circle cx="0" cy="8" r="28" fill="rgba(0,0,0,0)"/>
+        ${guaBarsSvg(b.lines, 0, -10, guaFill)}
+        <text x="0" y="14" text-anchor="middle" fill="${guaFill}" font-size="13" font-weight="700">${b.n}</text>
+        <text x="0" y="26" text-anchor="middle" fill="${guaFill}" font-size="8" font-weight="600">${b.tip}</text>
+      </g>`
+    }).join('')
+    const luckyMarks = (state.luckyOpen && state.luckyPack && state.luckyPack.marks || []).map((m) => {
+      const rim = polar(cx, cy, 200, m.plateDeg)
+      const tick = polar(cx, cy, 210, m.plateDeg)
+      const label = polar(cx, cy, 232, m.plateDeg)
+      return `<g class="lucky-mark" pointer-events="none">
+        <line x1="${rim.x.toFixed(1)}" y1="${rim.y.toFixed(1)}" x2="${tick.x.toFixed(1)}" y2="${tick.y.toFixed(1)}" stroke="#a03328" stroke-width="1.8"/>
+        <g transform="translate(${label.x.toFixed(1)},${label.y.toFixed(1)}) rotate(${m.plateDeg})">
+          <text x="0" y="-8" text-anchor="middle" fill="#a03328" font-size="16" font-weight="700">${m.label}</text>
+          <text x="0" y="10" text-anchor="middle" fill="#a03328" font-size="13">${m.dir}</text>
+        </g>
       </g>`
     }).join('')
     const gans = [['甲乙', '木'], ['丙丁', '火'], ['戊己', '土'], ['庚辛', '金'], ['壬癸', '水']]
@@ -236,7 +252,7 @@
     }).join('')
 
     return `
-      <svg viewBox="0 0 400 456" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
+      <svg viewBox="-40 -48 480 510" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
         <defs></defs>
         <g id="luopan-plate" transform="rotate(${rot} 200 200)">
           <circle cx="200" cy="200" r="198" fill="#e6d4b0" stroke="#46341c" stroke-width="3"/>
@@ -252,16 +268,19 @@
           ${dirTexts}
           ${mountainTexts}
           ${guaTexts}
+          ${luckyMarks}
         </g>
         <!-- 固定准星 -->
+        <g pointer-events="none">
         <line x1="200" y1="8" x2="200" y2="392" stroke="rgba(160,51,40,0.7)" stroke-width="1.5"/>
         <line x1="40" y1="200" x2="360" y2="200" stroke="rgba(160,51,40,0.35)" stroke-width="1"/>
         <polygon points="200,4 206,16 194,16" fill="#a03328"/>
         <circle cx="200" cy="200" r="4" fill="#a03328" stroke="#faf3e4" stroke-width="1.5"/>
+        </g>
         <circle cx="200" cy="200" r="46" fill="#f0e4c8" stroke="rgba(20,15,12,0.16)" stroke-width="1"/>
         <circle cx="200" cy="200" r="46" fill="none" stroke="rgba(143,38,31,0.1)" stroke-width="3"/>
         <circle cx="200" cy="200" r="34" fill="#f6eedc" stroke="rgba(20,15,12,0.42)" stroke-width="1.5"/>
-        <g>
+        <g pointer-events="none">
           <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="56s" repeatCount="indefinite"/>
           <path d="M200 166 A34 34 0 0 1 200 234 A17 17 0 0 1 200 200 A17 17 0 0 0 200 166" fill="#140f0c"/>
           <circle cx="200" cy="183" r="17" fill="#140f0c"/>
@@ -269,6 +288,7 @@
           <circle cx="200" cy="183" r="5" fill="#f6eedc"/>
           <circle cx="200" cy="217" r="5" fill="#140f0c"/>
         </g>
+        <circle data-lucky-toggle="1" cx="200" cy="200" r="46" fill="rgba(0,0,0,0)" style="cursor:pointer"/>
         ${ganRow}
       </svg>`
   }
@@ -457,24 +477,39 @@
         if (!state.locked) requestCompassPermission(false)
       }
     }
-    const centerOf = () => {
-      const svg = wrap.querySelector('svg')
-      const box = (svg || wrap).getBoundingClientRect()
-      return { x: box.left + box.width / 2, y: box.top + box.width / 2 }
-    }
+    const centerOf = () => compassCenter(wrap)
     const angleAt = (clientX, clientY, c) =>
       (Math.atan2(clientY - c.y, clientX - c.x) * 180) / Math.PI
 
     wrap.onmousedown = (e) => {
+      if (isLuckyHit(e.target)) return
       if (state.locked) return
       e.preventDefault()
+      state._didDrag = false
       state._dragging = true
       state._lastDragAng = angleAt(e.clientX, e.clientY, centerOf())
     }
+    wrap.onclick = (e) => {
+      if (state._didDrag) {
+        state._didDrag = false
+        return
+      }
+      if (isLuckyHit(e.target)) {
+        e.preventDefault()
+        e.stopPropagation()
+        toggleLucky()
+      }
+    }
     wrap.ontouchstart = (e) => {
-      if (state.locked) return
       const t = e.touches[0]
       if (!t) return
+      state._didDrag = false
+      if (isLuckyHit(e.target)) {
+        state._luckyTap = true
+        return
+      }
+      state._luckyTap = false
+      if (state.locked) return
       state._dragging = true
       state._lastDragAng = angleAt(t.clientX, t.clientY, centerOf())
     }
@@ -483,8 +518,47 @@
       if (!t || !state._dragging) return
       dragMove(t.clientX, t.clientY, centerOf)
     }
-    wrap.ontouchend = () => dragEnd()
+    wrap.ontouchend = () => {
+      if (state._luckyTap) {
+        state._luckyTap = false
+        if (!state._didDrag) toggleLucky()
+        return
+      }
+      dragEnd()
+    }
     wrap.ontouchcancel = () => dragEnd()
+  }
+
+  function compassCenter(wrap) {
+    const svg = wrap.querySelector('svg')
+    const box = (svg || wrap).getBoundingClientRect()
+    const vb = svg && svg.viewBox && svg.viewBox.baseVal
+    if (!vb || !vb.width) {
+      return { x: box.left + box.width / 2, y: box.top + box.width / 2 }
+    }
+    const scale = box.width / vb.width
+    return {
+      x: box.left + (200 - vb.x) * scale,
+      y: box.top + (200 - vb.y) * scale
+    }
+  }
+
+  function isLuckyHit(target) {
+    if (!target || !target.closest) return false
+    return !!target.closest('[data-lucky-toggle]')
+  }
+
+  function toggleLucky() {
+    const now = Date.now()
+    if (toggleLucky._at && now - toggleLucky._at < 400) return
+    toggleLucky._at = now
+    state.luckyOpen = !state.luckyOpen
+    if (state.luckyOpen && window.LiuYao && window.LiuYao.buildLuckyDirections) {
+      state.luckyPack = window.LiuYao.buildLuckyDirections(new Date())
+    } else {
+      state.luckyPack = null
+    }
+    render()
   }
 
   function dragMove(clientX, clientY, centerOf) {
@@ -494,6 +568,7 @@
     if (delta > 180) delta -= 360
     if (delta < -180) delta += 360
     state._lastDragAng = ang
+    state._didDrag = true
     state.plateDeg = normalizePlate(state.plateDeg + delta)
     state.compassHeading = headingFromPlate(state.plateDeg)
     state._dragHint = '拖动转盘中'
@@ -518,12 +593,7 @@
       if (!state._dragging) return
       const wrap = document.getElementById('luopan-wrap')
       if (!wrap) return
-      const svg = wrap.querySelector('svg')
-      const box = (svg || wrap).getBoundingClientRect()
-      dragMove(e.clientX, e.clientY, () => ({
-        x: box.left + box.width / 2,
-        y: box.top + box.width / 2
-      }))
+      dragMove(e.clientX, e.clientY, () => compassCenter(wrap))
     })
     window.addEventListener('mouseup', dragEnd)
   }
@@ -536,9 +606,12 @@
     const directionInfo = directionInfoOf(h)
     const directionGuide = currentDirectionGuide(h)
     if (!directionGuide && state.compassInfoTab === 'guide') state.compassInfoTab = 'measure'
+    const luckyHint = state.luckyOpen && state.luckyPack
+      ? `今日${state.luckyPack.dayText} · ${state.luckyPack.summary}`
+      : '点中间八卦 · 看今日吉位'
     app.innerHTML = `
       <div class="hero quiet">
-        <div class="home-brand" aria-label="周易"><img src="./assets/images/brand-zhouyi.png" alt="周易" /></div>
+        <div class="home-brand" aria-label="周易"><img src="./assets/images/brand-zhouyi.svg" alt="周易" /></div>
         <div class="home-brand-sub">
           <span>敬卜以问道</span><i>·</i><span>观变以知几</span><i>·</i><span>明理而不惑</span>
         </div>
@@ -547,6 +620,7 @@
         <div class="luopan-hud" id="luopan-hud">
           <div class="hud-main"><span id="hud-dir">${dirNameOf(h)}</span><span id="hud-deg">${(Math.round(h * 10) / 10)}°</span></div>
           <div class="hud-sub"><span id="hud-mountain">${mountainOf(h)}山</span></div>
+          <div class="lucky-hint ${state.luckyOpen ? 'on' : ''}" id="lucky-hint">${luckyHint}</div>
         </div>
         <div class="luopan-tools">
           <button type="button" class="lp-tool ${state.compassInfoOpen ? 'on' : ''}" id="compass-info">方位</button>

@@ -11,6 +11,7 @@ const order = [
   './learning-extra',
   '../data/learning',
   './ganzhi',
+  './jixiang',
   './rules',
   './coin',
   './paipan',
@@ -27,6 +28,7 @@ const fileOf = {
   './learning-extra': 'data/learning-extra.js',
   '../data/learning': 'data/learning.js',
   './ganzhi': 'utils/ganzhi.js',
+  './jixiang': 'utils/jixiang.js',
   './rules': 'utils/rules.js',
   './coin': 'utils/coin.js',
   './paipan': 'utils/paipan.js',
@@ -64,6 +66,7 @@ var coin = __require('./coin');
 var paipan = __require('./paipan');
 var duangu = __require('./duangu');
 var meihua = __require('./meihua');
+var jixiang = __require('./jixiang');
 var askOptions = __require('./ask-options');
 var learning = __require('../data/learning');
 window.LiuYao = {
@@ -77,6 +80,8 @@ window.LiuYao = {
   castByNumbers: meihua.castByNumbers,
   castByTime: meihua.castByTime,
   castByRandom: meihua.castByRandom,
+  buildLuckyDirections: jixiang.buildLuckyDirections,
+  luckyByGan: jixiang.luckyByGan,
   TIME_SCOPES: askOptions.TIME_SCOPES,
   listGroups: askOptions.listGroups,
   buildAskSelection: askOptions.buildAskSelection,
@@ -93,3 +98,11 @@ window.LiuYao = {
 
 fs.writeFileSync(path.join(__dirname, 'engine.bundle.js'), engine)
 console.log('wrote engine.bundle.js', engine.length)
+
+const standalonePath = path.join(__dirname, 'liuyao-standalone.html')
+if (fs.existsSync(standalonePath)) {
+  const html = fs.readFileSync(standalonePath, 'utf8')
+  const packed = html.replace(/<script>([\s\S]*?)<\/script>/, `<script>\n${engine}\n</script>`)
+  fs.writeFileSync(standalonePath, packed)
+  console.log('packed engine into liuyao-standalone.html')
+}
