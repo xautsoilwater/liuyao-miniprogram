@@ -14998,7 +14998,6 @@ window.LiuYao = {
       { n: '震', tip: '雷·木', color: '#3a3028', lines: [1, 0, 0], deg: 270 },
       { n: '巽', tip: '风·木', color: '#3a3028', lines: [0, 1, 1], deg: 315 }
     ]
-    const wxColor = { 木: '#3a3028', 火: '#3a3028', 土: '#3a3028', 金: '#3a3028', 水: '#3a3028' }
     const mountains = ['子', '癸', '丑', '艮', '寅', '甲', '卯', '乙', '辰', '巽', '巳', '丙', '午', '丁', '未', '坤', '申', '庚', '酉', '辛', '戌', '乾', '亥', '壬']
     const dirs = [{ n: '南', deg: 0 }, { n: '西', deg: 90 }, { n: '北', deg: 180 }, { n: '东', deg: 270 }]
     const ticks = Array.from({ length: 72 }, (_, i) => {
@@ -15052,15 +15051,9 @@ window.LiuYao = {
         </g>
       </g>`
     }).join('')
-    const wuxing = ['木', '火', '土', '金', '水']
-    const wxRow = wuxing.map((w, i) => {
-      const x = 56 + i * 72
-      return `<rect x="${x - 22}" y="414" width="44" height="26" fill="rgba(250,243,228,0.35)" stroke="rgba(20,15,12,0.14)" stroke-width="0.8"/>
-        <text x="${x}" y="432" text-anchor="middle" fill="${wxColor[w]}" font-size="12" font-weight="700">${w}</text>`
-    }).join('')
 
     return `
-      <svg viewBox="-40 -48 480 498" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
+      <svg viewBox="-40 -48 480 456" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
         <defs></defs>
         <g id="luopan-plate" transform="rotate(${rot} 200 200)">
           <circle cx="200" cy="200" r="198" fill="#e6d4b0" stroke="#46341c" stroke-width="3"/>
@@ -15097,7 +15090,6 @@ window.LiuYao = {
           <circle cx="200" cy="217" r="5" fill="#140f0c"/>
         </g>
         <circle data-lucky-toggle="1" cx="200" cy="200" r="46" fill="rgba(0,0,0,0)" style="cursor:pointer"/>
-        ${wxRow}
       </svg>`
   }
 

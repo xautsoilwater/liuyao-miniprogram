@@ -105,10 +105,4 @@
       </view>
     </view>
   </view>
-
-  <view class="wx-row">
-    <view class="wx-item tone-{{item.tone}}" wx:for="{{wuxing}}" wx:key="wx">
-      <text class="wx-name">{{item.wx}}</text>
-    </view>
-  </view>
 </view>
