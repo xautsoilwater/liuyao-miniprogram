@@ -52,10 +52,26 @@ function testPreviewStrings() {
     assert.ok(text.includes('点中间八卦'), `${rel} 缺少 点中间八卦`)
     assert.ok(text.includes('data-lucky-toggle'), `${rel} 缺少中间八卦点击热区`)
     assert.ok(text.includes('八卷跳转'), `${rel} 缺少八卷跳转`)
+    assert.ok(!text.includes('方位助手'), `${rel} 仍含方位助手`)
+    assert.ok(!text.includes('id="compass-info"'), `${rel} 仍含方位按钮`)
+    assert.ok(!text.includes('id="compass-lock"'), `${rel} 仍含锁定按钮`)
   })
+}
+
+function testLuopanControlsRemoved() {
+  const root = path.join(__dirname, '..')
+  const wxml = fs.readFileSync(path.join(root, 'components/luopan/luopan.wxml'), 'utf8')
+  const js = fs.readFileSync(path.join(root, 'components/luopan/luopan.js'), 'utf8')
+  assert.ok(!wxml.includes('方位助手'), 'luopan.wxml 仍含方位助手')
+  assert.ok(!wxml.includes('onToggleDirection'), 'luopan.wxml 仍含 onToggleDirection')
+  assert.ok(!wxml.includes('onToggleLock'), 'luopan.wxml 仍含 onToggleLock')
+  assert.ok(!js.includes('onToggleDirection'), 'luopan.js 仍含 onToggleDirection')
+  assert.ok(!js.includes('onToggleLock'), 'luopan.js 仍含 onToggleLock')
+  assert.ok(!js.includes('方位助手'), 'luopan.js 仍含方位助手')
 }
 
 testGanSong()
 testBuildLuckyDirections()
 testPreviewStrings()
+testLuopanControlsRemoved()
 console.log('jixiang: all checks passed')
