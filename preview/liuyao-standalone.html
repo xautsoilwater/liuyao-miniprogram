@@ -1102,8 +1102,9 @@
     .detail-note { font-size: 12px; line-height: 1.6; margin: 8px 0; color: var(--mist); }
 
     .fig {
-      margin: 12px 0 16px; padding: 16px 12px;
+      margin: 12px 0 16px; padding: 18px 10px;
       border: 1px solid var(--line-strong);
+      overflow: visible;
       background: radial-gradient(ellipse at 50% 0%, rgba(246,237,216,.9), transparent 60%), rgba(244,234,214,.55);
     }
     .fig-cap { margin-top: 10px; text-align: center; font-size: 13px; color: var(--mist); letter-spacing: .06em; }
@@ -1139,7 +1140,7 @@
     .fig-bagua em { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-style: normal; color: var(--cinnabar); font-size: 14px; }
     .lf-disks { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
     .lf-disks.is-compare { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px 6px; }
-    .lf-disk { --yt: 244px; --ink-deep: #140f0c; --cream: #f6eedc; --sight: #a03328; position: relative; width: var(--yt); }
+    .lf-disk { --yt: calc(min(393px, 100vw) * 0.7); --ink-deep: #140f0c; --cream: #f6eedc; --sight: #a03328; position: relative; width: var(--yt); } /* 盘面直径 ≈ 界面/视口宽 70% */
     .lf-disks.is-compare .lf-disk { --yt: 159px; }
     .lf-halo { position: absolute; left: -9px; top: -9px; width: calc(var(--yt) + 18px); height: calc(var(--yt) + 18px); border-radius: 50%; background: rgba(122,98,64,.07); pointer-events: none; }
     .lf-plate { position: relative; width: var(--yt); height: var(--yt); border-radius: 50%; overflow: hidden; background: #e6d4b0; box-shadow: inset 0 0 0 1.5px rgba(20,15,12,.35), inset 0 0 0 6px rgba(248,240,222,.55), inset 0 0 0 8px rgba(90,70,40,.22), 0 0 0 1px rgba(70,52,28,.45), 0 6px 14px rgba(20,15,12,.14); }

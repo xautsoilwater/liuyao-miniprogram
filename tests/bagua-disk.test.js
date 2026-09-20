@@ -64,6 +64,9 @@ function testComponentWiring() {
   assert.match(wxml, /lf-gua-meta/, '卦名下应变为一行象·数，减轻拥挤')
   assert.match(wxml, /lf-legend/, '盘外仍需图例标明先后天')
   assert.match(wxss, /\.lf-disk\s*\{/, 'WXSS 缺少 .lf-disk')
+  assert.match(wxss, /--yt:\s*70vw/, '单盘直径应为 70vw（界面/视口宽 70%）')
+  assert.doesNotMatch(wxss, /--yt:\s*488rpx/, '旧 488rpx 直径应已替换')
+  assert.match(wxss, /overflow:\s*visible/, '盘外图例/光晕不应被裁切')
   assert.match(wxss, /\.lf-bar\.is-yin/, 'WXSS 缺少阴爻分段样式')
   assert.match(wxss, /\.lf-tick\.major/, 'WXSS 缺少主刻度')
 }
@@ -84,6 +87,11 @@ function testPreviewWiring() {
       assert.match(text, /buildBaguaDiskHtml/, `${rel} 缺少盘面 HTML 构建`)
       assert.doesNotMatch(text, /lf-core-title/, `${rel} 盘心仍写先天/后天`)
       assert.match(text, /lf-gua-meta/, `${rel} 未把卦内信息收成一行`)
+    }
+    if (rel !== 'preview/app-preview.js') {
+      assert.match(text, /min\(393px,\s*100vw\)\s*\*\s*0\.7/, `${rel} 单盘直径应为界面/视口宽 70%`)
+      assert.doesNotMatch(text, /--yt:\s*244px/, `${rel} 旧 244px 直径应已替换`)
+      assert.match(text, /overflow:\s*visible/, `${rel} 盘外图例不应被裁切`)
     }
   })
   const standalone = fs.readFileSync(path.join(__dirname, '..', 'preview/liuyao-standalone.html'), 'utf8')

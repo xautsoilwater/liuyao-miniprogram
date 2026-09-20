@@ -5,7 +5,7 @@
 .fig-stage {
   position: relative;
   min-height: 220rpx;
-  padding: 28rpx 12rpx;
+  padding: 32rpx 16rpx;
   overflow: visible;
   border: 1rpx solid var(--line-strong);
   background:
@@ -114,7 +114,8 @@
 }
 
 .lf-disk {
-  --yt: 488rpx;
+  /* 单盘直径 = 界面/视口宽 70%（750rpx 设计宽 → 525rpx） */
+  --yt: 70vw;
   --ink-deep: #140f0c;
   --cream: #f6eedc;
   --sight: #a03328;
