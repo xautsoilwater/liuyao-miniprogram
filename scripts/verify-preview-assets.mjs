@@ -42,6 +42,12 @@ export async function verifyPreviewAssets() {
   if (!html.includes("requestCompassPermission")) {
     problems.push("compass permission flow is missing");
   }
+  if (!html.includes("今日吉位") || !html.includes("点中间八卦")) {
+    problems.push("homepage luopan must restore 今日吉位 (点中间八卦)");
+  }
+  if (!html.includes("八卷跳转")) {
+    problems.push("learn catalog must keep 八卷跳转");
+  }
 
   if (problems.length) {
     throw new Error(`Preview verification failed:\n- ${problems.join("\n- ")}`);

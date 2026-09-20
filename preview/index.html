@@ -997,8 +997,13 @@
     .luopan-hud #hud-deg { font-size: 25px; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }
     .luopan-hud .hud-sub { margin-top:4px; font-size: 16px; letter-spacing:.12em; color:rgba(28,24,20,.5); display:flex; justify-content:center; gap:6px; }
     .luopan-hud #hud-mountain { color:rgba(155,45,36,.88); font-weight:700; font-size: 17px; }
+    .lucky-hint {
+      margin-top: 6px; text-align: center; font-size: 13px;
+      letter-spacing: .08em; color: rgba(28,24,20,.48); line-height: 1.5;
+    }
+    .lucky-hint.on { color: var(--cinnabar); font-weight: 600; }
     .luopan-tools { display:flex; justify-content:space-between; width:min(70vw,276px); margin:0 auto 2px; }
-    .luopan-controls { position:relative; z-index:5; }
+    .luopan-controls { position:relative; z-index:5; overflow: visible; }
     .lp-tool {
       border:1px solid var(--line-strong); background:rgba(250,246,234,.75); color:var(--ink-soft);
       font-size: 15px; letter-spacing:.16em; padding:4px 10px; cursor:pointer; font-family:inherit;
@@ -1046,10 +1051,11 @@
       position: relative; width: min(70vw, 276px); margin: 0 auto;
       filter: drop-shadow(0 12px 22px rgba(28,24,20,.12));
       touch-action: none; cursor: grab; user-select: none;
+      overflow: visible;
     }
     .luopan-wrap:active { cursor: grabbing; }
     #heading-readout { cursor: pointer; }
-    .luopan-wrap svg { width: 100%; height: auto; display: block; }
+    .luopan-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
     .compass-beacon {
       position: absolute; left: 50%; top: 2px; transform: translateX(-50%);
       z-index: 3; display: flex; flex-direction: column; align-items: center;
