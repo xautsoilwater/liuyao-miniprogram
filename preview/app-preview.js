@@ -1466,7 +1466,7 @@
       `<i class="lf-spoke" style="transform:rotate(${deg}deg)"></i>`
     ).join('')
     const dirs = (disk.dirs || []).map((dir) =>
-      `<span class="lf-item" style="transform:rotate(${dir.deg}deg)"><b class="lf-dir-lab">${dir.name}</b></span>`
+      `<b class="lf-dir-lab deg-${dir.deg}">${dir.name}</b>`
     ).join('')
     const guas = (disk.bagua || []).map((gua) => {
       const bars = [2, 1, 0].map((idx) =>
@@ -1476,14 +1476,14 @@
     }).join('')
     return `<div class="lf-disk kind-${disk.kind}">
       <div class="lf-halo"></div>
+      <div class="lf-dirs">${dirs}</div>
+      <b class="lf-south">▲</b>
       <div class="lf-plate">
         <i class="lf-rim outer"></i><i class="lf-rim mid"></i><i class="lf-band"></i>
         <i class="lf-ring r-outer"></i><i class="lf-ring r-dir"></i><i class="lf-ring r-gua"></i><i class="lf-ring r-core"></i>
         <div class="lf-layer ticks">${ticks}</div>
         <div class="lf-layer spokes">${spokes}</div>
-        <div class="lf-layer dirs">${dirs}</div>
         <div class="lf-layer guas">${guas}</div>
-        <b class="lf-south">▲</b>
         <div class="lf-core">
           <div class="lf-taiji"><i class="lf-half yang"></i><i class="lf-half yin"></i><i class="lf-eye top"></i><i class="lf-eye bot"></i><i class="lf-dot top"></i><i class="lf-dot bot"></i></div>
         </div>

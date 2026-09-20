@@ -38,6 +38,10 @@
     >
       <view class="lf-disk kind-{{item.kind}}" wx:for="{{disks}}" wx:key="kind">
         <view class="lf-halo"></view>
+        <view class="lf-dirs">
+          <view class="lf-dir-lab deg-{{dir.deg}}" wx:for="{{item.dirs}}" wx:for-item="dir" wx:key="name">{{dir.name}}</view>
+        </view>
+        <view class="lf-south">▲</view>
         <view class="lf-plate">
           <view class="lf-rim outer"></view>
           <view class="lf-rim mid"></view>
@@ -67,12 +71,6 @@
             ></view>
           </view>
 
-          <view class="lf-layer dirs">
-            <view class="lf-item" wx:for="{{item.dirs}}" wx:for-item="dir" wx:key="name" style="transform:rotate({{dir.deg}}deg)">
-              <text class="lf-dir-lab">{{dir.name}}</text>
-            </view>
-          </view>
-
           <view class="lf-layer guas">
             <view class="lf-item" wx:for="{{item.bagua}}" wx:for-item="gua" wx:key="key" style="transform:rotate({{gua.deg}}deg)">
               <view class="lf-gua tone-{{gua.tone}}">
@@ -90,7 +88,6 @@
             </view>
           </view>
 
-          <view class="lf-south">▲</view>
           <view class="lf-core">
             <view class="lf-taiji">
               <view class="lf-half yang"></view>
