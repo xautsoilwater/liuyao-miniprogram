@@ -874,6 +874,146 @@
     .gd-yao { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px dashed rgba(20,15,12,.08); }
     .gd-yao .yao-bar { margin: 7px 0 0; }
     .gd-yao span { flex: 1; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+    /* 六十四卦卦典：八宫总图 + 单卦详解 */
+    .guadian-banner {
+      display: flex; align-items: center; gap: 12px; cursor: pointer;
+      margin: 6px 0 16px; padding: 12px 12px;
+      border: 1px solid rgba(155,45,36,.35);
+      background: linear-gradient(135deg, rgba(155,45,36,.08), rgba(250,246,234,.7));
+    }
+    .gb-seal {
+      flex-shrink: 0; padding: 4px 8px; font-size: 12px; letter-spacing: .12em;
+      color: var(--cinnabar); border: 1px solid rgba(155,45,36,.4); background: #fffcf5;
+    }
+    .gb-main { flex: 1; min-width: 0; }
+    .gb-title { font-weight: 700; letter-spacing: .18em; }
+    .gb-go { font-size: 22px; color: var(--cinnabar); opacity: .75; }
+    .gd-hero { text-align: center; margin-bottom: 8px; }
+    .gd-legend {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 10px;
+      margin: 10px 0 8px; padding: 8px 6px;
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      font-size: 12px; letter-spacing: .12em; color: var(--bronze);
+    }
+    .gd-map { display: flex; flex-direction: column; gap: 12px; }
+    .palace-card {
+      border: 1px solid var(--line-strong);
+      background: rgba(250,246,234,.55);
+      padding: 10px 10px 8px;
+    }
+    .palace-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--line); }
+    .palace-sym {
+      width: 36px; height: 36px; line-height: 36px; text-align: center;
+      font-size: 22px; color: var(--cinnabar); flex-shrink: 0;
+      border: 1px solid rgba(155,45,36,.25); background: rgba(155,45,36,.05);
+    }
+    .palace-line {
+      flex: 1; min-width: 0; display: flex; flex-direction: row; align-items: baseline;
+      flex-wrap: nowrap; gap: 8px; overflow: hidden;
+    }
+    .palace-name { flex-shrink: 0; letter-spacing: .14em; color: var(--cinnabar); font-weight: 600; white-space: nowrap; }
+    .palace-tip {
+      flex: 1; min-width: 0; font-size: 12px; letter-spacing: .04em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .gua-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .gua-cell {
+      width: calc(25% - 5px); max-width: calc(25% - 5px); box-sizing: border-box;
+      padding: 6px 3px 8px; text-align: center; cursor: pointer;
+      border: 1px solid var(--line); background: rgba(255,252,245,.95);
+      min-height: 88px; display: flex; flex-direction: column; align-items: center;
+      overflow: hidden;
+    }
+    .gua-cell:hover { border-color: var(--cinnabar); background: rgba(155,45,36,.06); }
+    .gua-stage { font-size: 10px; color: var(--bronze); letter-spacing: .04em; margin-bottom: 3px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mini-gua {
+      width: 22px; max-width: 70%; box-sizing: border-box;
+      display: flex; flex-direction: column; gap: 2px; margin: 2px auto 5px;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .mini-gua .mini-yao.yang { height: 3px; width: 100%; max-width: 100%; box-sizing: border-box; background: var(--ink); border-radius: 1px; }
+    .mini-gua .mini-yao.yin {
+      height: 3px; width: 100%; max-width: 100%; box-sizing: border-box;
+      display: flex; justify-content: space-between; overflow: hidden; background: transparent;
+    }
+    .mini-gua .mini-yao.yin .seg { width: 38%; flex: 0 0 38%; max-width: 38%; box-sizing: border-box; background: var(--ink); border-radius: 1px; }
+    .mini-gua .mini-yao.yin .gap { width: 24%; flex: 0 0 24%; max-width: 24%; }
+    .gua-alias {
+      margin-top: 2px; font-size: 13px; font-weight: 600; letter-spacing: .04em;
+      max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      box-sizing: border-box; padding: 0 2px;
+    }
+    .gua-full {
+      margin-top: 1px; font-size: 10px; letter-spacing: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+      box-sizing: border-box; padding: 0 2px;
+    }
+    .gd-struct { text-align: center; font-size: 13px; margin-top: 6px; letter-spacing: .04em; }
+    .gd-theme { text-align: center; color: var(--cinnabar); margin: 8px 0; letter-spacing: .08em; font-size: 15px; line-height: 1.5; }
+    .gd-section-head {
+      margin: 16px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line);
+      font-size: 14px; letter-spacing: .22em; color: var(--bronze);
+    }
+    .gd-guaci-box {
+      margin: 6px 0 8px; padding: 10px 12px; border-left: 3px solid var(--cinnabar);
+      background: linear-gradient(90deg, rgba(155,45,36,.07), rgba(155,45,36,.01));
+    }
+    .gd-guaci-classic { font-size: 16px; line-height: 1.75; letter-spacing: .08em; }
+    .gd-guaci-from { text-align: right; margin-top: 6px; font-size: 12px; color: var(--bronze); }
+    .gd-detail-frame .yao-board {
+      margin: 6px 0; padding: 10px 8px; border: 1px solid var(--line-strong);
+      background: rgba(250,246,234,.55);
+    }
+    .gd-detail-frame .yao-board .yao-row {
+      display: flex; align-items: center; gap: 8px; padding: 7px 2px;
+      border-bottom: 1px dashed rgba(110,90,62,.2);
+    }
+    .gd-detail-frame .yao-board .yao-row:last-child { border-bottom: none; }
+    .gd-detail-frame .yao-board .yao-row.is-shi { background: rgba(155,45,36,.05); }
+    .gd-detail-frame .yao-board .yao-row.is-ying { background: rgba(70,100,90,.05); }
+    .gd-detail-frame .yao-board .yao-pos { width: 36px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+    .gd-detail-frame .yao-board .pos-label { font-size: 12px; font-weight: 600; letter-spacing: .04em; }
+    .gd-detail-frame .yao-board .pos-tag { font-size: 10px; line-height: 1.2; padding: 0 3px; color: var(--cinnabar); border: 1px solid rgba(155,45,36,.35); }
+    .gd-detail-frame .yao-board .pos-tag.ying { color: #3d5c52; border-color: rgba(61,92,82,.4); }
+    .gd-detail-frame .yao-board .yao-bar-wrap { width: 52px; flex-shrink: 0; display: flex; justify-content: center; }
+    .gd-detail-frame .yao-board .yao-bar {
+      display: block; margin: 0; position: relative; box-sizing: border-box;
+      width: 46px; height: 7px;
+    }
+    .gd-detail-frame .yao-board .yao-bar.yang { width: 46px; height: 7px; background: var(--ink); border-radius: 1px; }
+    .gd-detail-frame .yao-board .yao-bar.yin {
+      width: 46px; height: 7px; display: flex; justify-content: space-between;
+      background: transparent;
+    }
+    .gd-detail-frame .yao-board .yao-bar.yin .seg { width: 36%; flex: 0 0 36%; background: var(--ink); border-radius: 1px; }
+    .gd-detail-frame .yao-board .yao-bar.yin .gap { width: 28%; flex: 0 0 28%; }
+    .gd-detail-frame .yao-board .yao-ci { flex: 1; min-width: 0; font-size: 13px; line-height: 1.4; color: var(--ink-soft); text-align: justify; }
+    .yao-board-tip { text-align: center; font-size: 11px; margin-top: 4px; letter-spacing: .06em; }
+    .plain-block { margin: 0 0 12px; padding: 10px 12px; border: 1px solid var(--line); background: rgba(255,252,245,.8); }
+    .plain-label { font-size: 13px; letter-spacing: .16em; color: var(--cinnabar); margin-bottom: 6px; }
+    .plain-text { font-size: 14px; line-height: 1.7; color: var(--ink-soft); text-align: justify; }
+    .plain-yao { display: flex; gap: 6px; padding: 4px 0; border-bottom: 1px dashed var(--line); align-items: flex-start; }
+    .plain-yao:last-child { border-bottom: none; }
+    .py-pos { width: 28px; flex-shrink: 0; font-size: 12px; font-weight: 600; color: var(--bronze); line-height: 1.55; }
+    .py-flow {
+      flex: 1; min-width: 0; font-size: 13px; line-height: 1.55;
+      letter-spacing: .03em; color: var(--ink-soft); text-align: justify;
+    }
+    .py-classic { font-weight: 700; color: var(--ink); letter-spacing: .04em; }
+    .py-rest { font-weight: 400; color: var(--ink-soft); }
+    .plain-zhan { font-size: 14px; line-height: 1.6; color: var(--ink-soft); padding: 2px 0; }
+    .xiang-structure {
+      font-size: 13px; letter-spacing: .08em; color: var(--bronze);
+      font-weight: 600; margin-bottom: 6px; line-height: 1.45;
+    }
+    .xiang-classic {
+      font-family: "Songti SC", "Noto Serif SC", "STSong", "SimSun", serif;
+      font-size: 13.5px; line-height: 1.65; letter-spacing: .05em;
+      font-weight: 600; color: var(--ink); margin-bottom: 4px; text-align: justify;
+    }
+    .xiang-plain { font-size: 13px; }
+    .detail-note { font-size: 12px; line-height: 1.6; margin: 8px 0; color: var(--mist); }
+
     .fig {
       margin: 12px 0 16px; padding: 16px 12px;
       border: 1px solid var(--line-strong);
@@ -1059,25 +1199,24 @@
       display: flex; justify-content: center; align-items: center; line-height: 1;
     }
     .home-brand img {
-      width: 140px; height: auto; display: block;
+      width: 161px; height: auto; display: block;
     }
     .home-brand-sub {
-      width:96%; margin:4px auto 2px; padding:5px 4px;
+      width:96%; margin:8px auto 8px; padding:6px 4px;
       display:flex; justify-content:center; align-items:center;
       border-top:1px solid var(--line); border-bottom:1px solid var(--line);
       font-size:13px; font-weight:600; letter-spacing:.1em; color:var(--ink-soft);
     }
     .home-brand-sub i { padding:0 9px; color:var(--cinnabar); font-style:normal; }
     .luopan-hud {
-      position: relative; z-index: 4; text-align:center; margin: 0 0 2px;
-      transform: translateY(12px);
+      position: relative; z-index: 4; text-align:center; margin: 4px 0 8px;
     }
-    .luopan-hud .hud-main { display:flex; justify-content:center; align-items:baseline; gap:8px; line-height:1; }
+    .luopan-hud .hud-main { display:flex; justify-content:center; align-items:baseline; gap:11px; line-height:1; }
     .luopan-hud #hud-dir {
       font-family: "Songti SC", serif;
-      font-size: 27px; font-weight:400; letter-spacing:.18em; color:var(--cinnabar);
+      font-size: 30px; font-weight:400; letter-spacing:.18em; color:var(--cinnabar);
     }
-    .luopan-hud #hud-deg { font-size: 25px; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }
+    .luopan-hud #hud-deg { font-size: 28px; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }
     .luopan-hud .hud-sub { margin-top:4px; font-size: 16px; letter-spacing:.12em; color:rgba(28,24,20,.5); display:flex; justify-content:center; gap:6px; }
     .luopan-hud #hud-mountain { color:rgba(155,45,36,.88); font-weight:700; font-size: 17px; }
     .lucky-hint {
@@ -1085,7 +1224,7 @@
       letter-spacing: .08em; color: rgba(28,24,20,.48); line-height: 1.5;
     }
     .lucky-hint.on { color: var(--cinnabar); font-weight: 600; }
-    .luopan-tools { display:flex; justify-content:space-between; width:min(70vw,276px); margin:0 auto 2px; }
+    .luopan-tools { display:flex; justify-content:space-between; width:min(86vw,352px); margin:0 auto 2px; }
     .luopan-controls { position:relative; z-index:5; overflow: visible; }
     .lp-tool {
       border:1px solid var(--line-strong); background:rgba(250,246,234,.75); color:var(--ink-soft);
@@ -1131,7 +1270,7 @@
     }
     .direction-guide p { margin:7px 0 0; color:rgba(28,24,20,.58); font-size:11px; line-height:1.5; }
     .luopan-wrap {
-      position: relative; width: min(70vw, 276px); margin: 0 auto;
+      position: relative; width: min(86vw, 352px); margin: 2px auto 0;
       filter: drop-shadow(0 12px 22px rgba(28,24,20,.12));
       touch-action: none; cursor: grab; user-select: none;
       overflow: visible;
