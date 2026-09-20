@@ -249,16 +249,15 @@
         </g>
       </g>`
     }).join('')
-    const gans = [['甲乙', '木'], ['丙丁', '火'], ['戊己', '土'], ['庚辛', '金'], ['壬癸', '水']]
-    const ganRow = gans.map((g, i) => {
+    const wuxing = ['木', '火', '土', '金', '水']
+    const wxRow = wuxing.map((w, i) => {
       const x = 56 + i * 72
-      return `<rect x="${x - 22}" y="414" width="44" height="34" fill="rgba(250,243,228,0.35)" stroke="rgba(20,15,12,0.14)" stroke-width="0.8"/>
-        <text x="${x}" y="428" text-anchor="middle" fill="rgba(20,15,12,0.62)" font-size="9">${g[0]}</text>
-        <text x="${x}" y="442" text-anchor="middle" fill="${wxColor[g[1]]}" font-size="11" font-weight="700">${g[1]}</text>`
+      return `<rect x="${x - 22}" y="414" width="44" height="26" fill="rgba(250,243,228,0.35)" stroke="rgba(20,15,12,0.14)" stroke-width="0.8"/>
+        <text x="${x}" y="432" text-anchor="middle" fill="${wxColor[w]}" font-size="12" font-weight="700">${w}</text>`
     }).join('')
 
     return `
-      <svg viewBox="-40 -48 480 510" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
+      <svg viewBox="-40 -48 480 498" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
         <defs></defs>
         <g id="luopan-plate" transform="rotate(${rot} 200 200)">
           <circle cx="200" cy="200" r="198" fill="#e6d4b0" stroke="#46341c" stroke-width="3"/>
@@ -295,7 +294,7 @@
           <circle cx="200" cy="217" r="5" fill="#140f0c"/>
         </g>
         <circle data-lucky-toggle="1" cx="200" cy="200" r="46" fill="rgba(0,0,0,0)" style="cursor:pointer"/>
-        ${ganRow}
+        ${wxRow}
       </svg>`
   }
 

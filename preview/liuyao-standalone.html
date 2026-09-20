@@ -1237,7 +1237,7 @@
     .hero.quiet {
       text-align: center;
       margin: 2px 0 0;
-      padding: max(90px, calc(env(safe-area-inset-top) + 43px)) 4px 0;
+      padding: max(78px, calc(env(safe-area-inset-top) + 31px)) 4px 0;
     }
     .track-hint {
       display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px;
@@ -1289,14 +1289,14 @@
       width: 161px; height: auto; display: block;
     }
     .home-brand-sub {
-      width:96%; margin:8px auto 8px; padding:6px 4px;
+      width:96%; margin:8px auto 4px; padding:6px 4px;
       display:flex; justify-content:center; align-items:center;
       border-top:1px solid var(--line); border-bottom:1px solid var(--line);
       font-size:13px; font-weight:600; letter-spacing:.1em; color:var(--ink-soft);
     }
     .home-brand-sub i { padding:0 9px; color:var(--cinnabar); font-style:normal; }
     .luopan-hud {
-      position: relative; z-index: 4; text-align:center; margin: 4px 0 8px;
+      position: relative; z-index: 4; text-align:center; margin: 2px 0 4px;
     }
     .luopan-hud .hud-main { display:flex; justify-content:center; align-items:baseline; gap:11px; line-height:1; }
     .luopan-hud #hud-dir {
@@ -15052,16 +15052,15 @@ window.LiuYao = {
         </g>
       </g>`
     }).join('')
-    const gans = [['甲乙', '木'], ['丙丁', '火'], ['戊己', '土'], ['庚辛', '金'], ['壬癸', '水']]
-    const ganRow = gans.map((g, i) => {
+    const wuxing = ['木', '火', '土', '金', '水']
+    const wxRow = wuxing.map((w, i) => {
       const x = 56 + i * 72
-      return `<rect x="${x - 22}" y="414" width="44" height="34" fill="rgba(250,243,228,0.35)" stroke="rgba(20,15,12,0.14)" stroke-width="0.8"/>
-        <text x="${x}" y="428" text-anchor="middle" fill="rgba(20,15,12,0.62)" font-size="9">${g[0]}</text>
-        <text x="${x}" y="442" text-anchor="middle" fill="${wxColor[g[1]]}" font-size="11" font-weight="700">${g[1]}</text>`
+      return `<rect x="${x - 22}" y="414" width="44" height="26" fill="rgba(250,243,228,0.35)" stroke="rgba(20,15,12,0.14)" stroke-width="0.8"/>
+        <text x="${x}" y="432" text-anchor="middle" fill="${wxColor[w]}" font-size="12" font-weight="700">${w}</text>`
     }).join('')
 
     return `
-      <svg viewBox="-40 -48 480 510" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
+      <svg viewBox="-40 -48 480 498" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
         <defs></defs>
         <g id="luopan-plate" transform="rotate(${rot} 200 200)">
           <circle cx="200" cy="200" r="198" fill="#e6d4b0" stroke="#46341c" stroke-width="3"/>
@@ -15098,7 +15097,7 @@ window.LiuYao = {
           <circle cx="200" cy="217" r="5" fill="#140f0c"/>
         </g>
         <circle data-lucky-toggle="1" cx="200" cy="200" r="46" fill="rgba(0,0,0,0)" style="cursor:pointer"/>
-        ${ganRow}
+        ${wxRow}
       </svg>`
   }
 

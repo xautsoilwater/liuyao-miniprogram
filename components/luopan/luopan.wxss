@@ -455,39 +455,32 @@
 .yin-dot { bottom: 18rpx; background: var(--ink-deep); }
 
 
-.gan-row {
+.wx-row {
   display: flex;
   justify-content: center;
   gap: 8rpx;
   margin-top: 10rpx;
   flex-wrap: nowrap;
 }
-.gan-item {
+.wx-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 68rpx;
-  padding: 8rpx 0 6rpx;
+  padding: 10rpx 0 8rpx;
   border: 1rpx solid rgba(20, 15, 12, 0.14);
   background: rgba(250, 243, 228, 0.35);
   --gua: var(--ink-deep);
 }
-.gan-item.tone-li,
-.gan-item.tone-kun,
-.gan-item.tone-dui,
-.gan-item.tone-qian,
-.gan-item.tone-kan,
-.gan-item.tone-gen,
-.gan-item.tone-zhen,
-.gan-item.tone-xun { --gua: var(--ink-deep); }
-.gan-txt {
-  font-size: 24rpx;
-  letter-spacing: 0.1em;
-  color: rgba(20, 15, 12, 0.62);
-}
-.gan-wx {
-  margin-top: 4rpx;
+.wx-item.tone-li,
+.wx-item.tone-kun,
+.wx-item.tone-dui,
+.wx-item.tone-qian,
+.wx-item.tone-kan,
+.wx-item.tone-gen,
+.wx-item.tone-zhen,
+.wx-item.tone-xun { --gua: var(--ink-deep); }
+.wx-name {
   font-size: 26rpx;
   letter-spacing: 0.14em;
   font-weight: 700;

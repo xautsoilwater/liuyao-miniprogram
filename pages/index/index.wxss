@@ -57,7 +57,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  transform: translateY(-8rpx);
+  transform: translateY(-16rpx);
   animation: rise 0.65s ease 0.05s both;
 }
 

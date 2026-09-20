@@ -1,7 +1,7 @@
 Page({
   data: {
     accountLabel: '登录',
-    homeHeaderTop: 90
+    homeHeaderTop: 78
   },
 
   onLoad() {
@@ -21,13 +21,13 @@ Page({
       // 首页采用自定义导航栏，品牌必须完整落在刘海和右上角胶囊下方。
       const homeHeaderTop = Math.ceil(
         menuBottom > statusBarHeight
-          ? menuBottom + 10
-          : statusBarHeight + 44
+          ? menuBottom + 2
+          : statusBarHeight + 36
       )
       this.setData({ homeHeaderTop })
     } catch (e) {
       // 极旧基础库兜底，仍留出完整的状态栏和导航栏高度。
-      this.setData({ homeHeaderTop: 90 })
+      this.setData({ homeHeaderTop: 78 })
     }
   },
 

@@ -64,12 +64,12 @@ Component({
     ticks: buildTicks(),
     mountains: buildMountains(),
     degreeLabels: buildDegreeLabels(),
-    tiangan: [
-      { gan: '甲乙', wx: '木', tone: 'zhen' },
-      { gan: '丙丁', wx: '火', tone: 'li' },
-      { gan: '戊己', wx: '土', tone: 'kun' },
-      { gan: '庚辛', wx: '金', tone: 'qian' },
-      { gan: '壬癸', wx: '水', tone: 'kan' }
+    wuxing: [
+      { wx: '木', tone: 'zhen' },
+      { wx: '火', tone: 'li' },
+      { wx: '土', tone: 'kun' },
+      { wx: '金', tone: 'qian' },
+      { wx: '水', tone: 'kan' }
     ]
   },
 
