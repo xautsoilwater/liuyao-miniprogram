@@ -2130,6 +2130,13 @@
       state.articleId = articleId
       stack[0] = snapshot()
     }
+    const scrollSel = q.get('scroll')
+    if (scrollSel) {
+      setTimeout(() => {
+        const el = document.querySelector(scrollSel)
+        if (el) el.scrollIntoView({ block: 'center' })
+      }, 0)
+    }
   } catch (err) {}
   window.__liuyaoPreview = { state, go, back, render, stack }
   render()
