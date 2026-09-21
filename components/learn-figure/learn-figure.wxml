@@ -206,11 +206,10 @@
     </view>
 
     <!-- 五行 -->
-    <view class="wx-row" wx:elif="{{name==='wuxing'}}">
-      <block wx:for="{{wuxing}}" wx:key="*this">
-        <view class="wx-i">{{item}}</view>
-        <text class="wx-arr" wx:if="{{index < wuxing.length - 1}}">生</text>
-      </block>
+    <view class="wx-cycle" wx:elif="{{name==='wuxing'}}">
+      <view class="wx-ring"></view>
+      <view class="wx-core">阴阳</view>
+      <view class="wx-i n{{index}}" wx:for="{{wuxing}}" wx:key="*this">{{item}}</view>
     </view>
 
     <!-- 内外 -->
@@ -269,7 +268,7 @@
     </view>
 
     <view class="fallback" wx:else>
-      <text class="gua-big">☯</text>
+      <text class="gua-big">图示</text>
     </view>
   </view>
   <view class="fig-cap" wx:if="{{caption}}">{{caption}}</view>

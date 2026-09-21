@@ -564,17 +564,43 @@
   letter-spacing: 0.04em;
 }
 
-.wx-row {
+.wx-cycle {
+  position: relative;
+  width: 280rpx;
+  height: 280rpx;
+}
+.wx-ring {
+  position: absolute;
+  inset: 36rpx;
+  border: 1rpx dashed var(--line-strong);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.wx-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72rpx;
+  height: 72rpx;
+  margin: -36rpx 0 0 -36rpx;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #f4ead6;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 8rpx;
+  font-size: 24rpx;
+  letter-spacing: 0.08em;
 }
 .wx-i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   width: 56rpx;
   height: 56rpx;
+  margin: -28rpx 0 0 -28rpx;
   border: 1rpx solid var(--line-strong);
+  background: rgba(244, 234, 214, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -582,7 +608,11 @@
   color: var(--cinnabar);
   font-weight: 700;
 }
-.wx-arr { font-size: 22rpx; color: var(--bronze); letter-spacing: 0.08em; }
+.wx-i.n0 { transform: rotate(0deg) translateY(-112rpx) rotate(0deg); }
+.wx-i.n1 { transform: rotate(72deg) translateY(-112rpx) rotate(-72deg); }
+.wx-i.n2 { transform: rotate(144deg) translateY(-112rpx) rotate(-144deg); }
+.wx-i.n3 { transform: rotate(216deg) translateY(-112rpx) rotate(-216deg); }
+.wx-i.n4 { transform: rotate(288deg) translateY(-112rpx) rotate(-288deg); }
 
 .nw {
   width: 100%;

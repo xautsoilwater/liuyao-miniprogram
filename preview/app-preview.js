@@ -1458,7 +1458,7 @@
 
   function buildBaguaDiskHtml(kind) {
     const disk = resolveBaguaDisk(kind)
-    if (!disk) return '<div class="fig-fallback">☯</div>'
+    if (!disk) return '<div class="fig-fallback">图示</div>'
     const ticks = (disk.ticks || []).map((tick) =>
       `<i class="lf-tick${tick.major ? ' major' : ''}${tick.mid ? ' mid' : ''}" style="transform:rotate(${tick.deg}deg)"></i>`
     ).join('')
@@ -1572,8 +1572,8 @@
     } else if (key === 'bagua-grid') {
       body = buildBaguaGridHtml()
     } else if (key === 'wuxing') {
-      body = `<div class="fig-wx">${['木', '火', '土', '金', '水'].map((item, i, arr) =>
-        `<span class="wx-i">${item}</span>${i < arr.length - 1 ? '<i class="wx-arr">生</i>' : ''}`
+      body = `<div class="fig-wx-cycle"><i class="wx-ring"></i><b class="wx-core">阴阳</b>${['木', '火', '土', '金', '水'].map((item, i) =>
+        `<span class="wx-i n${i}">${item}</span>`
       ).join('')}</div>`
     } else if (key === 'neiwai') {
       body = `<div class="fig-nw">
@@ -1591,7 +1591,7 @@
     } else if (key === 'steps6') {
       body = `<div class="fig-path wrap">取用 → 旺衰 → 动变 → 生克 → 应期 → 裁断</div>`
     } else {
-      body = `<div class="fig-fallback">☯</div>`
+      body = `<div class="fig-fallback">图示</div>`
     }
     return `<div class="fig${DISK_FIGURE_KEYS[key] ? ' is-disk' : ''}">${body}${cap}</div>`
   }
@@ -2122,6 +2122,15 @@
 
   hydratePreviewAccount()
   window.addEventListener('scroll', syncLearnActiveFromScroll, { passive: true })
+  try {
+    const q = new URLSearchParams(window.location.search || '')
+    const articleId = q.get('article') || q.get('articleId')
+    if (articleId) {
+      state.page = 'detail'
+      state.articleId = articleId
+      stack[0] = snapshot()
+    }
+  } catch (err) {}
   window.__liuyaoPreview = { state, go, back, render, stack }
   render()
 })()

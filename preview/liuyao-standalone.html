@@ -1228,9 +1228,15 @@
     .fig-bg-grid .lf-bar { width: 18px; height: 2px; }
     .fig-bg-grid .bg-name { display: block; font-size: 15px; font-weight: 700; letter-spacing: .12em; }
     .fig-bg-grid .bg-meta { display: block; margin-top: 2px; font-size: 11px; color: var(--mist); font-style: normal; letter-spacing: .04em; }
-    .fig-wx { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; }
-    .fig-wx .wx-i { width: 30px; height: 30px; border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--cinnabar); font-weight: 700; }
-    .fig-wx .wx-arr { font-size: 12px; color: var(--bronze); font-style: normal; letter-spacing: .08em; }
+    .fig-wx-cycle { position: relative; width: 148px; height: 148px; margin: 0 auto; }
+    .fig-wx-cycle .wx-ring { position: absolute; inset: 18px; border: 1px dashed var(--line-strong); border-radius: 50%; }
+    .fig-wx-cycle .wx-core { position: absolute; left: 50%; top: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; background: var(--ink); color: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 12px; letter-spacing: .08em; font-weight: 600; }
+    .fig-wx-cycle .wx-i { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1px solid var(--line-strong); background: rgba(244,234,214,.95); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--cinnabar); font-weight: 700; }
+    .fig-wx-cycle .wx-i.n0 { transform: rotate(0deg) translateY(-58px) rotate(0deg); }
+    .fig-wx-cycle .wx-i.n1 { transform: rotate(72deg) translateY(-58px) rotate(-72deg); }
+    .fig-wx-cycle .wx-i.n2 { transform: rotate(144deg) translateY(-58px) rotate(-144deg); }
+    .fig-wx-cycle .wx-i.n3 { transform: rotate(216deg) translateY(-58px) rotate(-216deg); }
+    .fig-wx-cycle .wx-i.n4 { transform: rotate(288deg) translateY(-58px) rotate(-288deg); }
     .fig-nw { width: 100%; display: flex; justify-content: center; gap: 28px; }
     .fig-nw .nw-col, .fig-hg .hg-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
     .fig-nw b, .fig-hg b { font-size: 14px; letter-spacing: .2em; color: var(--bronze); }
@@ -16268,7 +16274,7 @@ window.LiuYao = {
 
   function buildBaguaDiskHtml(kind) {
     const disk = resolveBaguaDisk(kind)
-    if (!disk) return '<div class="fig-fallback">☯</div>'
+    if (!disk) return '<div class="fig-fallback">图示</div>'
     const ticks = (disk.ticks || []).map((tick) =>
       `<i class="lf-tick${tick.major ? ' major' : ''}${tick.mid ? ' mid' : ''}" style="transform:rotate(${tick.deg}deg)"></i>`
     ).join('')
@@ -16382,8 +16388,8 @@ window.LiuYao = {
     } else if (key === 'bagua-grid') {
       body = buildBaguaGridHtml()
     } else if (key === 'wuxing') {
-      body = `<div class="fig-wx">${['木', '火', '土', '金', '水'].map((item, i, arr) =>
-        `<span class="wx-i">${item}</span>${i < arr.length - 1 ? '<i class="wx-arr">生</i>' : ''}`
+      body = `<div class="fig-wx-cycle"><i class="wx-ring"></i><b class="wx-core">阴阳</b>${['木', '火', '土', '金', '水'].map((item, i) =>
+        `<span class="wx-i n${i}">${item}</span>`
       ).join('')}</div>`
     } else if (key === 'neiwai') {
       body = `<div class="fig-nw">
@@ -16401,7 +16407,7 @@ window.LiuYao = {
     } else if (key === 'steps6') {
       body = `<div class="fig-path wrap">取用 → 旺衰 → 动变 → 生克 → 应期 → 裁断</div>`
     } else {
-      body = `<div class="fig-fallback">☯</div>`
+      body = `<div class="fig-fallback">图示</div>`
     }
     return `<div class="fig${DISK_FIGURE_KEYS[key] ? ' is-disk' : ''}">${body}${cap}</div>`
   }
@@ -16932,6 +16938,15 @@ window.LiuYao = {
 
   hydratePreviewAccount()
   window.addEventListener('scroll', syncLearnActiveFromScroll, { passive: true })
+  try {
+    const q = new URLSearchParams(window.location.search || '')
+    const articleId = q.get('article') || q.get('articleId')
+    if (articleId) {
+      state.page = 'detail'
+      state.articleId = articleId
+      stack[0] = snapshot()
+    }
+  } catch (err) {}
   window.__liuyaoPreview = { state, go, back, render, stack }
   render()
 })()
