@@ -380,15 +380,17 @@ function buildBaguaDisk(kind) {
   const volMap = kind === 'xiantian' ? XIANTIAN_NUM : LUOSHU_NUM
   const bagua = layout.map((slot) => {
     const t = TRIGRAMS[slot.key]
+    const tip = t.nature === t.wuxing ? t.nature : t.nature + t.wuxing
     return {
       key: t.key,
       name: t.name,
       nature: t.nature,
       wuxing: t.wuxing,
-      tip: t.nature + '·' + t.wuxing,
+      tip,
       vol: String(volMap[slot.key]),
       lines: t.lines.slice(),
       deg: slot.deg,
+      ccw: slot.deg ? -slot.deg : 0,
       tone: t.key
     }
   })

@@ -1021,7 +1021,7 @@
       overflow: visible;
       background: radial-gradient(ellipse at 50% 0%, rgba(246,237,216,.9), transparent 60%), rgba(244,234,214,.55);
     }
-    .fig.is-disk { padding: 30px 18px 24px; }
+    .fig.is-disk { padding: 36px 24px 28px; }
     .fig-cap { margin-top: 10px; text-align: center; font-size: 13px; color: var(--mist); letter-spacing: .06em; }
     .fig-taiji {
       position: relative; width: 96px; height: 96px; margin: 0 auto; border-radius: 50%;
@@ -1050,7 +1050,7 @@
     .fig-rings .r2 { inset: 16%; border: 1.5px solid var(--bronze); color: var(--bronze); background: rgba(244,234,214,.7); font-size: 14px; }
     .fig-rings .r3 { inset: 0; border: 1.5px solid var(--cinnabar); color: var(--cinnabar); font-size: 14px; }
     .lf-disks { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-    .lf-disks.is-compare { flex-direction: column; align-items: center; gap: 24px; }
+    .lf-disks.is-compare { flex-direction: column; align-items: center; gap: 32px; }
     .lf-disk { --yt: calc(min(393px, 100vw) * 0.7); --ink-deep: #140f0c; --cream: #f6eedc; --sight: #a03328; position: relative; width: var(--yt); overflow: visible; } /* 盘面直径 ≈ 界面/视口宽 70% */
     .lf-halo { position: absolute; left: -9px; top: -9px; width: calc(var(--yt) + 18px); height: calc(var(--yt) + 18px); border-radius: 50%; background: rgba(122,98,64,.07); pointer-events: none; }
     .lf-plate { position: relative; width: var(--yt); height: var(--yt); border-radius: 50%; overflow: hidden; background: #e6d4b0; box-shadow: inset 0 0 0 1.5px rgba(20,15,12,.35), inset 0 0 0 6px rgba(248,240,222,.55), inset 0 0 0 8px rgba(90,70,40,.22), 0 0 0 1px rgba(70,52,28,.45), 0 6px 14px rgba(20,15,12,.14); }
@@ -1060,29 +1060,30 @@
     .lf-band { position: absolute; inset: 10%; border-radius: 50%; border: 8px solid rgba(143,38,31,.06); box-sizing: border-box; pointer-events: none; display: block; }
     .lf-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(20,15,12,.12); pointer-events: none; display: block; }
     .lf-ring.r-outer { inset: 5%; border-color: rgba(20,15,12,.2); }
-    .lf-ring.r-dir { inset: 13%; border-color: rgba(143,38,31,.22); }
-    .lf-ring.r-gua { inset: 27%; border-color: rgba(20,15,12,.12); }
-    .lf-ring.r-core { inset: 41%; border-color: rgba(143,38,31,.16); }
+    .lf-ring.r-dir { inset: 11%; border-color: rgba(143,38,31,.22); }
+    .lf-ring.r-gua { inset: 22%; border-color: rgba(20,15,12,.12); }
+    .lf-ring.r-core { inset: 38%; border-color: rgba(143,38,31,.16); }
     .lf-layer { position: absolute; inset: 0; border-radius: 50%; }
+    .lf-layer.guas { z-index: 4; }
     .lf-item { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
     .lf-tick { position: absolute; left: 50%; top: 50%; width: 1px; height: calc(var(--yt) / 2 - 4px); margin-left: -0.5px; margin-top: calc(0px - var(--yt) / 2 + 4px); transform-origin: 50% calc(var(--yt) / 2 - 4px); background: linear-gradient(to bottom, rgba(20,15,12,.18) 0, rgba(20,15,12,.18) 3.5px, transparent 3.5px); pointer-events: none; display: block; }
     .lf-tick.mid { background: linear-gradient(to bottom, rgba(20,15,12,.32) 0, rgba(20,15,12,.32) 5.5px, transparent 5.5px); }
     .lf-tick.major { width: 1.5px; margin-left: -0.75px; background: linear-gradient(to bottom, rgba(143,38,31,.55) 0, rgba(143,38,31,.55) 8px, transparent 8px); }
-    .lf-spoke { position: absolute; left: 50%; top: 50%; width: 1px; height: 34%; margin-left: -0.5px; margin-top: -34%; transform-origin: 50% 100%; background: rgba(20,15,12,.12); pointer-events: none; display: block; }
+    .lf-spoke { position: absolute; left: 50%; top: 50%; width: 1px; height: calc(var(--yt) / 2 - 4px); margin-left: -0.5px; margin-top: calc(0px - var(--yt) / 2 + 4px); transform-origin: 50% calc(var(--yt) / 2 - 4px); background: linear-gradient(to bottom, rgba(20,15,12,.14) 0, rgba(20,15,12,.14) 11px, transparent 11px); pointer-events: none; display: block; }
     .lf-dirs { position: absolute; left: 0; top: 0; width: var(--yt); height: var(--yt); pointer-events: none; z-index: 6; overflow: visible; }
-    .lf-dir-lab { position: absolute; font-size: 14px; letter-spacing: .16em; color: rgba(143,38,31,.82); font-weight: 700; line-height: 1; font-style: normal; white-space: nowrap; }
-    .lf-dir-lab.deg-0 { left: 50%; top: 0; transform: translate(-50%, calc(-100% - 14px)); }
-    .lf-dir-lab.deg-180 { left: 50%; bottom: 0; transform: translate(-50%, calc(100% + 6px)); }
-    .lf-dir-lab.deg-270 { left: 0; top: 50%; transform: translate(calc(-100% - 7px), -50%); }
-    .lf-dir-lab.deg-90 { right: 0; top: 50%; transform: translate(calc(100% + 7px), -50%); }
-    .lf-gua { position: absolute; left: 0; top: calc(var(--yt) * -0.385); width: 66px; margin-left: -33px; text-align: center; line-height: 1.15; --gua: #140f0c; display: block; }
-    .lf-bars { display: flex; flex-direction: column; align-items: center; gap: 3.5px; margin: 0 auto 6px; width: 29px; }
-    .lf-bar { width: 29px; height: 3.5px; background: var(--gua); border-radius: 1px; display: block; }
+    .lf-dir-lab { position: absolute; font-size: 14px; letter-spacing: 0; color: rgba(143,38,31,.82); font-weight: 700; line-height: 1; font-style: normal; white-space: nowrap; writing-mode: horizontal-tb; text-orientation: mixed; }
+    .lf-dir-lab.deg-0 { left: 50%; top: 0; transform: translate(-50%, calc(-100% - 11px)) rotate(0deg); }
+    .lf-dir-lab.deg-180 { left: 50%; bottom: 0; transform: translate(-50%, calc(100% + 9px)) rotate(0deg); }
+    .lf-dir-lab.deg-270 { left: 0; top: 50%; transform: translate(calc(-100% - 11px), -50%) rotate(0deg); }
+    .lf-dir-lab.deg-90 { right: 0; top: 50%; transform: translate(calc(100% + 11px), -50%) rotate(0deg); }
+    .lf-gua { position: absolute; left: 0; top: 0; width: 40px; margin-left: -20px; transform: translateY(-50%); text-align: center; line-height: 1.12; --gua: #140f0c; display: block; }
+    .lf-bars { display: flex; flex-direction: column; align-items: center; gap: 2.5px; margin: 0 auto 3px; width: 26px; }
+    .lf-bar { width: 26px; height: 3px; background: var(--gua); border-radius: 1px; display: block; }
     .lf-bar.is-yin { background: linear-gradient(to right, var(--gua) 0, var(--gua) 36%, transparent 36%, transparent 64%, var(--gua) 64%, var(--gua) 100%); }
-    .lf-gua-name { display: block; font-size: 17px; letter-spacing: .14em; color: var(--gua); font-weight: 700; font-style: normal; }
-    .lf-gua-meta { display: flex; align-items: baseline; justify-content: center; gap: 5px; margin-top: 4px; white-space: nowrap; }
-    .lf-gua-tip { font-size: 11px; letter-spacing: .06em; font-weight: 600; color: var(--gua); opacity: .9; font-style: normal; }
-    .lf-gua-vol { font-size: 13px; font-weight: 700; color: var(--sight); font-style: normal; font-variant-numeric: tabular-nums; }
+    .lf-gua-name { display: block; font-size: 17px; letter-spacing: 0; color: var(--gua); font-weight: 700; font-style: normal; }
+    .lf-gua-meta { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 0; margin-top: 1px; white-space: nowrap; }
+    .lf-gua-tip { font-size: 11px; letter-spacing: .04em; font-weight: 600; color: var(--gua); opacity: .88; font-style: normal; }
+    .lf-gua-vol { font-size: 13px; font-weight: 700; color: var(--sight); font-style: normal; font-variant-numeric: tabular-nums; line-height: 1.15; }
     .lf-south { position: absolute; left: 50%; top: 0; transform: translate(-50%, calc(-100% - 2px)); color: var(--sight); font-size: 10px; font-weight: 700; line-height: 1; z-index: 7; font-style: normal; }
     .lf-core { position: absolute; left: 50%; top: 50%; width: 42px; height: 42px; margin: -21px 0 0 -21px; border-radius: 50%; z-index: 5; display: flex; align-items: center; justify-content: center; background: #f0e4c8; border: 1px solid rgba(20,15,12,.18); box-shadow: 0 0 0 2px rgba(250,243,228,.45), 0 0 0 3px rgba(143,38,31,.1); }
     .lf-taiji { position: relative; width: 31px; height: 31px; border-radius: 50%; overflow: hidden; background: var(--cream); box-shadow: inset 0 0 0 1px rgba(20,15,12,.42); }
@@ -1095,7 +1096,7 @@
     .lf-dot { position: absolute; left: 12px; width: 7px; height: 7px; border-radius: 50%; z-index: 2; display: block; }
     .lf-dot.top { top: 4.5px; background: var(--cream); }
     .lf-dot.bot { bottom: 4.5px; background: var(--ink-deep); }
-    .lf-legend { margin-top: 20px; text-align: center; font-size: 11px; letter-spacing: .14em; color: rgba(143,38,31,.78); }
+    .lf-legend { margin-top: 22px; text-align: center; font-size: 11px; letter-spacing: .1em; color: rgba(143,38,31,.78); white-space: nowrap; }
     .fig-yao4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .fig-yao4 > div { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border: 1px solid var(--line); font-size: 14px; }
     .fig-yao4 .yao-bar { width: 56px; height: 4px; margin: 0; }
