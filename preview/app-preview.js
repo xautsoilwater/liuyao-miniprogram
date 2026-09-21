@@ -1458,7 +1458,7 @@
 
   function buildBaguaDiskHtml(kind) {
     const disk = resolveBaguaDisk(kind)
-    if (!disk) return '<div class="fig-fallback">☯</div>'
+    if (!disk) return '<div class="fig-fallback">图示</div>'
     const ticks = (disk.ticks || []).map((tick) =>
       `<i class="lf-tick${tick.major ? ' major' : ''}${tick.mid ? ' mid' : ''}" style="transform:rotate(${tick.deg}deg)"></i>`
     ).join('')
@@ -1466,7 +1466,7 @@
       `<i class="lf-spoke" style="transform:rotate(${deg}deg)"></i>`
     ).join('')
     const dirs = (disk.dirs || []).map((dir) =>
-      `<span class="lf-item" style="transform:rotate(${dir.deg}deg)"><b class="lf-dir-lab">${dir.name}</b></span>`
+      `<b class="lf-dir-lab deg-${dir.deg}">${dir.name}</b>`
     ).join('')
     const guas = (disk.bagua || []).map((gua) => {
       const bars = [2, 1, 0].map((idx) =>
@@ -1476,20 +1476,40 @@
     }).join('')
     return `<div class="lf-disk kind-${disk.kind}">
       <div class="lf-halo"></div>
+      <div class="lf-dirs">${dirs}</div>
+      <b class="lf-south">▲</b>
       <div class="lf-plate">
         <i class="lf-rim outer"></i><i class="lf-rim mid"></i><i class="lf-band"></i>
         <i class="lf-ring r-outer"></i><i class="lf-ring r-dir"></i><i class="lf-ring r-gua"></i><i class="lf-ring r-core"></i>
         <div class="lf-layer ticks">${ticks}</div>
         <div class="lf-layer spokes">${spokes}</div>
-        <div class="lf-layer dirs">${dirs}</div>
         <div class="lf-layer guas">${guas}</div>
-        <b class="lf-south">▲</b>
         <div class="lf-core">
           <div class="lf-taiji"><i class="lf-half yang"></i><i class="lf-half yin"></i><i class="lf-eye top"></i><i class="lf-eye bot"></i><i class="lf-dot top"></i><i class="lf-dot bot"></i></div>
         </div>
       </div>
       <div class="lf-legend">${disk.title} · ${disk.subtitle} · ${disk.volLabel}</div>
     </div>`
+  }
+
+  const DISK_FIGURE_KEYS = {
+    'xiantian-bagua': true,
+    'houtian-bagua': true,
+    bagua: true,
+    'bagua-table': true
+  }
+  const BAGUA_GRID_KEYS = ['qian', 'dui', 'li', 'zhen', 'xun', 'kan', 'gen', 'kun']
+
+  function buildBaguaGridHtml() {
+    const trigrams = (window.LiuYao && window.LiuYao.TRIGRAMS) || {}
+    return `<div class="fig-bg-grid">${BAGUA_GRID_KEYS.map((k) => {
+      const t = trigrams[k]
+      if (!t) return ''
+      const bars = [2, 1, 0].map((idx) =>
+        `<i class="lf-bar ${t.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
+      ).join('')
+      return `<div class="bg-cell"><span class="lf-bars bg-bars">${bars}</span><b class="bg-name">${t.name}</b><i class="bg-meta">${t.nature} · ${t.wuxing}</i></div>`
+    }).join('')}</div>`
   }
 
   function buildFigureHtml(key, caption) {
@@ -1549,10 +1569,31 @@
       body = `<div class="fig-hc"><i>合</i><i>冲</i><i>生</i><i>克</i></div>`
     } else if (key === 'path' || key === 'yingqi') {
       body = `<div class="fig-path">易理 → 象数 → 卜卦 → 回证</div>`
+    } else if (key === 'bagua-grid') {
+      body = buildBaguaGridHtml()
+    } else if (key === 'wuxing') {
+      body = `<div class="fig-wx-cycle"><i class="wx-ring"></i><b class="wx-core">阴阳</b>${['木', '火', '土', '金', '水'].map((item, i) =>
+        `<span class="wx-i n${i}">${item}</span>`
+      ).join('')}</div>`
+    } else if (key === 'neiwai') {
+      body = `<div class="fig-nw">
+        <div class="nw-col"><b>外</b>${yaoBar('yang')}${yaoBar('yin')}${yaoBar('yang')}<em>四五上</em></div>
+        <div class="nw-col"><b>内</b>${yaoBar('yin')}${yaoBar('yang')}${yaoBar('yin')}<em>初二三</em></div>
+      </div>`
+    } else if (key === 'hugua') {
+      body = `<div class="fig-hg">
+        <div class="hg-col"><b>本</b>${yaoBar('yang')}${yaoBar('yin on')}${yaoBar('yang on')}${yaoBar('yin on')}${yaoBar('yang on')}${yaoBar('yin')}</div>
+        <em>→</em>
+        <div class="hg-col"><b>互</b>${yaoBar('yang')}${yaoBar('yin')}${yaoBar('yang')}${yaoBar('yin')}</div>
+      </div>`
+    } else if (key === 'vols8') {
+      body = `<div class="fig-path wrap">开宗 → 易理 → 象数 → 卜卦 → 排盘 → 断卦 → 梅花 → 附录</div>`
+    } else if (key === 'steps6') {
+      body = `<div class="fig-path wrap">取用 → 旺衰 → 动变 → 生克 → 应期 → 裁断</div>`
     } else {
-      body = `<div class="fig-fallback">☯</div>`
+      body = `<div class="fig-fallback">图示</div>`
     }
-    return `<div class="fig">${body}${cap}</div>`
+    return `<div class="fig${DISK_FIGURE_KEYS[key] ? ' is-disk' : ''}">${body}${cap}</div>`
   }
 
   function renderBlocks(blocks) {
@@ -2081,6 +2122,22 @@
 
   hydratePreviewAccount()
   window.addEventListener('scroll', syncLearnActiveFromScroll, { passive: true })
+  try {
+    const q = new URLSearchParams(window.location.search || '')
+    const articleId = q.get('article') || q.get('articleId')
+    if (articleId) {
+      state.page = 'detail'
+      state.articleId = articleId
+      stack[0] = snapshot()
+    }
+    const scrollSel = q.get('scroll')
+    if (scrollSel) {
+      setTimeout(() => {
+        const el = document.querySelector(scrollSel)
+        if (el) el.scrollIntoView({ block: 'center' })
+      }, 0)
+    }
+  } catch (err) {}
   window.__liuyaoPreview = { state, go, back, render, stack }
   render()
 })()
