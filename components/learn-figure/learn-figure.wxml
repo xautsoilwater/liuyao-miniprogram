@@ -72,7 +72,13 @@
           </view>
 
           <view class="lf-layer guas">
-            <view class="lf-item" wx:for="{{item.bagua}}" wx:for-item="gua" wx:key="key" style="transform:rotate({{gua.deg}}deg)">
+            <view
+              class="lf-item"
+              wx:for="{{item.bagua}}"
+              wx:for-item="gua"
+              wx:key="key"
+              style="transform:rotate({{gua.deg}}deg) translateY(calc(var(--yt) * -0.32)) rotate({{gua.ccw}}deg)"
+            >
               <view class="lf-gua tone-{{gua.tone}}">
                 <view class="lf-bars">
                   <view class="lf-bar {{gua.lines[2] ? 'is-yang' : 'is-yin'}}"></view>

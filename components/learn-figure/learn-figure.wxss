@@ -16,7 +16,7 @@
   justify-content: center;
 }
 .fig-stage.is-disk {
-  padding: 52rpx 28rpx 40rpx;
+  padding: 64rpx 44rpx 48rpx;
 }
 
 .fig-cap {
@@ -112,7 +112,7 @@
 .lf-disks.is-compare {
   flex-direction: column;
   align-items: center;
-  gap: 48rpx;
+  gap: 64rpx;
 }
 
 .lf-disk {
@@ -176,15 +176,16 @@
   pointer-events: none;
 }
 .lf-ring.r-outer { inset: 5%; border-color: rgba(20, 15, 12, 0.2); }
-.lf-ring.r-dir { inset: 13%; border-color: rgba(143, 38, 31, 0.22); }
-.lf-ring.r-gua { inset: 27%; border-color: rgba(20, 15, 12, 0.12); }
-.lf-ring.r-core { inset: 41%; border-color: rgba(143, 38, 31, 0.16); }
+.lf-ring.r-dir { inset: 11%; border-color: rgba(143, 38, 31, 0.22); }
+.lf-ring.r-gua { inset: 22%; border-color: rgba(20, 15, 12, 0.12); }
+.lf-ring.r-core { inset: 38%; border-color: rgba(143, 38, 31, 0.16); }
 
 .lf-layer {
   position: absolute;
   inset: 0;
   border-radius: 50%;
 }
+.lf-layer.guas { z-index: 4; }
 
 .lf-item {
   position: absolute;
@@ -220,15 +221,15 @@
   left: 50%;
   top: 50%;
   width: 1rpx;
-  height: 34%;
+  height: calc(var(--yt) / 2 - 8rpx);
   margin-left: -0.5rpx;
-  margin-top: -34%;
-  transform-origin: 50% 100%;
-  background: rgba(20, 15, 12, 0.12);
+  margin-top: calc(0px - var(--yt) / 2 + 8rpx);
+  transform-origin: 50% calc(var(--yt) / 2 - 8rpx);
+  background: linear-gradient(to bottom, rgba(20, 15, 12, 0.14) 0, rgba(20, 15, 12, 0.14) 22rpx, transparent 22rpx);
   pointer-events: none;
 }
 
-/* 东南西北在盘外正立，不占内环 */
+/* 东南西北在盘外正立，不随盘面旋转 */
 .lf-dirs {
   position: absolute;
   left: 0;
@@ -242,25 +243,28 @@
 .lf-dir-lab {
   position: absolute;
   font-size: 28rpx;
-  letter-spacing: 0.18em;
+  letter-spacing: 0;
   color: rgba(143, 38, 31, 0.82);
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
 }
-.lf-dir-lab.deg-0 { left: 50%; top: 0; transform: translate(-50%, calc(-100% - 28rpx)); }
-.lf-dir-lab.deg-180 { left: 50%; bottom: 0; transform: translate(-50%, calc(100% + 12rpx)); }
-.lf-dir-lab.deg-270 { left: 0; top: 50%; transform: translate(calc(-100% - 14rpx), -50%); }
-.lf-dir-lab.deg-90 { right: 0; top: 50%; transform: translate(calc(100% + 14rpx), -50%); }
+.lf-dir-lab.deg-0 { left: 50%; top: 0; transform: translate(-50%, calc(-100% - 22rpx)) rotate(0deg); }
+.lf-dir-lab.deg-180 { left: 50%; bottom: 0; transform: translate(-50%, calc(100% + 18rpx)) rotate(0deg); }
+.lf-dir-lab.deg-270 { left: 0; top: 50%; transform: translate(calc(-100% - 22rpx), -50%) rotate(0deg); }
+.lf-dir-lab.deg-90 { right: 0; top: 50%; transform: translate(calc(100% + 22rpx), -50%) rotate(0deg); }
 
 .lf-gua {
   position: absolute;
   left: 0;
-  top: calc(var(--yt) * -0.385);
-  width: 132rpx;
-  margin-left: -66rpx;
+  top: 0;
+  width: 80rpx;
+  margin-left: -40rpx;
+  transform: translateY(-50%);
   text-align: center;
-  line-height: 1.15;
+  line-height: 1.12;
   --gua: var(--ink-deep);
 }
 
@@ -268,14 +272,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7rpx;
-  margin: 0 auto 12rpx;
-  width: 58rpx;
+  gap: 5rpx;
+  margin: 0 auto 6rpx;
+  width: 52rpx;
 }
 
 .lf-bar {
-  width: 58rpx;
-  height: 7rpx;
+  width: 52rpx;
+  height: 6rpx;
   background: var(--gua);
   border-radius: 1rpx;
 }
@@ -294,35 +298,36 @@
 .lf-gua-name {
   display: block;
   font-size: 34rpx;
-  letter-spacing: 0.14em;
-  text-indent: 0.14em;
+  letter-spacing: 0;
   color: var(--gua);
   font-weight: 700;
 }
 
 .lf-gua-meta {
   display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 10rpx;
-  margin-top: 8rpx;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  margin-top: 2rpx;
   white-space: nowrap;
 }
 
 .lf-gua-tip {
   font-size: 22rpx;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   font-weight: 600;
   color: var(--gua);
-  opacity: 0.9;
+  opacity: 0.88;
 }
 
 .lf-gua-vol {
   font-size: 26rpx;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   color: var(--sight);
   font-variant-numeric: tabular-nums;
+  line-height: 1.15;
 }
 
 .lf-south {
@@ -381,11 +386,12 @@
 .lf-dot.bot { bottom: 9rpx; background: var(--ink-deep); }
 
 .lf-legend {
-  margin-top: 40rpx;
+  margin-top: 44rpx;
   text-align: center;
   font-size: 22rpx;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.1em;
   color: rgba(143, 38, 31, 0.78);
+  white-space: nowrap;
 }
 
 /* yao4 */

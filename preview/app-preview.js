@@ -1472,7 +1472,8 @@
       const bars = [2, 1, 0].map((idx) =>
         `<i class="lf-bar ${gua.lines[idx] ? 'is-yang' : 'is-yin'}"></i>`
       ).join('')
-      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><span class="lf-gua-meta"><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span></span>`
+      const ccw = gua.ccw != null ? gua.ccw : -gua.deg
+      return `<span class="lf-item" style="transform:rotate(${gua.deg}deg) translateY(calc(var(--yt) * -0.32)) rotate(${ccw}deg)"><span class="lf-gua tone-${gua.tone}"><span class="lf-bars">${bars}</span><b class="lf-gua-name">${gua.name}</b><span class="lf-gua-meta"><i class="lf-gua-tip">${gua.tip}</i><i class="lf-gua-vol">${gua.vol}</i></span></span></span>`
     }).join('')
     return `<div class="lf-disk kind-${disk.kind}">
       <div class="lf-halo"></div>
