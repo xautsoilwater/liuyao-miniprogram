@@ -1,0 +1,34 @@
+name: Publish web preview
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'preview/**'
+      - 'scripts/publish-web-preview.sh'
+      - 'scripts/verify-preview-assets.mjs'
+      - '.github/workflows/publish-web-preview.yml'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Publish to GitHub Pages repo
+        env:
+          # classic PAT / fine-grained token：对 xautsoilwater/liuyao-web-preview 有 Contents 写权限
+          GH_TOKEN: ${{ secrets.PREVIEW_PUSH_TOKEN }}
+          LIUYAO_PREVIEW_WORK: ${{ runner.temp }}/liuyao-web-preview-deploy
+        run: |
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "::error::缺少 secrets.PREVIEW_PUSH_TOKEN，无法写入 liuyao-web-preview"
+            echo "请在本仓库 Settings → Secrets 添加 PREVIEW_PUSH_TOKEN 后重跑本 workflow，"
+            echo "或在本机执行：bash scripts/publish-web-preview.sh"
+            exit 1
+          fi
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          bash scripts/publish-web-preview.sh

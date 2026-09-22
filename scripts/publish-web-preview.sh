@@ -39,6 +39,12 @@ else
   gh repo clone "$REPO" "$WORK"
 fi
 
+# Actions / 显式 token：确保能推到预览仓
+if [[ -n "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ]]; then
+  PUSH_TOKEN="${GH_TOKEN:-$GITHUB_TOKEN}"
+  git -C "$WORK" remote set-url origin "https://x-access-token:${PUSH_TOKEN}@github.com/${REPO}.git"
+fi
+
 # 无 rsync 时用 find+cp 等价同步（保留 .git）
 find "$WORK" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
 cp -a "$DIST"/. "$WORK"/
