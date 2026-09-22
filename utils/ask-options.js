@@ -1925,7 +1925,8 @@ function listGroups() {
       id: o.id,
       label: o.label,
       topicKey: o.topicKey,
-      wide: o.label.length > 10
+      // 双列里 ≥9 字易折行挤乱，通栏更稳
+      wide: Array.from(o.label).length >= 9
     }))
   }))
 }

@@ -133,7 +133,8 @@
     scrollPageTop()
   }
   function render() {
-    ({
+    if (app) app.classList.toggle('has-page-footer', state.page === 'ask')
+    const pages = {
       index: renderIndex,
       ask: renderAsk,
       cast: renderCast,
@@ -148,7 +149,8 @@
       guadian: renderGuadian,
       guadianDetail: renderGuadianDetail,
       feedback: renderFeedback
-    })[state.page]()
+    }
+    pages[state.page]()
     updateBackUi()
   }
   function corners() {
@@ -570,7 +572,6 @@
           <div class="ask-category-grid">${groups.map((g) => `
             <button type="button" class="ask-category" data-group="${g.key}">
               <span class="ask-category-name">${g.label}</span>
-              ${g.tip ? `<span class="ask-category-tip">${g.tip}</span>` : ''}
             </button>`).join('')}</div>
         </div>`
     }
@@ -580,11 +581,11 @@
     return `
       <div class="ask-picker">
         <div class="ask-category-head">
-          <div>
-            <div class="field-label">当前类别</div>
+          <div class="field-label">当前类别</div>
+          <div class="ask-category-row">
             <div class="ask-current-category">${selectedGroup.label}</div>
+            <button type="button" class="change-link ask-change-category" data-change-group>返回上一层</button>
           </div>
-          <button type="button" class="change-link ask-change-category" data-change-group>更换类别</button>
         </div>
         ${selectedGroup.tip ? `<div class="ask-group-tip muted">${selectedGroup.tip}</div>` : ''}
         <div class="field-label" style="margin-top:16px">选择具体事项</div>
@@ -592,7 +593,7 @@
           `<button type="button" class="ask-option ${o.wide ? 'wide' : ''} ${state.selectedOptionId === o.id ? 'on' : ''}" data-opt="${o.id}">${o.label}</button>`
         ).join('')}</div>
         <div class="field-label" style="margin-top:18px">时间范围</div>
-        <div class="chip-wrap">${timeHtml}</div>
+        <div class="ask-time-grid">${timeHtml}</div>
         <div class="ask-hint muted">${state.question || emptyHint}</div>
       </div>`
   }
@@ -641,7 +642,6 @@
   function renderAsk() {
     setNav('选择所问')
     const next = state.askNext === 'meihua' ? 'meihua' : 'cast'
-    const nextLabel = next === 'meihua' ? '梅花起卦' : '六爻卜卦'
     const confirmLabel = '去卜卦'
     const canConfirm = !!(state.selectedOptionId && state.question)
     app.innerHTML = `
@@ -651,8 +651,10 @@
         <div>澄心定念，明所求而后起卦。</div>
       </div>
       ${askPickerHtml('请点选一项')}
-      <button class="btn btn-primary" id="askConfirm" ${canConfirm ? '' : 'disabled'}>${canConfirm ? confirmLabel : '选择所问'}</button>
-      <button class="btn btn-ghost" data-back style="margin-top:12px">返回</button>`
+      <div class="page-footer">
+        <button class="btn btn-ghost" data-back>返回</button>
+        <button class="btn btn-primary" id="askConfirm" ${canConfirm ? '' : 'disabled'}>${canConfirm ? confirmLabel : '选择所问'}</button>
+      </div>`
     bindNav()
     bindAskPicker()
     const confirm = document.getElementById('askConfirm')
