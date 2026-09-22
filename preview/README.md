@@ -2,21 +2,11 @@
 
 ## 固定长期链接（推荐）
 
-**https://xautsoilwater.github.io/liuyao-web-preview/**
+**https://xautsoilwater.github.io/liuyao-miniprogram/**
 
-- HTTPS，长期有效，不依赖本机局域网 IP  
-- 源码仓库（仅静态站）：https://github.com/xautsoilwater/liuyao-web-preview  
-- 更新后约 1～2 分钟生效；强刷可用：`?v=时间戳`
+推送到 `main` 或 `cursor/**`（且改了 `preview/`、所问页或 `utils/ask-options.js`）后，GitHub Actions 会自动发布，约 1～2 分钟生效。强刷：`?v=时间戳`。
 
-## 发布最新预览
-
-在 `liuyao-miniprogram` 目录：
-
-```bash
-bash scripts/publish-web-preview.sh
-```
-
-会把 `preview/liuyao-standalone.html` + `assets/` 推到 GitHub Pages。
+旧地址 `https://xautsoilwater.github.io/liuyao-web-preview/` 不再作为发布目标。
 
 ## 本地临时预览
 

@@ -1,0 +1,55 @@
+name: Deploy web preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'cursor/**'
+    paths:
+      - 'preview/**'
+      - 'pages/ask/**'
+      - 'utils/ask-options.js'
+      - '.github/workflows/deploy-preview-pages.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: liuyao-web-preview
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build static preview
+        run: |
+          node scripts/verify-preview-assets.mjs
+          rm -rf _site
+          mkdir -p _site
+          cp preview/liuyao-standalone.html _site/index.html
+          cp -R preview/assets _site/assets
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > _site/BUILD.txt
+          BUILD_ID="$(tr -d '\n' < _site/BUILD.txt)"
+          if grep -q "liuyao-preview-build" _site/index.html; then
+            perl -i -pe "s/liuyao-preview-build:[^ ]*/liuyao-preview-build:${BUILD_ID}/" _site/index.html
+          else
+            perl -i -0pe "s#<head>#<head>\n  <!-- liuyao-preview-build:${BUILD_ID} -->#" _site/index.html
+          fi
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
