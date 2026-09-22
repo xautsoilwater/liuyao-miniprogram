@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - 'cursor/**'
     paths:
       - 'preview/**'
       - 'pages/ask/**'
@@ -55,5 +54,3 @@ jobs:
           path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
-
-# retrigger 2026-09-22T07:05:59Z
