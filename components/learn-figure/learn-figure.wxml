@@ -190,6 +190,29 @@
       <view class="hc-chip">克</view>
     </view>
 
+    <!-- 周易起源时间线 -->
+    <view class="origin" wx:elif="{{name==='origin-line'}}">
+      <view class="og-step"><text class="og-k">传说</text><text class="og-v">伏羲画卦</text></view>
+      <view class="og-step"><text class="og-k">考古</text><text class="og-v">数字卦</text></view>
+      <view class="og-step"><text class="og-k">经</text><text class="og-v">卦爻辞</text></view>
+      <view class="og-step"><text class="og-k">传</text><text class="og-v">十翼</text></view>
+      <view class="og-step"><text class="og-k">汉</text><text class="og-v">象数·义理</text></view>
+    </view>
+
+    <!-- 经与传 -->
+    <view class="jingzhuan" wx:elif="{{name==='jing-zhuan'}}">
+      <view class="jz-col">
+        <text class="jz-k">经</text>
+        <text class="jz-v">卦辞 · 爻辞</text>
+        <text class="jz-s">上下经 · 六十四卦</text>
+      </view>
+      <view class="jz-col">
+        <text class="jz-k">传</text>
+        <text class="jz-v">十翼</text>
+        <text class="jz-s">彖象 · 系辞 · 文言 · 说序杂</text>
+      </view>
+    </view>
+
     <!-- 应期 / 路径 -->
     <view class="path" wx:elif="{{name==='path' || name==='yingqi'}}">
       <text>易理</text><text class="sep">→</text>

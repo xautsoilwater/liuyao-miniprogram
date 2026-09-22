@@ -505,6 +505,74 @@
 }
 .path .sep { color: var(--line-strong); }
 
+.origin {
+  display: flex;
+  width: 100%;
+  gap: 8rpx;
+}
+.og-step {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  min-height: 132rpx;
+  padding: 12rpx 4rpx;
+  border: 1rpx solid var(--line-strong);
+  background: rgba(246, 237, 216, 0.45);
+  box-sizing: border-box;
+}
+.og-k {
+  font-size: 22rpx;
+  letter-spacing: 0.12em;
+  color: var(--cinnabar);
+}
+.og-v {
+  font-size: 22rpx;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-align: center;
+}
+
+.jingzhuan {
+  display: flex;
+  width: 100%;
+  gap: 16rpx;
+}
+.jz-col {
+  flex: 1;
+  min-height: 168rpx;
+  padding: 20rpx 12rpx;
+  border: 1rpx solid var(--line-strong);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  box-sizing: border-box;
+  background: rgba(246, 237, 216, 0.45);
+}
+.jz-k {
+  font-size: 40rpx;
+  letter-spacing: 0.28em;
+  color: var(--cinnabar);
+}
+.jz-v {
+  font-size: 26rpx;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+.jz-s {
+  font-size: 22rpx;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  color: var(--bronze);
+  text-align: center;
+}
+
 .fallback .gua-big { font-size: 80rpx; color: var(--bronze); }
 .muted { color: var(--mist); }
 
