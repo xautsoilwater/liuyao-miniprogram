@@ -39,7 +39,9 @@ else
   gh repo clone "$REPO" "$WORK"
 fi
 
-rsync -a --delete --exclude '.git' "$DIST/" "$WORK/"
+# 无 rsync 时用 find+cp 等价同步（保留 .git）
+find "$WORK" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+cp -a "$DIST"/. "$WORK"/
 date -u +"%Y-%m-%dT%H:%M:%SZ" > "$WORK/BUILD.txt"
 
 # 轻量防缓存：给 index 加 build 注释
