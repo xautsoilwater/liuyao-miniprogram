@@ -112,23 +112,26 @@
 .ask-option-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10rpx;
+  gap: 12rpx;
   margin-top: 12rpx;
+  align-items: stretch;
 }
 
 .ask-option {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 88rpx;
-  padding: 16rpx 14rpx;
+  min-height: 96rpx;
+  height: 100%;
+  padding: 18rpx 16rpx;
   border: 1rpx solid var(--line-strong);
   color: var(--ink-soft);
-  font-size: 26rpx;
-  line-height: 1.45;
-  letter-spacing: 0.02em;
+  font-size: 25rpx;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
   text-align: center;
   box-sizing: border-box;
+  word-break: break-word;
 }
 
 .ask-option.wide {
@@ -152,10 +155,10 @@
   width: 100%;
   box-sizing: border-box;
   font-size: 24rpx;
-  padding: 14rpx 8rpx;
+  padding: 16rpx 8rpx;
   border: 1rpx solid var(--line-strong);
   color: var(--ink-soft);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   line-height: 1.35;
   text-align: center;
 }

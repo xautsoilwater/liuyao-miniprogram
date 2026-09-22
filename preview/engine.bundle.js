@@ -10301,8 +10301,8 @@ function listGroups() {
       id: o.id,
       label: o.label,
       topicKey: o.topicKey,
-      // 双列里 ≥9 字易折行挤乱，通栏更稳
-      wide: Array.from(o.label).length >= 9
+      // 一律双列；长文案在格内折行，避免大量通栏「一行一项」
+      wide: false
     }))
   }))
 }
