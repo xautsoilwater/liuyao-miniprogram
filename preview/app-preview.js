@@ -1570,6 +1570,19 @@
       body = `<div class="fig-fu"><div>飞 ${yaoBar('yang')} 兄弟</div><em>伏 · 妻财</em></div>`
     } else if (key === 'he-chong') {
       body = `<div class="fig-hc"><i>合</i><i>冲</i><i>生</i><i>克</i></div>`
+    } else if (key === 'origin-line') {
+      body = `<div class="fig-origin">
+        <div><b>传说</b><i>伏羲画卦</i></div>
+        <div><b>考古</b><i>数字卦</i></div>
+        <div><b>经</b><i>卦爻辞</i></div>
+        <div><b>传</b><i>十翼</i></div>
+        <div><b>汉</b><i>象数·义理</i></div>
+      </div>`
+    } else if (key === 'jing-zhuan') {
+      body = `<div class="fig-jingzhuan">
+        <div><b>经</b><i>卦辞 · 爻辞</i><em>上下经 · 六十四卦</em></div>
+        <div><b>传</b><i>十翼</i><em>彖象 · 系辞 · 文言 · 说序杂</em></div>
+      </div>`
     } else if (key === 'path' || key === 'yingqi') {
       body = `<div class="fig-path">易理 → 象数 → 卜卦 → 回证</div>`
     } else if (key === 'bagua-grid') {
