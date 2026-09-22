@@ -37,9 +37,11 @@
   font-size: 28rpx;
   letter-spacing: 0.06em;
   line-height: 1.55;
+  margin-top: 18rpx;
   margin-bottom: 10rpx;
   min-height: 44rpx;
   color: var(--ink);
+  text-align: center;
 }
 
 .ask-group-title {
@@ -110,22 +112,26 @@
 .ask-option-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10rpx;
+  gap: 12rpx;
   margin-top: 12rpx;
+  align-items: stretch;
 }
 
 .ask-option {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 88rpx;
-  padding: 16rpx 12rpx;
+  min-height: 96rpx;
+  height: 100%;
+  padding: 18rpx 16rpx;
   border: 1rpx solid var(--line-strong);
   color: var(--ink-soft);
-  font-size: 26rpx;
+  font-size: 25rpx;
   line-height: 1.4;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   text-align: center;
+  box-sizing: border-box;
+  word-break: break-word;
 }
 
 .ask-option.wide {
@@ -149,31 +155,18 @@
   width: 100%;
   box-sizing: border-box;
   font-size: 24rpx;
-  padding: 12rpx 8rpx;
+  padding: 16rpx 8rpx;
   border: 1rpx solid var(--line-strong);
   color: var(--ink-soft);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   line-height: 1.35;
+  text-align: center;
 }
 
 .ask-chip.on {
   color: var(--cinnabar);
   border-color: var(--cinnabar);
   background: rgba(168, 52, 38, 0.06);
-}
-
-.footer-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-  margin: 36rpx 0 48rpx;
-}
-
-.footer-actions button {
-  width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-  box-sizing: border-box;
 }
 
 .btn-primary.is-disabled {

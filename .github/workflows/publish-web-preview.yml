@@ -1,0 +1,12 @@
+# 已停用：预览改由 deploy-preview-pages.yml 发布到本仓库 GitHub Pages。
+# 保留文件以免旧说明指向一个会失败的 workflow。
+name: Publish web preview (disabled)
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "replaced by Deploy web preview"

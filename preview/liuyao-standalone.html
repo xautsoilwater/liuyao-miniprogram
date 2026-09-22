@@ -565,7 +565,7 @@
       font-size: 14px; font-weight: 400; line-height: 1.7; letter-spacing: .08em;
     }
     .ask-picker { margin: 14px 0 18px; }
-    .ask-hint { font-size: 14px; letter-spacing: .06em; margin: 6px 0 8px; min-height: 22px; }
+    .ask-hint { font-size: 14px; letter-spacing: .06em; margin: 6px 0 8px; min-height: 22px; text-align: center; }
     .ask-group-title {
       margin: 12px 0 4px; font-size: 12px; letter-spacing: .22em; color: var(--bronze);
     }
@@ -580,7 +580,7 @@
       min-height: 54px; padding: 10px 8px; cursor: pointer; text-align: center;
       border: 1px solid var(--line-strong); background: rgba(246,237,216,.5);
       color: var(--ink); font-family: inherit; display: flex; align-items: center;
-      justify-content: center;
+      justify-content: center; box-sizing: border-box;
     }
     .ask-category-name { display: block; font-size: 15px; letter-spacing: .14em; }
     .ask-category-head {
@@ -599,12 +599,17 @@
       cursor: pointer; font-family: inherit; padding: 8px 0 8px 12px;
     }
     .ask-picker .field-label { text-align: center; }
-    .ask-option-list { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 8px; }
+    .ask-option-list {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;
+      align-items: stretch;
+    }
     .ask-option {
-      display: flex; align-items: center; justify-content: center; min-height: 52px;
-      padding: 9px 10px; cursor: pointer; text-align: center; font: inherit; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 56px; height: 100%;
+      padding: 10px 11px; cursor: pointer; text-align: center; font: inherit; font-size: 13px;
       border: 1px solid var(--line-strong); background: transparent; color: var(--ink-soft);
-      letter-spacing: .04em; line-height: 1.4;
+      letter-spacing: .01em; line-height: 1.4; box-sizing: border-box;
+      word-break: break-word;
     }
     .ask-option.wide { grid-column: 1 / -1; }
     .ask-option.on {
@@ -618,10 +623,11 @@
     }
     .ask-chip {
       font: inherit; cursor: pointer;
-      width: 100%; font-size: 13px; padding: 7px 6px;
+      width: 100%; font-size: 13px; padding: 9px 6px;
       border: 1px solid var(--line-strong);
       color: var(--ink-soft); background: transparent;
-      letter-spacing: .04em; line-height: 1.35;
+      letter-spacing: .06em; line-height: 1.35; text-align: center;
+      box-sizing: border-box;
     }
     .ask-chip.on {
       color: var(--cinnabar); border-color: var(--cinnabar);
@@ -11727,7 +11733,8 @@ function listGroups() {
       id: o.id,
       label: o.label,
       topicKey: o.topicKey,
-      wide: o.label.length > 10
+      // 一律双列；长文案在格内折行，避免大量通栏「一行一项」
+      wide: false
     }))
   }))
 }
@@ -14952,7 +14959,8 @@ window.LiuYao = {
     scrollPageTop()
   }
   function render() {
-    ({
+    if (app) app.classList.toggle('has-page-footer', state.page === 'ask')
+    const pages = {
       index: renderIndex,
       ask: renderAsk,
       cast: renderCast,
@@ -14967,7 +14975,8 @@ window.LiuYao = {
       guadian: renderGuadian,
       guadianDetail: renderGuadianDetail,
       feedback: renderFeedback
-    })[state.page]()
+    }
+    pages[state.page]()
     updateBackUi()
   }
   function corners() {
@@ -15389,7 +15398,6 @@ window.LiuYao = {
           <div class="ask-category-grid">${groups.map((g) => `
             <button type="button" class="ask-category" data-group="${g.key}">
               <span class="ask-category-name">${g.label}</span>
-              ${g.tip ? `<span class="ask-category-tip">${g.tip}</span>` : ''}
             </button>`).join('')}</div>
         </div>`
     }
@@ -15399,11 +15407,11 @@ window.LiuYao = {
     return `
       <div class="ask-picker">
         <div class="ask-category-head">
-          <div>
-            <div class="field-label">当前类别</div>
+          <div class="field-label">当前类别</div>
+          <div class="ask-category-row">
             <div class="ask-current-category">${selectedGroup.label}</div>
+            <button type="button" class="change-link ask-change-category" data-change-group>返回上一层</button>
           </div>
-          <button type="button" class="change-link ask-change-category" data-change-group>更换类别</button>
         </div>
         ${selectedGroup.tip ? `<div class="ask-group-tip muted">${selectedGroup.tip}</div>` : ''}
         <div class="field-label" style="margin-top:16px">选择具体事项</div>
@@ -15411,7 +15419,7 @@ window.LiuYao = {
           `<button type="button" class="ask-option ${o.wide ? 'wide' : ''} ${state.selectedOptionId === o.id ? 'on' : ''}" data-opt="${o.id}">${o.label}</button>`
         ).join('')}</div>
         <div class="field-label" style="margin-top:18px">时间范围</div>
-        <div class="chip-wrap">${timeHtml}</div>
+        <div class="ask-time-grid">${timeHtml}</div>
         <div class="ask-hint muted">${state.question || emptyHint}</div>
       </div>`
   }
@@ -15460,7 +15468,6 @@ window.LiuYao = {
   function renderAsk() {
     setNav('选择所问')
     const next = state.askNext === 'meihua' ? 'meihua' : 'cast'
-    const nextLabel = next === 'meihua' ? '梅花起卦' : '六爻卜卦'
     const confirmLabel = '去卜卦'
     const canConfirm = !!(state.selectedOptionId && state.question)
     app.innerHTML = `
@@ -15470,8 +15477,10 @@ window.LiuYao = {
         <div>澄心定念，明所求而后起卦。</div>
       </div>
       ${askPickerHtml('请点选一项')}
-      <button class="btn btn-primary" id="askConfirm" ${canConfirm ? '' : 'disabled'}>${canConfirm ? confirmLabel : '选择所问'}</button>
-      <button class="btn btn-ghost" data-back style="margin-top:12px">返回</button>`
+      <div class="page-footer">
+        <button class="btn btn-ghost" data-back>返回</button>
+        <button class="btn btn-primary" id="askConfirm" ${canConfirm ? '' : 'disabled'}>${canConfirm ? confirmLabel : '选择所问'}</button>
+      </div>`
     bindNav()
     bindAskPicker()
     const confirm = document.getElementById('askConfirm')
