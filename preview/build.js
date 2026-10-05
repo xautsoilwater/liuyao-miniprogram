@@ -25,7 +25,9 @@ const order = [
   './ask-options',
   './duangu',
   './meihua',
-  './bazi'
+  './bazi',
+  './ai-config',
+  './ai-interpreter'
 ]
 
 const fileOf = {
@@ -48,7 +50,9 @@ const fileOf = {
   './ask-options': 'utils/ask-options.js',
   './duangu': 'utils/duangu.js',
   './meihua': 'utils/meihua.js',
-  './bazi': 'utils/bazi.js'
+  './bazi': 'utils/bazi.js',
+  './ai-config': 'utils/ai-config.js',
+  './ai-interpreter': 'utils/ai-interpreter.js'
 }
 
 const aliases = {
@@ -91,12 +95,20 @@ var bagua = __require('../data/bagua');
 var guaci = __require('../data/guaci');
 var guadian = __require('./gua64-xiangjie');
 var bazi = __require('./bazi');
+var aiConfig = __require('./ai-config');
+var aiInterpreter = __require('./ai-interpreter');
 window.LiuYao = {
   tossThreeCoins: coin.tossThreeCoins,
   manualYao: coin.manualYao,
   arrangeCast: paipan.arrangeCast,
   buildPaipanGuide: paipan.buildPaipanGuide,
   interpret: duangu.interpret,
+  interpretWithAi: aiInterpreter.interpretWithAi,
+  formatCastForPrompt: aiInterpreter.formatCastForPrompt,
+  buildDivinationPrompt: aiInterpreter.buildDivinationPrompt,
+  getAiConfig: aiConfig.getAiConfig,
+  saveAiConfig: aiConfig.saveAiConfig,
+  resetAiConfig: aiConfig.resetAiConfig,
   TOPIC_YONGSHEN: duangu.TOPIC_YONGSHEN,
   guessTopicKey: duangu.guessTopicKey,
   castByNumbers: meihua.castByNumbers,

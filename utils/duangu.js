@@ -366,14 +366,32 @@ function choicePickFromParsed(parsed, tone) {
 }
 
 function philosophyGuidance(tone, focus, parsed) {
-  if (parsed && parsed.negativeEvent) return '先核事实，再定边界，不以卦象替代证据。'
-  if (parsed && (parsed.domain === 'health' || parsed.domain === 'pregnancy')) return '卦可定心，不可代医；以检查、复诊和专业意见为准。'
-  if (parsed && parsed.domain === 'weather') return '以官方预报和现场情况为准，卦象只作趋避提醒。'
-  if (parsed && parsed.domain === 'lost' && /寻人|人/.test(String(parsed.focus || ''))) return '先联络、查找和报警，勿因卦象耽误行动。'
-  if (parsed && parsed.mode === 'choice') return '先做可逆的小步验证，再决定是否重注。'
-  if (tone === 'good') return '可进，但以守正、守信并留有余地为度。'
-  if (tone === 'bad') return `宜先止损换势，不与「${focus}」的逆势硬争。`
-  return `先小步求证「${focus}」，条件明朗后再定。`
+  if (parsed && parsed.negativeEvent) {
+    return tone === 'good'
+      ? '明理之道：风险之象偏弱，也不可据卦指认他人或放弃核验；以事实、坦诚沟通与清楚边界守住关系。'
+      : tone === 'bad'
+        ? '避凶之道：风险之象偏强，先核事实、留证据、定边界；不以猜疑伤人，也不以侥幸纵患。'
+        : '指迷之要：风险未明时，不猜、不纵、不武断；以事实核验和可执行的边界减少后悔。'
+  }
+  if (parsed && (parsed.domain === 'health' || parsed.domain === 'pregnancy')) {
+    return '明理之道：安其心而不轻其患，尽人事而遵医理；能控制的是就医、复查、作息与支持，不能控制的结果不以一卦强求。'
+  }
+  if (parsed && parsed.domain === 'weather') {
+    return '明理之道：天时有变，备而不惧；以预报和现场为据，卦象只提醒人保留余地。'
+  }
+  if (parsed && parsed.domain === 'lost' && /寻人|人/.test(String(parsed.focus || ''))) {
+    return '寻人之要：以行动争取时间，以事实缩小范围；卦象不可替代联络、搜索与必要的报警求助。'
+  }
+  if (parsed && parsed.mode === 'choice') {
+    return '取舍之道：不求卦替人承担后果，只求看清得失；所选若有据、可承受、能修正，进退皆可少悔。'
+  }
+  if (tone === 'good') {
+    return `趋吉之道：顺势而行，却不因一时有利而躁进；守正、守信、留有余地，方能使「${focus}」之吉延续。`
+  }
+  if (tone === 'bad') {
+    return `避凶之道：先止损，再变通；莫把一时阻滞当作终局，也莫以执念强求「${focus}」。穷则变，变则通，调整自身与条件便是在育新机。`
+  }
+  return `指迷之要：象在变，事亦在变；先安其心，再辨轻重缓急，对「${focus}」小步求证、随势修正。知进退而守其中，方可少悔。`
 }
 
 /** 按问题类型组织判断与建议 */
@@ -1481,7 +1499,9 @@ function domainOutcome(profile, total) {
 }
 
 function narrativeHeadline(judgment, deep) {
-  const mode = judgment.parsed && judgment.parsed.mode
+  const guardedLevel = safetyLevel(judgment && judgment.parsed)
+  if (guardedLevel) return guardedLevel
+  const mode = judgment && judgment.parsed && judgment.parsed.mode
   if (deep.profile.safe || deep.profile.guarded || ['where', 'when', 'who', 'choice'].includes(mode)) return deep.summary
   if (deep.profile.negativeOutcome) return deep.summary
   if (deep.total >= 3) return '可望推进，但宜循序而进'
@@ -1524,6 +1544,13 @@ function narrativeOpening(ctx, judgment, deep) {
     text += `落到你问的“${focus}”，${naturalAxisFact(driver)}，这是事情能够继续向前的主要支点。`
   } else {
     text += `落到你问的“${focus}”，用神、世应与动爻之间尚未形成一股足以定局的力量，因此现在不宜把一时现象当作最终结果。`
+  }
+  const guarded = safetyJudgmentLine(
+    judgment && judgment.parsed,
+    judgment && judgment.parsed && judgment.parsed.mode === 'yesno' ? (judgment.answerTone || judgment.tone) : (judgment && judgment.tone)
+  )
+  if (guarded && !text.includes(guarded)) {
+    text = `${guarded} ${text}`
   }
   return text
 }
@@ -1651,31 +1678,51 @@ function timeNarrative(ctx, judgment) {
   return ''
 }
 
-function adviceNarrative(ctx, deep) {
-  if (deep.profile.safe || deep.profile.guarded || deep.profile.negativeOutcome) return deep.profile.action
-  const kind = deep.profile.kind || 'general'
-  const action = deep.profile.action || ''
-  if (/^emotion/.test(kind)) return `先不要继续猜对方心意，把卦里的“有无”交给一次具体行动验证。${action}`
-  if (kind === 'career') return `眼下不宜同时追逐多个可能，先让机会从口头认可变成明确的位置和节点。${action}`
-  if (['wealth', 'receivable'].includes(kind)) return `财上要先分清“看见机会”与“真正落袋”，不要被表面的热度带着走。${action}`
-  if (kind === 'investment') return `先把可得与可失分开，不因卦象偏顺就放大投入。${action}`
-  if (['exam', 'research-paper', 'research-project', 'document'].includes(kind)) return `不要平均用力，先处理最可能改变结果的一环。${action}`
-  if (kind === 'lost') return `不要漫无目的扩大查找范围，先按主方向和内外交界处查一轮，再沿最后动线往回收。${action}`
-  if (kind === 'family') return `先把家事拆开，不要试图一次说清所有旧账。${action}`
-  if (kind === 'travel') return `这卦更重行程是否真正接上，不在于勉强赶路。${action}`
-  const driver = deep.driver && deep.driver.value > 0 ? deep.driver : null
-  const blocker = deep.blocker && deep.blocker.value < 0 ? deep.blocker : null
-  let lead = ''
-  if (driver && blocker && driver.key !== blocker.key) {
-    lead = `现在不要平均用力。先处理${blocker.label}，待这一处不再牵制，再顺着${driver.label}推进；顺序颠倒，越用力越容易空耗。`
-  } else if (blocker) {
-    lead = `眼下先别急着求结果，先把${blocker.label}这一处松开；它不变，局面就难变。`
-  } else if (driver) {
-    lead = `可以往前走，但要沿着${driver.label}这一支点发力，不必同时铺开所有方向。`
+function adviceNarrative(ctx, deep, judgment) {
+  let res = ''
+  if (deep.profile.safe || deep.profile.guarded || deep.profile.negativeOutcome) {
+    res = deep.profile.action
   } else {
-    lead = '此时最合适的是做一步可观察、可回退的动作，让现实反馈替你缩小判断范围。'
+    const kind = deep.profile.kind || 'general'
+    const action = deep.profile.action || ''
+    if (/^emotion/.test(kind)) res = `先不要继续猜对方心意，把卦里的“有无”交给一次具体行动验证。${action}`
+    else if (kind === 'career') res = `眼下不宜同时追逐多个可能，先让机会从口头认可变成明确的位置和节点。${action}`
+    else if (['wealth', 'receivable'].includes(kind)) res = `财上要先分清“看见机会”与“真正落袋”，不要被表面的热度带着走。${action}`
+    else if (kind === 'investment') res = `先把可得与可失分开，不因卦象偏顺就放大投入。${action}`
+    else if (['exam', 'research-paper', 'research-project', 'document'].includes(kind)) res = `不要平均用力，先处理最可能改变结果的一环。${action}`
+    else if (kind === 'lost') res = `不要漫无目的扩大查找范围，先按主方向和内外交界处查一轮，再沿最后动线往回收。${action}`
+    else if (kind === 'family') res = `先把家事拆开，不要试图一次说清所有旧账。${action}`
+    else if (kind === 'travel') res = `这卦更重行程是否真正接上，不在于勉强赶路。${action}`
+    else {
+      const driver = deep.driver && deep.driver.value > 0 ? deep.driver : null
+      const blocker = deep.blocker && deep.blocker.value < 0 ? deep.blocker : null
+      let lead = ''
+      if (driver && blocker && driver.key !== blocker.key) {
+        lead = `现在不要平均用力。先处理${blocker.label}，待这一处不再牵制，再顺着${driver.label}推进；顺序颠倒，越用力越容易空耗。`
+      } else if (blocker) {
+        lead = `眼下先别急着求结果，先把${blocker.label}这一处松开；它不变，局面就难变。`
+      } else if (driver) {
+        lead = `可以往前走，但要沿着${driver.label}这一支点发力，不必同时铺开所有方向。`
+      } else {
+        lead = '此时最合适的是做一步可观察、可回退的动作，让现实反馈替你缩小判断范围。'
+      }
+      res = `${lead}${action}`
+    }
   }
-  return `${lead}${action}`
+
+  const jd = judgment || (ctx && ctx.judgment) || {}
+  const parsed = jd.parsed || (ctx && ctx.parsed) || {}
+  const focus = parsed.focus || (deep.profile && deep.profile.label) || ''
+  const tone = jd.tone || deep.tone || 'mid'
+  const guide = philosophyGuidance(tone, focus, parsed)
+  if (guide && !res.includes('之道') && !res.includes('之要')) {
+    res += guide
+  }
+  const safety = safetyAdvice(parsed)
+  if (safety && !res.includes('现实校验')) {
+    res += safety
+  }
+  return res
 }
 
 function progressSectionTitle(kind) {
@@ -1703,7 +1750,7 @@ function buildConciseSections(ctx, judgment) {
   deep.summary = narrativeHeadline(judgment, deep)
   deep.thesis = narrativeOpening(ctx, judgment, deep)
   deep.answer = narrativeDirectAnswer(judgment, deep)
-  deep.action = adviceNarrative(ctx, deep)
+  deep.action = adviceNarrative(ctx, deep, judgment)
   deep.pointer = ''
   const sections = []
   const process = processNarrative(ctx, deep)

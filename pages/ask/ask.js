@@ -1,5 +1,16 @@
-const { TIME_SCOPES, listGroups, buildAskSelection } = require('../../utils/ask-options')
 const swipeBack = require('../../behaviors/swipe-back')
+const { guessTopicKey } = require('../../utils/duangu')
+
+const ASK_PRESETS = [
+  '近期事业升迁与前程发展',
+  '求职跳槽面试吉凶如何',
+  '创业合伙与求财投资前景',
+  '二人感情缘分及未来走向',
+  '学业考试与考核能否过关',
+  '外出远行与差旅安否吉凶',
+  '买房置业与搬迁适宜与否',
+  '身体健康与调养平安吉凶'
+]
 
 const NEXT_META = {
   cast: { label: '六爻卜卦', path: '/pages/cast/cast', confirm: '去卜卦' },
@@ -12,14 +23,8 @@ Page({
     next: 'cast',
     nextLabel: '六爻卜卦',
     confirmLabel: '去卜卦',
-    askGroups: listGroups(),
-    timeScopes: TIME_SCOPES,
-    selectedGroupKey: '',
-    selectedGroup: null,
-    selectedOptionId: '',
-    selectedTimeKey: '',
-    selectedQuestion: '',
-    canConfirm: false
+    question: '',
+    askPresets: ASK_PRESETS
   },
 
   onLoad(query) {
@@ -33,100 +38,42 @@ Page({
   },
 
   onShow() {
-    this.resetAskState()
-  },
-
-  resetAskState() {
-    this.setData({
-      selectedGroupKey: '',
-      selectedGroup: null,
-      selectedOptionId: '',
-      selectedTimeKey: '',
-      selectedQuestion: '',
-      canConfirm: false
-    })
+    this.setData({ question: '' })
     if (getApp().setPendingAsk) getApp().setPendingAsk(null)
   },
 
-  syncAsk() {
-    const { selectedOptionId, selectedTimeKey } = this.data
-    if (!selectedOptionId) {
-      this.setData({ selectedQuestion: '', canConfirm: false })
-      return
-    }
-    const sel = buildAskSelection(selectedOptionId, selectedTimeKey)
-    if (!sel) {
-      this.setData({ selectedQuestion: '', canConfirm: false })
-      return
-    }
-    this.setData({
-      selectedQuestion: sel.question,
-      canConfirm: true
-    })
+  onInputQuestion(e) {
+    this.setData({ question: e.detail.value })
   },
 
-  onSelectTime(e) {
-    this.setData({ selectedTimeKey: e.currentTarget.dataset.key || '' }, () => this.syncAsk())
-  },
-
-  onSelectGroup(e) {
-    const selectedGroupKey = e.currentTarget.dataset.key || ''
-    const selectedGroup = this.data.askGroups.find((group) => group.key === selectedGroupKey) || null
-    this.setData({
-      selectedGroupKey,
-      selectedGroup,
-      selectedOptionId: '',
-      selectedQuestion: '',
-      canConfirm: false
-    })
-  },
-
-  onChangeGroup() {
-    this.setData({
-      selectedGroupKey: '',
-      selectedGroup: null,
-      selectedOptionId: '',
-      selectedQuestion: '',
-      canConfirm: false
-    })
-  },
-
-  onSelectOption(e) {
-    this.setData({ selectedOptionId: e.currentTarget.dataset.id || '' }, () => this.syncAsk())
+  onSelectPreset(e) {
+    const text = e.currentTarget.dataset.text || ''
+    this.setData({ question: text })
   },
 
   onConfirm() {
-    const { selectedOptionId, selectedTimeKey, next } = this.data
-    const sel = buildAskSelection(selectedOptionId, selectedTimeKey)
-    if (!sel) {
-      wx.showToast({ title: '请先选择所问', icon: 'none' })
-      return
+    let question = (this.data.question || '').trim()
+    if (!question) {
+      question = '心意默祷（诸事顺逆与进退机宜）'
     }
-    getApp().setPendingAsk({
-      optionId: selectedOptionId,
-      timeKey: selectedTimeKey || '',
-      question: sel.question,
-      askMeta: sel.askMeta,
-      topicKey: sel.topicKey,
-      next
-    })
-    const meta = NEXT_META[next] || NEXT_META.cast
-    const pages = getCurrentPages()
-    const prev = pages.length >= 2 ? pages[pages.length - 2] : null
-    const targetRoute = meta.path.replace(/^\//, '')
-    if (prev && prev.route === targetRoute) {
-      wx.navigateBack()
-      return
+    const topicKey = guessTopicKey ? guessTopicKey(question) : 'general'
+    const askSelection = {
+      question,
+      askMeta: {
+        summary: question,
+        topicKey
+      }
     }
-    wx.navigateTo({ url: meta.path })
+
+    if (getApp().setPendingAsk) {
+      getApp().setPendingAsk(askSelection)
+    }
+
+    const nextMeta = NEXT_META[this.data.next] || NEXT_META.cast
+    wx.navigateTo({ url: nextMeta.path })
   },
 
   onBack() {
-    const pages = getCurrentPages()
-    if (pages.length > 1) {
-      wx.navigateBack({ delta: 1 })
-      return
-    }
-    wx.reLaunch({ url: '/pages/index/index' })
+    wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/index/index' }) })
   }
 })

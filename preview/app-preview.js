@@ -43,7 +43,11 @@
     baziGender: '男',
     baziBirthDate: '1995-10-24',
     baziBirthTime: '09:30',
-    baziData: null
+    baziData: null,
+    aiLoading: false,
+    aiResult: null,
+    aiResultKey: '',
+    showAiConfigModal: false
   }
   const stack = [{ page: 'index', articleId: null, topicKey: 'general', guaAlias: null }]
   let touchStartX = 0
@@ -95,6 +99,8 @@
     state.selectedTimeKey = ''
     state.question = ''
     state.askMeta = null
+    state.aiResult = null
+    state.aiLoading = false
   }
   function go(page, extra = {}, opts = {}) {
     const replace = !!(opts && opts.replace)
@@ -559,115 +565,90 @@
     state.askMeta = sel.askMeta
   }
 
+  const ASK_PRESETS = [
+    '近期事业升迁与前程发展',
+    '求职跳槽面试吉凶如何',
+    '创业合伙与求财投资前景',
+    '二人感情缘分及未来走向',
+    '学业考试与考核能否过关',
+    '外出远行与差旅安否吉凶',
+    '买房置业与搬迁适宜与否',
+    '身体健康与调养平安吉凶'
+  ]
+
   function ensureAskSelected() {
-    if (state.selectedOptionId && state.askMeta) return true
-    alert('请先选择所问')
-    return false
-  }
-
-  function askPickerHtml(emptyHint) {
-    const scopes = window.LiuYao.TIME_SCOPES || []
-    const groups = window.LiuYao.listGroups ? window.LiuYao.listGroups() : []
-    if (!state.selectedGroupKey && state.selectedOptionId) {
-      const matched = groups.find((g) => g.options.some((o) => o.id === state.selectedOptionId))
-      if (matched) state.selectedGroupKey = matched.key
+    if (!state.question || !state.question.trim()) {
+      state.question = '心意默祷（诸事顺逆与进退机宜）'
     }
-    const selectedGroup = groups.find((g) => g.key === state.selectedGroupKey)
-    if (!selectedGroup) {
-      return `
-        <div class="ask-picker">
-          <div class="field-label">先选类别</div>
-          <div class="ask-category-grid">${groups.map((g) => `
-            <button type="button" class="ask-category" data-group="${g.key}">
-              <span class="ask-category-name">${g.label}</span>
-            </button>`).join('')}</div>
-        </div>`
+    state.askMeta = {
+      summary: state.question,
+      topicKey: window.LiuYao.guessTopicKey ? window.LiuYao.guessTopicKey(state.question) : 'general'
     }
-    const timeHtml = scopes.map((t) =>
-      `<button type="button" class="ask-chip ${state.selectedTimeKey === t.key ? 'on' : ''}" data-time="${t.key}">${t.label}</button>`
-    ).join('')
-    return `
-      <div class="ask-picker">
-        <div class="ask-category-head">
-          <div class="field-label">当前类别</div>
-          <div class="ask-category-row">
-            <div class="ask-current-category">${selectedGroup.label}</div>
-            <button type="button" class="change-link ask-change-category" data-change-group>返回上一层</button>
-          </div>
-        </div>
-        ${selectedGroup.tip ? `<div class="ask-group-tip muted">${selectedGroup.tip}</div>` : ''}
-        <div class="field-label" style="margin-top:16px">选择具体事项</div>
-        <div class="ask-option-list">${selectedGroup.options.map((o) =>
-          `<button type="button" class="ask-option ${o.wide ? 'wide' : ''} ${state.selectedOptionId === o.id ? 'on' : ''}" data-opt="${o.id}">${o.label}</button>`
-        ).join('')}</div>
-        <div class="field-label" style="margin-top:18px">时间范围</div>
-        <div class="ask-time-grid">${timeHtml}</div>
-        <div class="ask-hint muted">${state.question || emptyHint}</div>
-      </div>`
-  }
-
-  function bindAskPicker() {
-    app.querySelectorAll('[data-group]').forEach((el) => {
-      el.onclick = () => {
-        state.selectedGroupKey = el.dataset.group || ''
-        state.selectedOptionId = ''
-        syncAskSelection()
-        render()
-      }
-    })
-    const changeGroup = app.querySelector('[data-change-group]')
-    if (changeGroup) {
-      changeGroup.onclick = () => {
-        state.selectedGroupKey = ''
-        state.selectedOptionId = ''
-        syncAskSelection()
-        render()
-      }
-    }
-    app.querySelectorAll('[data-time]').forEach((el) => {
-      el.onclick = () => {
-        state.selectedTimeKey = el.dataset.time || ''
-        syncAskSelection()
-        render()
-      }
-    })
-    app.querySelectorAll('[data-opt]').forEach((el) => {
-      el.onclick = () => {
-        state.selectedOptionId = el.dataset.opt || ''
-        syncAskSelection()
-        render()
-      }
-    })
+    return true
   }
 
   function requirePendingAsk(next) {
-    if (state.selectedOptionId && state.askMeta && state.question) return true
+    if (state.question && state.question.trim()) return true
     state.askNext = next || 'cast'
     go('ask', {}, { replace: true })
     return false
   }
 
   function renderAsk() {
-    setNav('选择所问')
+    setNav('心念所求')
     const next = state.askNext === 'meihua' ? 'meihua' : 'cast'
     const confirmLabel = '去卜卦'
-    const canConfirm = !!(state.selectedOptionId && state.question)
+    const curQ = state.question || ''
+
     app.innerHTML = `
-      <div class="title-zh ask-title-center">所问</div>
+      <div class="title-zh ask-title-center">所求何事</div>
       <div class="ask-before-note">
         <div>占贵诚敬，一事一问；毋以戏筮，毋再三渎问。</div>
-        <div>澄心定念，明所求而后起卦。</div>
+        <div>澄心定念，写下所惑，或点选常用灵感。</div>
       </div>
-      ${askPickerHtml('请点选一项')}
+      <div class="ask-custom-box">
+        ${corners()}
+        <div class="field-label" style="margin-bottom:8px">请输入具体事由</div>
+        <textarea class="ask-custom-textarea" id="askCustomInput" rows="3" maxlength="120" placeholder="请在此诚心输入您心中所惑，例如：&#10;· 近期换工作求职能否顺遂？&#10;· 本次创业投资前景如何？&#10;· 与某某感情缘分发展怎样？">${curQ.replace(/</g, '&lt;')}</textarea>
+        <div class="ask-word-count"><span id="askCount">${curQ.length}</span>/120</div>
+        <div class="ask-presets-wrap">
+          <div class="ask-presets-title">✦ 常用灵感事由 ✦</div>
+          <div class="ask-presets-grid">
+            ${ASK_PRESETS.map((p) => `<button type="button" class="ask-preset-btn ${curQ === p ? 'active' : ''}" data-preset="${p}">${p}</button>`).join('')}
+          </div>
+        </div>
+      </div>
       <div class="page-footer">
         <button class="btn btn-ghost" data-back>返回</button>
-        <button class="btn btn-primary" id="askConfirm" ${canConfirm ? '' : 'disabled'}>${canConfirm ? confirmLabel : '选择所问'}</button>
+        <button class="btn btn-primary" id="askConfirm">${confirmLabel}</button>
       </div>`
     bindNav()
-    bindAskPicker()
+
+    const textarea = document.getElementById('askCustomInput')
+    const countEl = document.getElementById('askCount')
+    if (textarea) {
+      textarea.oninput = (e) => {
+        state.question = e.target.value
+        if (countEl) countEl.textContent = state.question.length
+      }
+    }
+
+    app.querySelectorAll('[data-preset]').forEach((btn) => {
+      btn.onclick = () => {
+        const text = btn.dataset.preset || ''
+        state.question = text
+        if (textarea) textarea.value = text
+        if (countEl) countEl.textContent = text.length
+        app.querySelectorAll('[data-preset]').forEach((b) => b.classList.toggle('active', b.dataset.preset === text))
+      }
+    })
+
     const confirm = document.getElementById('askConfirm')
     if (confirm) confirm.onclick = () => {
-      if (!ensureAskSelected()) return
+      if (textarea) {
+        state.question = textarea.value.trim()
+      }
+      ensureAskSelected()
       state.askNext = next
       if (next === 'meihua') {
         go('meihua')
@@ -828,7 +809,7 @@
         </div>
         ${rows}
       </div>
-      <div class="row" style="margin:12px 0 8px"><button class="btn btn-ghost" id="recast">再起</button><button class="btn btn-primary" data-go="interpret">断卦</button></div>
+      <div class="row" style="margin:12px 0 8px"><button class="btn btn-ghost" id="recast">再起</button><button class="btn btn-primary" data-go="interpret">AI 智能解卦</button></div>
       ${tags.length ? `<div class="chip-row" style="margin-bottom:10px">${[...new Set(tags)].slice(0, 8).map((t) => `<span class="chip ${/空|死|囚|日冲/.test(t) ? 'hot' : ''}">${t}</span>`).join('')}</div>` : ''}
       ${fushen.length ? `<div class="block"><div class="block-title">伏神</div>${fushen.map((f) => `<div class="muted">· ${f.text}</div>`).join('')}</div>` : ''}
       ${rel.length ? `<div class="block"><div class="block-title">动爻关系</div><div class="chip-row">${rel.map((t) => `<span class="chip">${t}</span>`).join('')}</div></div>` : ''}
@@ -855,36 +836,229 @@
       state.step = 0; state.yaos = []; state.current = null
       state.displayCoins = ['', '', '']
       state.askNext = 'cast'
+      state.aiResult = null
+      state.aiLoading = false
       go('ask')
     }
   }
 
+  function triggerAiInterpretation(force = false) {
+    if (state.aiLoading || !state.cast) return
+    const question = state.question || '心意默祷（诸事顺逆与进退机宜）'
+    const castKey = (state.cast.ben ? state.cast.ben.name : '') + '-' +
+      (state.cast.bian ? state.cast.bian.name : '') + '-' +
+      (state.cast.changingIndexes ? state.cast.changingIndexes.join('') : '') + '-' +
+      question
+
+    if (!force && state.aiResult && state.aiResultKey === castKey) {
+      return
+    }
+
+    state.aiLoading = true
+    state.aiResult = null
+    state.aiResultKey = castKey
+    render()
+
+    const runner = window.LiuYao && window.LiuYao.interpretWithAi
+    if (!runner) {
+      setTimeout(() => {
+        state.aiResult = window.LiuYao.interpret ? window.LiuYao.interpret(state.cast, 'general') : null
+        state.aiLoading = false
+        render()
+      }, 500)
+      return
+    }
+
+    runner(state.cast, question)
+      .then((res) => {
+        state.aiResult = res
+        state.aiLoading = false
+        render()
+      })
+      .catch((err) => {
+        console.error('AI解卦出错:', err)
+        state.aiLoading = false
+        if (window.LiuYao.interpret) {
+          state.aiResult = window.LiuYao.interpret(state.cast, 'general')
+        }
+        render()
+      })
+  }
+
   function renderInterpret() {
-    setNav('断卦')
+    setNav('AI智能解卦')
     if (!state.cast) { go('ask', {}, { replace: true }); return }
-    state.topicKey = (state.cast.askMeta && state.cast.askMeta.topicKey) || 'general'
-    const result = window.LiuYao.interpret(state.cast, state.topicKey)
-    const sections = (result.sections || []).map((sec, idx) => `
+
+    if (!state.aiResult && !state.aiLoading) {
+      triggerAiInterpretation()
+      return
+    }
+
+    if (state.aiLoading) {
+      app.innerHTML = `
+        <div class="title-zh">AI智能解卦</div>
+        <div class="subtitle">深度纳甲象数 · 义理时空推演</div>
+        <div class="ai-loading-box">
+          ${corners()}
+          <div class="ai-spinner"></div>
+          <div class="ai-loading-title">太史令神机研判中</div>
+          <div class="ai-loading-desc">正依《${state.cast.ben.name}》卦盘研判世应动变、月令日辰与吉凶机运...</div>
+          <div class="ai-loading-steps">
+            <div>✓ 纳甲排盘信息已就绪</div>
+            <div>✓ 用神原神忌神已标定</div>
+            <div class="pulse">· AI大模型正在推演象数理气与时空应期...</div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn btn-ghost" data-back>返回排盘</button>
+        </div>`
+      bindNav()
+      return
+    }
+
+    const res = state.aiResult || (window.LiuYao.interpret ? window.LiuYao.interpret(state.cast, 'general') : {})
+    const sections = (res.sections || []).map((sec, idx) => `
       <div class="sec">
         <div class="sec-head"><span class="sec-no">${idx + 1}</span><span class="sec-title">${sec.title.replace(/^[一二三四五六七]、/, '')}</span></div>
         ${sec.items.map((it) => `<div class="point">${it}</div>`).join('')}
       </div>`).join('')
+
+    const cfg = (window.LiuYao && window.LiuYao.getAiConfig) ? window.LiuYao.getAiConfig() : {}
+    const isCustom = cfg.source === 'custom' || (cfg.apiKey && !cfg.isDefaultKey)
+    const engineLabel = isCustom ? `自定义 AI (${cfg.model || '大模型'})` : `DeepSeek AI (${cfg.model || 'deepseek-chat'})`
+
+    const modalHtml = state.showAiConfigModal ? `
+      <div class="ai-modal-mask" id="aiModalMask">
+        <div class="ai-modal">
+          ${corners()}
+          <div class="ai-modal-title">AI 解卦服务配置</div>
+          <div class="ai-modal-tip">系统已默认内置免配置的 DeepSeek AI 官方接口服务。若需切换为您自己的 API 密钥或兼容端点，可在下方设置。</div>
+          <div class="ai-form-group">
+            <label class="ai-form-label">API 端点 (Base URL)</label>
+            <input class="ai-form-input" id="cfgApiBase" value="${cfg.apiBase || ''}" placeholder="https://api.deepseek.com/chat/completions" />
+          </div>
+          <div class="ai-form-group">
+            <label class="ai-form-label">模型名称 (Model)</label>
+            <input class="ai-form-input" id="cfgModel" value="${cfg.model || ''}" placeholder="deepseek-chat" />
+          </div>
+          <div class="ai-form-group">
+            <label class="ai-form-label">API Key (留空使用内置密钥)</label>
+            <input class="ai-form-input" type="password" id="cfgApiKey" value="${(cfg.apiKey && !cfg.isDefaultKey) ? cfg.apiKey : ''}" placeholder="留空则使用内置 DeepSeek Key" />
+          </div>
+          <div class="ai-modal-actions">
+            <button class="btn btn-ghost" id="cfgReset" style="padding:9px 0">恢复默认</button>
+            <button class="btn btn-primary" id="cfgSave" style="padding:9px 0">保存并关闭</button>
+          </div>
+        </div>
+      </div>` : ''
+
     app.innerHTML = `
-      <div class="title-zh">断卦</div>
-      <div class="subtitle">先看判断，再看分步依据</div>
-      <div class="verdict ${result.tendency ? result.tendency.tone : ''}">
-        ${corners()}
-        <div class="summary">判断：${result.summary}</div>
-        ${result.reply ? `<div class="reply">${result.reply}</div>` : ''}
-        <div class="judgment">${result.summaryNote || ''}</div>
-        ${result.advice ? `<div class="advice">${result.advice}</div>` : ''}
+      <div class="title-zh">AI智能解卦</div>
+      <div class="subtitle">深度纳甲象数 · 义理时空推演</div>
+
+      <div class="ask-box" style="margin-bottom:10px">
+        <div class="ask-lab">所测事宜</div>
+        <div class="ask-q">${state.question || '心意默祷（诸事顺逆与进退机宜）'}</div>
       </div>
+
+      <div class="ai-badge-row">
+        <span class="ai-badge-tag">✦ ${res.source === 'fallback' ? '智能纳甲推演' : engineLabel}</span>
+        <button type="button" class="ai-config-btn" id="openAiConfig">⚙️ AI灵匙设置</button>
+      </div>
+
+      <div class="verdict ${res.tendency ? res.tendency.tone : 'mid'}">
+        ${corners()}
+        <div class="summary">神机：${res.summary || '静候天时'}</div>
+        ${res.reply ? `<div class="reply">${res.reply}</div>` : ''}
+        <div class="judgment">${res.judgment || res.summaryNote || ''}</div>
+        ${res.advice ? `<div class="advice">${res.advice}</div>` : ''}
+      </div>
+
       <div class="frame">${corners()}${sections}</div>
-      <div class="row" style="margin:12px 0 8px">
+
+      <div class="row" style="margin:16px 0 8px">
+        <button class="btn btn-ghost" id="reInterpret">重新参详</button>
+        <button class="btn btn-ghost" id="copyVerdict">复制断语</button>
+      </div>
+      <div class="row" style="margin-bottom:12px">
         <button class="btn btn-ghost" data-back>返回排盘</button>
         <button class="btn btn-primary" data-go="index">返回首页</button>
-      </div>`
+      </div>
+      ${modalHtml}`
+
     bindNav()
+
+    const openBtn = document.getElementById('openAiConfig')
+    if (openBtn) openBtn.onclick = () => {
+      state.showAiConfigModal = true
+      render()
+    }
+
+    const reInterpretBtn = document.getElementById('reInterpret')
+    if (reInterpretBtn) reInterpretBtn.onclick = () => {
+      triggerAiInterpretation(true)
+    }
+
+    const copyBtn = document.getElementById('copyVerdict')
+    if (copyBtn) copyBtn.onclick = () => {
+      const benGua = state.cast.ben ? state.cast.ben.name : ''
+      const bianGua = state.cast.bian ? state.cast.bian.name : '无变'
+      let text = `【所测事宜】${state.question || '心意默祷'}\n`
+      text += `【周易排盘】本卦《${benGua}》 变卦《${bianGua}》\n`
+      text += `【神机结论】${res.summary || ''}\n\n`
+      if (res.sections && res.sections.length) {
+        res.sections.forEach((s) => {
+          text += `■ ${s.title}\n`
+          s.items.forEach((it) => { text += `· ${it}\n` })
+          text += '\n'
+        })
+      }
+      if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert('已复制解卦断语至剪贴板')
+        }).catch(() => {
+          alert('复制失败，请手动选择复制')
+        })
+      } else {
+        alert('浏览器暂不支持自动复制，请手动复制')
+      }
+    }
+
+    // Modal 事件
+    const modalMask = document.getElementById('aiModalMask')
+    if (modalMask) {
+      modalMask.onclick = (e) => {
+        if (e.target === modalMask) {
+          state.showAiConfigModal = false
+          render()
+        }
+      }
+    }
+    const cfgSave = document.getElementById('cfgSave')
+    if (cfgSave) {
+      cfgSave.onclick = () => {
+        const apiBase = (document.getElementById('cfgApiBase')?.value || '').trim()
+        const model = (document.getElementById('cfgModel')?.value || '').trim()
+        const apiKey = (document.getElementById('cfgApiKey')?.value || '').trim()
+        if (window.LiuYao && window.LiuYao.saveAiConfig) {
+          window.LiuYao.saveAiConfig({ apiBase, model, apiKey })
+        }
+        state.showAiConfigModal = false
+        alert('配置已保存')
+        triggerAiInterpretation(true)
+      }
+    }
+    const cfgReset = document.getElementById('cfgReset')
+    if (cfgReset) {
+      cfgReset.onclick = () => {
+        if (window.LiuYao && window.LiuYao.resetAiConfig) {
+          window.LiuYao.resetAiConfig()
+        }
+        state.showAiConfigModal = false
+        alert('已恢复为系统内置默认 AI 配置')
+        triggerAiInterpretation(true)
+      }
+    }
   }
 
   function formatMeihuaNow() {

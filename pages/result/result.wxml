@@ -87,5 +87,5 @@
 
 <view class="footer-actions" wx:if="{{cast}}">
   <button class="btn-ghost half" bindtap="recast">再起</button>
-  <button class="btn-primary half" bindtap="goInterpret">断卦</button>
+  <button class="btn-primary half" bindtap="goInterpret">AI 智能解卦</button>
 </view>

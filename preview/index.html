@@ -1427,6 +1427,220 @@
     .dimen-title { font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: .12em; }
     .dimen-summary { font-size: 12px; color: var(--cinnabar); letter-spacing: .08em; }
     .dimen-body { font-size: 14px; line-height: 1.8; color: var(--ink-soft); text-align: justify; }
+
+    /* 自定义问事输入与灵感预设 */
+    .ask-custom-box {
+      margin: 14px 0 16px;
+      padding: 14px 12px;
+      background: rgba(246, 237, 216, 0.45);
+      border: 1px solid var(--line-strong);
+      position: relative;
+    }
+    .ask-custom-textarea {
+      width: 100%;
+      min-height: 88px;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1px solid var(--line-strong);
+      background: #faf6ea;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .ask-custom-textarea:focus {
+      border-color: var(--cinnabar);
+      box-shadow: 0 0 0 2px var(--cinnabar-soft);
+    }
+    .ask-word-count {
+      text-align: right;
+      font-size: 11px;
+      color: var(--bronze);
+      margin-top: 4px;
+    }
+    .ask-presets-wrap {
+      margin-top: 14px;
+    }
+    .ask-presets-title {
+      font-size: 12px;
+      letter-spacing: .2em;
+      color: var(--bronze);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .ask-presets-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+    .ask-preset-btn {
+      padding: 6px 10px;
+      font-size: 12.5px;
+      font-family: inherit;
+      color: var(--ink-soft);
+      background: rgba(246, 237, 216, 0.6);
+      border: 1px solid var(--line-strong);
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .ask-preset-btn:hover, .ask-preset-btn.active {
+      border-color: var(--cinnabar);
+      color: var(--cinnabar);
+      background: var(--cinnabar-soft);
+    }
+
+    /* AI 解卦与加载态 */
+    .ai-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0 14px;
+      padding: 7px 10px;
+      background: rgba(246, 237, 216, 0.55);
+      border: 1px solid var(--line);
+      font-size: 12px;
+    }
+    .ai-badge-tag {
+      color: var(--cinnabar);
+      font-weight: 600;
+      letter-spacing: .08em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .ai-config-btn {
+      background: transparent;
+      border: 1px solid var(--bronze);
+      color: var(--ink);
+      font-size: 11.5px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: 2px;
+    }
+    .ai-config-btn:hover {
+      background: var(--line);
+    }
+
+    .ai-loading-box {
+      text-align: center;
+      padding: 36px 16px;
+      margin: 16px 0;
+      border: 1px solid var(--line-strong);
+      background: rgba(246, 237, 216, 0.5);
+      position: relative;
+    }
+    .ai-spinner {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 16px;
+      border: 3px solid rgba(143, 38, 31, 0.18);
+      border-top-color: var(--cinnabar);
+      border-radius: 50%;
+      animation: aiSpin 1s linear infinite;
+    }
+    @keyframes aiSpin {
+      to { transform: rotate(360deg); }
+    }
+    .ai-loading-title {
+      font-size: 18px;
+      letter-spacing: .16em;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .ai-loading-desc {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      max-width: 320px;
+      margin: 0 auto 16px;
+    }
+    .ai-loading-steps {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+      font-size: 12px;
+      color: var(--bronze);
+    }
+    .ai-loading-steps .pulse {
+      color: var(--cinnabar);
+      animation: aiPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes aiPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; font-weight: 600; }
+    }
+
+    /* AI 弹窗配置 */
+    .ai-modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 15, 12, 0.55);
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .ai-modal {
+      width: 100%;
+      max-width: 380px;
+      background: #fbf7ee;
+      border: 1px solid var(--ink);
+      padding: 18px 16px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+      position: relative;
+      font-family: inherit;
+    }
+    .ai-modal-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      color: var(--ink);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .ai-modal-tip {
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .ai-form-group {
+      margin-bottom: 12px;
+    }
+    .ai-form-label {
+      font-size: 12px;
+      color: var(--bronze);
+      margin-bottom: 4px;
+      display: block;
+    }
+    .ai-form-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      font-size: 13px;
+      border: 1px solid var(--line-strong);
+      background: #faf6ea;
+      color: var(--ink);
+      outline: none;
+      font-family: inherit;
+    }
+    .ai-form-input:focus {
+      border-color: var(--cinnabar);
+    }
+    .ai-modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
   </style>
 </head>
 <body>

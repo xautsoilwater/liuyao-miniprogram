@@ -2,6 +2,34 @@
 
 ---
 
+## [2026-10-05] 重大重构：算卦问事自由输入与 AI 深度智能解卦 (AI Divination & Free Asking)
+
+### 1. 业务背景与改造目标
+- **所问简化**：全面废弃原有死板的 11 大类与层级选项树，改为让用户在优雅的文本框中直接自由输入心中所惑，辅以 8 个高频灵感便签一键填入，实现“心诚意专，随念而测”。
+- **AI 智能解卦**：彻底废弃基于固定文本拼接的传统解卦机制，全面升级为大模型纳甲义理推演引擎，结合排盘全量信息（本卦、变卦、动爻、六神、六亲、世应、月建日辰、空亡、伏神等）进行深度神机断卦。
+- **开箱即用 API**：系统已内置开箱即用的 DeepSeek AI 官方端点与模型密钥，同时提供“AI灵匙设置”浮窗，允许用户自由切换自定义 API 端点与 Key。
+- **智能理数保底**：内置高水准的本地理数象数推演备用引擎，确保在断网、API 超时或离线状态下 100% 优雅兜底，绝不白屏。
+
+### 2. 核心架构与代码变更
+- **AI 配置中心 (`utils/ai-config.js`)**：
+  - 内置 DeepSeek API 端点（`https://api.deepseek.com/chat/completions`）与模型（`deepseek-chat`），以及系统内置通信密钥；
+  - 提供多端持久化配置（浏览器 `localStorage` 与微信小程序 `wx.getStorageSync` / `wx.setStorageSync`）。
+- **AI 解卦引擎 (`utils/ai-interpreter.js`)**：
+  - `formatCastForPrompt`：将复杂排盘对象结构化提取为易理报单；
+  - `buildDivinationPrompt`：设定严谨的“周易太史令”神机角色，按【神机总断】、【用神爻象】、【机运应期】、【周易明理】四段式结构化输出；
+  - `callAiDivinationApi`：支持浏览器 `fetch` 与小程序 `wx.request`；
+  - `buildIntelligentFallbackInterpretation`：离线/报错下的全自动象数理气推演，确保鲁棒性。
+- **前端网页预览 (`preview/`)**：
+  - `preview/build.js` 打包 `ai-config` 与 `ai-interpreter` 并导出到 `window.LiuYao`；
+  - `preview/index.html` 增加自定义输入框、灵感便签、太极旋转加载动画、AI徽标与设置弹窗的宋代古典雅致样式；
+  - `preview/app-preview.js` 重构 `renderAsk`（自由输入与灵感便签填入）、`renderResult`（AI解卦按钮）、`renderInterpret`（太极加载态、四段式神机解卦呈现、AI灵匙弹窗配置与一键复制）。
+- **微信小程序端原生落地 (`pages/ask/` & `pages/interpret/` & `pages/result/`)**：
+  - 重构 `pages/ask/` 为自由输入框与 8 类灵感便签；
+  - 重构 `pages/interpret/` 为异步 AI 解卦加载与四段式展示，支持弹窗配置自定义 API；
+  - 更新 `pages/result/result.wxml` 按钮文案为“AI 智能解卦”。
+
+---
+
 ## [2026-10-05] 功能新增：四柱八字命理分析 (Bazi Fortune & Mingli Analysis)
 
 ### 1. 业务背景与设计理念

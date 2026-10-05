@@ -1,39 +1,85 @@
 <view
   class="page interpret has-fixed-footer"
-  wx:if="{{result}}"
   bindtouchstart="onSwipeTouchStart"
   bindtouchend="onSwipeTouchEnd"
 >
   <nav-back />
   <view class="section-head">
-    <view class="title-zh">断卦</view>
-    <view class="subtitle">明所问 · 察卦变 · 定进退</view>
+    <view class="title-zh">AI智能解卦</view>
+    <view class="subtitle">深度纳甲象数 · 义理时空推演</view>
   </view>
 
-  <view class="ask-box" wx:if="{{result.question}}">
-    <view class="ask-lab">所问</view>
-    <view class="ask-q">{{result.question}}</view>
-  </view>
-
-  <view class="verdict {{result.tendency.tone}}">
-    <view class="summary">结论：{{result.summary}}</view>
-    <view class="reply" wx:if="{{result.reply}}">{{result.reply}}</view>
-    <view class="judgment">{{result.summaryNote}}</view>
-    <view class="advice" wx:if="{{result.advice}}">{{result.advice}}</view>
-    <view class="pointer" wx:if="{{result.pointer}}">
-      <text class="pointer-label">断曰</text>
-      <text>{{result.pointer}}</text>
+  <!-- 加载状态 -->
+  <view class="ai-loading-box" wx:if="{{loading}}">
+    <view class="ai-spinner"></view>
+    <view class="ai-loading-title">太史令神机研判中</view>
+    <view class="ai-loading-desc">正依《{{cast.ben.name}}》卦盘研判世应动变、月令日辰与吉凶机运...</view>
+    <view class="ai-loading-steps">
+      <view>✓ 纳甲排盘信息已就绪</view>
+      <view>✓ 用神原神忌神已标定</view>
+      <view class="pulse">· AI大模型正在推演象数理气与时空应期...</view>
     </view>
   </view>
 
-  <view class="section" wx:for="{{result.sections}}" wx:key="title">
-    <view class="sec-title">{{item.title}}</view>
-    <view class="sec-item" wx:for="{{item.items}}" wx:for-item="line" wx:key="*this">{{line}}</view>
-  </view>
+  <!-- 结果状态 -->
+  <block wx:if="{{!loading && result}}">
+    <view class="ask-box" wx:if="{{result.question}}">
+      <view class="ask-lab">所测事宜</view>
+      <view class="ask-q">{{result.question}}</view>
+    </view>
+
+    <view class="ai-badge-row">
+      <text class="ai-badge-tag">✦ {{result.source === 'fallback' ? '智能纳甲推演' : 'DeepSeek AI · 智能解卦'}}</text>
+      <button class="ai-config-btn" bindtap="onOpenConfig">⚙️ AI灵匙设置</button>
+    </view>
+
+    <view class="verdict {{result.tendency ? result.tendency.tone : 'mid'}}">
+      <view class="summary">神机：{{result.summary}}</view>
+      <view class="reply" wx:if="{{result.reply}}">{{result.reply}}</view>
+      <view class="judgment">{{result.judgment || result.summaryNote}}</view>
+      <view class="advice" wx:if="{{result.advice}}">{{result.advice}}</view>
+    </view>
+
+    <view class="section" wx:for="{{result.sections}}" wx:key="title">
+      <view class="sec-title">{{item.title}}</view>
+      <view class="sec-item" wx:for="{{item.items}}" wx:for-item="line" wx:key="*this">{{line}}</view>
+    </view>
+
+    <view class="action-row">
+      <button class="btn-ghost half" bindtap="onReInterpret">重新参详</button>
+      <button class="btn-ghost half" bindtap="onCopyResult">复制断语</button>
+    </view>
+  </block>
 
 </view>
 
-<view class="footer-actions" wx:if="{{result}}">
+<view class="footer-actions" wx:if="{{!loading && result}}">
   <button class="btn-ghost half" bindtap="goResult">返回排盘</button>
   <button class="btn-primary half" bindtap="goHome">返回首页</button>
+</view>
+
+<!-- AI 配置弹窗 -->
+<view class="modal-mask" wx:if="{{showConfig}}" bindtap="onCloseConfig">
+  <view class="modal-card" catchtap>
+    <view class="modal-title">AI 解卦服务配置</view>
+    <view class="modal-tip">系统已默认内置免配置的 DeepSeek AI 官方接口服务。若需切换为您自己的 API 密钥或兼容端点，可在下方设置。</view>
+    <form bindsubmit="onSaveConfig">
+      <view class="form-group">
+        <text class="form-label">API 端点 (Base URL)</text>
+        <input class="form-input" name="apiBase" value="{{aiConfig.apiBase}}" placeholder="https://api.deepseek.com/chat/completions" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">模型名称 (Model)</text>
+        <input class="form-input" name="model" value="{{aiConfig.model}}" placeholder="deepseek-chat" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">API Key (留空使用内置密钥)</text>
+        <input class="form-input" name="apiKey" password="true" value="{{aiConfig.apiKey}}" placeholder="留空则使用内置 DeepSeek Key" />
+      </view>
+      <view class="modal-actions">
+        <button class="btn-ghost half" type="button" bindtap="onResetConfig">恢复默认</button>
+        <button class="btn-primary half" form-type="submit">保存并关闭</button>
+      </view>
+    </form>
+  </view>
 </view>

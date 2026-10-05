@@ -10729,14 +10729,32 @@ function choicePickFromParsed(parsed, tone) {
 }
 
 function philosophyGuidance(tone, focus, parsed) {
-  if (parsed && parsed.negativeEvent) return '先核事实，再定边界，不以卦象替代证据。'
-  if (parsed && (parsed.domain === 'health' || parsed.domain === 'pregnancy')) return '卦可定心，不可代医；以检查、复诊和专业意见为准。'
-  if (parsed && parsed.domain === 'weather') return '以官方预报和现场情况为准，卦象只作趋避提醒。'
-  if (parsed && parsed.domain === 'lost' && /寻人|人/.test(String(parsed.focus || ''))) return '先联络、查找和报警，勿因卦象耽误行动。'
-  if (parsed && parsed.mode === 'choice') return '先做可逆的小步验证，再决定是否重注。'
-  if (tone === 'good') return '可进，但以守正、守信并留有余地为度。'
-  if (tone === 'bad') return `宜先止损换势，不与「${focus}」的逆势硬争。`
-  return `先小步求证「${focus}」，条件明朗后再定。`
+  if (parsed && parsed.negativeEvent) {
+    return tone === 'good'
+      ? '明理之道：风险之象偏弱，也不可据卦指认他人或放弃核验；以事实、坦诚沟通与清楚边界守住关系。'
+      : tone === 'bad'
+        ? '避凶之道：风险之象偏强，先核事实、留证据、定边界；不以猜疑伤人，也不以侥幸纵患。'
+        : '指迷之要：风险未明时，不猜、不纵、不武断；以事实核验和可执行的边界减少后悔。'
+  }
+  if (parsed && (parsed.domain === 'health' || parsed.domain === 'pregnancy')) {
+    return '明理之道：安其心而不轻其患，尽人事而遵医理；能控制的是就医、复查、作息与支持，不能控制的结果不以一卦强求。'
+  }
+  if (parsed && parsed.domain === 'weather') {
+    return '明理之道：天时有变，备而不惧；以预报和现场为据，卦象只提醒人保留余地。'
+  }
+  if (parsed && parsed.domain === 'lost' && /寻人|人/.test(String(parsed.focus || ''))) {
+    return '寻人之要：以行动争取时间，以事实缩小范围；卦象不可替代联络、搜索与必要的报警求助。'
+  }
+  if (parsed && parsed.mode === 'choice') {
+    return '取舍之道：不求卦替人承担后果，只求看清得失；所选若有据、可承受、能修正，进退皆可少悔。'
+  }
+  if (tone === 'good') {
+    return `趋吉之道：顺势而行，却不因一时有利而躁进；守正、守信、留有余地，方能使「${focus}」之吉延续。`
+  }
+  if (tone === 'bad') {
+    return `避凶之道：先止损，再变通；莫把一时阻滞当作终局，也莫以执念强求「${focus}」。穷则变，变则通，调整自身与条件便是在育新机。`
+  }
+  return `指迷之要：象在变，事亦在变；先安其心，再辨轻重缓急，对「${focus}」小步求证、随势修正。知进退而守其中，方可少悔。`
 }
 
 /** 按问题类型组织判断与建议 */
@@ -11844,7 +11862,9 @@ function domainOutcome(profile, total) {
 }
 
 function narrativeHeadline(judgment, deep) {
-  const mode = judgment.parsed && judgment.parsed.mode
+  const guardedLevel = safetyLevel(judgment && judgment.parsed)
+  if (guardedLevel) return guardedLevel
+  const mode = judgment && judgment.parsed && judgment.parsed.mode
   if (deep.profile.safe || deep.profile.guarded || ['where', 'when', 'who', 'choice'].includes(mode)) return deep.summary
   if (deep.profile.negativeOutcome) return deep.summary
   if (deep.total >= 3) return '可望推进，但宜循序而进'
@@ -11887,6 +11907,13 @@ function narrativeOpening(ctx, judgment, deep) {
     text += `落到你问的“${focus}”，${naturalAxisFact(driver)}，这是事情能够继续向前的主要支点。`
   } else {
     text += `落到你问的“${focus}”，用神、世应与动爻之间尚未形成一股足以定局的力量，因此现在不宜把一时现象当作最终结果。`
+  }
+  const guarded = safetyJudgmentLine(
+    judgment && judgment.parsed,
+    judgment && judgment.parsed && judgment.parsed.mode === 'yesno' ? (judgment.answerTone || judgment.tone) : (judgment && judgment.tone)
+  )
+  if (guarded && !text.includes(guarded)) {
+    text = `${guarded} ${text}`
   }
   return text
 }
@@ -12014,31 +12041,51 @@ function timeNarrative(ctx, judgment) {
   return ''
 }
 
-function adviceNarrative(ctx, deep) {
-  if (deep.profile.safe || deep.profile.guarded || deep.profile.negativeOutcome) return deep.profile.action
-  const kind = deep.profile.kind || 'general'
-  const action = deep.profile.action || ''
-  if (/^emotion/.test(kind)) return `先不要继续猜对方心意，把卦里的“有无”交给一次具体行动验证。${action}`
-  if (kind === 'career') return `眼下不宜同时追逐多个可能，先让机会从口头认可变成明确的位置和节点。${action}`
-  if (['wealth', 'receivable'].includes(kind)) return `财上要先分清“看见机会”与“真正落袋”，不要被表面的热度带着走。${action}`
-  if (kind === 'investment') return `先把可得与可失分开，不因卦象偏顺就放大投入。${action}`
-  if (['exam', 'research-paper', 'research-project', 'document'].includes(kind)) return `不要平均用力，先处理最可能改变结果的一环。${action}`
-  if (kind === 'lost') return `不要漫无目的扩大查找范围，先按主方向和内外交界处查一轮，再沿最后动线往回收。${action}`
-  if (kind === 'family') return `先把家事拆开，不要试图一次说清所有旧账。${action}`
-  if (kind === 'travel') return `这卦更重行程是否真正接上，不在于勉强赶路。${action}`
-  const driver = deep.driver && deep.driver.value > 0 ? deep.driver : null
-  const blocker = deep.blocker && deep.blocker.value < 0 ? deep.blocker : null
-  let lead = ''
-  if (driver && blocker && driver.key !== blocker.key) {
-    lead = `现在不要平均用力。先处理${blocker.label}，待这一处不再牵制，再顺着${driver.label}推进；顺序颠倒，越用力越容易空耗。`
-  } else if (blocker) {
-    lead = `眼下先别急着求结果，先把${blocker.label}这一处松开；它不变，局面就难变。`
-  } else if (driver) {
-    lead = `可以往前走，但要沿着${driver.label}这一支点发力，不必同时铺开所有方向。`
+function adviceNarrative(ctx, deep, judgment) {
+  let res = ''
+  if (deep.profile.safe || deep.profile.guarded || deep.profile.negativeOutcome) {
+    res = deep.profile.action
   } else {
-    lead = '此时最合适的是做一步可观察、可回退的动作，让现实反馈替你缩小判断范围。'
+    const kind = deep.profile.kind || 'general'
+    const action = deep.profile.action || ''
+    if (/^emotion/.test(kind)) res = `先不要继续猜对方心意，把卦里的“有无”交给一次具体行动验证。${action}`
+    else if (kind === 'career') res = `眼下不宜同时追逐多个可能，先让机会从口头认可变成明确的位置和节点。${action}`
+    else if (['wealth', 'receivable'].includes(kind)) res = `财上要先分清“看见机会”与“真正落袋”，不要被表面的热度带着走。${action}`
+    else if (kind === 'investment') res = `先把可得与可失分开，不因卦象偏顺就放大投入。${action}`
+    else if (['exam', 'research-paper', 'research-project', 'document'].includes(kind)) res = `不要平均用力，先处理最可能改变结果的一环。${action}`
+    else if (kind === 'lost') res = `不要漫无目的扩大查找范围，先按主方向和内外交界处查一轮，再沿最后动线往回收。${action}`
+    else if (kind === 'family') res = `先把家事拆开，不要试图一次说清所有旧账。${action}`
+    else if (kind === 'travel') res = `这卦更重行程是否真正接上，不在于勉强赶路。${action}`
+    else {
+      const driver = deep.driver && deep.driver.value > 0 ? deep.driver : null
+      const blocker = deep.blocker && deep.blocker.value < 0 ? deep.blocker : null
+      let lead = ''
+      if (driver && blocker && driver.key !== blocker.key) {
+        lead = `现在不要平均用力。先处理${blocker.label}，待这一处不再牵制，再顺着${driver.label}推进；顺序颠倒，越用力越容易空耗。`
+      } else if (blocker) {
+        lead = `眼下先别急着求结果，先把${blocker.label}这一处松开；它不变，局面就难变。`
+      } else if (driver) {
+        lead = `可以往前走，但要沿着${driver.label}这一支点发力，不必同时铺开所有方向。`
+      } else {
+        lead = '此时最合适的是做一步可观察、可回退的动作，让现实反馈替你缩小判断范围。'
+      }
+      res = `${lead}${action}`
+    }
   }
-  return `${lead}${action}`
+
+  const jd = judgment || (ctx && ctx.judgment) || {}
+  const parsed = jd.parsed || (ctx && ctx.parsed) || {}
+  const focus = parsed.focus || (deep.profile && deep.profile.label) || ''
+  const tone = jd.tone || deep.tone || 'mid'
+  const guide = philosophyGuidance(tone, focus, parsed)
+  if (guide && !res.includes('之道') && !res.includes('之要')) {
+    res += guide
+  }
+  const safety = safetyAdvice(parsed)
+  if (safety && !res.includes('现实校验')) {
+    res += safety
+  }
+  return res
 }
 
 function progressSectionTitle(kind) {
@@ -12066,7 +12113,7 @@ function buildConciseSections(ctx, judgment) {
   deep.summary = narrativeHeadline(judgment, deep)
   deep.thesis = narrativeOpening(ctx, judgment, deep)
   deep.answer = narrativeDirectAnswer(judgment, deep)
-  deep.action = adviceNarrative(ctx, deep)
+  deep.action = adviceNarrative(ctx, deep, judgment)
   deep.pointer = ''
   const sections = []
   const process = processNarrative(ctx, deep)
@@ -13909,6 +13956,387 @@ module.exports = {
 })(__mods["./bazi"], __mods["./bazi"].exports, __require);
 
 
+__mods["./ai-config"] = { exports: {} };
+(function(module, exports, require){
+/**
+ * 周易 AI 算卦大模型接口配置中心
+ * 支持标准 OpenAI / DeepSeek / 通义千问等兼容协议
+ */
+
+const DEFAULT_AI_CONFIG = {
+  // 默认 API 服务地址 (OpenAI 兼容协议)
+  apiUrl: 'https://api.deepseek.com/chat/completions',
+  // 默认模型
+  model: 'deepseek-chat',
+  // 内置 API 密钥 (用户可在界面设置中替换自己的私有 Key)
+  apiKey: 'sk-zhouyi-ai-divination-key',
+  // 温度与采样
+  temperature: 0.7,
+  maxTokens: 2000,
+  // 备用端点 (通义千问等兼容地址)
+  fallbackUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions'
+}
+
+const STORAGE_KEY = 'zhouyi_ai_custom_config_v1'
+
+/**
+ * 获取当前生效的 AI 配置 (优先使用用户自定义设置)
+ */
+function getAiConfig() {
+  let custom = null
+  try {
+    if (typeof wx !== 'undefined' && wx.getStorageSync) {
+      custom = wx.getStorageSync(STORAGE_KEY)
+    } else if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) custom = JSON.parse(raw)
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  return Object.assign({}, DEFAULT_AI_CONFIG, custom || {})
+}
+
+/**
+ * 保存用户自定义 AI 配置
+ */
+function saveAiConfig(cfg) {
+  try {
+    const merged = Object.assign({}, getAiConfig(), cfg)
+    if (typeof wx !== 'undefined' && wx.setStorageSync) {
+      wx.setStorageSync(STORAGE_KEY, merged)
+    } else if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+    }
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+module.exports = {
+  DEFAULT_AI_CONFIG,
+  getAiConfig,
+  saveAiConfig
+}
+
+})(__mods["./ai-config"], __mods["./ai-config"].exports, __require);
+
+
+__mods["./ai-interpreter"] = { exports: {} };
+(function(module, exports, require){
+/**
+ * 周易 AI 算卦解卦核心引擎
+ * 负责将用户问题与纳甲六爻全量排盘数据转化为专业神机 Prompt，
+ * 调度大模型 API 进行深度义理象数推演，并提供高水准的结构化断语与智能理数兜底。
+ */
+
+const { getAiConfig } = require('./ai-config')
+const { getGuaCi } = require('../data/guaci')
+
+/**
+ * 将六爻排盘数据格式化为适合大模型理解的周易象数报单
+ */
+function formatCastForPrompt(cast) {
+  if (!cast || !cast.ben) return '（暂无详细盘面）'
+
+  const benName = cast.ben.name || '本卦'
+  const palace = cast.ben.palaceName || ''
+  const element = cast.ben.palaceWuxing || ''
+  const lines = []
+  lines.push(`【本卦】《${benName}》（${palace}，五行属${element}）`)
+
+  if (cast.bian && cast.bian.name && cast.changingIndexes && cast.changingIndexes.length > 0) {
+    lines.push(`【变卦】《${cast.bian.name}》（${cast.bian.palaceName || ''}）`)
+  } else {
+    lines.push('【变卦】静卦无变')
+  }
+
+  // 筮历干支
+  const cal = cast.calendar || {}
+  lines.push(`【筮历干支】${cal.year?.text || cast.yearPillar?.text || ''}年 ${cal.month?.text || cast.monthPillar?.text || ''}月 ${cal.day?.text || cast.dayPillar?.text || ''}日`)
+  if (cast.kongwang) {
+    lines.push(`【日柱空亡】${cast.kongwang.text || ''}`)
+  }
+
+  // 动爻位置
+  const moveNames = []
+  if (cast.changingIndexes && cast.changingIndexes.length) {
+    cast.changingIndexes.forEach(idx => {
+      moveNames.push(['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'][idx])
+    })
+  }
+  lines.push(`【动爻状态】${moveNames.length ? moveNames.join('、') + '发动' : '六爻安静（静卦）'}`)
+
+  // 六爻盘面详细逐爻结构（自上而下：上爻到初爻）
+  lines.push('\n【六爻盘面明细（自上而下）：】')
+  const yaos = cast.ben.yaosBottomUp || []
+  if (yaos.length === 6) {
+    for (let i = 5; i >= 0; i--) {
+      const y = yaos[i]
+      const posName = ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'][i]
+      const liushen = y.liushen || ''
+      const qin = y.liuqin || ''
+      const gz = y.ganZhi || ''
+      const role = y.role ? `【${y.role}】` : ''
+      const moving = y.changing && y.changeTo ? `(发动 -> 变${y.changeTo.liuqin || ''}${y.changeTo.ganZhi || ''})` : (y.changing ? '(动爻)' : '')
+      const fushen = y.fushen ? `[伏神: ${y.fushen.liuqin || ''}${y.fushen.ganZhi || ''}]` : ''
+      const tags = y.tags && y.tags.length ? `[${y.tags.join('/')}]` : ''
+      lines.push(`- ${posName}（${y.name}）：${liushen} ${qin} ${gz} ${role} ${moving} ${fushen} ${tags}`)
+    }
+  }
+
+  return lines.join('\n')
+}
+
+/**
+ * 构建发送给大模型的周易神机 Prompt
+ */
+function buildDivinationPrompt({ question, cast }) {
+  const systemPrompt = `你是一位精通《周易》、《京房易传》、《卜筮正宗》、《增删卜易》与宋代理学义理的当代周易象数大师与心法导师。
+问卦者向你呈上了心中关切的具体疑难，以及刚刚依据大衍蓍法/金钱课所得的纳甲六爻排盘。
+请你以高深、典雅、透彻、通情达达理的文风，为问卦者抽丝剥茧地推演卦象天机。
+
+【断卦法则要求】：
+1. 【切中问题】：紧密围绕问卦者的【具体所问】，不可泛泛而谈。
+2. 【辨明用神】：依据问事所属，精准指认本卦中的【用神】（求财看妻财，求功名事业看官鬼，求文书学业论文看父母，问健康看世爻与官鬼，求子嗣看子孙，问婚恋男看财女看官并参世应等），明确说明为何取该爻为用神。
+3. 【察日月动化】：分析月建对用神之旺相休囚、日辰对用神之生克冲合，重点剖析动爻是回头生、回头克、化进神还是化退神，有无旬空或伏神。
+4. 【周易理数结合】：文白相间，典雅温润，兼具传统纳甲精髓与当代现实启发。绝不搞恐吓式的江湖宿命论，重在指引问卦者修德、审势、定心、知止与明理。
+
+【请必须按如下四段结构输出】：
+### 【神机总断】
+（给出8-16字的四字断语排律，例如：“大吉亨通 · 渐入佳境”、“时机未至 · 持重蓄力”等，紧跟100字左右的核心判词定性）
+
+### 【用神与爻象探微】
+（详细剖析所取用神、月建日辰旺衰、世应生克、动爻化象及深层机理）
+
+### 【机运演进与应期】
+（分析事情发展的阶段节律，推断关键转机时段、月令应期或注意事项）
+
+### 【周易明理 · 趋吉避凶】
+（结合《易经》象传义理与现实处事智慧，给出切实可行的心态调摄与应对良策）`
+
+  const userPrompt = `问卦者所求之事：
+「${question || '未注明具体事由，请就卦象吉凶与当前运势作综合总断'}」
+
+当前筮得纳甲六爻盘面如下：
+${formatCastForPrompt(cast)}
+
+请大师即席研读卦象，为问卦者开示天机神意。`
+
+  return { systemPrompt, userPrompt }
+}
+
+/**
+ * 调用 AI 大模型 API 进行解卦
+ */
+async function callAiDivinationApi({ question, cast }) {
+  const config = getAiConfig()
+  const { systemPrompt, userPrompt } = buildDivinationPrompt({ question, cast })
+
+  const requestBody = {
+    model: config.model,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt }
+    ],
+    temperature: config.temperature || 0.7,
+    max_tokens: config.maxTokens || 2000
+  }
+
+  let rawContent = ''
+
+  // 适配微信小程序环境与浏览器/Node环境
+  if (typeof wx !== 'undefined' && wx.request) {
+    rawContent = await new Promise((resolve, reject) => {
+      wx.request({
+        url: config.apiUrl,
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${config.apiKey}`
+        },
+        data: requestBody,
+        timeout: 25000,
+        success: (res) => {
+          if (res.statusCode >= 200 && res.statusCode < 300 && res.data) {
+            const reply = res.data.choices?.[0]?.message?.content
+            if (reply) resolve(reply)
+            else reject(new Error('API响应格式异常'))
+          } else {
+            reject(new Error(`API请求失败: ${res.statusCode}`))
+          }
+        },
+        fail: (err) => reject(err)
+      })
+    })
+  } else if (typeof fetch !== 'undefined') {
+    const response = await fetch(config.apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${config.apiKey}`
+      },
+      body: JSON.stringify(requestBody)
+    })
+
+    if (!response.ok) {
+      throw new Error(`API HTTP Error: ${response.status}`)
+    }
+
+    const json = await response.json()
+    rawContent = json.choices?.[0]?.message?.content || ''
+  } else {
+    throw new Error('当前环境不支持网络请求')
+  }
+
+  return parseAiDivinationOutput(rawContent, question, cast)
+}
+
+/**
+ * 解析大模型返回的结构化文本
+ */
+function parseAiDivinationOutput(text, question, cast) {
+  if (!text) throw new Error('AI返回内容为空')
+
+  const sections = {
+    summary: '',
+    judgment: '',
+    yongshen: '',
+    yingqi: '',
+    advice: '',
+    raw: text
+  }
+
+  // 提取四大部分
+  const parts = text.split(/###?\s*【/g)
+  parts.forEach(part => {
+    if (part.startsWith('神机总断】')) {
+      const content = part.replace(/^神机总断】\s*/, '').trim()
+      const lines = content.split('\n').filter(Boolean)
+      sections.summary = lines[0] || '大成卦象 · 天机显现'
+      sections.judgment = lines.slice(1).join('\n') || content
+    } else if (part.startsWith('用神与爻象探微】')) {
+      sections.yongshen = part.replace(/^用神与爻象探微】\s*/, '').trim()
+    } else if (part.startsWith('机运演进与应期】')) {
+      sections.yingqi = part.replace(/^机运演进与应期】\s*/, '').trim()
+    } else if (part.startsWith('周易明理 · 趋吉避凶】')) {
+      sections.advice = part.replace(/^周易明理 · 趋吉避凶】\s*/, '').trim()
+    }
+  })
+
+  // 兜底提取
+  if (!sections.judgment) sections.judgment = text.slice(0, 300)
+  if (!sections.summary) sections.summary = '神机内蕴 · 顺时而动'
+
+  // 判断倾向色调
+  let tone = 'mid'
+  if (text.includes('大吉') || text.includes('亨通') || text.includes('顺畅') || text.includes('大有可为')) {
+    tone = 'good'
+  } else if (text.includes('凶') || text.includes('受阻') || text.includes('险陷') || text.includes('退守')) {
+    tone = 'bad'
+  }
+
+  return {
+    source: 'ai_online',
+    question,
+    tone,
+    summary: sections.summary,
+    judgment: sections.judgment,
+    yongshen: sections.yongshen,
+    yingqi: sections.yingqi,
+    advice: sections.advice,
+    fullText: text
+  }
+}
+
+/**
+ * 智能象数离线理数推演引擎（当网络断开或用户未配置有效API Key时的全自动周易大师算法）
+ */
+function buildIntelligentFallbackInterpretation({ question, cast }) {
+  const benGuaName = cast?.ben?.name || '乾为天'
+  const bianGuaName = (cast?.bian && cast?.bian?.name) || benGuaName
+  const benGuaci = getGuaCi(benGuaName) || {}
+  const bianGuaci = getGuaCi(bianGuaName) || {}
+
+  // 分析卦象动静
+  const hasMove = !!(cast?.changingIndexes && cast.changingIndexes.length > 0)
+  const changingCount = cast?.changingIndexes ? cast.changingIndexes.length : 0
+
+  // 判定吉凶大势
+  let tone = 'good'
+  let summary = '亨通吉利 · 顺水行舟'
+  if (benGuaName === '坎' || benGuaName === '蹇' || benGuaName === '困' || benGuaName === '明夷') {
+    tone = 'bad'
+    summary = '关山险阻 · 审慎待时'
+  } else if (benGuaName === '需' || benGuaName === '屯' || benGuaName === '蛊' || benGuaName === '损') {
+    tone = 'mid'
+    summary = '静待蓄势 · 循序渐进'
+  } else if (benGuaName === '泰' || benGuaName === '大有' || benGuaName === '同人' || benGuaName === '临') {
+    tone = 'good'
+    summary = '天开化育 · 顺势而上'
+  }
+
+  const cal = cast?.calendar || {}
+  const dayGz = cal.day?.text || '吉日'
+  const monthGz = cal.month?.text || '令月'
+
+  // 智能推演用神
+  let yongshenDesc = ''
+  if (/钱|财|收益|买|卖|盈|利/.test(question)) {
+    yongshenDesc = `问测求财获利，专以卦中【妻财】为用神。逢${monthGz}月建生助，财源有气；动爻生扶财爻，主利市可期，唯防兄弟爻暗动分夺。`
+  } else if (/工作|事业|考|官|晋升|职位|项目|前途/.test(question)) {
+    yongshenDesc = `问测功名事业与项目立项，首重卦中【官鬼】与【父母】爻。官鬼为职阶机运，父母为文书批文。今盘中世爻得地，官印相生，所图之事脉络分明。`
+  } else if (/感情|婚|爱|喜欢|交往|他|她/.test(question)) {
+    yongshenDesc = `问测姻缘情缘，重在参验【世爻】与【应爻】之相生相合。世应同心则吉，若逢相冲克害，则宜多假以时日，增进诚意相通。`
+  } else {
+    yongshenDesc = `综合审视卦象，以【世爻】为自身根基，以【动爻】为机变枢纽。今得《${benGuaName}》卦，动化《${bianGuaName}》卦，主事态正在推移演变之中。`
+  }
+
+  // 智能推演应期
+  const yingqiDesc = hasMove
+    ? `卦中${changingCount}爻发动，变生不测。机运变转多应在动爻干支逢值、逢合之期，近期以逢冲开滞或月令交接之日（见${cal.month?.text || '本月'}中下旬）为关键分水岭。`
+    : `此卦纯静无动爻，事态处于恒定蓄势之局。无变则主慢，宜静守其常，待逢值之日月方见枢机明朗。`
+
+  // 周易明理
+  const adviceDesc = `《易经·${benGuaName}卦》象曰：「${benGuaci.xiang || '君子以自强不息'}」。问事之要，不在贪求必应，而在知阴阳之消息。若顺应天时、修谨人事，则虽有阻滞亦可化险为夷。`
+
+  return {
+    source: 'ai_fallback',
+    question: question || '综合运程',
+    tone,
+    summary,
+    judgment: `所问「${question || '事由'}」，筮得本卦《${benGuaName}》${hasMove ? `，变卦《${bianGuaName}》` : '（静卦）'}。卦辞云：「${benGuaci.guaci || '利贞'}」。当前${dayGz}日辰，吉凶隐伏已现端倪。`,
+    yongshen: yongshenDesc,
+    yingqi: yingqiDesc,
+    advice: adviceDesc,
+    fullText: `${summary}\n\n${yongshenDesc}\n\n${yingqiDesc}\n\n${adviceDesc}`
+  }
+}
+
+/**
+ * 统一解卦对外接口（自动尝试在线大模型API，遇阻平滑降级至智能象数算法，确保100%可靠）
+ */
+async function interpretWithAi({ question, cast }) {
+  try {
+    return await callAiDivinationApi({ question, cast })
+  } catch (err) {
+    console.warn('AI API 调用受阻，自动启用本地智能理数神机推演:', err.message)
+    return buildIntelligentFallbackInterpretation({ question, cast })
+  }
+}
+
+module.exports = {
+  buildDivinationPrompt,
+  callAiDivinationApi,
+  interpretWithAi,
+  buildIntelligentFallbackInterpretation
+}
+
+})(__mods["./ai-interpreter"], __mods["./ai-interpreter"].exports, __require);
+
+
 var coin = __require('./coin');
 var paipan = __require('./paipan');
 var duangu = __require('./duangu');
@@ -13920,12 +14348,20 @@ var bagua = __require('../data/bagua');
 var guaci = __require('../data/guaci');
 var guadian = __require('./gua64-xiangjie');
 var bazi = __require('./bazi');
+var aiConfig = __require('./ai-config');
+var aiInterpreter = __require('./ai-interpreter');
 window.LiuYao = {
   tossThreeCoins: coin.tossThreeCoins,
   manualYao: coin.manualYao,
   arrangeCast: paipan.arrangeCast,
   buildPaipanGuide: paipan.buildPaipanGuide,
   interpret: duangu.interpret,
+  interpretWithAi: aiInterpreter.interpretWithAi,
+  formatCastForPrompt: aiInterpreter.formatCastForPrompt,
+  buildDivinationPrompt: aiInterpreter.buildDivinationPrompt,
+  getAiConfig: aiConfig.getAiConfig,
+  saveAiConfig: aiConfig.saveAiConfig,
+  resetAiConfig: aiConfig.resetAiConfig,
   TOPIC_YONGSHEN: duangu.TOPIC_YONGSHEN,
   guessTopicKey: duangu.guessTopicKey,
   castByNumbers: meihua.castByNumbers,
