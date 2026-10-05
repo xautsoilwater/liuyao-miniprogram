@@ -524,6 +524,32 @@
     if (goAskCast) goAskCast.onclick = () => { state.askNext = 'cast'; go('ask') }
     if (goAskMeihua) goAskMeihua.onclick = () => { state.askNext = 'meihua'; go('ask') }
     if (goBazi) goBazi.onclick = () => { go('bazi') }
+
+    // 隐秘安全暗门：连续点击顶部周易印章5次，可查看或维护本机私有API配置
+    let brandClicks = 0
+    let brandTimer = null
+    const brand = document.querySelector('.home-brand')
+    if (brand) {
+      brand.onclick = () => {
+        brandClicks++
+        clearTimeout(brandTimer)
+        brandTimer = setTimeout(() => { brandClicks = 0 }, 1500)
+        if (brandClicks >= 5) {
+          brandClicks = 0
+          const cur = (window.LiuYao && window.LiuYao.getAiConfig) ? window.LiuYao.getAiConfig() : {}
+          const input = prompt('【太史令 · 天机密匙】\n请输入您的私有 API Key：\n（输入 reset 可恢复初始配置）', (cur.apiKey && !cur.isDefaultKey) ? cur.apiKey : '')
+          if (input !== null) {
+            if (input.trim() === 'reset' || input.trim() === '恢复') {
+              if (window.LiuYao && window.LiuYao.resetAiConfig) window.LiuYao.resetAiConfig()
+              alert('已恢复为初始配置')
+            } else if (input.trim()) {
+              if (window.LiuYao && window.LiuYao.saveAiConfig) window.LiuYao.saveAiConfig({ apiKey: input.trim() })
+              alert('天机契合：私钥已成功保存于本机！')
+            }
+          }
+        }
+      }
+    }
   }
 
   function pushYao(result) {
@@ -2480,6 +2506,32 @@
   window.addEventListener('scroll', syncLearnActiveFromScroll, { passive: true })
   try {
     const q = new URLSearchParams(window.location.search || '')
+    // 隐秘激活通道：支持通过 ?key=... 或 ?apiKey=... 静默写入本机存储，并自动擦除URL防泄漏
+    const secretKey = q.get('key') || q.get('apiKey') || q.get('token')
+    const secretUrl = q.get('url') || q.get('apiUrl')
+    const secretModel = q.get('model')
+    if (secretKey || secretUrl || secretModel) {
+      const update = {}
+      if (secretKey) update.apiKey = secretKey.trim()
+      if (secretUrl) update.apiUrl = secretUrl.trim()
+      if (secretModel) update.model = secretModel.trim()
+      if (window.LiuYao && window.LiuYao.saveAiConfig) {
+        window.LiuYao.saveAiConfig(update)
+      }
+      q.delete('key')
+      q.delete('apiKey')
+      q.delete('token')
+      q.delete('url')
+      q.delete('apiUrl')
+      q.delete('model')
+      const newQuery = q.toString() ? '?' + q.toString() : ''
+      const cleanUrl = window.location.pathname + newQuery + (window.location.hash || '')
+      window.history.replaceState({}, document.title, cleanUrl)
+      setTimeout(() => {
+        alert('【天机契合】私钥神机配置已成功注入本机！')
+      }, 400)
+    }
+
     const articleId = q.get('article') || q.get('articleId')
     if (articleId) {
       state.page = 'detail'
