@@ -502,7 +502,7 @@
       </div>
       <div class="actions">
         <span class="act" data-go="learn">研习典要</span>
-        <span class="act" id="goAskCast">六爻卜卦</span>
+        <span class="act" id="goAskCast" style="color:var(--cinnabar);font-weight:700">神机断卦</span>
         <span class="act" id="goAskMeihua">梅花易数</span>
         <span class="act" id="goBazi">命理分析</span>
       </div>
@@ -515,6 +515,9 @@
           <span>问题留言</span>
           <button type="button" class="feedback-link" data-go="feedback" aria-label="问题留言"></button>
         </span>
+      </div>
+      <div style="text-align:center;font-size:10.5px;color:var(--bronze);margin-top:12px;letter-spacing:1px;opacity:0.75">
+        ✦ 太史令 · 神机断卦新制 ✦
       </div>`
     bindNav()
     bindLuopanInteractions()
@@ -621,13 +624,13 @@
   }
 
   function renderAsk() {
-    setNav('心念所求')
+    setNav('神机断卦')
     const next = state.askNext === 'meihua' ? 'meihua' : 'cast'
     const confirmLabel = '去卜卦'
     const curQ = state.question || ''
 
     app.innerHTML = `
-      <div class="title-zh ask-title-center">所求何事</div>
+      <div class="title-zh ask-title-center">神机断卦 · 所求何事</div>
       <div class="ask-before-note">
         <div>占贵诚敬，一事一问；毋以戏筮，毋再三渎问。</div>
         <div>澄心定念，写下所惑，或点选常用灵感。</div>
@@ -835,7 +838,7 @@
         </div>
         ${rows}
       </div>
-      <div class="row" style="margin:12px 0 8px"><button class="btn btn-ghost" id="recast">再起</button><button class="btn btn-primary" data-go="interpret">神机解卦</button></div>
+      <div class="row" style="margin:12px 0 8px"><button class="btn btn-ghost" id="recast">再起</button><button class="btn btn-primary" data-go="interpret">神机断卦</button></div>
       ${tags.length ? `<div class="chip-row" style="margin-bottom:10px">${[...new Set(tags)].slice(0, 8).map((t) => `<span class="chip ${/空|死|囚|日冲/.test(t) ? 'hot' : ''}">${t}</span>`).join('')}</div>` : ''}
       ${fushen.length ? `<div class="block"><div class="block-title">伏神</div>${fushen.map((f) => `<div class="muted">· ${f.text}</div>`).join('')}</div>` : ''}
       ${rel.length ? `<div class="block"><div class="block-title">动爻关系</div><div class="chip-row">${rel.map((t) => `<span class="chip">${t}</span>`).join('')}</div></div>` : ''}
@@ -912,7 +915,7 @@
   }
 
   function renderInterpret() {
-    setNav('神机解卦')
+    setNav('神机断卦')
     if (!state.cast) { go('ask', {}, { replace: true }); return }
 
     if (!state.aiResult && !state.aiLoading) {
@@ -922,7 +925,7 @@
 
     if (state.aiLoading) {
       app.innerHTML = `
-        <div class="title-zh">神机解卦</div>
+        <div class="title-zh">神机断卦</div>
         <div class="subtitle">深度纳甲象数 · 义理时空推演</div>
         <div class="ai-loading-box">
           ${corners()}
@@ -950,7 +953,7 @@
       </div>`).join('')
 
     app.innerHTML = `
-      <div class="title-zh">神机解卦</div>
+      <div class="title-zh">神机断卦</div>
       <div class="subtitle">深度纳甲象数 · 义理时空推演</div>
 
       <div class="ask-box" style="margin-bottom:12px">

@@ -45,6 +45,11 @@ function getAiConfig() {
     // ignore
   }
 
+  // 严格过滤可能残留在用户设备上的旧测试假Key或空Key，确保默认内置真实的DeepSeek Key无缝生效
+  if (custom && (!custom.apiKey || custom.apiKey === 'sk-zhouyi-ai-divination-key')) {
+    delete custom.apiKey
+  }
+
   return Object.assign({}, DEFAULT_AI_CONFIG, custom || {})
 }
 

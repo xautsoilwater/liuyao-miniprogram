@@ -16,7 +16,7 @@
 
   <view class="actions">
     <view class="act" bindtap="goLearn" hover-class="act-hover">研习典要</view>
-    <view class="act" bindtap="goCast" hover-class="act-hover">六爻卜卦</view>
+    <view class="act" bindtap="goCast" hover-class="act-hover" style="color:var(--cinnabar);font-weight:700">神机断卦</view>
     <view class="act" bindtap="goMeihua" hover-class="act-hover">梅花易数</view>
     <view class="act" bindtap="goBazi" hover-class="act-hover">命理分析</view>
   </view>
