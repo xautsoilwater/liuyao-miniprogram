@@ -39,7 +39,11 @@
     topicKey: 'general',
     articleId: null,
     guaAlias: null,
-    feedbackText: ''
+    feedbackText: '',
+    baziGender: '男',
+    baziBirthDate: '1995-10-24',
+    baziBirthTime: '09:30',
+    baziData: null
   }
   const stack = [{ page: 'index', articleId: null, topicKey: 'general', guaAlias: null }]
   let touchStartX = 0
@@ -148,7 +152,8 @@
       detail: renderDetail,
       guadian: renderGuadian,
       guadianDetail: renderGuadianDetail,
-      feedback: renderFeedback
+      feedback: renderFeedback,
+      bazi: renderBazi
     }
     pages[state.page]()
     updateBackUi()
@@ -493,6 +498,7 @@
         <span class="act" data-go="learn">研习典要</span>
         <span class="act" id="goAskCast">六爻卜卦</span>
         <span class="act" id="goAskMeihua">梅花易数</span>
+        <span class="act" id="goBazi">命理分析</span>
       </div>
       <div class="link-row soft">
         <span class="text-link" data-go="account">${accountLabel}</span>
@@ -508,8 +514,10 @@
     bindLuopanInteractions()
     const goAskCast = document.getElementById('goAskCast')
     const goAskMeihua = document.getElementById('goAskMeihua')
+    const goBazi = document.getElementById('goBazi')
     if (goAskCast) goAskCast.onclick = () => { state.askNext = 'cast'; go('ask') }
     if (goAskMeihua) goAskMeihua.onclick = () => { state.askNext = 'meihua'; go('ask') }
+    if (goBazi) goBazi.onclick = () => { go('bazi') }
   }
 
   function pushYao(result) {
@@ -1091,6 +1099,218 @@
       state.feedbackText = ''
       alert('留言已保存，感谢反馈')
       go('index')
+    }
+  }
+
+  function wuxingColorClass(wx) {
+    if (wx === '木') return 'wx-mu'
+    if (wx === '火') return 'wx-huo'
+    if (wx === '土') return 'wx-tu'
+    if (wx === '金') return 'wx-jin'
+    if (wx === '水') return 'wx-shui'
+    return ''
+  }
+
+  function wuxingBarBg(wx) {
+    if (wx === '金') return '#c5a059'
+    if (wx === '木') return '#4a8255'
+    if (wx === '水') return '#386f96'
+    if (wx === '火') return '#ba372d'
+    if (wx === '土') return '#8b6742'
+    return '#888'
+  }
+
+  function renderBaziInputView() {
+    app.innerHTML = `
+      <div class="bazi-hero">
+        <div class="title-zh" style="font-size:24px">命理起柱</div>
+        <div class="subtitle">探阴阳消息 · 察五行盛衰</div>
+      </div>
+      <div class="bazi-intro-card">
+        命由天定，运由己修；澄心定虑，知五行之节律，以修德成己。
+      </div>
+      <div class="bazi-form-row">
+        <label>命主乾坤</label>
+        <div class="gender-grid">
+          <div class="gender-btn ${state.baziGender === '男' ? 'on' : ''}" id="btnGenderMale">乾造 (男)</div>
+          <div class="gender-btn ${state.baziGender === '女' ? 'on' : ''}" id="btnGenderFemale">坤造 (女)</div>
+        </div>
+      </div>
+      <div class="bazi-time-form">
+        <div class="bazi-form-row">
+          <label>公历出生日期</label>
+          <input type="date" class="bazi-input" id="baziDateInput" value="${state.baziBirthDate || '1995-10-24'}">
+        </div>
+        <div class="bazi-form-row">
+          <label>出生时间 (时辰)</label>
+          <input type="time" class="bazi-input" id="baziTimeInput" value="${state.baziBirthTime || '09:30'}">
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btnBaziSubmit" style="margin-top:14px">立 柱 排 盘</button>
+      <button class="btn btn-ghost" data-back style="margin-top:6px">返 回</button>`
+
+    bindNav()
+    const maleBtn = document.getElementById('btnGenderMale')
+    const femaleBtn = document.getElementById('btnGenderFemale')
+    const dateIn = document.getElementById('baziDateInput')
+    const timeIn = document.getElementById('baziTimeInput')
+    const submitBtn = document.getElementById('btnBaziSubmit')
+
+    if (maleBtn) maleBtn.onclick = () => { state.baziGender = '男'; render() }
+    if (femaleBtn) femaleBtn.onclick = () => { state.baziGender = '女'; render() }
+    if (dateIn) dateIn.onchange = () => { state.baziBirthDate = dateIn.value }
+    if (timeIn) timeIn.onchange = () => { state.baziBirthTime = timeIn.value }
+
+    if (submitBtn) {
+      submitBtn.onclick = () => {
+        const dStr = (dateIn && dateIn.value) || state.baziBirthDate || '1995-10-24'
+        const tStr = (timeIn && timeIn.value) || state.baziBirthTime || '09:30'
+        state.baziBirthDate = dStr
+        state.baziBirthTime = tStr
+        const dt = new Date(`${dStr}T${tStr}:00`)
+        if (Number.isNaN(dt.getTime())) {
+          alert('请选择有效的出生日期时间')
+          return
+        }
+        if (window.LiuYao && window.LiuYao.calculateBazi) {
+          state.baziData = window.LiuYao.calculateBazi({
+            birthDate: dt,
+            gender: state.baziGender
+          })
+          render()
+        } else {
+          alert('排盘算法引擎未准备就绪')
+        }
+      }
+    }
+  }
+
+  function renderBaziResultView() {
+    const data = state.baziData
+    if (!data) return
+
+    // 4柱按古典顺序从左到右：时柱、日柱、月柱、年柱
+    const displayPillars = [
+      data.pillars[3], // 时柱
+      data.pillars[2], // 日柱
+      data.pillars[1], // 月柱
+      data.pillars[0]  // 年柱
+    ]
+
+    const pillarsHtml = displayPillars.map((p) => {
+      const isDay = p.pillarName === '日柱'
+      const cangHtml = p.cangDetails.map(c => `<div class="bazi-cang-item">${c.gan} <span class="${wuxingColorClass(c.wuxing)}">${c.wuxing}</span> · ${c.shishenShort}</div>`).join('')
+      const shenshaHtml = p.shensha.length ? p.shensha.map(s => `<span class="bazi-shensha-tag">${s}</span>`).join('<br>') : '<span style="color:var(--mist)">—</span>'
+
+      return `
+        <div class="bazi-col">
+          <div class="bazi-col-title">${p.pillarName}</div>
+          <div class="bazi-shishen ${isDay ? 'day' : ''}">${p.shishen}</div>
+          <div class="bazi-char ${wuxingColorClass(p.ganWuxing)}">${p.gan}</div>
+          <div class="bazi-char ${wuxingColorClass(p.zhiWuxing)}">${p.zhi}</div>
+          <div style="margin:4px 0">${cangHtml}</div>
+          <div class="bazi-changsheng">${p.changsheng}</div>
+          <div class="bazi-nayin">${p.nayin}</div>
+          <div style="margin-top:6px">${shenshaHtml}</div>
+        </div>`
+    }).join('')
+
+    // 五行能量条
+    const wuxingList = ['金', '木', '水', '火', '土']
+    const energyHtml = wuxingList.map(wx => {
+      const pct = data.energy.percents[wx] || 0
+      return `
+        <div class="energy-row">
+          <span class="energy-label ${wuxingColorClass(wx)}">${wx}</span>
+          <div class="energy-bar-wrap">
+            <div class="energy-bar" style="width:${pct}%; background:${wuxingBarBg(wx)}"></div>
+          </div>
+          <span class="energy-val">${pct}%</span>
+        </div>`
+    }).join('')
+
+    // 大运横向滚动卡
+    const dayunHtml = data.dayun.list.map((u, i) => `
+      <div class="dayun-card ${i === 2 ? 'active' : ''}">
+        <div class="dayun-age">${u.ageRange}</div>
+        <div class="dayun-gz">${u.text}</div>
+        <div class="dayun-ss">${u.shishen}</div>
+        <div style="font-size:10px;color:var(--bronze)">${u.nayin}</div>
+      </div>
+    `).join('')
+
+    // 六维明理断解卡片
+    const dimenHtml = data.interpretation.map(item => `
+      <div class="dimen-card">
+        <div class="dimen-head">
+          <span class="dimen-title">${item.title}</span>
+          <span class="dimen-summary">${item.summary}</span>
+        </div>
+        <div class="dimen-body">${item.content}</div>
+      </div>
+    `).join('')
+
+    app.innerHTML = `
+      <div class="bazi-hero">
+        <div class="title-zh" style="font-size:24px">四 柱 原 局</div>
+        <div class="seal" style="margin:6px 0">${data.summary}</div>
+        <div class="subtitle" style="margin-top:4px">
+          ${data.dayGan}${data.dayWuxing}日元 · ${data.analysis.strength} · 空亡${data.kongwang.text}
+        </div>
+      </div>
+
+      <!-- 四柱大盘 -->
+      <div class="bazi-board">
+        <div class="bazi-pillars-grid">
+          ${pillarsHtml}
+        </div>
+        <div style="text-align:center;font-size:12px;color:var(--bronze);border-top:1px dashed var(--line);padding-top:6px;margin-top:8px">
+          格局判定：${data.analysis.pattern} ｜ 喜神：${data.analysis.xi.join('、')} ｜ 忌神：${data.analysis.ji.join('、')}
+        </div>
+      </div>
+
+      <!-- 五行能量气象 -->
+      <div class="energy-card">
+        <div style="font-size:14px;letter-spacing:.2em;color:var(--bronze);margin-bottom:8px;font-weight:600">五行能量气象</div>
+        ${energyHtml}
+      </div>
+
+      <!-- 大运排布 -->
+      <div class="energy-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:14px;letter-spacing:.2em;color:var(--bronze);font-weight:600">大运推移</span>
+          <span style="font-size:12px;color:var(--ink-soft)">${data.dayun.startAgeDesc}</span>
+        </div>
+        <div class="dayun-scroll">
+          ${dayunHtml}
+        </div>
+      </div>
+
+      <!-- 六维明理象解 -->
+      <div style="margin:16px 0 6px">
+        <div class="ornament">周 易 象 解 · 趋 吉 避 凶</div>
+        ${dimenHtml}
+      </div>
+
+      <button class="btn btn-primary" id="btnBaziReset" style="margin-top:18px">重 新 起 柱</button>
+      <button class="btn btn-ghost" data-back style="margin-top:6px">返 回 首 页</button>`
+
+    bindNav()
+    const resetBtn = document.getElementById('btnBaziReset')
+    if (resetBtn) {
+      resetBtn.onclick = () => {
+        state.baziData = null
+        render()
+      }
+    }
+  }
+
+  function renderBazi() {
+    setNav('命理分析')
+    if (state.baziData) {
+      renderBaziResultView()
+    } else {
+      renderBaziInputView()
     }
   }
 

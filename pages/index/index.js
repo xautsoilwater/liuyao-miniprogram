@@ -52,6 +52,10 @@ Page({
     wx.navigateTo({ url: '/pages/ask/ask?next=meihua' })
   },
 
+  goBazi() {
+    wx.navigateTo({ url: '/pages/bazi/bazi' })
+  },
+
   goLearn() {
     wx.navigateTo({ url: '/pages/learn/learn' })
   },

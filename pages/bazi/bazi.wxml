@@ -1,0 +1,129 @@
+<view class="page bazi-page">
+  <nav-back title="命理分析" />
+
+  <!-- 输入状态 -->
+  <view wx:if="{{!baziData}}" class="bazi-input-section">
+    <view class="bazi-hero">
+      <view class="title-zh">命理起柱</view>
+      <view class="subtitle">探阴阳消息 · 察五行盛衰</view>
+    </view>
+
+    <view class="bazi-intro-card">
+      命由天定，运由己修；澄心定虑，知五行之节律，以修德成己。
+    </view>
+
+    <view class="bazi-form-row">
+      <view class="form-label">命主乾坤</view>
+      <view class="gender-grid">
+        <view class="gender-btn {{gender === '男' ? 'on' : ''}}" bindtap="setGenderMale">乾造 (男)</view>
+        <view class="gender-btn {{gender === '女' ? 'on' : ''}}" bindtap="setGenderFemale">坤造 (女)</view>
+      </view>
+    </view>
+
+    <view class="bazi-time-form">
+      <view class="bazi-form-row">
+        <view class="form-label">公历出生日期</view>
+        <picker mode="date" value="{{birthDate}}" bindchange="onDateChange">
+          <view class="picker-box">{{birthDate}}</view>
+        </picker>
+      </view>
+
+      <view class="bazi-form-row">
+        <view class="form-label">出生时间 (时辰)</view>
+        <picker mode="time" value="{{birthTime}}" bindchange="onTimeChange">
+          <view class="picker-box">{{birthTime}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <button class="btn btn-primary" bindtap="calculatePillars" style="margin-top: 28rpx">立 柱 排 盘</button>
+    <button class="btn btn-ghost" bindtap="goBack" style="margin-top: 14rpx">返 回</button>
+  </view>
+
+  <!-- 结果状态 -->
+  <view wx:else class="bazi-result-section">
+    <view class="bazi-hero">
+      <view class="title-zh">四 柱 原 局</view>
+      <view class="seal" style="margin: 12rpx 0">{{baziData.summary}}</view>
+      <view class="subtitle" style="margin-top: 8rpx">
+        {{baziData.dayGan}}{{baziData.dayWuxing}}日元 · {{baziData.analysis.strength}} · 空亡{{baziData.kongwang.text}}
+      </view>
+    </view>
+
+    <!-- 四柱大盘 -->
+    <view class="bazi-board">
+      <view class="bazi-pillars-grid">
+        <block wx:for="{{displayPillars}}" wx:key="pillarName">
+          <view class="bazi-col">
+            <view class="bazi-col-title">{{item.pillarName}}</view>
+            <view class="bazi-shishen {{item.pillarName === '日柱' ? 'day' : ''}}">{{item.shishen}}</view>
+            <view class="bazi-char wx-{{item.ganWuxing}}">{{item.gan}}</view>
+            <view class="bazi-char wx-{{item.zhiWuxing}}">{{item.zhi}}</view>
+            <view class="bazi-cang-box">
+              <view wx:for="{{item.cangDetails}}" wx:for-item="cg" wx:key="gan" class="bazi-cang-item">
+                {{cg.gan}} <text class="wx-{{cg.wuxing}}">{{cg.wuxing}}</text> · {{cg.shishenShort}}
+              </view>
+            </view>
+            <view class="bazi-changsheng">{{item.changsheng}}</view>
+            <view class="bazi-nayin">{{item.nayin}}</view>
+            <view class="bazi-shensha-box">
+              <view wx:for="{{item.shensha}}" wx:for-item="ss" wx:key="*this" class="bazi-shensha-tag">{{ss}}</view>
+            </view>
+          </view>
+        </block>
+      </view>
+      <view class="bazi-pattern-summary">
+        格局判定：{{baziData.analysis.pattern}} ｜ 喜神：{{baziData.analysis.xiText}} ｜ 忌神：{{baziData.analysis.jiText}}
+      </view>
+    </view>
+
+    <!-- 五行能量气象 -->
+    <view class="energy-card">
+      <view class="card-sec-title">五行能量气象</view>
+      <block wx:for="{{wuxingEnergies}}" wx:key="wx">
+        <view class="energy-row">
+          <text class="energy-label wx-{{item.wx}}">{{item.wx}}</text>
+          <view class="energy-bar-wrap">
+            <view class="energy-bar" style="width: {{item.pct}}%; background: {{item.color}}"></view>
+          </view>
+          <text class="energy-val">{{item.pct}}%</text>
+        </view>
+      </block>
+    </view>
+
+    <!-- 大运推移 -->
+    <view class="energy-card">
+      <view class="dayun-header">
+        <text class="card-sec-title">大运推移</text>
+        <text class="dayun-sub">{{baziData.dayun.startAgeDesc}}</text>
+      </view>
+      <scroll-view scroll-x class="dayun-scroll" enable-flex>
+        <block wx:for="{{baziData.dayun.list}}" wx:key="step">
+          <view class="dayun-card {{index === 2 ? 'active' : ''}}">
+            <view class="dayun-age">{{item.ageRange}}</view>
+            <view class="dayun-gz">{{item.text}}</view>
+            <view class="dayun-ss">{{item.shishen}}</view>
+            <view class="dayun-ny">{{item.nayin}}</view>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+
+    <!-- 周易明理象解 -->
+    <view class="interpret-section">
+      <view class="ornament">周 易 象 解 · 趋 吉 避 凶</view>
+      <block wx:for="{{baziData.interpretation}}" wx:key="title">
+        <view class="dimen-card">
+          <view class="dimen-head">
+            <text class="dimen-title">{{item.title}}</text>
+            <text class="dimen-summary">{{item.summary}}</text>
+          </view>
+          <view class="dimen-body">{{item.content}}</view>
+        </view>
+      </block>
+    </view>
+
+    <button class="btn btn-primary" bindtap="resetBazi" style="margin-top: 36rpx">重 新 起 柱</button>
+    <button class="btn btn-ghost" bindtap="goBack" style="margin-top: 14rpx">返 回 首 页</button>
+  </view>
+</view>

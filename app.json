@@ -10,7 +10,8 @@
     "pages/account/account",
     "pages/learn/learn",
     "pages/learn-detail/learn-detail",
-    "pages/history/history"
+    "pages/history/history",
+    "pages/bazi/bazi"
   ],
   "window": {
     "navigationStyle": "custom",

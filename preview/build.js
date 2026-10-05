@@ -24,7 +24,8 @@ const order = [
   './ask',
   './ask-options',
   './duangu',
-  './meihua'
+  './meihua',
+  './bazi'
 ]
 
 const fileOf = {
@@ -46,7 +47,8 @@ const fileOf = {
   './ask': 'utils/ask.js',
   './ask-options': 'utils/ask-options.js',
   './duangu': 'utils/duangu.js',
-  './meihua': 'utils/meihua.js'
+  './meihua': 'utils/meihua.js',
+  './bazi': 'utils/bazi.js'
 }
 
 const aliases = {
@@ -88,6 +90,7 @@ var learning = __require('../data/learning');
 var bagua = __require('../data/bagua');
 var guaci = __require('../data/guaci');
 var guadian = __require('./gua64-xiangjie');
+var bazi = __require('./bazi');
 window.LiuYao = {
   tossThreeCoins: coin.tossThreeCoins,
   manualYao: coin.manualYao,
@@ -101,6 +104,7 @@ window.LiuYao = {
   castByRandom: meihua.castByRandom,
   buildLuckyDirections: jixiang.buildLuckyDirections,
   luckyByGan: jixiang.luckyByGan,
+  calculateBazi: bazi.calculateBazi,
   TIME_SCOPES: askOptions.TIME_SCOPES,
   listGroups: askOptions.listGroups,
   buildAskSelection: askOptions.buildAskSelection,
@@ -130,18 +134,24 @@ console.log('wrote engine.bundle.js', engine.length)
 
 const standalonePath = path.join(__dirname, 'liuyao-standalone.html')
 const appPreview = fs.readFileSync(path.join(__dirname, 'app-preview.js'), 'utf8')
+const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8')
+const styleMatch = indexHtml.match(/<style>([\s\S]*?)<\/style>/)
+
 if (fs.existsSync(standalonePath)) {
   const html = fs.readFileSync(standalonePath, 'utf8')
   let n = 0
-  const packed = html.replace(/<script>([\s\S]*?)<\/script>/g, () => {
+  let packed = html.replace(/<script>([\s\S]*?)<\/script>/g, () => {
     n += 1
     if (n === 1) return `<script>\n${engine}\n</script>`
     if (n === 2) return `<script>\n/* synced from app-preview.js by preview/build.js */\n${appPreview}\n</script>`
     return arguments[0]
   })
+  if (styleMatch) {
+    packed = packed.replace(/<style>([\s\S]*?)<\/style>/, `<style>${styleMatch[1]}</style>`)
+  }
   if (n < 2) {
     throw new Error('liuyao-standalone.html expected two inline <script> tags, found ' + n)
   }
   fs.writeFileSync(standalonePath, packed)
-  console.log('packed engine + app-preview into liuyao-standalone.html')
+  console.log('packed style + engine + app-preview into liuyao-standalone.html')
 }
