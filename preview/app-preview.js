@@ -503,7 +503,6 @@
       <div class="actions">
         <span class="act" data-go="learn">研习典要</span>
         <span class="act" id="goAskCast" style="color:var(--cinnabar);font-weight:700">神机断卦</span>
-        <span class="act" id="goAskMeihua">梅花易数</span>
         <span class="act" id="goBazi">命理分析</span>
       </div>
       <div class="link-row soft">
@@ -522,10 +521,8 @@
     bindNav()
     bindLuopanInteractions()
     const goAskCast = document.getElementById('goAskCast')
-    const goAskMeihua = document.getElementById('goAskMeihua')
     const goBazi = document.getElementById('goBazi')
     if (goAskCast) goAskCast.onclick = () => { state.askNext = 'cast'; go('ask') }
-    if (goAskMeihua) goAskMeihua.onclick = () => { state.askNext = 'meihua'; go('ask') }
     if (goBazi) goBazi.onclick = () => { go('bazi') }
 
     // 隐秘安全暗门：连续点击顶部周易印章5次，可查看或维护本机私有API配置
@@ -678,14 +675,10 @@
         state.question = textarea.value.trim()
       }
       ensureAskSelected()
-      state.askNext = next
-      if (next === 'meihua') {
-        go('meihua')
-      } else {
-        state.step = 0; state.yaos = []; state.current = null
-        state.displayCoins = ['', '', '']
-        go('cast')
-      }
+      state.askNext = 'cast'
+      state.step = 0; state.yaos = []; state.current = null
+      state.displayCoins = ['', '', '']
+      go('cast')
     }
   }
 

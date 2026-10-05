@@ -141,6 +141,25 @@
   - 在首页底部增加专属版本识别标记「✦ 太史令 · 神机断卦新制 ✦」，便于用户直观核验最新版本状态；
   - 优化 `utils/ai-config.js` 的缓存清洗逻辑，自动清除历史残存的旧测试假 Key，确保全局内置的 DeepSeek 官方密钥 100% 优先无缝生效。
 
+---
+
+## [2026-10-06] 架构精简：下线梅花易数，聚焦三大核心易学支柱 (Sunset Meihua & Core Focus)
+
+### 1. 业务目标
+- 响应用户最新需求，彻底移除「梅花易数」功能；
+- 界面由原先四功能紧凑排版转为精炼的三大支柱布局：**【研习典要】**、**【神机断卦】**、**【命理分析】**，视觉更加开阔高雅。
+
+### 2. 代码与功能变更
+- **小程序端 (`pages/index/` & `app.json`)**：
+  - 从 `pages/index/index.wxml` 与 `index.js` 中移除「梅花易数」入口及 `goMeihua` 路由逻辑；
+  - 从 `app.json` 中注销 `pages/meihua/meihua` 与 `pages/meihua-result/meihua-result`；
+  - 调整 `.actions` 间距至 `gap: 28rpx`，三项居中自适应排版。
+- **单页预览端 (`preview/app-preview.js` & `preview/index.html`)**：
+  - 首页移除 `#goAskMeihua` 按钮与点击监听；
+  - 问事流程移除 `meihua` 分支判断，确认后直通神机起卦；
+  - CSS 优化 `.actions` 间距至 `gap: 16px`，三项按钮舒展大气。
+
+
 
 
 

@@ -65,7 +65,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10rpx;
+  gap: 28rpx;
   margin-top: 20rpx;
   padding: 20rpx 4rpx;
   border-top: 1rpx solid var(--line);

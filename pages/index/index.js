@@ -48,10 +48,6 @@ Page({
     wx.navigateTo({ url: '/pages/ask/ask?next=cast' })
   },
 
-  goMeihua() {
-    wx.navigateTo({ url: '/pages/ask/ask?next=meihua' })
-  },
-
   goBazi() {
     wx.navigateTo({ url: '/pages/bazi/bazi' })
   },
