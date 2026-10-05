@@ -181,15 +181,16 @@ page {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, #9d9588 0%, #81796e 100%);
-  color: #ffffff;
-  border-radius: 0;
+  background: linear-gradient(135deg, #a32c25 0%, #7e1d1a 100%);
+  color: #fbf7ee;
+  border-radius: 8rpx;
   font-size: 32rpx;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.36em;
   padding: 26rpx 0;
-  border: 1rpx solid #756e64;
-  text-indent: 0.4em;
-  box-shadow: 0 12rpx 28rpx rgba(28, 24, 20, 0.12);
+  border: 1rpx solid rgba(230, 211, 163, 0.45);
+  text-indent: 0.36em;
+  box-shadow: 0 12rpx 32rpx rgba(158, 42, 43, 0.28);
+  font-weight: 600;
   font-family: var(--display);
 }
 
@@ -198,14 +199,15 @@ page {
 }
 
 .btn-ghost {
-  background: linear-gradient(180deg, #9d9588 0%, #81796e 100%);
-  color: #ffffff;
-  border: 1rpx solid #756e64;
-  border-radius: 0;
+  background: rgba(255, 252, 246, 0.88);
+  color: var(--ink-2);
+  border: 1rpx solid rgba(197, 160, 89, 0.38);
+  border-radius: 8rpx;
   font-size: 30rpx;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.28em;
   padding: 22rpx 0;
-  text-indent: 0.3em;
+  text-indent: 0.28em;
+  box-shadow: 0 6rpx 20rpx rgba(45, 32, 20, 0.04);
 }
 
 .btn-ghost::after {

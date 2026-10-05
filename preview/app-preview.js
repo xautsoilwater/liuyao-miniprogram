@@ -500,10 +500,34 @@
       <div class="luopan-wrap slim" id="luopan-wrap">
         ${buildLuopanSvg(state.plateDeg)}
       </div>
-      <div class="actions">
-        <span class="act" data-go="learn">研习典要</span>
-        <span class="act" id="goAskCast" style="color:var(--cinnabar);font-weight:700">神机断卦</span>
-        <span class="act" id="goBazi">命理分析</span>
+      <div class="pillar-portal">
+        <div class="pillar-card main" id="goAskCast" role="button" aria-label="神机断卦">
+          <div class="pillar-corner tl"></div><div class="pillar-corner tr"></div>
+          <div class="pillar-corner bl"></div><div class="pillar-corner br"></div>
+          <div class="pillar-glow"></div>
+          <div class="pillar-seal">太史令</div>
+          <div class="pillar-body">
+            <div class="pillar-title">神 机 断 卦</div>
+            <div class="pillar-desc">六爻精微 · 澄心问卜 · 义理时空推演</div>
+          </div>
+          <div class="pillar-arrow">✦</div>
+        </div>
+        <div class="pillar-sub-row">
+          <div class="pillar-card sub" data-go="learn" role="button" aria-label="研习典要">
+            <div class="sub-seal">典</div>
+            <div class="sub-text">
+              <span class="sub-title">研习典要</span>
+              <span class="sub-sub">经传义理 · 卦典渊薮</span>
+            </div>
+          </div>
+          <div class="pillar-card sub" id="goBazi" role="button" aria-label="命理分析">
+            <div class="sub-seal">命</div>
+            <div class="sub-text">
+              <span class="sub-title">命理分析</span>
+              <span class="sub-sub">四柱干支 · 八字气运</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="link-row soft">
         <span class="text-link" data-go="account">${accountLabel}</span>
@@ -515,7 +539,7 @@
           <button type="button" class="feedback-link" data-go="feedback" aria-label="问题留言"></button>
         </span>
       </div>
-      <div style="text-align:center;font-size:10.5px;color:var(--bronze);margin-top:12px;letter-spacing:1px;opacity:0.75">
+      <div style="text-align:center;font-size:11px;color:var(--bronze);margin-top:14px;letter-spacing:1.5px;opacity:0.85">
         ✦ 太史令 · 神机断卦新制 ✦
       </div>`
     bindNav()
@@ -956,6 +980,7 @@
 
       <div class="verdict ${res.tendency ? res.tendency.tone : 'mid'}">
         ${corners()}
+        <div style="display:inline-block;padding:2px 10px;border:1px solid rgba(158,42,43,0.6);color:var(--cinnabar);font-size:11px;letter-spacing:0.22em;border-radius:2px;background:rgba(158,42,43,0.06);margin-bottom:6px;font-family:var(--serif)">✦ 太史令 · 研断 ✦</div>
         <div class="summary">神机：${res.summary || '静候天时'}</div>
         ${res.reply ? `<div class="reply">${res.reply}</div>` : ''}
         <div class="judgment">${res.judgment || res.summaryNote || ''}</div>
