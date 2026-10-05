@@ -809,7 +809,7 @@
         </div>
         ${rows}
       </div>
-      <div class="row" style="margin:12px 0 8px"><button class="btn btn-ghost" id="recast">再起</button><button class="btn btn-primary" data-go="interpret">AI 智能解卦</button></div>
+      <div class="row" style="margin:12px 0 8px"><button class="btn btn-ghost" id="recast">再起</button><button class="btn btn-primary" data-go="interpret">神机解卦</button></div>
       ${tags.length ? `<div class="chip-row" style="margin-bottom:10px">${[...new Set(tags)].slice(0, 8).map((t) => `<span class="chip ${/空|死|囚|日冲/.test(t) ? 'hot' : ''}">${t}</span>`).join('')}</div>` : ''}
       ${fushen.length ? `<div class="block"><div class="block-title">伏神</div>${fushen.map((f) => `<div class="muted">· ${f.text}</div>`).join('')}</div>` : ''}
       ${rel.length ? `<div class="block"><div class="block-title">动爻关系</div><div class="chip-row">${rel.map((t) => `<span class="chip">${t}</span>`).join('')}</div></div>` : ''}
@@ -876,7 +876,7 @@
         render()
       })
       .catch((err) => {
-        console.error('AI解卦出错:', err)
+        console.error('神机解卦出错:', err)
         state.aiLoading = false
         if (window.LiuYao.interpret) {
           state.aiResult = window.LiuYao.interpret(state.cast, 'general')
@@ -886,7 +886,7 @@
   }
 
   function renderInterpret() {
-    setNav('AI智能解卦')
+    setNav('神机解卦')
     if (!state.cast) { go('ask', {}, { replace: true }); return }
 
     if (!state.aiResult && !state.aiLoading) {
@@ -896,7 +896,7 @@
 
     if (state.aiLoading) {
       app.innerHTML = `
-        <div class="title-zh">AI智能解卦</div>
+        <div class="title-zh">神机解卦</div>
         <div class="subtitle">深度纳甲象数 · 义理时空推演</div>
         <div class="ai-loading-box">
           ${corners()}
@@ -906,7 +906,7 @@
           <div class="ai-loading-steps">
             <div>✓ 纳甲排盘信息已就绪</div>
             <div>✓ 用神原神忌神已标定</div>
-            <div class="pulse">· AI大模型正在推演象数理气与时空应期...</div>
+            <div class="pulse">· 太史令正依易数推演理气机变与时空应期...</div>
           </div>
         </div>
         <div class="row" style="margin-top:14px">
@@ -923,47 +923,13 @@
         ${sec.items.map((it) => `<div class="point">${it}</div>`).join('')}
       </div>`).join('')
 
-    const cfg = (window.LiuYao && window.LiuYao.getAiConfig) ? window.LiuYao.getAiConfig() : {}
-    const isCustom = cfg.source === 'custom' || (cfg.apiKey && !cfg.isDefaultKey)
-    const engineLabel = isCustom ? `自定义 AI (${cfg.model || '大模型'})` : `DeepSeek AI (${cfg.model || 'deepseek-chat'})`
-
-    const modalHtml = state.showAiConfigModal ? `
-      <div class="ai-modal-mask" id="aiModalMask">
-        <div class="ai-modal">
-          ${corners()}
-          <div class="ai-modal-title">AI 解卦服务配置</div>
-          <div class="ai-modal-tip">系统已默认内置免配置的 DeepSeek AI 官方接口服务。若需切换为您自己的 API 密钥或兼容端点，可在下方设置。</div>
-          <div class="ai-form-group">
-            <label class="ai-form-label">API 端点 (Base URL)</label>
-            <input class="ai-form-input" id="cfgApiBase" value="${cfg.apiBase || ''}" placeholder="https://api.deepseek.com/chat/completions" />
-          </div>
-          <div class="ai-form-group">
-            <label class="ai-form-label">模型名称 (Model)</label>
-            <input class="ai-form-input" id="cfgModel" value="${cfg.model || ''}" placeholder="deepseek-chat" />
-          </div>
-          <div class="ai-form-group">
-            <label class="ai-form-label">API Key (留空使用内置密钥)</label>
-            <input class="ai-form-input" type="password" id="cfgApiKey" value="${(cfg.apiKey && !cfg.isDefaultKey) ? cfg.apiKey : ''}" placeholder="留空则使用内置 DeepSeek Key" />
-          </div>
-          <div class="ai-modal-actions">
-            <button class="btn btn-ghost" id="cfgReset" style="padding:9px 0">恢复默认</button>
-            <button class="btn btn-primary" id="cfgSave" style="padding:9px 0">保存并关闭</button>
-          </div>
-        </div>
-      </div>` : ''
-
     app.innerHTML = `
-      <div class="title-zh">AI智能解卦</div>
+      <div class="title-zh">神机解卦</div>
       <div class="subtitle">深度纳甲象数 · 义理时空推演</div>
 
-      <div class="ask-box" style="margin-bottom:10px">
+      <div class="ask-box" style="margin-bottom:12px">
         <div class="ask-lab">所测事宜</div>
         <div class="ask-q">${state.question || '心意默祷（诸事顺逆与进退机宜）'}</div>
-      </div>
-
-      <div class="ai-badge-row">
-        <span class="ai-badge-tag">✦ ${res.source === 'fallback' ? '智能纳甲推演' : engineLabel}</span>
-        <button type="button" class="ai-config-btn" id="openAiConfig">⚙️ AI灵匙设置</button>
       </div>
 
       <div class="verdict ${res.tendency ? res.tendency.tone : 'mid'}">
@@ -983,16 +949,9 @@
       <div class="row" style="margin-bottom:12px">
         <button class="btn btn-ghost" data-back>返回排盘</button>
         <button class="btn btn-primary" data-go="index">返回首页</button>
-      </div>
-      ${modalHtml}`
+      </div>`
 
     bindNav()
-
-    const openBtn = document.getElementById('openAiConfig')
-    if (openBtn) openBtn.onclick = () => {
-      state.showAiConfigModal = true
-      render()
-    }
 
     const reInterpretBtn = document.getElementById('reInterpret')
     if (reInterpretBtn) reInterpretBtn.onclick = () => {
