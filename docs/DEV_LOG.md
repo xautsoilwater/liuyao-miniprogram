@@ -46,11 +46,30 @@
   - 输出六维周易明理象解（元亨心性、功名学业、利见事业、丰亨财禄、同人姻缘、保和养生、明理趋吉）。
 - **单元测试 (`tests/bazi.test.js`)**：
   - 覆盖十神推算、日上起时、排盘集成测试，全部验证通过。
-- **网页单页独立预览 (`preview/`)**：
-  - 更新 `preview/build.js`，将 `utils/bazi.js` 打包整合入 `engine.bundle.js` 与 `liuyao-standalone.html`；
-  - 更新 `preview/index.html`，追加宋代美学专属四柱大盘、五行能量条、大运滑块与明理卡片 CSS 样式，并优化首页功能按钮间距，确保四项不折行；
-  - 更新 `preview/app-preview.js`，实现 `renderBaziInputView`（生辰输入）与 `renderBaziResultView`（四柱大盘与象解），完成路由接入。
-- **微信小程序端原生落地 (`pages/bazi/` & `pages/index/`)**：
-  - 新建 `pages/bazi/bazi.json`、`bazi.wxml`、`bazi.wxss`、`bazi.js`；
-  - 在全局配置 `app.json` 中注册 `"pages/bazi/bazi"` 路由；
-  - 首页 `pages/index/index.wxml`、`index.wxss`、`index.js` 同步增加「命理分析」入口与自适应防折行样式。
+
+---
+
+## [2026-10-05] 重大重构：算卦全流程升级为自由输入与 AI 深度智能解卦 (AI Divination & Free Input)
+
+### 1. 需求与设计理念
+- **自由输入取代固定分类**：摒弃原先 11 大类和级联子项的机械化选择，改为古朴雅致的多行文本输入框，允许问卦者随心笔录心中的具体疑难与祈愿，并附带 8 项常用灵感便签（科研学业、事业谋职、财运经营、情缘婚恋等）一键填入。
+- **AI 大模型解卦取代固定拼接断语**：废弃原先机械拼装断语，全面升级为由 AI 大模型基于六爻纳甲全盘真实数据（本卦、变卦、动爻化象、世应、六亲、六神、月建日辰、旬空、伏神）进行深度象数义理推演。
+- **开箱即用与自由配置兼备**：内置开箱即用的 DeepSeek AI 官方服务配置，同时提供「⚙️ AI 灵匙设置」前台弹窗，用户可随心切换自定义 API Key、端点及模型，且支持离线/断网下的全自动周易大师理数平滑降级（100% 可用）。
+
+### 2. 核心架构与代码变更
+- **AI 引擎核心 (`utils/ai-interpreter.js`)**：
+  - 打造六爻象数神机 Prompt 构造器，融合《增删卜易》、《卜筮正宗》与宋代理学义理规范；
+  - 严格结构化四段输出：【神机总断】、【用神与爻象探微】、【机运演进与应期】、【周易明理 · 趋吉避凶】；
+  - 统一实现参数归一化 `normalizeArgs`，自适应兼容单对象 `{ question, cast }`、双参数 `(cast, question)` 及 `(question, cast)` 调用；
+  - 完善 `sections` 条目数组与 `tendency: { tone }` 状态输出，确保多端模板无缝渲染。
+- **AI 配置中心 (`utils/ai-config.js`)**：
+  - 支持 LocalStorage（Web 预览端）与 `wx.setStorageSync`（小程序端）的本地持久化。
+- **测试用例 (`tests/ai-interpreter.test.js`)**：
+  - 新增全流程测试，覆盖 Prompt 组装、智能理数兜底推演与异步接口调用。
+- **单页预览端 (`preview/`)**：
+  - `preview/build.js` 将 AI 引擎与配置中心打入独立运行包并暴露至 `window.LiuYao`；
+  - `preview/index.html` 增加问事输入框、灵感便签、太极旋转研判动效、AI 徽标及配置弹窗的宋代古典雅致样式；
+  - `preview/app-preview.js` 重构起卦问事流、排盘结果页【AI 智能解卦】按钮、解卦展示面板及配置弹窗交互。
+- **微信小程序端原生重构 (`pages/ask/` & `pages/interpret/`)**：
+  - `pages/ask/` 原生改为自由多行输入与 8 项灵感便签；
+  - `pages/interpret/` 原生支持研判加载态、四段式结构断语展示、断语一键复制与灵匙设置弹窗。

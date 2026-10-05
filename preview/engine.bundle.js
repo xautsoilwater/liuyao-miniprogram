@@ -14091,12 +14091,50 @@ function formatCastForPrompt(cast) {
 }
 
 /**
+ * 参数归一化：无缝支持 ({ question, cast })、(cast, question)、(question, cast) 等多种调用签名
+ */
+function normalizeArgs(a, b) {
+  if (a && typeof a === 'object' && ('cast' in a || 'question' in a)) {
+    return {
+      cast: a.cast || null,
+      question: typeof a.question === 'string' ? a.question : ''
+    }
+  }
+  if (a && typeof a === 'object' && (a.ben || a.changingIndexes || a.yaosBottomUp || a.lines)) {
+    return {
+      cast: a,
+      question: typeof b === 'string' ? b : (b && b.question ? b.question : '')
+    }
+  }
+  if (typeof a === 'string') {
+    return {
+      cast: b || null,
+      question: a
+    }
+  }
+  return {
+    cast: a || null,
+    question: typeof b === 'string' ? b : ''
+  }
+}
+
+/**
+ * 将文本切分为条目数组
+ */
+function toSectionItems(text) {
+  if (!text) return []
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
+  return lines.length > 0 ? lines : [text]
+}
+
+/**
  * 构建发送给大模型的周易神机 Prompt
  */
-function buildDivinationPrompt({ question, cast }) {
+function buildDivinationPrompt(a, b) {
+  const { question, cast } = normalizeArgs(a, b)
   const systemPrompt = `你是一位精通《周易》、《京房易传》、《卜筮正宗》、《增删卜易》与宋代理学义理的当代周易象数大师与心法导师。
 问卦者向你呈上了心中关切的具体疑难，以及刚刚依据大衍蓍法/金钱课所得的纳甲六爻排盘。
-请你以高深、典雅、透彻、通情达达理的文风，为问卦者抽丝剥茧地推演卦象天机。
+请你以高深、典雅、透彻、通情达理的文风，为问卦者抽丝剥茧地推演卦象天机。
 
 【断卦法则要求】：
 1. 【切中问题】：紧密围绕问卦者的【具体所问】，不可泛泛而谈。
@@ -14131,7 +14169,8 @@ ${formatCastForPrompt(cast)}
 /**
  * 调用 AI 大模型 API 进行解卦
  */
-async function callAiDivinationApi({ question, cast }) {
+async function callAiDivinationApi(a, b) {
+  const { question, cast } = normalizeArgs(a, b)
   const config = getAiConfig()
   const { systemPrompt, userPrompt } = buildDivinationPrompt({ question, cast })
 
@@ -14200,7 +14239,7 @@ async function callAiDivinationApi({ question, cast }) {
 function parseAiDivinationOutput(text, question, cast) {
   if (!text) throw new Error('AI返回内容为空')
 
-  const sections = {
+  const parsed = {
     summary: '',
     judgment: '',
     yongshen: '',
@@ -14215,20 +14254,20 @@ function parseAiDivinationOutput(text, question, cast) {
     if (part.startsWith('神机总断】')) {
       const content = part.replace(/^神机总断】\s*/, '').trim()
       const lines = content.split('\n').filter(Boolean)
-      sections.summary = lines[0] || '大成卦象 · 天机显现'
-      sections.judgment = lines.slice(1).join('\n') || content
+      parsed.summary = lines[0] || '大成卦象 · 天机显现'
+      parsed.judgment = lines.slice(1).join('\n') || content
     } else if (part.startsWith('用神与爻象探微】')) {
-      sections.yongshen = part.replace(/^用神与爻象探微】\s*/, '').trim()
+      parsed.yongshen = part.replace(/^用神与爻象探微】\s*/, '').trim()
     } else if (part.startsWith('机运演进与应期】')) {
-      sections.yingqi = part.replace(/^机运演进与应期】\s*/, '').trim()
+      parsed.yingqi = part.replace(/^机运演进与应期】\s*/, '').trim()
     } else if (part.startsWith('周易明理 · 趋吉避凶】')) {
-      sections.advice = part.replace(/^周易明理 · 趋吉避凶】\s*/, '').trim()
+      parsed.advice = part.replace(/^周易明理 · 趋吉避凶】\s*/, '').trim()
     }
   })
 
   // 兜底提取
-  if (!sections.judgment) sections.judgment = text.slice(0, 300)
-  if (!sections.summary) sections.summary = '神机内蕴 · 顺时而动'
+  if (!parsed.judgment) parsed.judgment = text.slice(0, 300)
+  if (!parsed.summary) parsed.summary = '神机内蕴 · 顺时而动'
 
   // 判断倾向色调
   let tone = 'mid'
@@ -14238,15 +14277,36 @@ function parseAiDivinationOutput(text, question, cast) {
     tone = 'bad'
   }
 
+  const sections = [
+    {
+      title: '一、神机总断',
+      items: toSectionItems(parsed.judgment || parsed.summary)
+    },
+    {
+      title: '二、用神与爻象探微',
+      items: toSectionItems(parsed.yongshen || '卦中用神清晰，察日月生克与动爻乘除，天机自现。')
+    },
+    {
+      title: '三、机运演进与应期',
+      items: toSectionItems(parsed.yingqi || '万物有时，事机发动逢值逢合之候为关键应期。')
+    },
+    {
+      title: '四、周易明理 · 趋吉避凶',
+      items: toSectionItems(parsed.advice || '知进知退，顺天应人，修德明理方能趋吉避凶。')
+    }
+  ]
+
   return {
     source: 'ai_online',
     question,
     tone,
-    summary: sections.summary,
-    judgment: sections.judgment,
-    yongshen: sections.yongshen,
-    yingqi: sections.yingqi,
-    advice: sections.advice,
+    tendency: { tone },
+    summary: parsed.summary,
+    judgment: parsed.judgment,
+    yongshen: parsed.yongshen,
+    yingqi: parsed.yingqi,
+    advice: parsed.advice,
+    sections,
     fullText: text
   }
 }
@@ -14254,7 +14314,8 @@ function parseAiDivinationOutput(text, question, cast) {
 /**
  * 智能象数离线理数推演引擎（当网络断开或用户未配置有效API Key时的全自动周易大师算法）
  */
-function buildIntelligentFallbackInterpretation({ question, cast }) {
+function buildIntelligentFallbackInterpretation(a, b) {
+  const { question, cast } = normalizeArgs(a, b)
   const benGuaName = cast?.ben?.name || '乾为天'
   const bianGuaName = (cast?.bian && cast?.bian?.name) || benGuaName
   const benGuaci = getGuaCi(benGuaName) || {}
@@ -14302,23 +14363,47 @@ function buildIntelligentFallbackInterpretation({ question, cast }) {
   // 周易明理
   const adviceDesc = `《易经·${benGuaName}卦》象曰：「${benGuaci.xiang || '君子以自强不息'}」。问事之要，不在贪求必应，而在知阴阳之消息。若顺应天时、修谨人事，则虽有阻滞亦可化险为夷。`
 
+  const judgmentDesc = `所问「${question || '事由'}」，筮得本卦《${benGuaName}》${hasMove ? `，变卦《${bianGuaName}》` : '（静卦）'}。卦辞云：「${benGuaci.guaci || '利贞'}」。当前${dayGz}日辰，吉凶隐伏已现端倪。`
+
+  const sections = [
+    {
+      title: '一、神机总断',
+      items: toSectionItems(judgmentDesc)
+    },
+    {
+      title: '二、用神与爻象探微',
+      items: toSectionItems(yongshenDesc)
+    },
+    {
+      title: '三、机运演进与应期',
+      items: toSectionItems(yingqiDesc)
+    },
+    {
+      title: '四、周易明理 · 趋吉避凶',
+      items: toSectionItems(adviceDesc)
+    }
+  ]
+
   return {
-    source: 'ai_fallback',
+    source: 'fallback',
     question: question || '综合运程',
     tone,
+    tendency: { tone },
     summary,
-    judgment: `所问「${question || '事由'}」，筮得本卦《${benGuaName}》${hasMove ? `，变卦《${bianGuaName}》` : '（静卦）'}。卦辞云：「${benGuaci.guaci || '利贞'}」。当前${dayGz}日辰，吉凶隐伏已现端倪。`,
+    judgment: judgmentDesc,
     yongshen: yongshenDesc,
     yingqi: yingqiDesc,
     advice: adviceDesc,
-    fullText: `${summary}\n\n${yongshenDesc}\n\n${yingqiDesc}\n\n${adviceDesc}`
+    sections,
+    fullText: `${summary}\n\n${judgmentDesc}\n\n${yongshenDesc}\n\n${yingqiDesc}\n\n${adviceDesc}`
   }
 }
 
 /**
  * 统一解卦对外接口（自动尝试在线大模型API，遇阻平滑降级至智能象数算法，确保100%可靠）
  */
-async function interpretWithAi({ question, cast }) {
+async function interpretWithAi(a, b) {
+  const { question, cast } = normalizeArgs(a, b)
   try {
     return await callAiDivinationApi({ question, cast })
   } catch (err) {
