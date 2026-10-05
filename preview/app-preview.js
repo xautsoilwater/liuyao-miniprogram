@@ -2502,8 +2502,18 @@
   requestCompassPermission(false)
   enableCompassOnFirstGesture()
 
-  hydratePreviewAccount()
-  window.addEventListener('scroll', syncLearnActiveFromScroll, { passive: true })
+  function showFloatingNotice(msg) {
+    if (typeof document === 'undefined') return
+    const el = document.createElement('div')
+    el.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);background:#1b1511;color:#f0e4c8;padding:8px 18px;border-radius:4px;font-size:12px;letter-spacing:1px;box-shadow:0 4px 18px rgba(0,0,0,0.45);z-index:9999;border:1px solid rgba(160,51,40,0.65);transition:opacity .35s ease;pointer-events:none;'
+    el.textContent = msg
+    document.body.appendChild(el)
+    setTimeout(() => {
+      el.style.opacity = '0'
+      setTimeout(() => el.remove(), 400)
+    }, 2400)
+  }
+
   try {
     const q = new URLSearchParams(window.location.search || '')
     // 隐秘激活通道：支持通过 ?key=... 或 ?apiKey=... 静默写入本机存储，并自动擦除URL防泄漏
@@ -2528,8 +2538,8 @@
       const cleanUrl = window.location.pathname + newQuery + (window.location.hash || '')
       window.history.replaceState({}, document.title, cleanUrl)
       setTimeout(() => {
-        alert('【天机契合】私钥神机配置已成功注入本机！')
-      }, 400)
+        showFloatingNotice('【天机契合】私钥神机配置已成功注入本机！')
+      }, 300)
     }
 
     const articleId = q.get('article') || q.get('articleId')
