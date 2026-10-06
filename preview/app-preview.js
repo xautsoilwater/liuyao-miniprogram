@@ -250,20 +250,20 @@
       </g>`
     }).join('')
     const luckyMarks = (state.luckyOpen && state.luckyPack && state.luckyPack.marks || []).map((m) => {
-      const rim = polar(cx, cy, 200, m.plateDeg)
-      const tick = polar(cx, cy, 210, m.plateDeg)
-      const label = polar(cx, cy, 232, m.plateDeg)
+      const rim = polar(cx, cy, 198, m.plateDeg)
+      const tick = polar(cx, cy, 207, m.plateDeg)
+      const label = polar(cx, cy, 220, m.plateDeg)
       return `<g class="lucky-mark" pointer-events="none">
         <line x1="${rim.x.toFixed(1)}" y1="${rim.y.toFixed(1)}" x2="${tick.x.toFixed(1)}" y2="${tick.y.toFixed(1)}" stroke="#a03328" stroke-width="1.8"/>
         <g transform="translate(${label.x.toFixed(1)},${label.y.toFixed(1)}) rotate(${m.plateDeg})">
-          <text x="0" y="-8" text-anchor="middle" fill="#a03328" font-size="16" font-weight="700">${m.label}</text>
-          <text x="0" y="10" text-anchor="middle" fill="#a03328" font-size="13">${m.dir}</text>
+          <text x="0" y="-4" text-anchor="middle" fill="#a03328" font-size="13.5" font-weight="700">${m.label}</text>
+          <text x="0" y="8.5" text-anchor="middle" fill="#a03328" font-size="11">${m.dir}</text>
         </g>
       </g>`
     }).join('')
 
     return `
-      <svg viewBox="-40 -48 480 456" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
+      <svg viewBox="-40 -45 480 495" overflow="visible" xmlns="http://www.w3.org/2000/svg" aria-label="后天八卦罗盘 · 准星指南针">
         <defs></defs>
         <g id="luopan-plate" transform="rotate(${rot} 200 200)">
           <circle cx="200" cy="200" r="198" fill="#e6d4b0" stroke="#46341c" stroke-width="3"/>
@@ -586,14 +586,14 @@
     return `<div class="progress">${[0,1,2,3,4,5].map((i) => `<i class="bead ${i < state.step ? 'on' : ''}"></i>`).join('')}</div>`
   }
 
-  function miniGua() {
+  function miniGua(title = '卦象', isManual = false) {
     const lines = []
     for (let i = 5; i >= 0; i -= 1) {
       const y = state.yaos[i]
       if (!y) lines.push('<div class="mini-yao"></div>')
       else lines.push(`<div class="mini-yao filled ${y.yinYang ? 'yang' : 'yin'} ${y.changing ? 'moving' : ''}"></div>`)
     }
-    return `<div class="gua-side"><div class="gua-lab">卦象</div><div class="gua-lines">${lines.join('')}</div></div>`
+    return `<div class="gua-side ${isManual ? 'manual-gua-box' : ''}"><div class="gua-lab">${title}</div><div class="gua-lines">${lines.join('')}</div></div>`
   }
 
   function syncAskSelection() {
@@ -731,14 +731,20 @@
         </div>
         ${miniGua()}
       </div>` : `
-      <div class="muted center" style="margin-bottom:10px">按实摇结果点选（字阳背阴）</div>
-      <div class="manual-grid">
-        <div class="manual-item" data-manual="laoYang"><i class="yao-bar yang moving"></i><span>老阳 ○</span></div>
-        <div class="manual-item" data-manual="shaoYin"><i class="yao-bar yin"></i><span>少阴 --</span></div>
-        <div class="manual-item" data-manual="shaoYang"><i class="yao-bar yang"></i><span>少阳 —</span></div>
-        <div class="manual-item" data-manual="laoYin"><i class="yao-bar yin moving"></i><span>老阴 ×</span></div>
-      </div>
-      <div style="margin-top:16px">${miniGua()}</div>`
+      <div class="manual-live">
+        <div class="manual-left">
+          <div class="manual-hint">按实摇点选（字阳背阴）</div>
+          <div class="manual-grid">
+            <div class="manual-item" data-manual="laoYang" role="button" aria-label="老阳"><i class="yao-bar yang moving"></i><span>老阳 ○</span></div>
+            <div class="manual-item" data-manual="shaoYin" role="button" aria-label="少阴"><i class="yao-bar yin"></i><span>少阴 --</span></div>
+            <div class="manual-item" data-manual="shaoYang" role="button" aria-label="少阳"><i class="yao-bar yang"></i><span>少阳 —</span></div>
+            <div class="manual-item" data-manual="laoYin" role="button" aria-label="老阴"><i class="yao-bar yin moving"></i><span>老阴 ×</span></div>
+          </div>
+        </div>
+        <div class="manual-right">
+          ${miniGua('成卦卦象', true)}
+        </div>
+      </div>`
 
     app.innerHTML = `
       <div class="title-zh">卜卦</div>
@@ -757,8 +763,10 @@
         ${stageBody}
       </div>
       ${state.step >= 6
-        ? `<div class="row"><button class="btn btn-ghost" id="reset">重摇</button><button class="btn btn-primary" id="submit">排卦</button></div>`
-        : `<button class="btn btn-ghost" data-back>返回</button>`}`
+        ? `<div class="row"><button class="btn btn-ghost" id="reset">重置</button><button class="btn btn-primary" id="submit">排卦</button></div>`
+        : state.mode === 'manual' && state.step > 0
+          ? `<div class="row"><button class="btn btn-ghost" data-back>返回</button><button class="btn btn-ghost" id="undo">撤回一爻</button></div>`
+          : `<button class="btn btn-ghost" data-back>返回</button>`}`
     bindNav()
     const changeAsk = document.getElementById('changeAsk')
     if (changeAsk) changeAsk.onclick = () => { state.askNext = 'cast'; go('ask') }
@@ -792,6 +800,15 @@
     if (reset) reset.onclick = () => {
       state.step = 0; state.yaos = []; state.current = null
       state.displayCoins = ['', '', '']; render()
+    }
+    const undo = document.getElementById('undo')
+    if (undo) undo.onclick = () => {
+      if (state.step > 0) {
+        state.yaos.pop()
+        state.step -= 1
+        state.current = state.yaos[state.yaos.length - 1] || null
+        render()
+      }
     }
     const submit = document.getElementById('submit')
     if (submit) submit.onclick = () => {
