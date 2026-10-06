@@ -790,11 +790,11 @@
       state.current = null
       state.displayCoins = result.coins
       if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        // 阶梯触感：350ms 钱入龟壳轻震 -> 700ms/950ms/1200ms 龟壳摇撼碰撞 -> 1780ms 击盘沉震
-        try { navigator.vibrate([10, 340, 15, 330, 18, 230, 20, 230, 18, 560, 45]) } catch (e) { /* ignore */ }
+        // 触感优化：380ms 颠摇轻震 -> 1220ms 滑坠击盘沉震，精简震动避免主线程与马达队列卡顿
+        try { navigator.vibrate([0, 380, 15, 820, 40]) } catch (e) { /* ignore */ }
       }
       render()
-      setTimeout(() => pushYao(result), 2200)
+      setTimeout(() => pushYao(result), 1600)
     }
     app.querySelectorAll('[data-manual]').forEach((el) => {
       el.onclick = () => {

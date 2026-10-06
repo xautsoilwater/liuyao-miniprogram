@@ -207,7 +207,7 @@
   gap: 16rpx;
   align-items: stretch;
   overflow: visible;
-  padding-top: 360rpx; /* 大幅增高卡片框，给大龟壳与抛跌动画舒展空间 */
+  padding-top: 288rpx; /* 龟壳缩小为0.8后，高度舒展适宜，紧凑不空旷 */
 }
 
 .stage-live .gua-side {
@@ -271,23 +271,24 @@
   min-height: 0;
 }
 
-/* 周易文王真身灵龟筮壳（真实器物 · 拟人双手捧执） */
+/* 周易文王真身灵龟筮壳（真实器物 · 缩至0.8黄金比例 · 极简GPU硬件加速） */
 .shaker-stage {
   position: absolute;
-  top: -300rpx;
+  top: -240rpx;
   left: 50%;
-  margin-left: -156rpx;
-  width: 312rpx;
-  height: 208rpx;
+  margin-left: -125rpx;
+  width: 250rpx;
+  height: 166rpx;
   z-index: 10;
   pointer-events: none;
   opacity: 0.98;
   transform: translate3d(0, 0, 0) rotate(-2deg);
   transform-origin: 50% 65%;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  will-change: transform;
+  will-change: transform, opacity;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  contain: layout paint;
 }
 
 .shaker-vessel {
@@ -304,7 +305,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 14rpx 24rpx rgba(18, 12, 8, 0.38));
+  filter: drop-shadow(0 10rpx 18rpx rgba(18, 12, 8, 0.32));
   will-change: transform;
   transform: translateZ(0);
 }
@@ -327,41 +328,27 @@
 
 .shaker-stage.is-shaking {
   opacity: 1;
-  animation: vessel-cast 2.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation: vessel-cast 1.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
   will-change: transform;
 }
 
-.shaker-stage.is-shaking .shaker-img {
-  /* 摇动期间降低重度像素级高斯模糊负载，释放GPU算力确保满帧丝滑 */
-  filter: drop-shadow(0 8rpx 14rpx rgba(18, 12, 8, 0.28));
-}
-
-/* 拟人化双手摇卦仪轨：双手捧执 -> 手腕3轮发力上下颠簸顿挫 -> 双手前推翻腕下倾倒出 -> 恭肃放平 */
+/* 拟人化双手摇卦仪轨：节奏鲜明，大幅度有致颠摇，彻底消除微小高频抽搐卡顿 */
 @keyframes vessel-cast {
   0% { transform: translate3d(0, 0, 0) rotate(-2deg); }
-  /* 0~16%：双手捧住接纳三钱飞入，双手顺势下沉蓄势端起 */
-  10% { transform: translate3d(0, 8rpx, 0) rotate(0deg); }
-  16% { transform: translate3d(0, -12rpx, 0) rotate(-2deg); }
-  /* 18%~28%：第1次手腕发力向上用力颠起 ➡️ 沉顿挫震 */
-  22% { transform: translate3d(-6rpx, -40rpx, 0) rotate(6deg); }
-  28% { transform: translate3d(4rpx, 8rpx, 0) rotate(-4deg); }
-  /* 30%~42%：第2次双手更大发力向上颠摇 ➡️ 失重沉落 */
-  34% { transform: translate3d(-10rpx, -52rpx, 0) rotate(8deg); }
-  42% { transform: translate3d(4rpx, 10rpx, 0) rotate(-5deg); }
-  /* 44%~54%：第3次手腕快速颠颠碰撞 ➡️ 挫震收势 */
-  48% { transform: translate3d(-4rpx, -36rpx, 0) rotate(5deg); }
-  54% { transform: translate3d(0, 4rpx, 0) rotate(-2deg); }
-  /* 56%~64%：双手在胸前平端微晃蓄势，准备前推翻腕 */
-  60% { transform: translate3d(-2rpx, -12rpx, 0) rotate(1deg); }
-  64% { transform: translate3d(0, -6rpx, 0) rotate(0deg); }
-  /* 68%~78%：真实人手动作：双手向前推伸、手腕自然向前翻腕下压倾倒 */
-  70% { transform: translate3d(24rpx, 24rpx, 0) rotate(48deg) scale(1.03); }
-  76% { transform: translate3d(32rpx, 40rpx, 0) rotate(56deg) scale(1.02); }
-  /* 78%~84%：铜钱滑落砸出，手腕一轻微滞顿挫 */
-  82% { transform: translate3d(34rpx, 44rpx, 0) rotate(58deg); opacity: 0.98; }
-  /* 86%~100%：双手平稳将龟壳收回胸前，缓缓放平端正，神态恭肃 */
-  92% { transform: translate3d(14rpx, 16rpx, 0) rotate(16deg) scale(0.96); opacity: 0.75; }
-  100% { transform: translate3d(0, 0, 0) rotate(-2deg); opacity: 0.95; }
+  /* 0~18%：接纳金钱飞入，双手后沉蓄势端平 */
+  12% { transform: translate3d(0, 6rpx, 0) rotate(0deg); }
+  18% { transform: translate3d(0, -10rpx, 0) rotate(-2deg); }
+  /* 20%~56%：双手起伏有致两轮颠摇，动作开合流畅 */
+  28% { transform: translate3d(-6rpx, -36rpx, 0) rotate(7deg); }
+  38% { transform: translate3d(4rpx, 6rpx, 0) rotate(-4deg); }
+  48% { transform: translate3d(-8rpx, -42rpx, 0) rotate(8deg); }
+  56% { transform: translate3d(2rpx, 4rpx, 0) rotate(-2deg); }
+  /* 58%~72%：双手前推自然翻腕下倾，龟壳口朝下倾泻金钱 */
+  64% { transform: translate3d(16rpx, 16rpx, 0) rotate(38deg); }
+  72% { transform: translate3d(26rpx, 32rpx, 0) rotate(52deg); }
+  /* 74%~100%：金钱落出，双手沉稳平放收回 */
+  84% { transform: translate3d(12rpx, 14rpx, 0) rotate(16deg); opacity: 0.88; }
+  100% { transform: translate3d(0, 0, 0) rotate(-2deg); opacity: 0.98; }
 }
 
 /* 铜钱区：高度=硬币本身；动画向上溢出 */
@@ -392,137 +379,137 @@
   pointer-events: none;
 }
 
-/* 方案二：金钱飞入龟壳 -> 摇动龟壳 -> 倾倒掉落 -> 击盘定格 */
+/* 金钱飞入龟壳 -> 摇动龟壳 -> 倾倒掉落 -> 击盘定格（1.6s 纯GPU流畅动画） */
 .shake .coin-body {
   transform-style: preserve-3d;
   transform-origin: center center;
-  animation: toss-drop 2.2s cubic-bezier(0.33, 0.02, 0.2, 1) both;
+  animation: toss-drop 1.6s cubic-bezier(0.33, 0.02, 0.2, 1) both;
   will-change: transform, opacity;
 }
 
 .shake .coin:nth-child(1) .coin-body {
   animation-name: toss-drop-a;
-  animation-duration: 2.2s;
+  animation-duration: 1.6s;
   animation-delay: 0ms;
 }
 .shake .coin:nth-child(2) .coin-body {
   animation-name: toss-drop-b;
-  animation-duration: 2.2s;
-  animation-delay: 20ms;
+  animation-duration: 1.6s;
+  animation-delay: 15ms;
 }
 .shake .coin:nth-child(3) .coin-body {
   animation-name: toss-drop-c;
-  animation-duration: 2.2s;
-  animation-delay: 40ms;
+  animation-duration: 1.6s;
+  animation-delay: 30ms;
 }
 
 .shake .coin-shadow {
-  animation: toss-shadow 2.2s cubic-bezier(0.33, 0.02, 0.2, 1) both;
+  animation: toss-shadow 1.6s cubic-bezier(0.33, 0.02, 0.2, 1) both;
   will-change: transform, opacity;
 }
 .shake .coin:nth-child(1) .coin-shadow {
   animation-name: toss-shadow-a;
-  animation-duration: 2.2s;
+  animation-duration: 1.6s;
   animation-delay: 0ms;
 }
 .shake .coin:nth-child(2) .coin-shadow {
   animation-name: toss-shadow-b;
-  animation-duration: 2.2s;
-  animation-delay: 20ms;
+  animation-duration: 1.6s;
+  animation-delay: 15ms;
 }
 .shake .coin:nth-child(3) .coin-shadow {
   animation-name: toss-shadow-c;
-  animation-duration: 2.2s;
-  animation-delay: 40ms;
+  animation-duration: 1.6s;
+  animation-delay: 30ms;
 }
 
-/* 左钱：飞入龟口 -> 龟内摇动隐匿 -> 自倾斜龟口滑出 -> 砸盘反弹定格 */
+/* 左钱：飞入龟口 -> 龟内隐匿摇晃 -> 自倾斜龟口滑落 -> 砸盘弹跳定格 */
 @keyframes toss-drop-a {
   0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-  9% { opacity: 1; transform: translate3d(120rpx, -200rpx, 0) scale(0.7) rotateX(25deg) rotateY(120deg) rotateZ(15deg); }
-  17% { opacity: 0.9; transform: translate3d(222rpx, -300rpx, 0) scale(0.3) rotateX(45deg) rotateY(260deg) rotateZ(30deg); }
-  20% { opacity: 0; transform: translate3d(222rpx, -300rpx, 0) scale(0.2) rotateX(45deg) rotateY(260deg) rotateZ(30deg); }
-  66% { opacity: 0; transform: translate3d(242rpx, -156rpx, 0) scale(0.2) rotateX(30deg) rotateY(50deg) rotateZ(-15deg); }
-  67% { opacity: 1; transform: translate3d(242rpx, -152rpx, 0) scale(0.36) rotateX(30deg) rotateY(50deg) rotateZ(-15deg); }
-  72% { opacity: 1; transform: translate3d(190rpx, -100rpx, 0) scale(0.6) rotateX(45deg) rotateY(170deg) rotateZ(-24deg); }
-  78% { opacity: 1; transform: translate3d(90rpx, -36rpx, 0) scale(0.88) rotateX(65deg) rotateY(310deg) rotateZ(-20deg); }
-  84% { opacity: 1; transform: translate3d(-12rpx, 8rpx, 0) scale(1.05) rotateX(8deg) rotateY(450deg) rotateZ(16deg); }
-  90% { opacity: 1; transform: translate3d(-8rpx, -28rpx, 0) scale(0.98) rotateX(-5deg) rotateY(580deg) rotateZ(-10deg); }
-  96% { opacity: 1; transform: translate3d(-4rpx, 4rpx, 0) scale(1.02) rotateX(4deg) rotateY(680deg) rotateZ(6deg); }
+  8% { opacity: 1; transform: translate3d(96rpx, -160rpx, 0) scale(0.7) rotateX(20deg) rotateY(120deg) rotateZ(12deg); }
+  15% { opacity: 0.9; transform: translate3d(178rpx, -240rpx, 0) scale(0.32) rotateX(36deg) rotateY(240deg) rotateZ(24deg); }
+  18% { opacity: 0; transform: translate3d(178rpx, -240rpx, 0) scale(0.2) rotateX(36deg) rotateY(240deg) rotateZ(24deg); }
+  60% { opacity: 0; transform: translate3d(194rpx, -126rpx, 0) scale(0.2) rotateX(24deg) rotateY(40deg) rotateZ(-12deg); }
+  62% { opacity: 1; transform: translate3d(194rpx, -126rpx, 0) scale(0.38) rotateX(24deg) rotateY(40deg) rotateZ(-12deg); }
+  68% { opacity: 1; transform: translate3d(150rpx, -80rpx, 0) scale(0.65) rotateX(36deg) rotateY(150deg) rotateZ(-18deg); }
+  75% { opacity: 1; transform: translate3d(70rpx, -28rpx, 0) scale(0.9) rotateX(50deg) rotateY(280deg) rotateZ(-15deg); }
+  82% { opacity: 1; transform: translate3d(-10rpx, 6rpx, 0) scale(1.05) rotateX(6deg) rotateY(420deg) rotateZ(12deg); }
+  90% { opacity: 1; transform: translate3d(-6rpx, -18rpx, 0) scale(0.98) rotateX(-4deg) rotateY(540deg) rotateZ(-8deg); }
+  96% { opacity: 1; transform: translate3d(-2rpx, 2rpx, 0) scale(1.01) rotateX(2deg) rotateY(640deg) rotateZ(4deg); }
   100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(720deg) rotateZ(0deg); }
 }
 
-/* 中钱：飞入龟口 -> 龟内摇动隐匿 -> 最先自龟口倾泻 -> 砸盘反弹定格 */
+/* 中钱：飞入龟口 -> 龟内隐匿摇晃 -> 最先倾泻滑落 -> 砸盘弹跳定格 */
 @keyframes toss-drop-b {
   0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-  9% { opacity: 1; transform: translate3d(50rpx, -200rpx, 0) scale(0.7) rotateX(-20deg) rotateY(140deg) rotateZ(0deg); }
-  17% { opacity: 0.9; transform: translate3d(90rpx, -300rpx, 0) scale(0.3) rotateX(-40deg) rotateY(300deg) rotateZ(0deg); }
-  20% { opacity: 0; transform: translate3d(90rpx, -300rpx, 0) scale(0.2) rotateX(-40deg) rotateY(300deg) rotateZ(0deg); }
-  64% { opacity: 0; transform: translate3d(110rpx, -156rpx, 0) scale(0.2) rotateX(25deg) rotateY(60deg) rotateZ(10deg); }
-  65% { opacity: 1; transform: translate3d(110rpx, -152rpx, 0) scale(0.36) rotateX(25deg) rotateY(60deg) rotateZ(10deg); }
-  70% { opacity: 1; transform: translate3d(80rpx, -100rpx, 0) scale(0.6) rotateX(40deg) rotateY(160deg) rotateZ(15deg); }
-  76% { opacity: 1; transform: translate3d(36rpx, -36rpx, 0) scale(0.88) rotateX(60deg) rotateY(280deg) rotateZ(12deg); }
-  82% { opacity: 1; transform: translate3d(0, 8rpx, 0) scale(1.06) rotateX(10deg) rotateY(460deg) rotateZ(-14deg); }
-  88% { opacity: 1; transform: translate3d(0, -32rpx, 0) scale(0.97) rotateX(-6deg) rotateY(580deg) rotateZ(8deg); }
-  95% { opacity: 1; transform: translate3d(0, 4rpx, 0) scale(1.02) rotateX(3deg) rotateY(680deg) rotateZ(-4deg); }
+  8% { opacity: 1; transform: translate3d(40rpx, -160rpx, 0) scale(0.7) rotateX(-16deg) rotateY(130deg) rotateZ(0deg); }
+  15% { opacity: 0.9; transform: translate3d(72rpx, -240rpx, 0) scale(0.32) rotateX(-32deg) rotateY(270deg) rotateZ(0deg); }
+  18% { opacity: 0; transform: translate3d(72rpx, -240rpx, 0) scale(0.2) rotateX(-32deg) rotateY(270deg) rotateZ(0deg); }
+  58% { opacity: 0; transform: translate3d(88rpx, -126rpx, 0) scale(0.2) rotateX(20deg) rotateY(50deg) rotateZ(8deg); }
+  60% { opacity: 1; transform: translate3d(88rpx, -126rpx, 0) scale(0.38) rotateX(20deg) rotateY(50deg) rotateZ(8deg); }
+  66% { opacity: 1; transform: translate3d(64rpx, -80rpx, 0) scale(0.65) rotateX(32deg) rotateY(140deg) rotateZ(12deg); }
+  73% { opacity: 1; transform: translate3d(28rpx, -28rpx, 0) scale(0.9) rotateX(46deg) rotateY(260deg) rotateZ(10deg); }
+  80% { opacity: 1; transform: translate3d(0, 6rpx, 0) scale(1.05) rotateX(8deg) rotateY(430deg) rotateZ(-10deg); }
+  88% { opacity: 1; transform: translate3d(0, -20rpx, 0) scale(0.98) rotateX(-5deg) rotateY(550deg) rotateZ(6deg); }
+  95% { opacity: 1; transform: translate3d(0, 2rpx, 0) scale(1.01) rotateX(2deg) rotateY(650deg) rotateZ(-3deg); }
   100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(720deg) rotateZ(0deg); }
 }
 
-/* 右钱：飞入龟口 -> 龟内摇动隐匿 -> 自倾斜龟口滑出 -> 砸盘反弹定格 */
+/* 右钱：飞入龟口 -> 龟内隐匿摇晃 -> 自倾斜龟口滑出 -> 砸盘弹跳定格 */
 @keyframes toss-drop-c {
   0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-  9% { opacity: 1; transform: translate3d(-20rpx, -200rpx, 0) scale(0.7) rotateX(20deg) rotateY(-120deg) rotateZ(-15deg); }
-  17% { opacity: 0.9; transform: translate3d(-42rpx, -300rpx, 0) scale(0.3) rotateX(40deg) rotateY(-260deg) rotateZ(-30deg); }
-  20% { opacity: 0; transform: translate3d(-42rpx, -300rpx, 0) scale(0.2) rotateX(40deg) rotateY(-260deg) rotateZ(-30deg); }
-  68% { opacity: 0; transform: translate3d(-22rpx, -160rpx, 0) scale(0.2) rotateX(20deg) rotateY(-50deg) rotateZ(18deg); }
-  69% { opacity: 1; transform: translate3d(-22rpx, -156rpx, 0) scale(0.36) rotateX(20deg) rotateY(-50deg) rotateZ(18deg); }
-  74% { opacity: 1; transform: translate3d(-16rpx, -96rpx, 0) scale(0.66) rotateX(35deg) rotateY(-160deg) rotateZ(25deg); }
-  80% { opacity: 1; transform: translate3d(-8rpx, -32rpx, 0) scale(0.92) rotateX(55deg) rotateY(-300deg) rotateZ(22deg); }
-  85% { opacity: 1; transform: translate3d(0, 8rpx, 0) scale(1.05) rotateX(-6deg) rotateY(-440deg) rotateZ(-16deg); }
-  91% { opacity: 1; transform: translate3d(0, -24rpx, 0) scale(0.98) rotateX(4deg) rotateY(-560deg) rotateZ(10deg); }
-  96% { opacity: 1; transform: translate3d(0, 4rpx, 0) scale(1.02) rotateX(-3deg) rotateY(-660deg) rotateZ(-5deg); }
+  8% { opacity: 1; transform: translate3d(-16rpx, -160rpx, 0) scale(0.7) rotateX(16deg) rotateY(-110deg) rotateZ(-12deg); }
+  15% { opacity: 0.9; transform: translate3d(-34rpx, -240rpx, 0) scale(0.32) rotateX(32deg) rotateY(-240deg) rotateZ(-24deg); }
+  18% { opacity: 0; transform: translate3d(-34rpx, -240rpx, 0) scale(0.2) rotateX(32deg) rotateY(-240deg) rotateZ(-24deg); }
+  62% { opacity: 0; transform: translate3d(-18rpx, -128rpx, 0) scale(0.2) rotateX(16deg) rotateY(-40deg) rotateZ(14deg); }
+  64% { opacity: 1; transform: translate3d(-18rpx, -128rpx, 0) scale(0.38) rotateX(16deg) rotateY(-40deg) rotateZ(14deg); }
+  70% { opacity: 1; transform: translate3d(-12rpx, -78rpx, 0) scale(0.68) rotateX(28deg) rotateY(-140deg) rotateZ(20deg); }
+  77% { opacity: 1; transform: translate3d(-6rpx, -25rpx, 0) scale(0.92) rotateX(44deg) rotateY(-270deg) rotateZ(18deg); }
+  84% { opacity: 1; transform: translate3d(0, 6rpx, 0) scale(1.05) rotateX(-5deg) rotateY(-410deg) rotateZ(-12deg); }
+  91% { opacity: 1; transform: translate3d(0, -16rpx, 0) scale(0.98) rotateX(3deg) rotateY(-530deg) rotateZ(8deg); }
+  96% { opacity: 1; transform: translate3d(0, 2rpx, 0) scale(1.01) rotateX(-2deg) rotateY(-630deg) rotateZ(-4deg); }
   100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(720deg) rotateZ(0deg); }
 }
 
 @keyframes toss-shadow-a {
   0% { opacity: 0.28; transform: scaleX(1); }
-  8% { opacity: 0.08; transform: translateX(8rpx) scaleX(0.4); }
-  16% { opacity: 0; transform: scaleX(0.1); }
-  66% { opacity: 0; transform: scaleX(0.1); }
-  67% { opacity: 0.12; transform: translateX(12rpx) scaleX(0.35); }
-  74% { opacity: 0.22; transform: translateX(-8rpx) scaleX(0.65); }
-  80% { opacity: 0.38; transform: translateX(-24rpx) scaleX(0.95); }
-  85% { opacity: 0.58; transform: translateX(-32rpx) scaleX(1.3); }
-  90% { opacity: 0.16; transform: translateX(-20rpx) scaleX(0.5); }
-  96% { opacity: 0.38; transform: translateX(-8rpx) scaleX(1.1); }
+  7% { opacity: 0.08; transform: translateX(6rpx) scaleX(0.4); }
+  15% { opacity: 0; transform: scaleX(0.1); }
+  60% { opacity: 0; transform: scaleX(0.1); }
+  62% { opacity: 0.12; transform: translateX(10rpx) scaleX(0.35); }
+  70% { opacity: 0.22; transform: translateX(-6rpx) scaleX(0.65); }
+  77% { opacity: 0.38; transform: translateX(-18rpx) scaleX(0.95); }
+  82% { opacity: 0.52; transform: translateX(-24rpx) scaleX(1.25); }
+  90% { opacity: 0.16; transform: translateX(-14rpx) scaleX(0.6); }
+  96% { opacity: 0.35; transform: translateX(-6rpx) scaleX(1.05); }
   100% { opacity: 0.28; transform: translateX(0) scaleX(1); }
 }
 
 @keyframes toss-shadow-b {
   0% { opacity: 0.28; transform: scaleX(1); }
-  8% { opacity: 0.08; transform: scaleX(0.4); }
-  16% { opacity: 0; transform: scaleX(0.1); }
-  64% { opacity: 0; transform: scaleX(0.1); }
-  65% { opacity: 0.12; transform: translateX(16rpx) scaleX(0.35); }
-  72% { opacity: 0.25; transform: translateX(8rpx) scaleX(0.65); }
-  78% { opacity: 0.42; transform: translateX(2rpx) scaleX(0.95); }
-  83% { opacity: 0.6; transform: translateX(0) scaleX(1.35); }
-  89% { opacity: 0.18; transform: scaleX(0.5); }
-  95% { opacity: 0.4; transform: scaleX(1.1); }
+  7% { opacity: 0.08; transform: scaleX(0.4); }
+  15% { opacity: 0; transform: scaleX(0.1); }
+  58% { opacity: 0; transform: scaleX(0.1); }
+  60% { opacity: 0.12; transform: translateX(12rpx) scaleX(0.35); }
+  68% { opacity: 0.25; transform: translateX(6rpx) scaleX(0.65); }
+  75% { opacity: 0.42; transform: translateX(2rpx) scaleX(0.95); }
+  80% { opacity: 0.55; transform: translateX(0) scaleX(1.3); }
+  88% { opacity: 0.18; transform: scaleX(0.6); }
+  95% { opacity: 0.36; transform: scaleX(1.05); }
   100% { opacity: 0.28; transform: scaleX(1); }
 }
 
 @keyframes toss-shadow-c {
   0% { opacity: 0.28; transform: scaleX(1); }
-  8% { opacity: 0.08; transform: translateX(-8rpx) scaleX(0.4); }
-  16% { opacity: 0; transform: scaleX(0.1); }
-  68% { opacity: 0; transform: scaleX(0.1); }
-  69% { opacity: 0.12; transform: translateX(20rpx) scaleX(0.35); }
-  76% { opacity: 0.22; transform: translateX(28rpx) scaleX(0.65); }
-  82% { opacity: 0.38; transform: translateX(30rpx) scaleX(0.95); }
-  86% { opacity: 0.58; transform: translateX(28rpx) scaleX(1.3); }
-  91% { opacity: 0.16; transform: translateX(16rpx) scaleX(0.5); }
-  96% { opacity: 0.38; transform: translateX(6rpx) scaleX(1.1); }
+  7% { opacity: 0.08; transform: translateX(-6rpx) scaleX(0.4); }
+  15% { opacity: 0; transform: scaleX(0.1); }
+  62% { opacity: 0; transform: scaleX(0.1); }
+  64% { opacity: 0.12; transform: translateX(16rpx) scaleX(0.35); }
+  72% { opacity: 0.22; transform: translateX(22rpx) scaleX(0.65); }
+  79% { opacity: 0.38; transform: translateX(24rpx) scaleX(0.95); }
+  84% { opacity: 0.52; transform: translateX(22rpx) scaleX(1.25); }
+  91% { opacity: 0.16; transform: translateX(12rpx) scaleX(0.6); }
+  96% { opacity: 0.35; transform: translateX(4rpx) scaleX(1.05); }
   100% { opacity: 0.28; transform: translateX(0) scaleX(1); }
 }
 

@@ -326,15 +326,16 @@ page {
 .coin-shadow {
   position: absolute;
   left: 50%;
-  bottom: -8rpx;
+  bottom: -6rpx;
   width: 68%;
-  height: 10rpx;
+  height: 12rpx;
   margin-left: -34%;
   border-radius: 50%;
-  background: rgba(28, 24, 20, 0.2);
-  filter: blur(3rpx);
+  background: radial-gradient(ellipse at center, rgba(28, 24, 20, 0.38) 0%, rgba(28, 24, 20, 0.12) 55%, transparent 75%);
   z-index: 0;
   transform-origin: center;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 .coin-body {
   position: relative;
@@ -342,6 +343,8 @@ page {
   height: 100%;
   z-index: 1;
   transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 .coin-face {
   position: absolute;
@@ -352,17 +355,17 @@ page {
   box-sizing: border-box;
   overflow: hidden;
   display: block;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .coin-obverse {
   opacity: 1;
   z-index: 2;
-  box-shadow: 0 8rpx 16rpx rgba(28, 24, 20, 0.16);
 }
 .coin-reverse {
   opacity: 0;
   z-index: 1;
   pointer-events: none;
-  box-shadow: 0 8rpx 16rpx rgba(28, 24, 20, 0.16);
 }
 .coin.yin .coin-obverse {
   opacity: 0;

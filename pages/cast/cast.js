@@ -130,27 +130,18 @@ Page({
       displayCoins: result.coins
     })
 
-    // 灵龟仪轨阶梯触感：350ms 铜钱飞入龟壳轻震 -> 700ms/950ms/1200ms 龟壳剧烈摇撼 -> 1780ms 倾倒下坠撞盘沉震
+    // 灵龟仪轨触感优化：精简高频震动避免移动端线程与马达阻塞
+    // 380ms 双手合托起颠轻震 -> 1220ms 倾壳滑坠击盘沉震
     setTimeout(() => {
       try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
-    }, 350)
+    }, 380)
     setTimeout(() => {
-      try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
-    }, 700)
-    setTimeout(() => {
-      try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
-    }, 950)
-    setTimeout(() => {
-      try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
-    }, 1200)
-    setTimeout(() => {
-      // 约 1780ms 处铜钱自龟壳口飞坠砸入托盘
       try { wx.vibrateShort({ type: 'medium' }) } catch (e) { /* ignore */ }
-    }, 1780)
+    }, 1220)
 
     setTimeout(() => {
       this.pushYao(result)
-    }, 2200)
+    }, 1600)
   },
 
   pickManual(e) {
