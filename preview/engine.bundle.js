@@ -14134,12 +14134,34 @@ function normalizeArgs(a, b) {
 }
 
 /**
- * 将文本切分为条目数组
+ * 彻底清洗 AI 输出中混入的 Markdown 标记与各类星号符号
+ */
+function cleanAiMarkdown(text) {
+  if (!text || typeof text !== 'string') return ''
+  return text
+    // 移除三阶或二阶加粗/斜体星号（保留内部文本）: ***文本*** -> 文本, **文本** -> 文本, *文本* -> 文本
+    .replace(/\*{1,3}([^\*\n]+?)\*{1,3}/g, '$1')
+    // 移除行首的 Markdown 列表星号或减号: * 文本 -> 文本
+    .replace(/^[\s]*[\*\-]\s+/gm, '')
+    // 移除可能散落遗留的任何孤立星号
+    .replace(/\*+/g, '')
+    // 移除 Markdown 标题井号: ### 文本 -> 文本
+    .replace(/^[\s]*#{1,6}\s*/gm, '')
+    // 移除多余的波浪线和反引号
+    .replace(/[`~]/g, '')
+    .trim()
+}
+
+/**
+ * 将文本切分为条目数组并彻底清理星号
  */
 function toSectionItems(text) {
   if (!text) return []
-  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
-  return lines.length > 0 ? lines : [text]
+  const cleaned = cleanAiMarkdown(text)
+  const lines = cleaned.split('\n')
+    .map((l) => cleanAiMarkdown(l).trim())
+    .filter(Boolean)
+  return lines.length > 0 ? lines : [cleaned]
 }
 
 /**
@@ -14157,6 +14179,7 @@ function buildDivinationPrompt(a, b) {
 3. 【察日月动化】：分析月建对用神之旺相休囚、日辰对用神之生克冲合，重点剖析动爻是回头生、回头克、化进神还是化退神，有无旬空或伏神。
 4. 【周易理数结合】：文白相间，典雅温润，兼具传统纳甲精髓与当代现实启发。绝不搞恐吓式的江湖宿命论，重在指引问卦者修德、审势、定心、知止与明理。
 5. 【纯正文风，绝无技术痕迹】：通篇必须纯以易学宗师太史令的身份作答，严禁出现任何“AI”、“人工智能”、“大模型”、“算法提示”、“语言模型”、“计算机”等现代词汇，言辞典雅纯正，深具古风易理底蕴。
+6. 【排版禁忌，严禁星号】：通篇绝对禁止输出任何 Markdown 星号（严禁出现 ** 加粗、严禁出现 * 列表符号或任何形式的星号），所有强调、重点字句请直接使用中文方头括号【】或书名号《》，列表请直接使用数字序号或汉字段落，保持纯净典雅的书卷阅读质感。
 
 【请必须按如下四段结构输出】：
 ### 【神机总断】
@@ -14268,21 +14291,21 @@ function parseAiDivinationOutput(text, question, cast) {
   const parts = text.split(/###?\s*【/g)
   parts.forEach(part => {
     if (part.startsWith('神机总断】')) {
-      const content = part.replace(/^神机总断】\s*/, '').trim()
-      const lines = content.split('\n').filter(Boolean)
-      parsed.summary = lines[0] || '大成卦象 · 天机显现'
-      parsed.judgment = lines.slice(1).join('\n') || content
+      const content = cleanAiMarkdown(part.replace(/^神机总断】\s*/, '').trim())
+      const lines = content.split('\n').map(l => cleanAiMarkdown(l).trim()).filter(Boolean)
+      parsed.summary = cleanAiMarkdown(lines[0] || '大成卦象 · 天机显现')
+      parsed.judgment = cleanAiMarkdown(lines.slice(1).join('\n') || content)
     } else if (part.startsWith('用神与爻象探微】')) {
-      parsed.yongshen = part.replace(/^用神与爻象探微】\s*/, '').trim()
+      parsed.yongshen = cleanAiMarkdown(part.replace(/^用神与爻象探微】\s*/, '').trim())
     } else if (part.startsWith('机运演进与应期】')) {
-      parsed.yingqi = part.replace(/^机运演进与应期】\s*/, '').trim()
+      parsed.yingqi = cleanAiMarkdown(part.replace(/^机运演进与应期】\s*/, '').trim())
     } else if (part.startsWith('周易明理 · 趋吉避凶】')) {
-      parsed.advice = part.replace(/^周易明理 · 趋吉避凶】\s*/, '').trim()
+      parsed.advice = cleanAiMarkdown(part.replace(/^周易明理 · 趋吉避凶】\s*/, '').trim())
     }
   })
 
   // 兜底提取
-  if (!parsed.judgment) parsed.judgment = text.slice(0, 300)
+  if (!parsed.judgment) parsed.judgment = cleanAiMarkdown(text.slice(0, 300))
   if (!parsed.summary) parsed.summary = '神机内蕴 · 顺时而动'
 
   // 判断倾向色调
@@ -14429,6 +14452,7 @@ async function interpretWithAi(a, b) {
 }
 
 module.exports = {
+  cleanAiMarkdown,
   buildDivinationPrompt,
   callAiDivinationApi,
   interpretWithAi,

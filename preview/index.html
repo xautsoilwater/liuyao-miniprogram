@@ -68,13 +68,15 @@
       width: min(393px, 100%);
       margin: 0 auto;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex; flex-direction: column;
+      box-sizing: border-box;
     }
     .nav {
       position: sticky; top: 0; z-index: 20;
       display: flex; align-items: center;
       min-height: 44px;
-      padding: 3px 16px;
+      padding: max(4px, env(safe-area-inset-top)) 16px 6px;
       background: linear-gradient(180deg, rgba(251, 247, 238, 0.95), rgba(243, 235, 219, 0.9));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -96,7 +98,7 @@
     .nav-back .chev { color: var(--cinnabar); font-size: 21px; line-height: 1; margin-top: -1px; }
     .shell.swipe-hint { box-shadow: inset 3px 0 0 rgba(160, 40, 32, 0.35); }
     .content {
-      padding: 8px 16px 28px;
+      padding: 8px 16px max(24px, calc(env(safe-area-inset-bottom) + 12px));
       flex: 1;
       animation: pageIn .42s ease both;
     }
@@ -505,26 +507,45 @@
       gap: 12px;
       align-items: stretch;
       margin-top: 10px;
+      min-height: 275px;
+      height: 275px;
+      box-sizing: border-box;
     }
     .manual-left {
-      flex: 1.25;
+      flex: 1.22;
       min-width: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
     }
-    .manual-hint {
-      font-size: 12px;
+    .manual-col-head {
+      font-size: 12.5px;
       color: var(--bronze);
       letter-spacing: 0.12em;
+      height: 22px;
+      line-height: 22px;
       margin: 0 0 8px;
       text-align: center;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+    .manual-col-head.gua-col-head {
+      font-weight: 600;
+      color: #6a4a22;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
     }
     .manual-grid {
+      flex: 1;
+      height: calc(100% - 30px);
       display: grid;
       grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
       gap: 8px;
     }
     .manual-item {
+      height: 100%;
+      box-sizing: border-box;
       padding: 12px 6px;
       text-align: center;
       border: 1px solid var(--line-strong);
@@ -535,8 +556,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      border-radius: 4px;
+      gap: 12px;
+      border-radius: 6px;
       transition: background .18s, border-color .18s, transform .12s;
       user-select: none;
     }
@@ -545,22 +566,29 @@
       border-color: var(--gold-border);
       transform: scale(0.97);
     }
+    .manual-item .yao-bar {
+      width: 52px;
+      height: 6px;
+      margin: 0 auto;
+    }
     .manual-item span {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
       color: var(--ink);
       white-space: nowrap;
     }
     .manual-right {
-      flex: 0.95;
-      min-width: 106px;
+      flex: 0.98;
+      min-width: 108px;
+      height: 100%;
       display: flex;
+      flex-direction: column;
     }
     .manual-live .manual-gua-box {
       flex: 1;
-      min-width: 0;
-      min-height: 180px;
-      padding: 10px 8px 12px;
+      height: calc(100% - 30px);
+      min-height: 0;
+      padding: 14px 10px;
       margin: 0;
       border: 1px dashed rgba(166, 124, 62, 0.55);
       border-radius: 6px;
@@ -571,27 +599,20 @@
       align-items: center;
       box-sizing: border-box;
     }
-    .manual-live .manual-gua-box .gua-lab {
-      position: static;
-      margin: 0 0 10px;
-      font-size: 13.5px;
-      font-weight: 600;
-      letter-spacing: 0.28em;
-      text-indent: 0.28em;
-      color: #6a4a22;
-      text-align: center;
-    }
     .manual-live .manual-gua-box .gua-lines {
       flex: 1;
       width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+      padding: 4px 0;
+      box-sizing: border-box;
     }
     .manual-live .manual-gua-box .mini-yao {
-      width: 66px;
-      height: 10px;
+      width: 74px;
+      height: 12px;
       background: rgba(20, 15, 12, 0.1);
       border-radius: 2px;
     }
@@ -600,6 +621,10 @@
     }
     .manual-live .manual-gua-box .mini-yao.filled.yin {
       background: linear-gradient(90deg, var(--ink) 0 42%, transparent 42% 58%, var(--ink) 58% 100%);
+    }
+    .manual-live .manual-gua-box .mini-yao.filled.moving::after {
+      content: ""; position: absolute; right: -12px; top: 50%; width: 7px; height: 7px;
+      margin-top: -3.5px; border-radius: 50%; background: var(--cinnabar);
     }
     .yao-line {
       display: flex; justify-content: space-between; align-items: center;

@@ -69,7 +69,7 @@
     </view>
     <view class="manual-live">
       <view class="manual-left">
-        <view class="muted hint">按实摇结果点选</view>
+        <view class="manual-col-head">按实点选（字阳背阴）</view>
         <view class="manual-grid">
           <view class="manual-item" wx:for="{{manualOptions}}" wx:key="key" data-key="{{item.key}}" bindtap="pickManual">
             <view class="yao-bar {{item.score === 9 || item.score === 7 ? 'yang' : 'yin'}} {{item.score === 9 || item.score === 6 ? 'moving' : ''}}"></view>
@@ -77,13 +77,15 @@
           </view>
         </view>
       </view>
-      <view class="gua-side">
-        <view class="gua-lab">卦象</view>
-        <view class="gua-lines">
-          <view class="gua-slot" wx:for="{{guaLines}}" wx:key="index">
-            <view
-              class="yao-bar xl {{item.filled ? (item.yinYang ? 'yang' : 'yin') : 'empty'}} {{item.changing ? 'moving' : ''}}"
-            ></view>
+      <view class="manual-right">
+        <view class="manual-col-head gua-col-head">成卦卦象</view>
+        <view class="gua-side">
+          <view class="gua-lines">
+            <view class="gua-slot" wx:for="{{guaLines}}" wx:key="index">
+              <view
+                class="yao-bar xl {{item.filled ? (item.yinYang ? 'yang' : 'yin') : 'empty'}} {{item.changing ? 'moving' : ''}}"
+              ></view>
+            </view>
           </view>
         </view>
       </view>

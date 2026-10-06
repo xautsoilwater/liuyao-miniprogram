@@ -593,7 +593,8 @@
       if (!y) lines.push('<div class="mini-yao"></div>')
       else lines.push(`<div class="mini-yao filled ${y.yinYang ? 'yang' : 'yin'} ${y.changing ? 'moving' : ''}"></div>`)
     }
-    return `<div class="gua-side ${isManual ? 'manual-gua-box' : ''}"><div class="gua-lab">${title}</div><div class="gua-lines">${lines.join('')}</div></div>`
+    const labHtml = title ? `<div class="gua-lab">${title}</div>` : ''
+    return `<div class="gua-side ${isManual ? 'manual-gua-box' : ''}">${labHtml}<div class="gua-lines">${lines.join('')}</div></div>`
   }
 
   function syncAskSelection() {
@@ -733,7 +734,7 @@
       </div>` : `
       <div class="manual-live">
         <div class="manual-left">
-          <div class="manual-hint">按实摇点选（字阳背阴）</div>
+          <div class="manual-col-head">按实点选（字阳背阴）</div>
           <div class="manual-grid">
             <div class="manual-item" data-manual="laoYang" role="button" aria-label="老阳"><i class="yao-bar yang moving"></i><span>老阳 ○</span></div>
             <div class="manual-item" data-manual="shaoYin" role="button" aria-label="少阴"><i class="yao-bar yin"></i><span>少阴 --</span></div>
@@ -742,7 +743,8 @@
           </div>
         </div>
         <div class="manual-right">
-          ${miniGua('成卦卦象', true)}
+          <div class="manual-col-head gua-col-head">成卦卦象</div>
+          ${miniGua('', true)}
         </div>
       </div>`
 
@@ -976,11 +978,23 @@
       return
     }
 
+    const cleanText = (t) => {
+      if (!t) return ''
+      if (window.LiuYao && window.LiuYao.cleanAiMarkdown) return window.LiuYao.cleanAiMarkdown(t)
+      return String(t)
+        .replace(/\*{1,3}([^\*\n]+?)\*{1,3}/g, '$1')
+        .replace(/^[\s]*[\*\-]\s+/gm, '')
+        .replace(/\*+/g, '')
+        .replace(/^[\s]*#{1,6}\s*/gm, '')
+        .replace(/[`~]/g, '')
+        .trim()
+    }
+
     const res = state.aiResult || (window.LiuYao.interpret ? window.LiuYao.interpret(state.cast, 'general') : {})
     const sections = (res.sections || []).map((sec, idx) => `
       <div class="sec">
-        <div class="sec-head"><span class="sec-no">${idx + 1}</span><span class="sec-title">${sec.title.replace(/^[一二三四五六七]、/, '')}</span></div>
-        ${sec.items.map((it) => `<div class="point">${it}</div>`).join('')}
+        <div class="sec-head"><span class="sec-no">${idx + 1}</span><span class="sec-title">${cleanText(sec.title).replace(/^[一二三四五六七]、/, '')}</span></div>
+        ${sec.items.map((it) => `<div class="point">${cleanText(it)}</div>`).join('')}
       </div>`).join('')
 
     app.innerHTML = `
@@ -995,10 +1009,10 @@
       <div class="verdict ${res.tendency ? res.tendency.tone : 'mid'}">
         ${corners()}
         <div style="display:inline-block;padding:2px 10px;border:1px solid rgba(158,42,43,0.6);color:var(--cinnabar);font-size:11px;letter-spacing:0.22em;border-radius:2px;background:rgba(158,42,43,0.06);margin-bottom:6px;font-family:var(--serif)">✦ 太史令 · 研断 ✦</div>
-        <div class="summary">神机：${res.summary || '静候天时'}</div>
-        ${res.reply ? `<div class="reply">${res.reply}</div>` : ''}
-        <div class="judgment">${res.judgment || res.summaryNote || ''}</div>
-        ${res.advice ? `<div class="advice">${res.advice}</div>` : ''}
+        <div class="summary">神机：${cleanText(res.summary) || '静候天时'}</div>
+        ${res.reply ? `<div class="reply">${cleanText(res.reply)}</div>` : ''}
+        <div class="judgment">${cleanText(res.judgment || res.summaryNote || '')}</div>
+        ${res.advice ? `<div class="advice">${cleanText(res.advice)}</div>` : ''}
       </div>
 
       <div class="frame">${corners()}${sections}</div>
@@ -1025,11 +1039,11 @@
       const bianGua = state.cast.bian ? state.cast.bian.name : '无变'
       let text = `【所测事宜】${state.question || '心意默祷'}\n`
       text += `【周易排盘】本卦《${benGua}》 变卦《${bianGua}》\n`
-      text += `【神机结论】${res.summary || ''}\n\n`
+      text += `【神机结论】${cleanText(res.summary) || ''}\n\n`
       if (res.sections && res.sections.length) {
         res.sections.forEach((s) => {
-          text += `■ ${s.title}\n`
-          s.items.forEach((it) => { text += `· ${it}\n` })
+          text += `■ ${cleanText(s.title)}\n`
+          s.items.forEach((it) => { text += `· ${cleanText(it)}\n` })
           text += '\n'
         })
       }

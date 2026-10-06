@@ -1,5 +1,6 @@
 const assert = require('assert')
 const {
+  cleanAiMarkdown,
   buildDivinationPrompt,
   buildIntelligentFallbackInterpretation,
   interpretWithAi
@@ -55,6 +56,15 @@ interpretWithAi({
 }).then(res => {
   assert(res.summary, '异步主入口必须返回有效解卦结果')
   console.log('✔ 统一主入口 interpretWithAi 测试通过')
+
+  // 4. 测试 cleanAiMarkdown 彻底清洗各类星号
+  const dirtyText = '### **神机总断**：***大吉亨通***！\n* **用神分析**：专以卦中**【妻财】**为用神。\n* 另外* 包含孤立星号* 标记'
+  const cleanedText = cleanAiMarkdown(dirtyText)
+  assert(!cleanedText.includes('*'), '清洗后绝对不能残留任何星号*')
+  assert(!cleanedText.includes('#'), '清洗后绝对不能残留Markdown标题#')
+  assert(cleanedText.includes('神机总断：大吉亨通！'), '加粗星号剥离后文字内容完整保留')
+  console.log('✔ Markdown 星号清洗引擎测试通过')
+
   console.log('All AI interpreter tests passed successfully!')
 }).catch(err => {
   console.error('Test error:', err)
