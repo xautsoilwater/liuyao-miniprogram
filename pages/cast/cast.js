@@ -130,22 +130,27 @@ Page({
       displayCoins: result.coins
     })
 
-    // 方案二阶梯触觉反馈：筒内摇动轻震 -> 倾倒掷出 -> 铜钱撞盘中震
-    try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
+    // 灵龟仪轨阶梯触感：350ms 铜钱飞入龟壳轻震 -> 700ms/950ms/1200ms 龟壳剧烈摇撼 -> 1780ms 倾倒下坠撞盘沉震
     setTimeout(() => {
       try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
-    }, 280)
+    }, 350)
     setTimeout(() => {
       try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
-    }, 560)
+    }, 700)
     setTimeout(() => {
-      // 约 1380ms 处铜钱自筒口飞坠触及钱盘
+      try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
+    }, 950)
+    setTimeout(() => {
+      try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
+    }, 1200)
+    setTimeout(() => {
+      // 约 1780ms 处铜钱自龟壳口飞坠砸入托盘
       try { wx.vibrateShort({ type: 'medium' }) } catch (e) { /* ignore */ }
-    }, 1380)
+    }, 1780)
 
     setTimeout(() => {
       this.pushYao(result)
-    }, 1800)
+    }, 2200)
   },
 
   pickManual(e) {

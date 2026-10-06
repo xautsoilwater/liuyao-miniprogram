@@ -298,6 +298,7 @@
     .coin-stage {
       flex: 1.15; text-align: center;
       display: flex; flex-direction: column; overflow: visible;
+      position: relative;
     }
     .coin-stage .btn { margin-bottom: 0; }
     .gua-side {
@@ -345,21 +346,22 @@
       content: ""; position: absolute; right: -12px; top: 50%; width: 7px; height: 7px;
       margin-top: -3.5px; border-radius: 50%; background: var(--cinnabar);
     }
-    /* 玄木描金摇卦神筒 */
+    /* 周易文王灵龟神壳 */
+    /* 周易文王灵龟神壳（正对红圈黄金焦点） */
     .shaker-stage {
       position: absolute;
-      top: -12px;
+      top: -96px;
       left: 50%;
-      margin-left: -28px;
-      width: 56px;
-      height: 77px;
+      margin-left: -33px;
+      width: 66px;
+      height: 88px;
       z-index: 10;
       pointer-events: none;
-      opacity: 0.88;
+      opacity: 0.94;
       transform: translate3d(0, 0, 0) rotate(-6deg);
-      transform-origin: 50% 90%;
+      transform-origin: 50% 88%;
       transition: opacity 0.3s ease, transform 0.3s ease;
-      filter: drop-shadow(0 6px 12px rgba(20, 15, 10, 0.28));
+      filter: drop-shadow(0 10px 20px rgba(18, 12, 8, 0.38));
     }
     .shaker-svg {
       display: block;
@@ -367,33 +369,34 @@
       height: 100%;
       overflow: visible;
     }
-    .cup-coin-glint {
+    .shell-coin-glint, .cup-coin-glint {
       opacity: 0;
       transition: opacity 0.2s;
     }
-    .is-shaking .cup-coin-glint {
-      animation: coin-glint 0.28s ease-in-out infinite alternate;
+    .is-shaking .shell-coin-glint, .is-shaking .cup-coin-glint {
+      animation: coin-glint 0.26s ease-in-out infinite alternate;
     }
     @keyframes coin-glint {
-      0% { opacity: 0.15; transform: scale(0.8); }
-      100% { opacity: 0.95; transform: scale(1.25); }
+      0% { opacity: 0.1; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.3); }
     }
     .shaker-stage.is-shaking {
       opacity: 1;
-      animation: vessel-cast 1.8s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+      animation: vessel-cast 2.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
     }
     @keyframes vessel-cast {
       0% { transform: translate3d(0, 0, 0) rotate(-6deg); }
-      10% { transform: translate3d(-12px, -16px, 0) rotate(-26deg); }
-      22% { transform: translate3d(14px, -22px, 0) rotate(24deg); }
-      34% { transform: translate3d(-14px, -24px, 0) rotate(-28deg); }
-      46% { transform: translate3d(12px, -20px, 0) rotate(24deg); }
-      58% { transform: translate3d(-8px, -14px, 0) rotate(-16deg); }
-      66% { transform: translate3d(0, -10px, 0) rotate(0deg); }
-      74% { transform: translate3d(18px, -2px, 0) rotate(58deg) scale(1.08); }
-      84% { transform: translate3d(26px, 12px, 0) rotate(68deg) scale(1.02); opacity: 0.95; }
-      92% { transform: translate3d(16px, -2px, 0) rotate(24deg) scale(0.88); opacity: 0.35; }
-      100% { transform: translate3d(0, 0, 0) rotate(-6deg); opacity: 0.88; }
+      18% { transform: translate3d(0, 2px, 0) rotate(-4deg); } /* 迎金钱入腹，微下沉 */
+      24% { transform: translate3d(-10px, -12px, 0) rotate(-18deg); } /* 纳毕起势摇动 */
+      32% { transform: translate3d(16px, -20px, 0) rotate(24deg); }
+      40% { transform: translate3d(-18px, -24px, 0) rotate(-28deg); }
+      48% { transform: translate3d(14px, -18px, 0) rotate(22deg); }
+      56% { transform: translate3d(-10px, -12px, 0) rotate(-14deg); }
+      64% { transform: translate3d(0, -6px, 0) rotate(0deg); }
+      72% { transform: translate3d(20px, 16px, 0) rotate(66deg) scale(1.08); } /* 猛烈前倾，开口对盘 */
+      82% { transform: translate3d(26px, 28px, 0) rotate(76deg) scale(1.02); opacity: 0.98; }
+      90% { transform: translate3d(14px, 8px, 0) rotate(20deg) scale(0.92); opacity: 0.55; }
+      100% { transform: translate3d(0, 0, 0) rotate(-6deg); opacity: 0.94; }
     }
 
     .coins {
@@ -410,92 +413,109 @@
     }
     .shake .coin-body {
       transform-style: preserve-3d; transform-origin: center center;
-      animation: toss-drop 1.8s cubic-bezier(.33,.02,.2,1) both;
+      animation: toss-drop 2.2s cubic-bezier(.33,.02,.2,1) both;
       will-change: transform, opacity;
     }
     .shake .coin:nth-child(1) .coin-body {
-      animation-name: toss-drop-a; animation-duration: 1.8s; animation-delay: 0ms;
+      animation-name: toss-drop-a; animation-duration: 2.2s; animation-delay: 0ms;
     }
     .shake .coin:nth-child(2) .coin-body {
-      animation-name: toss-drop-b; animation-duration: 1.8s; animation-delay: 35ms;
+      animation-name: toss-drop-b; animation-duration: 2.2s; animation-delay: 20ms;
     }
     .shake .coin:nth-child(3) .coin-body {
-      animation-name: toss-drop-c; animation-duration: 1.8s; animation-delay: 70ms;
+      animation-name: toss-drop-c; animation-duration: 2.2s; animation-delay: 40ms;
     }
     .shake .coin-shadow {
-      animation: toss-shadow 1.8s cubic-bezier(.33,.02,.2,1) both;
+      animation: toss-shadow 2.2s cubic-bezier(.33,.02,.2,1) both;
       will-change: transform, opacity;
     }
     .shake .coin:nth-child(1) .coin-shadow {
-      animation-name: toss-shadow-a; animation-duration: 1.8s; animation-delay: 0ms;
+      animation-name: toss-shadow-a; animation-duration: 2.2s; animation-delay: 0ms;
     }
     .shake .coin:nth-child(2) .coin-shadow {
-      animation-name: toss-shadow-b; animation-duration: 1.8s; animation-delay: 35ms;
+      animation-name: toss-shadow-b; animation-duration: 2.2s; animation-delay: 20ms;
     }
     .shake .coin:nth-child(3) .coin-shadow {
-      animation-name: toss-shadow-c; animation-duration: 1.8s; animation-delay: 70ms;
+      animation-name: toss-shadow-c; animation-duration: 2.2s; animation-delay: 40ms;
     }
 
-    /* 左钱：从筒口倾出，偏左抛射，触桌反弹，斜倚打转定格 */
+    /* 左钱：平卧 -> 拔地腾空飞入龟壳 -> 龟中剧烈晃动 -> 倾倒破空掉落 -> 击盘反弹微旋定格 */
     @keyframes toss-drop-a {
-      0% { opacity: 0; transform: translate3d(-6px, -36px, 0) scale(.25); }
-      65% { opacity: 0; transform: translate3d(-6px, -36px, 0) scale(.25); }
-      68% { opacity: 1; transform: translate3d(-12px, -62px, 0) scale(.8) rotateX(15deg) rotateY(60deg) rotateZ(-18deg); }
-      75% { transform: translate3d(-24px, -118px, 0) scale(1.06) rotateX(25deg) rotateY(210deg) rotateZ(-36deg); }
-      84% { transform: translate3d(-18px, 4px, 0) scale(1.04) rotateX(8deg) rotateY(430deg) rotateZ(18deg); }
-      90% { transform: translate3d(-10px, -22px, 0) scale(.98) rotateX(-5deg) rotateY(560deg) rotateZ(-12deg); }
+      0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg); }
+      8% { opacity: 1; transform: translate3d(10px, -45px, 0) scale(0.68) rotateX(25deg) rotateY(120deg) rotateZ(15deg); }
+      16% { opacity: 0.9; transform: translate3d(20px, -86px, 0) scale(0.35) rotateX(45deg) rotateY(260deg) rotateZ(30deg); }
+      20% { opacity: 0; transform: translate3d(20px, -86px, 0) scale(0.2); }
+      65% { opacity: 0; transform: translate3d(20px, -86px, 0) scale(0.2); }
+      68% { opacity: 1; transform: translate3d(-10px, -66px, 0) scale(0.72) rotateX(15deg) rotateY(60deg) rotateZ(-18deg); }
+      75% { transform: translate3d(-24px, -112px, 0) scale(1.05) rotateX(25deg) rotateY(210deg) rotateZ(-36deg); }
+      84% { transform: translate3d(-16px, 6px, 0) scale(1.04) rotateX(8deg) rotateY(430deg) rotateZ(18deg); }
+      90% { transform: translate3d(-10px, -18px, 0) scale(0.98) rotateX(-5deg) rotateY(560deg) rotateZ(-12deg); }
       95% { transform: translate3d(-4px, 2px, 0) scale(1.02) rotateX(4deg) rotateY(660deg) rotateZ(8deg); }
       100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(720deg) rotateZ(0deg); }
     }
-    /* 中钱：从筒口飞跃，高抛直立自旋，触桌重弹，斜倚微旋 */
+
+    /* 中钱：平卧 -> 直立腾空飞入龟壳 -> 龟中晃动 -> 倾倒飞跃下坠重弹 -> 微旋定格 */
     @keyframes toss-drop-b {
-      0% { opacity: 0; transform: translate3d(0, -36px, 0) scale(.25); }
-      65% { opacity: 0; transform: translate3d(0, -36px, 0) scale(.25); }
-      68% { opacity: 1; transform: translate3d(0, -68px, 0) scale(.85) rotateX(-10deg) rotateY(80deg) rotateZ(8deg); }
-      76% { transform: translate3d(2px, -135px, 0) scale(1.1) rotateX(-20deg) rotateY(260deg) rotateZ(12deg); }
-      85% { transform: translate3d(4px, 4px, 0) scale(1.05) rotateX(10deg) rotateY(480deg) rotateZ(-16deg); }
-      91% { transform: translate3d(2px, -28px, 0) scale(.97) rotateX(-6deg) rotateY(600deg) rotateZ(10deg); }
+      0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg); }
+      8% { opacity: 1; transform: translate3d(0, -48px, 0) scale(0.7) rotateX(-20deg) rotateY(140deg); }
+      16% { opacity: 0.9; transform: translate3d(0, -88px, 0) scale(0.35) rotateX(-40deg) rotateY(300deg); }
+      20% { opacity: 0; transform: translate3d(0, -88px, 0) scale(0.2); }
+      65% { opacity: 0; transform: translate3d(0, -88px, 0) scale(0.2); }
+      68% { opacity: 1; transform: translate3d(0, -72px, 0) scale(0.75) rotateX(-10deg) rotateY(80deg) rotateZ(8deg); }
+      76% { transform: translate3d(4px, -126px, 0) scale(1.08) rotateX(-20deg) rotateY(260deg) rotateZ(12deg); }
+      85% { transform: translate3d(4px, 6px, 0) scale(1.05) rotateX(10deg) rotateY(480deg) rotateZ(-16deg); }
+      91% { transform: translate3d(2px, -24px, 0) scale(0.97) rotateX(-6deg) rotateY(600deg) rotateZ(10deg); }
       96% { transform: translate3d(1px, 2px, 0) scale(1.02) rotateX(3deg) rotateY(690deg) rotateZ(-6deg); }
       100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(720deg) rotateZ(0deg); }
     }
-    /* 右钱：从筒口倾出，偏右滑行，触桌轻弹，旋动定格 */
+
+    /* 右钱：平卧 -> 腾空飞入龟壳 -> 龟中晃动 -> 倾倒滑翔下冲轻弹 -> 微旋定格 */
     @keyframes toss-drop-c {
-      0% { opacity: 0; transform: translate3d(6px, -36px, 0) scale(.25); }
-      65% { opacity: 0; transform: translate3d(6px, -36px, 0) scale(.25); }
-      68% { opacity: 1; transform: translate3d(14px, -58px, 0) scale(.8) rotateX(12deg) rotateY(-60deg) rotateZ(15deg); }
-      75% { transform: translate3d(26px, -115px, 0) scale(1.05) rotateX(20deg) rotateY(-200deg) rotateZ(32deg); }
-      84% { transform: translate3d(20px, 4px, 0) scale(1.04) rotateX(-6deg) rotateY(-420deg) rotateZ(-18deg); }
-      90% { transform: translate3d(12px, -20px, 0) scale(.98) rotateX(4deg) rotateY(-540deg) rotateZ(12deg); }
-      95% { transform: translate3d(5px, 2px, 0) scale(1.02) rotateX(-3deg) rotateY(-650deg) rotateZ(-7deg); }
+      0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg); }
+      8% { opacity: 1; transform: translate3d(-10px, -45px, 0) scale(0.68) rotateX(20deg) rotateY(-120deg) rotateZ(-15deg); }
+      16% { opacity: 0.9; transform: translate3d(-20px, -86px, 0) scale(0.35) rotateX(40deg) rotateY(-260deg) rotateZ(-30deg); }
+      20% { opacity: 0; transform: translate3d(-20px, -86px, 0) scale(0.2); }
+      65% { opacity: 0; transform: translate3d(-20px, -86px, 0) scale(0.2); }
+      68% { opacity: 1; transform: translate3d(10px, -66px, 0) scale(0.72) rotateX(12deg) rotateY(-60deg) rotateZ(15deg); }
+      75% { transform: translate3d(24px, -112px, 0) scale(1.05) rotateX(20deg) rotateY(-200deg) rotateZ(32deg); }
+      84% { transform: translate3d(18px, 6px, 0) scale(1.04) rotateX(-6deg) rotateY(-420deg) rotateZ(-18deg); }
+      90% { transform: translate3d(10px, -16px, 0) scale(0.98) rotateX(4deg) rotateY(-540deg) rotateZ(12deg); }
+      95% { transform: translate3d(4px, 2px, 0) scale(1.02) rotateX(-3deg) rotateY(-650deg) rotateZ(-7deg); }
       100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(720deg) rotateZ(0deg); }
     }
 
     @keyframes toss-shadow-a {
-      0%, 65% { opacity: 0; transform: scaleX(.1); }
-      68% { opacity: .1; transform: translateX(-4px) scaleX(.4); }
-      75% { opacity: .05; transform: translateX(-8px) scaleX(.22); }
-      84% { opacity: .52; transform: translateX(-6px) scaleX(1.25); }
-      90% { opacity: .14; transform: translateX(-4px) scaleX(.5); }
-      95% { opacity: .38; transform: translateX(-2px) scaleX(1.1); }
-      100% { opacity: .28; transform: translateX(0) scaleX(1); }
+      0% { opacity: 0.28; transform: scaleX(1); }
+      8% { opacity: 0.08; transform: translateX(4px) scaleX(0.4); }
+      16%, 65% { opacity: 0; transform: scaleX(0.1); }
+      68% { opacity: 0.1; transform: translateX(-4px) scaleX(0.35); }
+      75% { opacity: 0.05; transform: translateX(-8px) scaleX(0.22); }
+      84% { opacity: 0.55; transform: translateX(-6px) scaleX(1.3); }
+      90% { opacity: 0.15; transform: translateX(-4px) scaleX(0.5); }
+      95% { opacity: 0.38; transform: translateX(-2px) scaleX(1.1); }
+      100% { opacity: 0.28; transform: translateX(0) scaleX(1); }
     }
     @keyframes toss-shadow-b {
-      0%, 65% { opacity: 0; transform: scaleX(.1); }
-      68% { opacity: .1; transform: scaleX(.4); }
-      76% { opacity: .04; transform: scaleX(.2); }
-      85% { opacity: .55; transform: scaleX(1.3); }
-      91% { opacity: .15; transform: scaleX(.48); }
-      96% { opacity: .4; transform: scaleX(1.08); }
-      100% { opacity: .28; transform: scaleX(1); }
+      0% { opacity: 0.28; transform: scaleX(1); }
+      8% { opacity: 0.08; transform: scaleX(0.4); }
+      16%, 65% { opacity: 0; transform: scaleX(0.1); }
+      68% { opacity: 0.1; transform: scaleX(0.35); }
+      76% { opacity: 0.04; transform: scaleX(0.2); }
+      85% { opacity: 0.58; transform: scaleX(1.35); }
+      91% { opacity: 0.16; transform: scaleX(0.48); }
+      96% { opacity: 0.4; transform: scaleX(1.08); }
+      100% { opacity: 0.28; transform: scaleX(1); }
     }
     @keyframes toss-shadow-c {
-      0%, 65% { opacity: 0; transform: scaleX(.1); }
-      68% { opacity: .1; transform: translateX(4px) scaleX(.4); }
-      75% { opacity: .05; transform: translateX(8px) scaleX(.22); }
-      84% { opacity: .52; transform: translateX(6px) scaleX(1.25); }
-      90% { opacity: .14; transform: translateX(4px) scaleX(.5); }
-      95% { opacity: .38; transform: translateX(2px) scaleX(1.1); }
-      100% { opacity: .28; transform: translateX(0) scaleX(1); }
+      0% { opacity: 0.28; transform: scaleX(1); }
+      8% { opacity: 0.08; transform: translateX(-4px) scaleX(0.4); }
+      16%, 65% { opacity: 0; transform: scaleX(0.1); }
+      68% { opacity: 0.1; transform: translateX(4px) scaleX(0.35); }
+      75% { opacity: 0.05; transform: translateX(8px) scaleX(0.22); }
+      84% { opacity: 0.55; transform: translateX(6px) scaleX(1.3); }
+      90% { opacity: 0.15; transform: translateX(4px) scaleX(0.5); }
+      95% { opacity: 0.38; transform: translateX(2px) scaleX(1.1); }
+      100% { opacity: 0.28; transform: translateX(0) scaleX(1); }
     }
     @keyframes toss-drop {
       0% { transform: translate3d(0, -20px, 0) rotateY(0) scale(.94); }
@@ -550,8 +570,8 @@
     .fig-coins .c.yin .m-l { left: 8px; border-radius: 2px; box-shadow: 0 -5px 0 rgba(236,220,180,.75), 0 5px 0 rgba(236,220,180,.75); }
     .fig-coins .c.yin .m-r { right: 8px; }
     .result-line {
-      margin: 6px 0 12px; min-height: 52px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 8px; box-sizing: border-box;
+      margin: 4px 0 10px; min-height: 20px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 6px; box-sizing: border-box;
     }
     .yao-label { font-size: 21px; letter-spacing: 0.28em; }
     .mark { color: var(--cinnabar); }
@@ -17269,29 +17289,56 @@ window.LiuYao = {
         <div class="coin-stage">
           <div class="shaker-stage ${state.shaking ? 'is-shaking' : ''}" aria-hidden="true">
             <div class="shaker-vessel">
-              <svg class="shaker-svg" viewBox="0 0 80 110" width="56" height="77">
+              <svg class="shaker-svg" viewBox="0 0 90 120" width="66" height="88">
                 <defs>
-                  <linearGradient id="shakerWood" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#2a2017" />
-                    <stop offset="25%" stop-color="#3d2f23" />
-                    <stop offset="60%" stop-color="#241a12" />
-                    <stop offset="100%" stop-color="#140f0b" />
+                  <radialGradient id="shellBody" cx="45%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="#4a3622" />
+                    <stop offset="50%" stop-color="#312215" />
+                    <stop offset="85%" stop-color="#1f140c" />
+                    <stop offset="100%" stop-color="#120b06" />
+                  </radialGradient>
+                  <linearGradient id="shellGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#eddba4" />
+                    <stop offset="50%" stop-color="#b88d3d" />
+                    <stop offset="100%" stop-color="#f5e7bf" />
                   </linearGradient>
-                  <linearGradient id="shakerGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#ebd59f" />
-                    <stop offset="50%" stop-color="#aa8645" />
-                    <stop offset="100%" stop-color="#ebd59f" />
-                  </linearGradient>
+                  <radialGradient id="shellHole" cx="50%" cy="40%" r="55%">
+                    <stop offset="0%" stop-color="#2a1d12" />
+                    <stop offset="70%" stop-color="#120c08" />
+                    <stop offset="100%" stop-color="#050302" />
+                  </radialGradient>
+                  <radialGradient id="shellCoinGlint" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffe8a3" />
+                    <stop offset="50%" stop-color="#c99738" stop-opacity="0.8" />
+                    <stop offset="100%" stop-color="#c99738" stop-opacity="0" />
+                  </radialGradient>
                 </defs>
-                <path d="M 16 24 C 18 60, 20 86, 22 96 C 24 100, 56 100, 58 96 C 60 86, 62 60, 64 24 Z" fill="url(#shakerWood)" stroke="#140f0b" stroke-width="1.5" />
-                <ellipse cx="40" cy="24" rx="24" ry="10" fill="#150f0b" stroke="url(#shakerGold)" stroke-width="1.8" />
-                <ellipse cx="40" cy="25" rx="18" ry="6" fill="#0d0907" />
-                <circle class="cup-coin-glint" cx="40" cy="24" r="7" fill="rgba(242, 220, 150, 0.75)" />
-                <path d="M 18 42 C 28 47, 52 47, 62 42" fill="none" stroke="url(#shakerGold)" stroke-width="1.4" opacity="0.85" />
-                <path d="M 19 46 C 29 51, 51 51, 61 46" fill="none" stroke="url(#shakerGold)" stroke-width="0.8" opacity="0.65" />
-                <path d="M 21 72 C 30 76, 50 76, 59 72" fill="none" stroke="url(#shakerGold)" stroke-width="1.4" opacity="0.85" />
-                <circle cx="40" cy="59" r="6.5" fill="#8f261f" opacity="0.9" />
-                <text x="40" y="62.5" font-size="6" fill="#faeed7" font-weight="bold" text-anchor="middle" font-family="serif">易</text>
+                <path d="M 22 22 C 10 38, 8 82, 17 104 C 25 116, 65 116, 73 104 C 82 82, 80 38, 68 22 Z" fill="#0d0805" opacity="0.6" />
+                <path d="M 23 20 C 11 36, 9 80, 18 102 C 26 114, 64 114, 72 102 C 81 80, 79 36, 67 20 Z" fill="url(#shellBody)" stroke="#1a110a" stroke-width="1.8" />
+                <ellipse cx="45" cy="20" rx="22" ry="9" fill="#18100a" stroke="url(#shellGold)" stroke-width="1.4" />
+                <ellipse cx="45" cy="20.5" rx="18" ry="6" fill="url(#shellHole)" />
+                <ellipse class="shell-coin-glint" cx="45" cy="20.5" rx="10" ry="4" fill="url(#shellCoinGlint)" />
+                <path d="M 20 32 C 18 42, 16 56, 15 70 C 15 82, 18 94, 23 103" fill="none" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <path d="M 70 32 C 72 42, 74 56, 75 70 C 75 82, 72 94, 67 103" fill="none" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <line x1="17" y1="44" x2="22" y2="46" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
+                <line x1="15" y1="62" x2="21" y2="63" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
+                <line x1="15" y1="80" x2="21" y2="79" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
+                <line x1="73" y1="44" x2="68" y2="46" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
+                <line x1="75" y1="62" x2="69" y2="63" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
+                <line x1="75" y1="80" x2="69" y2="79" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
+                <polygon points="45,30 55,38 53,52 45,55 37,52 35,38" fill="rgba(255,240,200,0.06)" stroke="url(#shellGold)" stroke-width="1.2" />
+                <polygon points="45,57 55,65 54,80 45,84 36,80 35,65" fill="rgba(255,240,200,0.08)" stroke="url(#shellGold)" stroke-width="1.4" />
+                <polygon points="45,85 54,92 50,103 45,106 40,103 36,92" fill="rgba(255,240,200,0.05)" stroke="url(#shellGold)" stroke-width="1.2" />
+                <polygon points="35,38 37,52 24,56 22,40" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
+                <polygon points="55,38 53,52 66,56 68,40" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
+                <polygon points="37,52 35,65 36,80 23,80 23,64 24,56" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
+                <polygon points="53,52 55,65 54,80 67,80 67,64 66,56" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
+                <polygon points="36,80 45,85 40,103 28,99 23,80" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
+                <polygon points="54,80 45,85 50,103 62,99 67,80" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
+                <circle cx="45" cy="70" r="5" fill="#8f261f" opacity="0.92" />
+                <circle cx="45" cy="70" r="4.2" fill="none" stroke="url(#shellGold)" stroke-width="0.6" opacity="0.8" />
+                <text x="45" y="72.6" font-size="5" fill="#faeed7" font-weight="bold" text-anchor="middle" font-family="serif">易</text>
+                <path d="M 45 32 L 45 104" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,2" />
               </svg>
             </div>
           </div>
@@ -17311,7 +17358,7 @@ window.LiuYao = {
           <div class="result-line">${state.current
             ? `<i class="yao-bar lg ${state.current.yinYang ? 'yang' : 'yin'} ${state.current.changing ? 'moving' : ''}"></i>
                <div class="yao-label">${state.current.type}<span class="mark"> ${state.current.mark}</span></div>`
-            : '<span class="muted" style="font-size:14px;letter-spacing:.14em">静心片刻，然后摇卦</span>'}</div>
+            : ''}</div>
           <button class="btn btn-primary" id="shake" ${state.shaking || state.step >= 6 ? 'disabled' : ''}>${state.step >= 6 ? '六爻已成' : state.shaking ? '摇卦中…' : '摇铜钱'}</button>
         </div>
         ${miniGua()}
@@ -17373,11 +17420,11 @@ window.LiuYao = {
       state.current = null
       state.displayCoins = result.coins
       if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        // 摇筒震颤 (0ms, 180ms, 360ms) + 倾掷出钱 (720ms) + 触盘落定 (1200ms)
-        try { navigator.vibrate([15, 80, 18, 90, 20, 200, 35, 60, 20]) } catch (e) { /* ignore */ }
+        // 阶梯触感：350ms 钱入龟壳轻震 -> 700ms/950ms/1200ms 龟壳摇撼碰撞 -> 1780ms 击盘沉震
+        try { navigator.vibrate([10, 340, 15, 330, 18, 230, 20, 230, 18, 560, 45]) } catch (e) { /* ignore */ }
       }
       render()
-      setTimeout(() => pushYao(result), 1800)
+      setTimeout(() => pushYao(result), 2200)
     }
     app.querySelectorAll('[data-manual]').forEach((el) => {
       el.onclick = () => {
