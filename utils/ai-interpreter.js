@@ -156,17 +156,17 @@ function resolveYingqiFromCast(cast, tone, timeFrame) {
   const zhi = (y && y.zhi) || ''
   const dayZhi = (cast && cast.calendar && cast.calendar.day && cast.calendar.day.zhi) || ''
   const keyZhi = zhi || dayZhi
-  const zhiHint = keyZhi ? `「${keyZhi}」日及其冲合日` : '值日支冲合之日'
+  const zhiHint = keyZhi ? `${keyZhi}日左右（及其前后冲合日）` : '关键日及其前后几天'
 
   if (timeFrame) {
-    if (tone === 'good') return `就你问的「${timeFrame}」看，偏可推进；该窗口内重点盯${zhiHint}`
-    if (tone === 'bad') return `就你问的「${timeFrame}」看，偏不宜硬闯；宁可放到该窗口后半段，或等到${zhiHint}再动`
-    return `「${timeFrame}」内尚两可，宜先小步试探，逢${zhiHint}再加码`
+    if (tone === 'good') return `按你问的「${timeFrame}」，整体可以动；重点看${zhiHint}`
+    if (tone === 'bad') return `按你问的「${timeFrame}」，现在硬推容易碰壁；可放到后半段，或等${zhiHint}再看`
+    return `「${timeFrame}」里吉凶各半，先小步试，到${zhiHint}再决定是否加码`
   }
-  if (tone === 'good' && moving.length) return `应期偏近，约近几日至本月内；重点看${zhiHint}`
-  if (tone === 'good') return `应期偏稳偏慢，宜按月推进；可参${zhiHint}`
-  if (tone === 'bad') return `应期易迟滞反复，近一旬不宜死磕；等${zhiHint}后再看`
-  return `应期未明，先观察半个月；重点留意${zhiHint}前后`
+  if (tone === 'good' && moving.length) return `时间偏近，近几天到本月内有机会；重点看${zhiHint}`
+  if (tone === 'good') return `时间偏稳，宜按月推进；可留意${zhiHint}`
+  if (tone === 'bad') return `容易拖、容易反复，近十天别死磕；等${zhiHint}后再动更稳`
+  return `时间还不明朗，先观察半个月；${zhiHint}前后值得留意`
 }
 
 /**
@@ -322,41 +322,42 @@ function buildDivinationPrompt(a, b) {
           ? '用户在问怎么办。必须给出可执行的下一步。'
           : '必须直接回答用户这句问话，禁止答成与所问无关的空话。'
 
-  const systemPrompt = `你是纳甲六爻断卦师。你的唯一任务：读懂用户原话，结合卦象，回答他所问的那一件事。
+  const systemPrompt = `你是会看六爻的师傅，用大白话帮人断事。先听懂用户问什么，再结合卦象直接回答。
 
-【最高法则：所问即所答】
-- 用户原话是：「${asked}」
-- 先理解他到底在问什么（成否、时机、方位、怎么办、走势），再断。
-- 禁止套用与所问无关的万能吉凶话；禁止只谈卦名玄理却不回答问题。
-- 四句偈与解释都必须围绕「${intent.cleanTopic}」来写。
+【所问即所答】
+- 用户原话：「${asked}」
+- 核心标的：「${intent.cleanTopic}」
+- 先分清：成否、时间、方位、怎么办，还是看走势
+- 禁止套话、空话、只背卦名不回答问题
 
-【盘面】
-- 本卦：《${cast?.ben?.name || '本卦'}》（卦德：${benDetail.theme || '知进知退'}；${benDetail.yili || benDetail.nameWhy || ''}）
-- 变卦：${cast?.bian?.name ? `动化《${cast.bian.name}》（${bianDetail.theme || '机运流转'}）` : '静卦无变'}
-- 问法：${intent.modeLabel || '走势'}；时间窗口：${intent.timeFrame || '未特别指定'}；关键：${intent.keyDilemma}
-- 方位取象参考：${placeHint}
+【盘面参考】
+- 本卦：《${cast?.ben?.name || '本卦'}》${benDetail.theme ? `（${benDetail.theme}）` : ''}
+- 变卦：${cast?.bian?.name ? `《${cast.bian.name}》` : '无变卦'}
+- 问法：${intent.modeLabel || '走势'}；时间：${intent.timeFrame || '未特别指定'}
+- 方位参考：${placeHint}
 
 【输出要求】
-1. 只输出两部分，不要写「卦象解释」。
+1. 只输出两部分：神机四句偈、偈语解释。不要单独写「卦象解释」。
 2. ${modeHint}
-3. 神机四句偈：你必须为「这一问」现场写七言四句（每行一句，共28字），把所问之事写进诗意里；不要写与所问无关的套诗。
-4. 偈语解释：必须逐句对应上面四句原文，固定四行：
-「第一句原文」：直断——用白话明确回答「${asked}」（约40字）
-「第二句原文」：何以见得——点出本卦/动变如何支持这个判断
-「第三句原文」：若问时间给具体范围；若问地点给具体方位；否则说本阶段须防什么
-「第四句原文」：下一步——针对「${intent.cleanTopic}」的可执行动作
-5. 禁止 AI、大模型等词；禁止 Markdown 星号。
+3. 四句偈：为这一问现场写七言四句，把「${intent.cleanTopic}」写进诗里。
+4. 偈语解释：逐句对应上面四句，固定四行，每行约35～50字，像跟朋友聊天：
+「第一句原文」：第一句先直接回答「${asked}」——说清能/不能、何时、何方或怎么办
+「第二句原文」：第二句说为什么这么看，用白话讲卦象在提示什么（别堆术语）
+「第三句原文」：第三句说时间范围、方位细节，或这阶段最该防什么
+「第四句原文」：第四句说接下来具体怎么做，一步能落地
+5. 解释禁用套话标签：不要用「直断」「何以见得」「卦德」「取象」「应期」「尤须戒」「用神」等行话。
+6. 禁止 AI、大模型等词；禁止 Markdown 星号。
 
 ### 【神机四句偈】
-（为所问专写的七言四句，每行一句）
+（七言四句，每行一句）
 
 ### 【偈语解释】
-（四行「原文」：直断/依据/时位/下一步）`
+（四行，每行「该句原文」：大白话解释）`
 
-  const userPrompt = `请只回答下面这句问话，不要跑题：
+  const userPrompt = `请用大白话回答这句问话，不要跑题：
 「${asked}」
 
-本卦《${cast?.ben?.name || '本卦'}》。请先理解问题，再依卦给出明确结论、必要的时间或方位，以及下一步。
+本卦《${cast?.ben?.name || '本卦'}》。先给明确结论，再给时间或方位（若问到），最后说下一步怎么做。
 
 盘面：
 ${formatCastForPrompt(cast)}`
@@ -1038,6 +1039,69 @@ function compressEssence(text, fallback, hintLine, maxLen = 28) {
   return pick || fallback || '顺时而动'
 }
 
+/** 把卦德长句压成一句大白话 */
+function toPlainSentence(text, fallback) {
+  if (!text) return fallback || ''
+  let t = String(text)
+    .replace(/《[^》]+》者[^，。；]*[，。；]?/g, '')
+    .replace(/正如[^，。；]+[，。；]?/g, '')
+    .replace(/此卦昭示[「"]?([^」"]+)[」"]?[^，。；]*/g, '$1')
+    .replace(/[「「]([^」」]+)[」」]/g, '$1')
+    .replace(/成败关键(?:在于|全在)/g, '')
+    .replace(/大势[^，。；]{0,12}[，。；]?/g, '')
+    .replace(/千万不可|切莫|切忌|严禁|最忌/g, '别')
+    .replace(/防范/g, '注意')
+    .replace(/务必|必须/g, '要')
+    .replace(/顺天应人|审时度势|顺应天机|知进知退|修德明理/g, '')
+    .replace(/——+/g, '，')
+    .replace(/\s+/g, '')
+    .trim()
+  const parts = t.split(/[，。；、——–−-]+/).map((p) => p.trim()).filter((p) => p.length >= 4)
+  let pick = parts.find((p) => /别|要|宜|注意|先|再|借力|守|等|试|签|谈|查|停|缓|依附|合作|借力/.test(p) && p.length <= 36)
+    || parts.find((p) => p.length >= 8 && p.length <= 36)
+    || parts[0]
+    || t
+  pick = pick.replace(/^关键是+/, '').replace(/关键+/g, '关键')
+  if (pick.length > 36) pick = pick.slice(0, 36).replace(/[与的和及于在，、]$/, '')
+  return pick.replace(/^[，。、]/, '') || fallback || ''
+}
+
+/** 从卦象资料取一句白话依据/风险/行动 */
+function essencePlainLine(cleanName, which) {
+  const e = GUA_ESSENCE[cleanName]
+  if (!e) return ''
+  const src = which === 'why' ? e.spirit : which === 'risk' ? e.pitfall : which === 'how' ? e.action : e.nature
+  return toPlainSentence(src, '')
+}
+
+/** 去掉解释里的套话标签与行话，统一成口语 */
+function plainifyExplainText(text) {
+  if (!text) return ''
+  let t = String(text)
+    .replace(/直断[：:\-—–\s]*/g, '')
+    .replace(/何以见得[：:\-—–\s]*/g, '')
+    .replace(/下一步[：:\-—–\s]*/g, '')
+    .replace(/尤须戒[：:\-—–\s]*/g, '注意：')
+    .replace(/本卦《[^》]+》，?取象[「"][^」"]+[」"]/g, '')
+    .replace(/卦德[「"][^」"]+[」"]/g, '')
+    .replace(/爻动化《[^》]+》，?事有转折/g, '卦有变化，后面可能转个弯')
+    .replace(/六爻安静，?宜守常蓄力/g, '卦象较稳，宜按部就班')
+    .replace(/象意[「"][^」"]+[」"]。?/g, '')
+    .replace(/用神|应期|纳甲|世应/g, '')
+    .replace(/[。；]{2,}/g, '。')
+    .replace(/\s+/g, '')
+    .trim()
+  if (t.startsWith('，') || t.startsWith('。')) t = t.slice(1)
+  return t
+}
+
+function plainifyExplainItems(items) {
+  return (items || []).map((it) => ({
+    quote: it.quote,
+    text: plainifyExplainText(it.text)
+  }))
+}
+
 /**
  * 偈语解释是否已与四句偈逐句对应（每句原文都出现在解释中）
  */
@@ -1102,80 +1166,83 @@ function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
   const topic = intent.focus || intent.cleanTopic
   const timeStr = intent.timeFrame || ''
   const askMode = intent.askMode || 'outlook'
-  const theme = (benDetail.theme || '知进知退，顺时而动').replace(/[。；]+$/g, '')
-  const nature = compressEssence(essence.nature, theme, lines[0], 26)
-  const spirit = compressEssence(essence.spirit, theme, lines[1], 28)
-  const pitfall = compressEssence(essence.pitfall, '忌轻举妄动', lines[2], 26)
-  const action = compressEssence(essence.action, '守正待机，步步落实', lines[3], 28)
-  const xiang = String(benGuaci.xiang || benGuaci.guaci || '')
-    .replace(/[。；]+$/g, '')
-    .trim()
-    .slice(0, 18)
+  const whyPlain = essencePlainLine(cleanName, 'why') || toPlainSentence(essence.spirit, '卦象提示先稳再动')
+  const riskPlain = essencePlainLine(cleanName, 'risk') || '别贪快、别硬冲'
+  const actionPlain = essencePlainLine(cleanName, 'how') || '先把眼前一件小事做到位'
 
   const place = resolvePlaceFromCast(cast)
   const yingqi = resolveYingqiFromCast(cast, tone, timeStr)
-  const guaLabel = cleanName || benGuaName
   const moveHint = hasMove && bianAlias && bianAlias !== cleanName
-    ? `爻动化《${bianAlias}》，事有转折`
-    : '六爻安静，宜守常蓄力'
+    ? '卦有变化，后面可能转个弯'
+    : '卦象较稳，宜按部就班'
 
-  // 第一句：直断——必须回答用户问的那件事
-  let verdict = ''
+  // 第一句：直接回答所问
+  let line1 = ''
   if (askMode === 'where' || intent.category === 'place') {
-    verdict = place
-      ? `直断：你问的方位，重点落在「${place}」一侧。`
-      : `直断：你问的方位信号不足，暂不宜钉死一处。`
+    line1 = place
+      ? `你要找的方位，多半在${place}一带，先去那边找最靠谱。`
+      : `方位信号不够清楚，暂时别只盯一个地方。`
   } else if (askMode === 'when') {
-    verdict = `直断：${yingqi}。`
+    line1 = yingqi.endsWith('。') ? yingqi : `${yingqi}。`
   } else if (askMode === 'yesno') {
-    verdict = tone === 'good'
-      ? `直断：就「${topic}」而言，倾向可行，可以推进。`
+    line1 = tone === 'good'
+      ? `就你问的「${topic}」，卦象看可以推进，值得一试。`
       : tone === 'bad'
-        ? `直断：就「${topic}」而言，倾向暂不宜，宜缓或改道。`
-        : `直断：就「${topic}」而言，尚未明朗，宜先试探再定。`
+        ? `就你问的「${topic}」，卦象看先别急着上，缓一缓或换路子更稳。`
+        : `就你问的「${topic}」，目前吉凶各半，适合先小范围试一下再定。`
   } else if (askMode === 'how') {
-    verdict = `直断：办「${topic}」，先落地一步——${action}。`
+    line1 = `关于「${topic}」，第一步可以先：${actionPlain}。`
   } else {
-    verdict = tone === 'good'
-      ? `直断：你问「${topic}」，大势偏好，可推进。`
+    line1 = tone === 'good'
+      ? `你问的「${topic}」，整体偏顺，可以推进。`
       : tone === 'bad'
-        ? `直断：你问「${topic}」，大势偏逆，宜暂守。`
-        : `直断：你问「${topic}」，吉凶相半，宜稳中求。`
+        ? `你问的「${topic}」，眼下阻力偏大，先守再看更稳妥。`
+        : `你问的「${topic}」，吉凶各半，宜稳扎稳打。`
   }
 
-  // 第三句：时间或方位细节
+  // 第二句：为什么这么看
+  const whySay = whyPlain || '卦象提示先看清局面再动手'
+  const line2 = `之所以这么看，是因为${whySay.endsWith('。') ? whySay.slice(0, -1) : whySay}。`
+
+  const riskSay = (riskPlain || '别贪快、别硬冲').replace(/^这卦提醒/, '')
+
+  // 第三句：时间/方位/风险
   let line3 = ''
   if (askMode === 'where' || intent.category === 'place') {
-    line3 = `${moveHint}。方位取象以「${place || '邻近方位'}」为主${place ? '，可连同相邻方位核查' : ''}。尤须戒：${pitfall}。`
+    line3 = place
+      ? `${moveHint}。重点查${place}，再向旁边相邻方向扩展；${riskSay}。`
+      : `${moveHint}。先回到最后出现的地方和动线回溯；${riskSay}。`
   } else if (askMode === 'when') {
-    line3 = `${moveHint}。时间范围：${yingqi}。尤须戒：${pitfall}。`
+    line3 = `${moveHint}。${yingqi.replace(/。$/, '')}；这阶段${riskSay.startsWith('别') ? riskSay : `注意${riskSay}`}。`
   } else if (timeStr) {
-    line3 = `${moveHint}。时间上：${yingqi}。尤须戒：${pitfall}。`
+    line3 = `${moveHint}。${yingqi.replace(/。$/, '')}；这阶段${riskSay.startsWith('别') ? riskSay : `注意${riskSay}`}。`
   } else {
-    line3 = `${moveHint}。若问何时：${yingqi}。尤须戒：${pitfall}。`
+    line3 = `${moveHint}。若问何时，${yingqi.replace(/。$/, '')}；${riskSay.startsWith('别') ? riskSay : `注意${riskSay}`}。`
   }
+  if (!line3.endsWith('。')) line3 += '。'
 
   // 第四句：下一步怎么做
-  let nextStep = ''
+  let line4 = ''
   if (askMode === 'where' || intent.category === 'place') {
-    nextStep = place
-      ? `下一步：先往「${place}」方向核查或行动，再向相邻方位扩展；忌漫无目的乱找。`
-      : `下一步：先回到最后出现处与动线回溯，方位未明时勿只盯一点。`
+    line4 = place
+      ? `先去${place}方向实地找一圈，找不到再扩到相邻方位，别漫无目的乱翻。`
+      : `先沿最后动线往回找，别凭感觉只盯一个点。`
   } else if (askMode === 'when') {
-    nextStep = `下一步：按上述时间窗口排期，窗口外勿硬推；先做一件可验证的小动作试水。`
+    line4 = `按上面时间窗口排期，窗口外别硬推；先做一件能马上验证的小动作试水。`
   } else if (tone === 'bad') {
-    nextStep = `下一步：先停主攻，改为「${action}」；把「${topic}」拆成可验证的小步再议。`
+    line4 = `先暂停主攻，改为：${actionPlain}；把「${topic}」拆成小步，试完再决定要不要继续。`
   } else {
-    nextStep = `下一步：立刻落地「${action}」，专攻「${topic}」这一件，忌同时铺太多线。`
+    const act = (actionPlain || '先把眼前一件小事做到位').replace(/^这卦提醒/, '')
+    line4 = `接下来就做这一件：${act}；专攻「${topic}」，别同时铺太多线。`
   }
-  if (xiang) nextStep = `象意「${xiang}」。` + nextStep
+  if (!line4.endsWith('。')) line4 += '。'
 
-  return [
-    { quote: lines[0], text: `${verdict}本卦《${guaLabel}》，取象「${nature}」。` },
-    { quote: lines[1], text: `何以见得：卦德「${theme}」，关键在「${spirit}」。` },
+  return plainifyExplainItems([
+    { quote: lines[0], text: line1 },
+    { quote: lines[1], text: line2 },
     { quote: lines[2], text: line3 },
-    { quote: lines[3], text: nextStep }
-  ]
+    { quote: lines[3], text: line4 }
+  ])
 }
 
 function formatJiyuExplain(items) {
@@ -1340,8 +1407,9 @@ function parseAiDivinationOutput(text, question, cast) {
     }
   } else {
     jiyuExplainItems = buildJiyuExplainItems(question, cast, benGuaName, tone, parsed.jiyu)
-    parsed.jiyuExplain = formatJiyuExplain(jiyuExplainItems)
   }
+  jiyuExplainItems = plainifyExplainItems(jiyuExplainItems)
+  parsed.jiyuExplain = formatJiyuExplain(jiyuExplainItems)
   parsed.directAnswer = parsed.jiyuExplain
 
   // 3. 不再单独输出卦象解释；象理已融入偈语解释
@@ -1349,7 +1417,7 @@ function parseAiDivinationOutput(text, question, cast) {
   parsed.judgment = parsed.jiyuExplain
 
   if (!parsed.summary) {
-    parsed.summary = tone === 'good' ? '天开化育 · 顺势而上' : (tone === 'bad' ? '关山险阻 · 审慎待时' : '静待蓄势 · 循序渐进')
+    parsed.summary = tone === 'good' ? '大势偏顺，可顺势推进' : (tone === 'bad' ? '大势偏阻，先稳再看' : '吉凶各半，宜稳扎稳打')
   }
 
   const sections = [
@@ -1399,13 +1467,13 @@ function buildIntelligentFallbackInterpretation(a, b) {
   const MID_GUAS = ['需', '屯', '蒙', '蛊', '损', '复', '大畜', '小畜', '颐', '艮', '小过', '随', '履', '噬嗑', '革', '鼎', '涣', '节', '中孚', '未济']
 
   let tone = 'good'
-  let summary = '天开化育 · 顺势而上'
+  let summary = '大势偏顺，可顺势推进'
   if (BAD_GUAS.includes(cleanAlias)) {
     tone = 'bad'
-    summary = '关山险阻 · 审慎待时'
+    summary = '大势偏阻，先稳再看'
   } else if (MID_GUAS.includes(cleanAlias)) {
     tone = 'mid'
-    summary = '静待蓄势 · 循序渐进'
+    summary = '吉凶各半，宜稳扎稳打'
   }
 
   // 1. 置顶四句神机诗偈
@@ -1445,8 +1513,8 @@ function buildIntelligentFallbackInterpretation(a, b) {
     directAnswer: jiyuExplain,
     judgment: jiyuExplain,
     yongshen: '',
-    yingqi: hasMove ? '动爻逢值逢合之期为转机' : '静卦守常待逢冲破局',
-    advice: '顺天应人，修德明理，方见通达。',
+    yingqi: hasMove ? '近几天到本月内可能有转机' : '宜按月推进，别急于求成',
+    advice: '守住本分，按上面建议一步步做。',
     sections,
     fullText
   }
@@ -1477,5 +1545,7 @@ module.exports = {
   buildJiyuExplainItems,
   parseJiyuExplainItems,
   parseAiDivinationOutput,
-  explainAnswersQuestion
+  explainAnswersQuestion,
+  plainifyExplainText,
+  plainifyExplainItems
 }

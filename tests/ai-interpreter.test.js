@@ -50,7 +50,8 @@ const { systemPrompt, userPrompt } = buildDivinationPrompt({
 
 assert(systemPrompt.includes('开拓新市场'), '系统Prompt应注入深度解构的标的物')
 assert(systemPrompt.includes('今年下半年'), '系统Prompt应注入时间窗口')
-assert(systemPrompt.includes('所问即所答') || systemPrompt.includes('不能答非所问') || systemPrompt.includes('所问'), '系统Prompt须强调紧扣所问')
+assert(systemPrompt.includes('所问即所答') || systemPrompt.includes('大白话') || systemPrompt.includes('所问'), '系统Prompt须强调紧扣所问且用大白话')
+assert(systemPrompt.includes('直断') === false || systemPrompt.includes('不要用'), '系统Prompt应禁止套话标签')
 assert(userPrompt.includes('开拓新市场'), '用户Prompt必须包含用户亲笔问题')
 assert(userPrompt.includes(cast.ben.name), '用户Prompt必须包含本卦名称')
 console.log('✔ AI 神机 Prompt 深度聚焦组装测试通过')
@@ -92,9 +93,12 @@ const fallbackResult = buildIntelligentFallbackInterpretation({
 assert(fallbackResult.summary, '必须有神机总断')
 assert(fallbackResult.jiyuExplain.includes('开拓新市场'), '偈语解释必须靶向出现问卦者的具体标的')
 assert(fallbackResult.jiyuExplain.includes('今年下半年'), '必须有时间节律回应')
-assert(fallbackResult.jiyuExplain.includes('直断'), '必须先给出明确直断')
-assert(fallbackResult.jiyuExplain.includes('下一步'), '必须有具体下一步动作')
-assert(fallbackResult.jiyuExplain.includes('本卦') || fallbackResult.jiyuExplain.includes('卦德'), '偈语解释须紧扣卦象')
+assert(/可以推进|值得一试|先别|吉凶各半/.test(fallbackResult.jiyuExplain), '必须先给出明确结论')
+assert(/接下来|先去|先做|改为/.test(fallbackResult.jiyuExplain), '必须有具体下一步动作')
+assert(!fallbackResult.jiyuExplain.includes('直断'), '解释不应出现套话标签「直断」')
+assert(!fallbackResult.jiyuExplain.includes('何以见得'), '解释不应出现套话标签「何以见得」')
+assert(!fallbackResult.jiyuExplain.includes('卦德'), '解释不应堆砌卦德行话')
+assert(!fallbackResult.jiyuExplain.includes('取象'), '解释不应堆砌取象行话')
 assert(!fallbackResult.guaExplain, '不再单独输出卦象解释')
 assert(Array.isArray(fallbackResult.jiyu) && fallbackResult.jiyu.length === 4, '必须包含四句趋吉避凶神机偈语')
 assert(Array.isArray(fallbackResult.jiyuExplainItems) && fallbackResult.jiyuExplainItems.length === 4, '必须包含分段解释条目')
@@ -111,9 +115,9 @@ const placeResult = buildIntelligentFallbackInterpretation({
   question: '东西丢在哪个方向？',
   cast
 })
-assert(placeResult.jiyuExplain.includes('直断'), '方位题须有直断')
-assert(/东|南|西|北/.test(placeResult.jiyuExplain), '方位题须给出具体方位')
-assert(placeResult.jiyuExplain.includes('下一步'), '方位题须有下一步')
+assert(/东|南|西|北|方位|方向/.test(placeResult.jiyuExplain), '方位题须给出具体方位或方向说明')
+assert(/先去|找|查/.test(placeResult.jiyuExplain), '方位题须有可执行的查找建议')
+assert(!placeResult.jiyuExplain.includes('直断'), '方位题解释不应套话')
 console.log('✔ 方位题直断测试通过')
 
 // 时间题必须给出时间范围
@@ -121,8 +125,8 @@ const whenResult = buildIntelligentFallbackInterpretation({
   question: '开拓新市场什么时候合适？',
   cast
 })
-assert(whenResult.jiyuExplain.includes('直断'), '时间题须有直断')
-assert(/日|月|近几|旬|窗口|应期/.test(whenResult.jiyuExplain), '时间题须给出具体时间范围')
+assert(/日|月|近几|旬|窗口|观察|推进/.test(whenResult.jiyuExplain), '时间题须给出具体时间范围')
+assert(!whenResult.jiyuExplain.includes('应期'), '时间题解释不应使用「应期」行话')
 console.log('✔ 时间题直断测试通过')
 
 console.log('✔ 智能理数兜底推演高度聚焦测试通过')
