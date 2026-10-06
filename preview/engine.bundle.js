@@ -14165,20 +14165,142 @@ function toSectionItems(text) {
 }
 
 /**
+ * 深度解构问卦者的问题意图、核心标的物、时间窗口与动作焦点
+ */
+function analyzeQuestionIntent(rawQuestion) {
+  const q = (rawQuestion || '').trim()
+  if (!q) {
+    return {
+      isEmpty: true,
+      raw: '',
+      cleanTopic: '综合运程进退',
+      timeFrame: '当前阶段',
+      actionVerb: '行事进退',
+      targetNoun: '万事机缘',
+      category: 'general',
+      keyDilemma: '知常明变与审时度势'
+    }
+  }
+
+  // 1. 抽取时间窗口
+  let timeFrame = ''
+  const timeMatch = q.match(/(今年下半年|今年上半年|下半年|上半年|今年年底|年底|明年|下个月|本月|近期|眼下|当下|未来三年|未来五年|这几天|未来半年|秋天|冬天|春天|夏天)/)
+  if (timeMatch) {
+    timeFrame = timeMatch[1]
+  }
+
+  // 2. 识别问事分类与动作标的
+  let category = 'general'
+  let actionVerb = '谋划行进'
+  let targetNoun = '所测事宜'
+  let keyDilemma = '把握机先与化解阻滞'
+
+  if (/拓|辟|进军|新市场|新赛道|业务|获客|扩张|新项目/.test(q)) {
+    category = 'expand'
+    actionVerb = '开拓进取'
+    targetNoun = '开拓新市场业务'
+    keyDilemma = '外围获客与内部资金链防守'
+  } else if (/合伙|合作|入股|搭伙|股份|分红/.test(q)) {
+    category = 'partner'
+    actionVerb = '合伙共事'
+    targetNoun = '合伙商业合作'
+    keyDilemma = '权责利润分配与合伙人信任'
+  } else if (/钱|财|收益|买|卖|盈|利|投资|理财|股|货|款|买房|置业|房产/.test(q)) {
+    category = 'wealth'
+    actionVerb = '求财投资'
+    targetNoun = '资产收益与商业求财'
+    keyDilemma = '本金安全与变现利润'
+  } else if (/换工作|跳槽|离职|辞职|转行|换行业/.test(q)) {
+    category = 'career_switch'
+    actionVerb = '跳槽变轨'
+    targetNoun = '职场变动与新旧交替'
+    keyDilemma = '下家发展机缘与盲动风险'
+  } else if (/工作|事业|升职|晋升|提拔|岗位|竞聘|评职称|官/.test(q)) {
+    category = 'career'
+    actionVerb = '求取晋升'
+    targetNoun = '事业前程与职阶机运'
+    keyDilemma = '贵人提携与同侪暗中竞争'
+  } else if (/考研|考公|考编|考|学|研|试|录取|论文|评定|证|面试/.test(q)) {
+    category = 'study'
+    actionVerb = '应试登科'
+    targetNoun = '学业功名与文书过关'
+    keyDilemma = '考场发挥与薄弱环节防守'
+  } else if (/复合|挽回|和好|破镜/.test(q)) {
+    category = 'love_reconcile'
+    actionVerb = '旧缘复合'
+    targetNoun = '旧情和解与情缘重续'
+    keyDilemma = '历史心结未解与现实温差'
+  } else if (/感情|婚|爱|喜欢|交往|他|她|对象|相亲|伴侣|结婚|离婚/.test(q)) {
+    category = 'love'
+    actionVerb = '姻缘相处'
+    targetNoun = '情缘婚恋与世应交感'
+    keyDilemma = '价值观契合度与沟通坦诚'
+  } else if (/病|健康|医|身体|痛|伤|疾|手术|康复/.test(q)) {
+    category = 'health'
+    actionVerb = '调养身心'
+    targetNoun = '气血安康与病疾调摄'
+    keyDilemma = '遵从医嘱与心态放松'
+  } else if (/官司|诉讼|仲裁|纠纷|起诉|打官司/.test(q)) {
+    category = 'law'
+    actionVerb = '定分止争'
+    targetNoun = '法务诉讼与权益争端'
+    keyDilemma = '证据扎实度与和解退让时机'
+  } else if (/行|出差|走|旅游|迁|搬家|去/.test(q)) {
+    category = 'travel'
+    actionVerb = '出行迁徙'
+    targetNoun = '行程通达与水土安和'
+    keyDilemma = '旅途防备与人际和气'
+  }
+
+  // 提取用户问句的核心标的，过滤掉“能不能”、“是否合适”等提问词
+  let cleanTopic = q
+    .replace(/[吗呢吧呀？\?！!]/g, '')
+    .replace(/(能不能|是否合适|是否可以|好不好|会怎样|如何|怎么样|能否顺利|成不成|可以吗|可否|行不行)/g, '')
+    .trim()
+
+  if (!cleanTopic) cleanTopic = targetNoun || '所测事宜'
+
+  return {
+    isEmpty: false,
+    raw: q,
+    cleanTopic,
+    timeFrame,
+    category,
+    actionVerb,
+    targetNoun: targetNoun || cleanTopic,
+    keyDilemma
+  }
+}
+
+/**
  * 构建发送给大模型的周易神机 Prompt
  */
 function buildDivinationPrompt(a, b) {
   const { question, cast } = normalizeArgs(a, b)
+  const intent = analyzeQuestionIntent(question)
+
   const systemPrompt = `你是一位精通《周易》、《京房易传》、《卜筮正宗》、《增删卜易》与宋代理学义理的当代周易象数大师与心法导师。
 问卦者向你呈上了心中关切的具体疑难，以及刚刚依据大衍蓍法/金钱课所得的纳甲六爻排盘。
 请你以高深、典雅、透彻、通情达理的文风，为问卦者抽丝剥茧地推演卦象天机。
 
-【断卦法则要求】：
-1. 【神机四句偈，居首开示】：必须为问卜者专赋一首七言绝句（四句诗偈，每句七字，共四句，共28字）。诗偈须融合本卦卦意、所问事宜与动变天机，言浅意深，工整押韵，专门指引问卦者在现实中如何「趋吉避凶」、转危为安。
-2. 【偈语解释，直断事由】：紧扣问卦者的【具体所问】对四句偈语作通俗透彻解读，开门见山给出鲜明、相对具体的回答与直接推断。明确事情可否行进、成败关键、顺逆走向、人际/合同/沟通中的具体防范点，并给出具体的破局先手策略，严禁空泛套话。
-3. 【卦象解释，提纲挈领】：精炼阐明本卦、变卦、用神与动爻之易理象数。紧扣世应动变与天时大势，言简意赅，兼具传统纳甲精髓与当代现实启发，绝不搞恐吓式的江湖宿命论，重在指引问卦者修德、审势、定心、知止与明理。
-4. 【纯正文风，绝无技术痕迹】：通篇必须纯以易学宗师太史令的身份作答，严禁出现任何“AI”、“人工智能”、“大模型”、“算法提示”、“语言模型”、“计算机”等现代词汇，言辞典雅纯正，深具古风易理底蕴。
-5. 【排版禁忌，严禁星号】：通篇绝对禁止输出任何 Markdown 星号（严禁出现 ** 加粗、严禁出现 * 列表符号或任何形式的星号），所有强调、重点字句请直接使用中文方头括号【】或书名号《》，列表请直接使用数字序号或汉字段落，保持纯净典雅的书卷阅读质感。
+【问事深度解构与聚焦靶向要求（重中之重，严禁泛泛而谈）】：
+1. 【精准锚定真实事务，拒绝万能套话】：
+   - 问测核心标的：【${intent.cleanTopic}】
+   - 时间跨度：【${intent.timeFrame || '当前阶段'}】
+   - 核心考量：【${intent.keyDilemma}】
+   大师断卦必须全神贯注于「${intent.cleanTopic}」这一具体真实生活/商业情境，字字扣准该事务的具体环节（资金流、客户开拓、同侪竞争、考核文书、合伙合同、情感心结等）。严禁输出换在其他事情上也能讲得通的空泛套话！
+2. 【神机四句偈，居首量身定赋】：
+   必须为问卦者关切的「${intent.cleanTopic}」专赋七言绝句一首（共4句，每句7字，共28字）。
+   诗偈必须深嵌该事务的特定意象（如拓荒辟土、文曲折桂、商海淘金、情海连理等），言浅意深，工整押韵，专门指引问卦者在现实中如何「趋吉避凶」、定心成事。
+3. 【偈语解释，靶向直断】：
+   紧扣「${intent.cleanTopic}」深入解读四句诗偈的玄机：
+   - 开篇第一句即对该事作出鲜明定性（可不可为、顺逆几何、胜算利弊）；
+   - 结合问测的时间跨度（如「${intent.timeFrame || '当下'}」），正面剖析事情推进的关键节点与转机时令；
+   - 明确指出该具体事务最大的隐性风险点（人际合作、财务成本、心态盲点等），并给出最核心的一条【当下破局先手策略】。
+4. 【卦象解释，理数相扣】：
+   精炼阐明本卦、变卦、用神与动爻之易理象数。精准指出该事在盘中对应何爻为用神、动静化象如何、如何以易理修德知止。
+5. 【纯正文风，绝无技术痕迹】：通篇必须纯以易学宗师太史令的身份作答，严禁出现任何“AI”、“人工智能”、“大模型”、“算法提示”、“计算机”等现代词汇。
+6. 【排版禁忌，严禁星号】：通篇绝对禁止输出任何 Markdown 星号（严禁出现 ** 加粗、严禁出现 * 列表符号或任何形式的星号），所有强调、重点字句请直接使用中文方头括号【】或书名号《》。
 
 【请严格按如下三部分输出，结构精炼，层次分明】：
 ### 【神机四句偈】
@@ -14190,13 +14312,14 @@ function buildDivinationPrompt(a, b) {
 ### 【卦象解释】
 （精练阐释本卦、变卦与动爻用神之易理象数，说明局势走向与易道修身处事之方）`
 
-  const userPrompt = `问卦者所求之事：
-「${question || '未注明具体事由，请就卦象吉凶与当前运势作综合总断'}」
+  const userPrompt = `问卦者呈上的具体困惑与所求之事：
+「${question || '未注明具体事由，请就卦象吉凶作综合研判'}」
+
+请大师务必将整场推演【深度定焦】于「${intent.cleanTopic}」！
+紧扣其时间节奏（${intent.timeFrame || '近期'}）与核心矛盾（${intent.keyDilemma}），为问卦者开示天机神意。
 
 当前筮得纳甲六爻盘面如下：
-${formatCastForPrompt(cast)}
-
-请大师即席研读卦象，为问卦者开示天机神意。`
+${formatCastForPrompt(cast)}`
 
   return { systemPrompt, userPrompt }
 }
@@ -14342,8 +14465,57 @@ const GUA_JIYU_MAP = {
 /**
  * 依据卦名、吉凶势态与所测问题，生成专属的四句趋吉避凶绝句偈语
  */
-function generateDivinationJiyu(benGuaName, tone) {
+function generateDivinationJiyu(benGuaName, tone, question) {
+  const intent = analyzeQuestionIntent(question)
   const cleanName = (benGuaName || '').replace(/为[天地水火山风雷泽]/g, '')
+
+  // 1. 如果提问具有明确领域特征，优先给专属定制诗偈，更加切题聚焦
+  if (intent.category === 'expand') {
+    if (tone === 'good') {
+      return ['扬帆踏浪辟新程', '天相吉星四海清', '最贵谋深防浪险', '步全根固自风行']
+    } else if (tone === 'bad') {
+      return ['关山涉远路犹偏', '莫向荒原拓险滩', '且敛锋芒修本固', '待时乘势步从宽']
+    }
+    return ['开拓图新莫急攀', '深耕一域度重关', '量材用度全周密', '云起风来上泰山']
+  }
+
+  if (intent.category === 'partner') {
+    if (tone === 'good') {
+      return ['同心合德利通津', '相照肝胆见诚真', '白纸明书无猜忌', '共赢风浪展经纶']
+    } else if (tone === 'bad') {
+      return ['同床异梦暗藏刀', '财利分张起浪涛', '莫信虚言轻托付', '早抽身手免徒劳']
+    }
+    return ['合伴同行且审详', '先明权责后图张', '公私分际清如水', '免使嫌生两断肠']
+  }
+
+  if (intent.category === 'career_switch') {
+    if (tone === 'good') {
+      return ['乘时变轨步青云', '下里明堂正待君', '果决前行休顾虑', '一朝借力建新勋']
+    } else if (tone === 'bad') {
+      return ['林暗风高莫弃枝', '空仓盲跳陷泥池', '安心守拙磨利刃', '春暖花开再待时']
+    }
+    return ['去留进退费思量', '未可轻离旧主场', '且把身家筹算定', '东风忽起再扬航']
+  }
+
+  if (intent.category === 'study') {
+    if (tone === 'good') {
+      return ['蟾宫折桂路非遥', '文运腾升气象高', '细理偏枯除隐患', '一朝金榜领风骚']
+    } else if (tone === 'bad') {
+      return ['寒窗苦志待春开', '莫为浮名乱步台', '查漏补缺深下力', '来时一举越金阶']
+    }
+    return ['读书穷理定心神', '戒躁防虚下苦因', '磨得胸中冰雪净', '天公终不负苦人']
+  }
+
+  if (intent.category === 'love_reconcile') {
+    if (tone === 'good') {
+      return ['历尽风波重拾温', '心扉敞处解疑痕', '宽容莫再翻陈账', '珍重当前月满门']
+    } else if (tone === 'bad') {
+      return ['覆水难收莫强牵', '残灯明灭结愁眠', '不如放手修宁静', '转角青山有善缘']
+    }
+    return ['情丝剪乱意如麻', '各自回头静看花', '冷暖随缘休执念', '心安何处不天涯']
+  }
+
+  // 2. 通用经典 64 卦诗偈库匹配
   if (GUA_JIYU_MAP[cleanName]) {
     return GUA_JIYU_MAP[cleanName]
   }
@@ -14352,6 +14524,7 @@ function generateDivinationJiyu(benGuaName, tone) {
       return GUA_JIYU_MAP[k]
     }
   }
+
   if (tone === 'good') {
     return ['天心顺遂好乘舟', '动变相生利道周', '得意莫忘持戒慎', '宽怀容物自优游']
   }
@@ -14362,58 +14535,141 @@ function generateDivinationJiyu(benGuaName, tone) {
 }
 
 /**
- * 依据问测事宜与卦爻机变，生成相对具体落地、直指事由的答复与策略
+ * 依据问测事宜与卦爻机变，生成极度聚焦、切中痛点、直指事由的答复与策略
  */
 function generateConcreteAnswer(question, cast, benGuaName, tone) {
-  const q = question || ''
+  const intent = analyzeQuestionIntent(question)
   const hasMove = !!(cast?.changingIndexes && cast.changingIndexes.length > 0)
-  
-  if (/钱|财|收益|买|卖|盈|利|投资|理财|股|货|款/.test(q)) {
+  const timeDesc = intent.timeFrame ? `【时间节律 · ${intent.timeFrame}】：` : '【时间节律】：'
+
+  let directVerdict = ''
+  let keyRisk = ''
+  let timeSchedule = ''
+  let firstAction = ''
+
+  if (intent.category === 'expand') {
     if (tone === 'good') {
-      return `【就求财所断】：此卦财源得气，所谋求之财物与商业收益可行，主近期有实质进账或商机落地。但${hasMove ? '盘中有动爻翻转，提示合同细节与分成必须白纸黑字签定，严防兄弟爻争夺利润' : '静卦利于持重，宜在既有赛道精耕细作'}。具体策略：勿加杠杆，见好即收，现金流落袋为安为上策。`
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦得《${benGuaName}》，天时与气数相助，向外拓展新版图、开拓新市场大势向好，可行性极高，利于主动出击。`
+      keyRisk = `【核心痛点与风险防范】：切莫因为前景看好而粗放铺摊。当前最核心防范点在于「获客成本超支」与「战线拉长导致后方现金流承压」。${hasMove ? '盘中有动爻翻转，提示在新市场签约合作中务必白纸黑字划清权责与回款周期，严防拖欠或合作方甩手。' : '静卦利于持重，切忌同时多点开花，宜聚焦单一杀手级突破口。'}`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」内，` : ''}前段以低成本试错、样板客户验证为主；中后段待模式跑通再集中资源规模放量，切勿在起步阶段就重资产压注。`
+      firstAction = `【当下第一步破局先手】：本周内即刻厘清「新市场首批种子客户画像」与「严格预算止损线」，先小步快跑跑通闭环，再图全面推进。`
     } else if (tone === 'bad') {
-      return `【就求财所断】：此卦财星受克或入墓绝，当前求财切忌盲目扩资、合伙分羹或涉足不熟悉领域。容易发生货款拖欠、隐性成本超支或同行截流分财。具体对策：紧缩预算，止血保本，切勿借贷追加，待月令转旺再行定夺。`
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦得《${benGuaName}》，外部险阻重重，当前强行跨界或大举开拓新市场易陷「进退两难、水土不服」之泥潭，目前非大张旗鼓之吉时。`
+      keyRisk = `【核心痛点与风险防范】：外部环境存在隐性壁垒或同侪恶性低价拦截，且自身准备尚未扎实。盲目投入极易造成资金空转折损。`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」期间，` : ''}切忌硬碰硬。宜将重心放在守稳既有基本盘、收缩非必要开支上，待外部阻力明朗化再做定夺。`
+      firstAction = `【当下第一步破局先手】：立刻叫停重资产投入计划，重新审视可行性论证，先排除潜藏的合规与资金漏洞。`
+    } else {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦得《${benGuaName}》，事物正处于酝酿蓄势阶段。开拓之举成败参半，关键不在外部风口，而在自身护城河是否坚固。`
+      keyRisk = `【核心痛点与风险防范】：切忌因同行焦虑而盲动跟风，防范因轻信口头承诺而仓促上马。`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」之中，` : ''}宜采取「侦察兵策略」，以极小代价在边缘做探索，静观市场反馈。`
+      firstAction = `【当下第一步破局先手】：找两位该领域的资深行家当面深度摸底，补齐信息差后再出方案。`
     }
-    return `【就求财所断】：此卦财运处于蓄势平衡阶段，小额回流顺畅，大额求财尚缺一股东风。具体建议：先稳住日常营运盘，厘清账目明细，防范因口头协议产生的后续扯皮，时机成熟自可稳步变现。`
-  }
-
-  if (/工作|事业|考|官|晋升|职位|项目|前途|换|跳槽|应聘|面试|创业/.test(q)) {
+  } else if (intent.category === 'partner') {
     if (tone === 'good') {
-      return `【就事业前程所断】：此卦官印相涵，问晋升、求职、项目立项大有可为，近期贵人提携之象明显。具体落地指引：主动在关键文书、述职或方案上展现扎实成果；若考虑跳槽，下家已有确定眉目即可顺势而为，不宜反复摇摆延误良机。`
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦世应相生，合伙共事有相辅相成之象，各展所长能成合力。`
+      keyRisk = `【核心痛点与风险防范】：合伙之大忌在于「亲兄弟明算账未落纸面」。必须提前把退出机制、增资规则、股权表决权和财务透明制度签定成法定文书，杜绝日后人情撕扯。`
+      timeSchedule = `${timeDesc}合作起步期彼此激情尚在，关键看半年磨合期。`
+      firstAction = `【当下第一步破局先手】：把双方出资、分工与最坏情况下的散伙退出协议白纸黑字写定。`
     } else if (tone === 'bad') {
-      return `【就事业前程所断】：此卦官鬼动克或世爻失位，眼下职场环境存在暗流阻力，或竞争对手强势制肘。切忌此时贸然冲动裸辞或与上层正面较劲。具体破局策略：低调务实、守正藏拙，将工作留痕归档，静待人事动荡平息。`
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦兄弟爻动克财星，或世应相克，此番合伙暗藏嫌隙与利益纷争，极大可能同床异梦。`
+      keyRisk = `【核心痛点与风险防范】：防范权责不清、出资不对等，以及后期对方擅自挪用资源或甩锅推诿。`
+      timeSchedule = `${timeDesc}短期看似热闹，一旦遇到利益分配或亏损分担立刻见真章。`
+      firstAction = `【当下第一步破局先手】：谨慎注资，绝不代持或口头协议，尽可能保留随时可抽身的风控底线。`
+    } else {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：合伙之事尚欠火候，双方对生意的预期与付出度存在温差。`
+      keyRisk = `【核心痛点与风险防范】：沟通尚未充分，底层商业逻辑还需反复推敲。`
+      timeSchedule = `${timeDesc}暂不宜签署长线排他合同，宜以单个项目短期试水。`
+      firstAction = `【当下第一步破局先手】：就最核心的财务分配与亏损承担方式展开一次开诚布公的面对面推演。`
     }
-    return `【就事业前程所断】：此卦事业正值转换节点，进退皆有道理。关键不在外部环境，而在自身筹码是否充实。具体指引：现阶段以练内功、补齐专业资质为第一要义，切莫急于表态，下月自见明朗风向。`
-  }
-
-  if (/感情|婚|爱|喜欢|交往|他|她|对象|复合|相亲|伴侣/.test(q)) {
+  } else if (intent.category === 'career_switch') {
     if (tone === 'good') {
-      return `【就情缘婚恋所断】：此卦世应生合相投，双方心意基础坚实，彼此间有较深默契。若问增进关系或谈婚论嫁，当下正是顺水推舟之吉机。具体行动：多注重现实关怀与面对面沟通，坦诚相待即可修成正果。`
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦官印相生，职场变轨顺应天时，下家有更广阔空间或能遇得力上级，利于动变。`
+      keyRisk = `【核心痛点与风险防范】：切忌裸辞！必须拿到具有法律效力的正式 Offer 且薪酬考核条款明确后再提离职，防范过渡期口头协议落空。`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」内，` : ''}抓住金九银十或月令相生之季迅速办结交接，不宜拖泥带水。`
+      firstAction = `【当下第一步破局先手】：全面优化履历与实操背调成果，低调行进，未成行前在原单位绝不走漏风声。`
     } else if (tone === 'bad') {
-      return `【就情缘婚恋所断】：此卦世应相冲克或动爻化退，代表双方近期价值观存在温差，或有沟通堵塞、外界琐事干扰。具体指引：切忌紧逼质问或冷战较劲，先各自退后一步冷静心绪，以宽厚柔和姿态方能解冻。`
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦世爻入墓或官鬼相克，当下职场大环境存在虚高陷阱，盲目跳槽容易「出狼窝又入虎穴」。`
+      keyRisk = `【核心痛点与风险防范】：新坑的实际工作强度与待遇可能严重低于面试承诺，且试用期风险极高。`
+      timeSchedule = `${timeDesc}眼下宜骑马找马、蓄力藏拙，切勿冲动意气用事。`
+      firstAction = `【当下第一步破局先手】：在原单位稳住基本薪资与业绩留痕，利用业余时间考证补强核心竞争力。`
+    } else {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：换与不换在伯仲之间，外部机会虽有但并无质的飞跃。`
+      keyRisk = `【核心痛点与风险防范】：避免因一时受气而冲动决定，核心看新平台能否带来不可替代的经验积累。`
+      timeSchedule = `${timeDesc}建议多看两到三家机会横向对比，不急于本周做决断。`
+      firstAction = `【当下第一步破局先手】：列出当前工作的真实痛点与下家公司的硬性指标清单，做理性权衡。`
     }
-    return `【就情缘婚恋所断】：此卦情缘处于相处磨合之常局，激情渐敛，需看细水长流。具体指引：莫被一时小矛盾牵引心神，多关注彼此实际生活需要，少翻旧账，彼此信任是破冰钥匙。`
+  } else if (intent.category === 'study') {
+    if (tone === 'good') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦父母爻旺相生世，文星拱照，应试登科胜算极高，大有上岸过关之喜！`
+      keyRisk = `【核心痛点与风险防范】：功底已足，唯一防范考场心态浮躁、审题粗心漏题与文书书写规范。`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」备考冲刺中，` : ''}按既定节奏推进即可，切莫中途推倒重来。`
+      firstAction = `【当下第一步破局先手】：针对历年真题与最易丢分的偏难小专题集中扫盲，做全仿真模考。`
+    } else if (tone === 'bad') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦父母爻受克或子孙爻泄气，考学文书存在硬性短板，竞争极为惨烈。`
+      keyRisk = `【核心痛点与风险防范】：复习方法存在虚假勤奋或偏科死角，切忌押宝侥幸押题。`
+      timeSchedule = `${timeDesc}若时间尚早需果断换法补偏，若临考在即则需保住基础题基本盘。`
+      firstAction = `【当下第一步破局先手】：彻底摒弃题海战术，找专业名师或上岸学长精准诊断薄弱板块。`
+    } else {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：成绩处于临界线边缘，胜负在一两题之间。`
+      keyRisk = `【核心痛点与风险防范】：心态起伏过大容易影响临场发挥。`
+      timeSchedule = `${timeDesc}考前两周重在固化作息与解题肌肉记忆。`
+      firstAction = `【当下第一步破局先手】：严格执行错题本清零计划，先把会做的题目拿满分。`
+    }
+  } else if (intent.category === 'love_reconcile') {
+    if (tone === 'good') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦世应生合，前缘未断，彼此心底仍有挂碍，复合之机已现。`
+      keyRisk = `【核心痛点与风险防范】：切莫急于质问翻旧账！必须建立在真诚倾听与改变自身旧习的基础上方能长久。`
+      timeSchedule = `${timeDesc}宜选彼此心情平静、外界无干扰的周末当面沟通。`
+      firstAction = `【当下第一步破局先手】：以一件轻巧、无压力的问候或共同回忆为切入点试探温度，切忌长篇大论施加心理压迫。`
+    } else if (tone === 'bad') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦世应相冲克或化绝，对方心意已决或已有新阻碍，强求复合只会徒增怨怼与自我消耗。`
+      keyRisk = `【核心痛点与风险防范】：切忌卑微纠缠或自我感动，执迷于沉没成本会错失更好的机缘。`
+      timeSchedule = `${timeDesc}短痛胜长痛，退后一步海阔天空。`
+      firstAction = `【当下第一步破局先手】：断绝频繁窥探动态，将精力全面收回自身成长与生活建设。`
+    } else {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：关系处于僵持观望之期，对方情绪也在拉扯。`
+      keyRisk = `【核心痛点与风险防范】：急躁进逼必遭反弹，冷漠疏离又致渐行渐远。`
+      timeSchedule = `${timeDesc}给彼此两到三周冷静沉淀期再做接触。`
+      firstAction = `【当下第一步破局先手】：过好自己的日常，展现积极独立的状态，以静制动。`
+    }
+  } else if (intent.category === 'wealth') {
+    if (tone === 'good') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦妻财星旺相有源，求财进账有实质吉象，现金流回款顺畅。`
+      keyRisk = `【核心痛点与风险防范】：切忌盲目扩杠杆或将利润再次全仓滚入高风险项目，落袋为安才是真财。`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」之中，` : ''}财源渐进式增长，以月令长生之月为收获高点。`
+      firstAction = `【当下第一步破局先手】：做好资金池分层管理，预留至少 6 个月安全备用金，再行配置优质标的。`
+    } else if (tone === 'bad') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦财星逢空破受克，当前投入极易缩水折损，严重防范资金链断裂或踩坑被套。`
+      keyRisk = `【核心痛点与风险防范】：严防熟人借贷、虚假高息理财、加杠杆炒作或接盘高估值资产。`
+      timeSchedule = `${timeDesc}当前处于财运低谷期，宜收不宜放。`
+      firstAction = `【当下第一步破局先手】：果断止血止损，核查个人负债结构，绝不再盲目追加一分钱。`
+    } else {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：财运平稳，日常收支平衡，暴利难求，唯靠稳健经营。`
+      keyRisk = `【核心痛点与风险防范】：防范隐性超支与非必要消费。`
+      timeSchedule = `${timeDesc}平稳蓄积，不宜贪大求全。`
+      firstAction = `【当下第一步破局先手】：理顺账目流水，把精力放在提升主业赚钱效率上。`
+    }
+  } else {
+    // 综合兜底：同样深刻绑定用户的 cleanTopic
+    if (tone === 'good') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦得《${benGuaName}》，顺水行舟，诸事向好。针对你所关切的这桩事务，当下天时人际皆有策应，胜算颇大。`
+      keyRisk = `【核心痛点与风险防范】：顺境最忌骄矜轻敌。${hasMove ? '盘中有爻象发动，暗示行进中会有细节变化，需保持应变机敏。' : '宜持重笃行，按部就班推进。'}`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」内，` : ''}事态将迎来实质性利好进展。`
+      firstAction = `【当下第一步破局先手】：尽快落实执行计划，敲定关键协调人，切勿因迟疑坐失良机。`
+    } else if (tone === 'bad') {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦得《${benGuaName}》，局势多遇险隘关卡。针对你所问之事，当前外力制约较重，若贸然强推必有阻隔挫折。`
+      keyRisk = `【核心痛点与风险防范】：切莫意气用事或盲目蛮干，防范因信息不对称导致的决策失误。`
+      timeSchedule = `${timeDesc}${intent.timeFrame ? `在「${intent.timeFrame}」期间，` : ''}以守正藏拙为上策，静待机运反转。`
+      firstAction = `【当下第一步破局先手】：按兵不动，全面排查当前计划中的潜在薄弱环节，以守代攻。`
+    } else {
+      directVerdict = `【就所测「${intent.cleanTopic}」靶向直断】：此卦得《${benGuaName}》，事态处于蓄力沉淀的转折期。问事吉凶各半，进退皆有讲究。`
+      keyRisk = `【核心痛点与风险防范】：切勿焦虑烦躁，不宜仓促下注。`
+      timeSchedule = `${timeDesc}静观其变，待关键信号浮现。`
+      firstAction = `【当下第一步破局先手】：扎实做好手头准备，修齐自身内功，以不变应万变。`
+    }
   }
 
-  if (/考|学|研|试|录取|论文|评定|证/.test(q)) {
-    return `【就学业文书所断】：此卦专看父母爻与官星。文书印星得位，功底扎实，大有登科过关之望。具体应考指引：临考前务必注重规范书写与审题细致，查漏补缺，切勿押宝侥幸题目，以严谨自律稳拿胜券。`
-  }
-
-  if (/病|健康|医|身体|痛|伤|疾/.test(q)) {
-    return `【就身心健康所断】：卦象提示此为气血失调或思虑过重之候，子孙爻为调养之吉神。具体调护建议：近期宜早睡固精、放空心神，远离焦虑源；易象重在指引心绪平复，身体有不适务必遵从专业医师当面诊断。`
-  }
-
-  if (/行|出差|走|旅游|迁|搬家|去/.test(q)) {
-    return `【就出行迁徙所断】：卦中道路信息分明。若为公干商务，行程能有所收获；具体出行提点：提前核对交通班次、天气预警及随身证件，旅途待人谦和宽厚，即可一路平安顺遂。`
-  }
-
-  // 综合问事
-  if (tone === 'good') {
-    return `【就所问之事具体研判】：此卦得《${benGuaName}》，天时人脉相得益彰，所谋之事大势向好，可行性极高。具体落地策略：乘胜追击，尽快落实执行方案与关键对接人，切勿因迟疑拖延错失最佳窗口期。`
-  } else if (tone === 'bad') {
-    return `【就所问之事具体研判】：此卦得《${benGuaName}》，局势前行多有险隘暗礁，外力制约较重。当下强行推进行动极易受阻折损。具体应对锦囊：暂时按兵不动、止步自省，先排除潜藏漏洞，以守为攻方为上策。`
-  }
-  return `【就所问之事具体研判】：此卦得《${benGuaName}》，目前正处于量变积累、蓄势待发的转折阶段。既不可盲动躁进，亦无须灰心气馁。具体指引：按部就班扎实做好手头准备，待关键时机现身再顺势而发。`
+  return `${directVerdict}\n\n${keyRisk}\n\n${timeSchedule}\n\n${firstAction}`
 }
 
 /**
@@ -14474,7 +14730,7 @@ function parseAiDivinationOutput(text, question, cast) {
 
   // 1. 确保四句偈语 100% 存在且工整
   if (!parsed.jiyu || parsed.jiyu.length < 4) {
-    parsed.jiyu = generateDivinationJiyu(benGuaName, tone)
+    parsed.jiyu = generateDivinationJiyu(benGuaName, tone, question)
   }
 
   // 2. 确保偈语解释 / 针对具体回答存在
@@ -14558,8 +14814,8 @@ function buildIntelligentFallbackInterpretation(a, b) {
   const dayGz = cal.day?.text || '吉日'
   const monthGz = cal.month?.text || '令月'
 
-  // 1. 置顶四句神机诗偈
-  const jiyu = generateDivinationJiyu(benGuaName, tone)
+  // 1. 置顶四句神机诗偈（深度切题）
+  const jiyu = generateDivinationJiyu(benGuaName, tone, question)
 
   // 2. 偈语解释与针对所测落地具体答复
   const jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone)
@@ -14628,6 +14884,7 @@ async function interpretWithAi(a, b) {
 
 module.exports = {
   cleanAiMarkdown,
+  analyzeQuestionIntent,
   buildDivinationPrompt,
   callAiDivinationApi,
   interpretWithAi,
