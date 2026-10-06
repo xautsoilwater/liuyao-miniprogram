@@ -41,7 +41,19 @@
     </view>
 
     <!-- 2. 第二位：偈语解释（针对所测事宜的具体解答与避凶指引） -->
-    <view class="card-box" wx:if="{{result.jiyuExplain || result.directAnswer}}">
+    <view class="card-box" wx:if="{{result.jiyuExplainItems && result.jiyuExplainItems.length}}">
+      <view class="card-head">
+        <text class="card-badge">直断指引</text>
+        <text class="card-title">偈语解释 · 趋吉避凶</text>
+      </view>
+      <view class="explain-list">
+        <view class="explain-item" wx:for="{{result.jiyuExplainItems}}" wx:key="quote">
+          <view class="explain-quote">「{{item.quote}}」</view>
+          <view class="explain-text">{{item.text}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="card-box" wx:elif="{{result.jiyuExplain || result.directAnswer}}">
       <view class="card-head">
         <text class="card-badge">直断指引</text>
         <text class="card-title">偈语解释 · 趋吉避凶</text>

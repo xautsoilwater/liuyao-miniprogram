@@ -995,9 +995,21 @@
         .trim()
     }
 
+    const escapeHtml = (t) => String(t || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+
     const res = state.aiResult || (window.LiuYao.interpret ? window.LiuYao.interpret(state.cast, 'general') : {})
     const jiyuExp = cleanText(res.jiyuExplain || res.directAnswer || '')
     const guaExp = cleanText(res.guaExplain || res.judgment || '')
+    const explainItems = Array.isArray(res.jiyuExplainItems) && res.jiyuExplainItems.length
+      ? res.jiyuExplainItems
+      : (jiyuExp ? jiyuExp.split(/\n+/).map(line => {
+          const m = line.match(/^「([^」]+)」\s*[：:]\s*(.+)$/)
+          return m ? { quote: m[1], text: m[2] } : null
+        }).filter(Boolean) : [])
 
     app.innerHTML = `
       <div class="title-zh">神机断卦</div>
@@ -1016,23 +1028,39 @@
             <span class="jiyu-seal">✦ 趋吉避凶 · 神机四句偈 ✦</span>
           </div>
           <div class="jiyu-lines">
-            ${res.jiyu.map(line => `<div class="jiyu-line">${cleanText(line)}</div>`).join('')}
+            ${res.jiyu.map(line => `<div class="jiyu-line">${escapeHtml(cleanText(line))}</div>`).join('')}
           </div>
           <div class="jiyu-foot">默念受持 · 明理远虑 · 顺时趋吉</div>
         </div>
       ` : ''}
 
       <!-- 2. 第二位：偈语解释（针对所测事宜的具体解答与避凶指引） -->
-      ${jiyuExp ? `
+      ${explainItems.length ? `
         <div class="card-box">
           ${corners()}
           <div class="card-head">
             <span class="card-badge">直断指引</span>
             <span class="card-title">偈语解释 · 趋吉避凶</span>
           </div>
-          <div class="card-body">${jiyuExp}</div>
+          <div class="explain-list">
+            ${explainItems.map(it => `
+              <div class="explain-item">
+                <div class="explain-quote">「${escapeHtml(cleanText(it.quote))}」</div>
+                <div class="explain-text">${escapeHtml(cleanText(it.text))}</div>
+              </div>
+            `).join('')}
+          </div>
         </div>
-      ` : ''}
+      ` : (jiyuExp ? `
+        <div class="card-box">
+          ${corners()}
+          <div class="card-head">
+            <span class="card-badge">直断指引</span>
+            <span class="card-title">偈语解释 · 趋吉避凶</span>
+          </div>
+          <div class="card-body">${escapeHtml(jiyuExp)}</div>
+        </div>
+      ` : '')}
 
       <!-- 3. 第三位：卦象解释（本变卦与爻动之易理精释） -->
       ${guaExp ? `
@@ -1042,7 +1070,7 @@
             <span class="card-badge">象数易理</span>
             <span class="card-title">卦象解释</span>
           </div>
-          <div class="card-body">${guaExp}</div>
+          <div class="card-body">${escapeHtml(guaExp)}</div>
         </div>
       ` : ''}
 

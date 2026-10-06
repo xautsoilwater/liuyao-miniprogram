@@ -60,16 +60,20 @@ const fallbackResult = buildIntelligentFallbackInterpretation({
 assert(fallbackResult.summary, '必须有神机总断')
 assert(fallbackResult.jiyuExplain.includes('开拓新市场'), '偈语解释必须靶向出现问卦者的具体标的')
 assert(fallbackResult.jiyuExplain.includes('今年下半年'), '必须有时间节律回应')
-assert(fallbackResult.jiyuExplain.includes('当下先手'), '必须有具体先手动作指引')
+assert(fallbackResult.jiyuExplain.includes('当下：') || fallbackResult.jiyuExplain.includes('当下'), '必须有具体先手动作指引')
 assert(Array.isArray(fallbackResult.jiyu) && fallbackResult.jiyu.length === 4, '必须包含四句趋吉避凶神机偈语')
+assert(Array.isArray(fallbackResult.jiyuExplainItems) && fallbackResult.jiyuExplainItems.length === 4, '必须包含分段解释条目')
 fallbackResult.jiyu.forEach((line, i) => {
   assert(fallbackResult.jiyuExplain.includes(line), `偈语解释必须引用第${i + 1}句原文以逐句对应`)
+  assert(fallbackResult.jiyuExplainItems[i].quote === line, `分段条目第${i + 1}句须对齐偈文`)
+  assert(fallbackResult.jiyuExplainItems[i].text.length <= 28, `分段短解宜言简意赅（第${i + 1}句）`)
 })
 assert(fallbackResult.guaExplain, '必须包含卦象解释')
 console.log('✔ 智能理数兜底推演高度聚焦测试通过')
 console.log('总断概要:', fallbackResult.summary)
 console.log('四句偈语:\n' + fallbackResult.jiyu.join('\n'))
 console.log('偈语解释:\n' + fallbackResult.jiyuExplain)
+console.log('分段条目:', JSON.stringify(fallbackResult.jiyuExplainItems, null, 2))
 
 // 3. 测试对外主入口 interpretWithAi
 interpretWithAi({

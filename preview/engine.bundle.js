@@ -14300,12 +14300,12 @@ function buildDivinationPrompt(a, b) {
 1. 紧扣「${intent.cleanTopic}」说话，忌空泛套话。
 2. 神机四句偈：七言四句，每行一句，共28字，切合本卦与所测事宜。
 3. 偈语解释：必须逐句对应上面四句偈，格式固定为四行——
-「第一句原文」：一句话点明此句对所测之事的含义（不超过40字）
+「第一句原文」：不超过18字的短解
 「第二句原文」：……
 「第三句原文」：……
 「第四句原文」：……
-四句解释须分别贴合对应偈句，言简意赅；第三句宜点出「${intent.timeFrame || '当前'}」的注意点，第四句给出当下可做的一步。
-4. 卦象解释：用两三句话说明本卦、变卦与动爻大意即可。
+第三句点出「${intent.timeFrame || '当前'}」注意点，第四句给当下一步；严禁长篇。
+4. 卦象解释：两三句即可。
 5. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
 
 【严格按以下三部分输出】：
@@ -15016,9 +15016,40 @@ function isJiyuExplainAligned(jiyu, explain) {
 }
 
 /**
- * 依据四句偈逐句生成简明解释，与偈文一一对应
+ * 从解释正文解析出「引句 + 短解」分段
  */
-function generateConcreteAnswer(question, cast, benGuaName, tone, jiyu) {
+function parseJiyuExplainItems(explain, jiyu) {
+  const items = []
+  const re = /「([^」]{2,16})」\s*[：:]\s*([^\n]+)/g
+  let m
+  while ((m = re.exec(String(explain || '')))) {
+    const text = m[2].replace(/^[—\-–\s]+/, '').replace(/[。；]+\s*$/, '').trim()
+    if (text) items.push({ quote: m[1].trim(), text })
+  }
+  if (items.length >= 4) return items.slice(0, 4)
+
+  // 按换行兜底：与四句偈顺序对齐
+  if (Array.isArray(jiyu) && jiyu.length >= 4) {
+    const lines = String(explain || '').split(/\n+/).map(l => l.trim()).filter(Boolean)
+    if (lines.length >= 4) {
+      return jiyu.slice(0, 4).map((quote, i) => {
+        const raw = lines[i] || ''
+        const text = raw
+          .replace(new RegExp(`^[「"]?${quote}[」"]?[：:]\\s*`), '')
+          .replace(/^[—\-–\s]+/, '')
+          .replace(/[。；]+\s*$/, '')
+          .trim() || raw
+        return { quote, text }
+      })
+    }
+  }
+  return items
+}
+
+/**
+ * 依据四句偈生成逐句短解（结构化）
+ */
+function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
   const intent = analyzeQuestionIntent(question)
   const cleanName = resolveGuaAlias(benGuaName)
   const benDetail = getGuaXiangjie(cleanName) || {}
@@ -15035,23 +15066,33 @@ function generateConcreteAnswer(question, cast, benGuaName, tone, jiyu) {
 
   const topic = intent.cleanTopic
   const timeStr = intent.timeFrame || '当前'
-  const nature = compressEssence(essence.nature, '卦象已成，须察机顺势', lines[0])
-  const spirit = compressEssence(essence.spirit, '审时度势，稳健推进', lines[1])
+  const spirit = compressEssence(essence.spirit, '审时度势', lines[1])
   const pitfall = compressEssence(essence.pitfall, '忌轻举妄动', lines[2])
-  const action = compressEssence(essence.action, '守正待机，步步落实', lines[3])
+  const action = compressEssence(essence.action, '守正待机', lines[3])
 
   const toneHint = tone === 'good'
-    ? '大势可期，宜顺势推进'
+    ? '大势可期'
     : tone === 'bad'
-      ? '多有阻滞，宜缓不宜急'
-      : '吉凶相半，宜稳中求进'
+      ? '宜缓勿急'
+      : '宜稳中求进'
 
   return [
-    `「${lines[0]}」：问「${topic}」，${nature}。${toneHint}。`,
-    `「${lines[1]}」：${spirit}。`,
-    `「${lines[2]}」：${timeStr}尤须留意——${pitfall}。`,
-    `「${lines[3]}」：当下先手：${action}。`
-  ].join('\n')
+    { quote: lines[0], text: `问「${topic}」：${toneHint}` },
+    { quote: lines[1], text: spirit },
+    { quote: lines[2], text: `${timeStr}：${pitfall}` },
+    { quote: lines[3], text: `当下：${action}` }
+  ]
+}
+
+function formatJiyuExplain(items) {
+  return (items || []).map(it => `「${it.quote}」：${it.text}`).join('\n')
+}
+
+/**
+ * 依据四句偈逐句生成简明解释，与偈文一一对应
+ */
+function generateConcreteAnswer(question, cast, benGuaName, tone, jiyu) {
+  return formatJiyuExplain(buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu))
 }
 
 /**
@@ -15119,6 +15160,11 @@ function parseAiDivinationOutput(text, question, cast) {
   if (!isJiyuExplainAligned(parsed.jiyu, parsed.jiyuExplain)) {
     parsed.jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone, parsed.jiyu)
   }
+  let jiyuExplainItems = parseJiyuExplainItems(parsed.jiyuExplain, parsed.jiyu)
+  if (jiyuExplainItems.length < 4) {
+    jiyuExplainItems = buildJiyuExplainItems(question, cast, benGuaName, tone, parsed.jiyu)
+    parsed.jiyuExplain = formatJiyuExplain(jiyuExplainItems)
+  }
   parsed.directAnswer = parsed.jiyuExplain
 
   // 3. 确保卦象解释存在
@@ -15138,7 +15184,7 @@ function parseAiDivinationOutput(text, question, cast) {
     },
     {
       title: '二、偈语解释 · 趋吉避凶',
-      items: toSectionItems(parsed.jiyuExplain)
+      items: jiyuExplainItems.map(it => `「${it.quote}」：${it.text}`)
     },
     {
       title: '三、卦象解释',
@@ -15154,6 +15200,7 @@ function parseAiDivinationOutput(text, question, cast) {
     summary: parsed.summary,
     jiyu: parsed.jiyu,
     jiyuExplain: parsed.jiyuExplain,
+    jiyuExplainItems,
     guaExplain: parsed.guaExplain,
     directAnswer: parsed.jiyuExplain,
     judgment: parsed.guaExplain,
@@ -15197,14 +15244,15 @@ function buildIntelligentFallbackInterpretation(a, b) {
   const jiyu = generateDivinationJiyu(benGuaName, tone, question)
 
   // 2. 偈语解释：与四句偈逐句对应、言简意赅
-  const jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone, jiyu)
+  const jiyuExplainItems = buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu)
+  const jiyuExplain = formatJiyuExplain(jiyuExplainItems)
 
   // 3. 卦象精炼解释
   let guaExplain = ''
   if (hasMove) {
-    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》动化《${bianGuaName}》，${changingCount}爻发动。象曰「${benGuaci.xiang || '自强不息'}」。事态将有转折，宜顺势调整，勿固执一端。`
+    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》动化《${bianGuaName}》，${changingCount}爻发动。象曰「${benGuaci.xiang || '自强不息'}」。事态将有转折，宜顺势调整。`
   } else {
-    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》静卦。卦辞「${benGuaci.guaci || '利贞'}」。气机未变，宜守正蓄力，待时而动。`
+    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》静卦。卦辞「${benGuaci.guaci || '利贞'}」。气机未变，宜守正蓄力。`
   }
 
   const sections = [
@@ -15214,7 +15262,7 @@ function buildIntelligentFallbackInterpretation(a, b) {
     },
     {
       title: '二、偈语解释 · 趋吉避凶',
-      items: toSectionItems(jiyuExplain)
+      items: jiyuExplainItems.map(it => `「${it.quote}」：${it.text}`)
     },
     {
       title: '三、卦象解释',
@@ -15237,6 +15285,7 @@ function buildIntelligentFallbackInterpretation(a, b) {
     summary,
     jiyu,
     jiyuExplain,
+    jiyuExplainItems,
     guaExplain,
     directAnswer: jiyuExplain,
     judgment: guaExplain,
@@ -15269,7 +15318,9 @@ module.exports = {
   interpretWithAi,
   buildIntelligentFallbackInterpretation,
   generateDivinationJiyu,
-  generateConcreteAnswer
+  generateConcreteAnswer,
+  buildJiyuExplainItems,
+  parseJiyuExplainItems
 }
 
 })(__mods["./ai-interpreter"], __mods["./ai-interpreter"].exports, __require);

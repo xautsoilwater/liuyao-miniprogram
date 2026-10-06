@@ -974,6 +974,24 @@
       white-space: pre-line;
     }
 
+    /* 偈语解释：逐句分段 */
+    .explain-list {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .explain-item {
+      padding: 8px 10px;
+      background: rgba(247, 239, 224, 0.55);
+      border-left: 3px solid rgba(171, 56, 52, 0.55);
+    }
+    .explain-quote {
+      font-size: 13px; color: #ab3834; letter-spacing: 0.08em;
+      font-family: var(--serif); font-weight: 600; line-height: 1.45;
+      margin-bottom: 4px;
+    }
+    .explain-text {
+      font-size: 13.5px; color: var(--ink); line-height: 1.6; letter-spacing: 0.02em;
+    }
+
     /* 趋吉避凶 · 神机四句金偈卡片 */
     .jiyu-card {
       margin: 14px 0 16px; padding: 16px 14px;
