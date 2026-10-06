@@ -16455,37 +16455,33 @@ function buildDivinationPrompt(a, b) {
   const benDetail = getGuaXiangjie(benAlias) || {}
   const bianDetail = getGuaXiangjie(bianAlias) || {}
 
-  const systemPrompt = `你是精通《周易》纳甲六爻的断卦师。请结合卦象，针对问卦者的具体事宜作简明断语。
+  const systemPrompt = `你是精通《周易》纳甲六爻的断卦师。请紧扣本卦卦象与所测事宜，写出谨慎、可读的断语。
 
 【盘面】
-- 本卦：《${cast?.ben?.name || '本卦'}》（${benDetail.theme || '知进知退，顺时而动'}）
+- 本卦：《${cast?.ben?.name || '本卦'}》（卦德：${benDetail.theme || '知进知退，顺时而动'}；象理：${benDetail.yili || benDetail.nameWhy || '君子以顺天应人'}）
 - 变卦：${cast?.bian?.name ? `动化《${cast.bian.name}》（${bianDetail.theme || '机运流转'}）` : '静卦无变'}
 - 所测：「${intent.cleanTopic}」；时间：${intent.timeFrame || '当前'}；关键：${intent.keyDilemma}
 
 【要求】
-1. 紧扣「${intent.cleanTopic}」说话，忌空泛套话。
-2. 神机四句偈：七言四句，每行一句，共28字，切合本卦与所测事宜。
-3. 偈语解释：必须逐句对应上面四句偈，格式固定为四行——
-「第一句原文」：用一两句说清此句对所测之事的含义（约25～45字，让人读懂即可，勿空喊）
-「第二句原文」：……
-「第三句原文」：……
-「第四句原文」：……
-第一句定性顺逆，第二句点关键，第三句结合「${intent.timeFrame || '当前'}」说须防什么，第四句给可落地的一步；保持分段、可读，勿写成长文。
-4. 卦象解释：两三句即可。
-5. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
+1. 只输出两部分：神机四句偈、偈语解释。不要单独写「卦象解释」。
+2. 神机四句偈：七言四句，每行一句，共28字；须从本卦取象，紧扣「${intent.cleanTopic}」，措辞谨慎，勿夸大、勿空话。
+3. 偈语解释：必须逐句对应四句偈，格式固定四行——
+「第一句原文」：点明本卦取象与此事大势（约30～50字）
+「第二句原文」：用卦德说明成败关键
+「第三句原文」：结合动静/变卦与「${intent.timeFrame || '当前'}」说明须防什么
+「第四句原文」：给出紧扣卦象的当下一步
+每句解释都要把卦象（本卦名、卦德或象意）融入人事，让人读懂；勿另开卦象专段，勿写成长文。
+4. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
 
-【严格按以下三部分输出】：
+【严格按以下两部分输出】：
 ### 【神机四句偈】
-（七言四句，每行一句）
+（七言四句，每行一句，紧扣本卦取象）
 
 ### 【偈语解释】
-（四行，每行「该句原文」：短解；必须与上面四句一一对应）
-
-### 【卦象解释】
-（两三句精炼象数说明）`
+（四行，每行「该句原文」：融入卦象的短解；与上面四句一一对应）`
 
   const userPrompt = `所测事宜：「${question || '未注明具体事由，请就卦象吉凶作综合研判'}」
-本卦《${cast?.ben?.name || '本卦'}》（${benDetail.theme || ''}），请围绕「${intent.cleanTopic}」简要断之。
+本卦《${cast?.ben?.name || '本卦'}》（${benDetail.theme || ''}）。请把卦象融入四句偈及其解释，不要单独写卦象解释。
 
 盘面：
 ${formatCastForPrompt(cast)}`
@@ -17212,12 +17208,16 @@ function parseJiyuExplainItems(explain, jiyu) {
 }
 
 /**
- * 依据四句偈生成逐句可读解释（结构化：引句 + 一两句说明）
+ * 依据四句偈生成逐句解释：卦象融入人事，措辞谨慎、可读
  */
 function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
   const intent = analyzeQuestionIntent(question)
   const cleanName = resolveGuaAlias(benGuaName)
   const benDetail = getGuaXiangjie(cleanName) || {}
+  const benGuaci = getGuaCi(benGuaName) || getGuaCi(cleanName) || {}
+  const bianRaw = (cast?.bian && cast.bian.name) || ''
+  const bianAlias = resolveGuaAlias(bianRaw)
+  const hasMove = !!(cast?.changingIndexes && cast.changingIndexes.length > 0)
   const lines = (Array.isArray(jiyu) && jiyu.length >= 4)
     ? jiyu.slice(0, 4)
     : generateDivinationJiyu(benGuaName, tone, question)
@@ -17231,22 +17231,45 @@ function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
 
   const topic = intent.cleanTopic
   const timeStr = intent.timeFrame || '当前'
-  const nature = compressEssence(essence.nature, '卦象已成，须察机顺势', lines[0], 24)
-  const spirit = compressEssence(essence.spirit, '审时度势，稳健推进', lines[1], 30)
+  const theme = (benDetail.theme || '知进知退，顺时而动').replace(/[。；]+$/g, '')
+  const nature = compressEssence(essence.nature, theme, lines[0], 26)
+  const spirit = compressEssence(essence.spirit, theme, lines[1], 28)
   const pitfall = compressEssence(essence.pitfall, '忌轻举妄动', lines[2], 26)
-  const action = compressEssence(essence.action, '守正待机，步步落实', lines[3], 30)
+  const action = compressEssence(essence.action, '守正待机，步步落实', lines[3], 28)
+  const xiang = String(benGuaci.xiang || benGuaci.guaci || '')
+    .replace(/[。；]+$/g, '')
+    .trim()
+    .slice(0, 18)
 
   const toneHint = tone === 'good'
-    ? '总体可做，宜顺势推进'
+    ? '总体可推进，但仍须依象谨慎'
     : tone === 'bad'
-      ? '当前阻力偏多，宜缓不宜急'
+      ? '阻力偏多，宜缓不宜急'
       : '吉凶相半，宜稳中求进'
 
+  const moveHint = hasMove && bianAlias && bianAlias !== cleanName
+    ? `爻动化《${bianAlias}》，事有转折`
+    : '六爻安静，宜守常蓄力'
+
+  const guaLabel = cleanName || benGuaName
+
   return [
-    { quote: lines[0], text: `此句看「${topic}」的大势：${nature}。${toneHint}。` },
-    { quote: lines[1], text: `此句点明成败关键：${spirit}。` },
-    { quote: lines[2], text: `此句是告诫。${timeStr}尤须留意：${pitfall}。` },
-    { quote: lines[3], text: `此句指路。当下可做：${action}。` }
+    {
+      quote: lines[0],
+      text: `本卦《${guaLabel}》，取象「${nature}」。问「${topic}」：${toneHint}。`
+    },
+    {
+      quote: lines[1],
+      text: `卦德「${theme}」。此句点明关键：${spirit}。`
+    },
+    {
+      quote: lines[2],
+      text: `${moveHint}。${timeStr}尤须戒：${pitfall}。`
+    },
+    {
+      quote: lines[3],
+      text: `${xiang ? `象意「${xiang}」。` : ''}当下宜依卦而行：${action}。`
+    }
   ]
 }
 
@@ -17316,14 +17339,21 @@ function parseAiDivinationOutput(text, question, cast) {
   }
 
   const benGuaName = cast?.ben?.name || '大成卦'
+  const cleanAlias = resolveGuaAlias(benGuaName)
 
   // 1. 确保四句偈语 100% 存在且工整
   if (!parsed.jiyu || parsed.jiyu.length < 4) {
     parsed.jiyu = generateDivinationJiyu(benGuaName, tone, question)
   }
 
-  // 2. 偈语解释必须与四句偈逐句对应；不对齐则按偈文重写简明解释
-  if (!isJiyuExplainAligned(parsed.jiyu, parsed.jiyuExplain)) {
+  // 2. 偈语解释须逐句对应，并紧扣本卦卦象；否则按卦象重写
+  const explainHasGua = !!(parsed.jiyuExplain && (
+    parsed.jiyuExplain.includes(`《${cleanAlias}`) ||
+    parsed.jiyuExplain.includes('本卦') ||
+    parsed.jiyuExplain.includes('卦德') ||
+    (cleanAlias && parsed.jiyuExplain.includes(cleanAlias))
+  ))
+  if (!isJiyuExplainAligned(parsed.jiyu, parsed.jiyuExplain) || !explainHasGua) {
     parsed.jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone, parsed.jiyu)
   }
   let jiyuExplainItems = parseJiyuExplainItems(parsed.jiyuExplain, parsed.jiyu)
@@ -17333,11 +17363,9 @@ function parseAiDivinationOutput(text, question, cast) {
   }
   parsed.directAnswer = parsed.jiyuExplain
 
-  // 3. 确保卦象解释存在
-  if (!parsed.guaExplain) {
-    parsed.guaExplain = cleanAiMarkdown(text.slice(0, 260))
-  }
-  parsed.judgment = parsed.guaExplain
+  // 3. 不再单独输出卦象解释；象理已融入偈语解释
+  parsed.guaExplain = ''
+  parsed.judgment = parsed.jiyuExplain
 
   if (!parsed.summary) {
     parsed.summary = tone === 'good' ? '天开化育 · 顺势而上' : (tone === 'bad' ? '关山险阻 · 审慎待时' : '静待蓄势 · 循序渐进')
@@ -17349,12 +17377,8 @@ function parseAiDivinationOutput(text, question, cast) {
       items: parsed.jiyu
     },
     {
-      title: '二、偈语解释 · 趋吉避凶',
+      title: '二、偈语解释 · 卦象直断',
       items: jiyuExplainItems.map(it => `「${it.quote}」：${it.text}`)
-    },
-    {
-      title: '三、卦象解释',
-      items: toSectionItems(parsed.guaExplain)
     }
   ]
 
@@ -17367,10 +17391,10 @@ function parseAiDivinationOutput(text, question, cast) {
     jiyu: parsed.jiyu,
     jiyuExplain: parsed.jiyuExplain,
     jiyuExplainItems,
-    guaExplain: parsed.guaExplain,
+    guaExplain: '',
     directAnswer: parsed.jiyuExplain,
-    judgment: parsed.guaExplain,
-    yongshen: parsed.yongshen || parsed.guaExplain,
+    judgment: parsed.jiyuExplain,
+    yongshen: parsed.yongshen || '',
     yingqi: parsed.yingqi || '',
     advice: parsed.advice || '',
     sections,
@@ -17384,12 +17408,9 @@ function parseAiDivinationOutput(text, question, cast) {
 function buildIntelligentFallbackInterpretation(a, b) {
   const { question, cast } = normalizeArgs(a, b)
   const benGuaName = cast?.ben?.name || '乾为天'
-  const bianGuaName = (cast?.bian && cast?.bian?.name) || benGuaName
-  const benGuaci = getGuaCi(benGuaName) || {}
 
   // 分析卦象动静
   const hasMove = !!(cast?.changingIndexes && cast.changingIndexes.length > 0)
-  const changingCount = cast?.changingIndexes ? cast.changingIndexes.length : 0
 
   // 判定吉凶大势（依据周易64卦深层卦性体系精准匹配别名与全名）
   const cleanAlias = resolveGuaAlias(benGuaName)
@@ -17409,17 +17430,9 @@ function buildIntelligentFallbackInterpretation(a, b) {
   // 1. 置顶四句神机诗偈
   const jiyu = generateDivinationJiyu(benGuaName, tone, question)
 
-  // 2. 偈语解释：与四句偈逐句对应、言简意赅
+  // 2. 偈语解释：卦象融入四句，不再另开卦象专段
   const jiyuExplainItems = buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu)
   const jiyuExplain = formatJiyuExplain(jiyuExplainItems)
-
-  // 3. 卦象精炼解释
-  let guaExplain = ''
-  if (hasMove) {
-    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》动化《${bianGuaName}》，${changingCount}爻发动。象曰「${benGuaci.xiang || '自强不息'}」。事态将有转折，宜顺势调整。`
-  } else {
-    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》静卦。卦辞「${benGuaci.guaci || '利贞'}」。气机未变，宜守正蓄力。`
-  }
 
   const sections = [
     {
@@ -17427,20 +17440,15 @@ function buildIntelligentFallbackInterpretation(a, b) {
       items: jiyu
     },
     {
-      title: '二、偈语解释 · 趋吉避凶',
+      title: '二、偈语解释 · 卦象直断',
       items: jiyuExplainItems.map(it => `「${it.quote}」：${it.text}`)
-    },
-    {
-      title: '三、卦象解释',
-      items: toSectionItems(guaExplain)
     }
   ]
 
   const fullText = [
     summary,
     `【神机四句偈】\n${jiyu.join('\n')}`,
-    `【偈语解释 · 趋吉避凶】\n${jiyuExplain}`,
-    `【卦象解释】\n${guaExplain}`
+    `【偈语解释 · 卦象直断】\n${jiyuExplain}`
   ].join('\n\n')
 
   return {
@@ -17452,10 +17460,10 @@ function buildIntelligentFallbackInterpretation(a, b) {
     jiyu,
     jiyuExplain,
     jiyuExplainItems,
-    guaExplain,
+    guaExplain: '',
     directAnswer: jiyuExplain,
-    judgment: guaExplain,
-    yongshen: guaExplain,
+    judgment: jiyuExplain,
+    yongshen: '',
     yingqi: hasMove ? '动爻逢值逢合之期为转机' : '静卦守常待逢冲破局',
     advice: '顺天应人，修德明理，方见通达。',
     sections,
@@ -18557,7 +18565,6 @@ window.__TORTOISE_SHELL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAC
 
     const res = state.aiResult || (window.LiuYao.interpret ? window.LiuYao.interpret(state.cast, 'general') : {})
     const jiyuExp = cleanText(res.jiyuExplain || res.directAnswer || '')
-    const guaExp = cleanText(res.guaExplain || res.judgment || '')
     const explainItems = Array.isArray(res.jiyuExplainItems) && res.jiyuExplainItems.length
       ? res.jiyuExplainItems
       : (jiyuExp ? jiyuExp.split(/\n+/).map(line => {
@@ -18574,7 +18581,7 @@ window.__TORTOISE_SHELL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAC
         <div class="ask-q">${state.question || '心意默祷（诸事顺逆与进退机宜）'}</div>
       </div>
 
-      <!-- 1. 置顶第一位：趋吉避凶 · 神机四句偈 -->
+      <!-- 1. 置顶：趋吉避凶 · 神机四句偈 -->
       ${res.jiyu && res.jiyu.length ? `
         <div class="jiyu-card">
           ${corners()}
@@ -18588,13 +18595,13 @@ window.__TORTOISE_SHELL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAC
         </div>
       ` : ''}
 
-      <!-- 2. 第二位：偈语解释（针对所测事宜的具体解答与避凶指引） -->
+      <!-- 2. 偈语解释（卦象已融入各句） -->
       ${explainItems.length ? `
         <div class="card-box">
           ${corners()}
           <div class="card-head">
-            <span class="card-badge">直断指引</span>
-            <span class="card-title">偈语解释 · 趋吉避凶</span>
+            <span class="card-badge">象理直断</span>
+            <span class="card-title">偈语解释 · 卦象直断</span>
           </div>
           <div class="explain-list">
             ${explainItems.map(it => `
@@ -18609,24 +18616,12 @@ window.__TORTOISE_SHELL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAC
         <div class="card-box">
           ${corners()}
           <div class="card-head">
-            <span class="card-badge">直断指引</span>
-            <span class="card-title">偈语解释 · 趋吉避凶</span>
+            <span class="card-badge">象理直断</span>
+            <span class="card-title">偈语解释 · 卦象直断</span>
           </div>
           <div class="card-body">${escapeHtml(jiyuExp)}</div>
         </div>
       ` : '')}
-
-      <!-- 3. 第三位：卦象解释（本变卦与爻动之易理精释） -->
-      ${guaExp ? `
-        <div class="card-box">
-          ${corners()}
-          <div class="card-head">
-            <span class="card-badge">象数易理</span>
-            <span class="card-title">卦象解释</span>
-          </div>
-          <div class="card-body">${escapeHtml(guaExp)}</div>
-        </div>
-      ` : ''}
 
       <div class="row" style="margin:16px 0 8px">
         <button class="btn btn-ghost" id="reInterpret">重新参详</button>
@@ -18654,10 +18649,7 @@ window.__TORTOISE_SHELL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAAC
         text += `【趋吉避凶 · 神机四句偈】\n${res.jiyu.map(l => cleanText(l)).join('\n')}\n\n`
       }
       if (jiyuExp) {
-        text += `【偈语解释 · 趋吉避凶】\n${jiyuExp}\n\n`
-      }
-      if (guaExp) {
-        text += `【卦象解释】\n${guaExp}\n`
+        text += `【偈语解释 · 卦象直断】\n${jiyuExp}\n\n`
       }
       if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {

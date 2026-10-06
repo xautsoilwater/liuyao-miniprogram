@@ -21,7 +21,7 @@
     </view>
   </view>
 
-  <!-- 结果状态：四句偈语放前面，偈语解释与卦象解释放下面 -->
+  <!-- 结果状态：四句偈 + 融入卦象的偈语解释 -->
   <block wx:if="{{!loading && result}}">
     <!-- 所测事宜 -->
     <view class="ask-box" wx:if="{{result.question}}">
@@ -29,7 +29,7 @@
       <view class="ask-q">{{result.question}}</view>
     </view>
 
-    <!-- 1. 置顶第一位：趋吉避凶 · 神机四句偈 -->
+    <!-- 1. 置顶：趋吉避凶 · 神机四句偈 -->
     <view class="jiyu-card" wx:if="{{result.jiyu && result.jiyu.length}}">
       <view class="jiyu-head">
         <text class="jiyu-seal">✦ 趋吉避凶 · 神机四句偈 ✦</text>
@@ -40,11 +40,11 @@
       <view class="jiyu-foot">默念受持 · 明理远虑 · 顺时趋吉</view>
     </view>
 
-    <!-- 2. 第二位：偈语解释（针对所测事宜的具体解答与避凶指引） -->
+    <!-- 2. 偈语解释（卦象已融入各句） -->
     <view class="card-box" wx:if="{{result.jiyuExplainItems && result.jiyuExplainItems.length}}">
       <view class="card-head">
-        <text class="card-badge">直断指引</text>
-        <text class="card-title">偈语解释 · 趋吉避凶</text>
+        <text class="card-badge">象理直断</text>
+        <text class="card-title">偈语解释 · 卦象直断</text>
       </view>
       <view class="explain-list">
         <view class="explain-item" wx:for="{{result.jiyuExplainItems}}" wx:key="quote">
@@ -55,19 +55,10 @@
     </view>
     <view class="card-box" wx:elif="{{result.jiyuExplain || result.directAnswer}}">
       <view class="card-head">
-        <text class="card-badge">直断指引</text>
-        <text class="card-title">偈语解释 · 趋吉避凶</text>
+        <text class="card-badge">象理直断</text>
+        <text class="card-title">偈语解释 · 卦象直断</text>
       </view>
       <view class="card-body">{{result.jiyuExplain || result.directAnswer}}</view>
-    </view>
-
-    <!-- 3. 第三位：卦象解释（本变卦与爻动之易理精释） -->
-    <view class="card-box" wx:if="{{result.guaExplain || result.judgment}}">
-      <view class="card-head">
-        <text class="card-badge">象数易理</text>
-        <text class="card-title">卦象解释</text>
-      </view>
-      <view class="card-body">{{result.guaExplain || result.judgment}}</view>
     </view>
 
     <view class="action-row">

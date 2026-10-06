@@ -91,11 +91,7 @@ Page({
     }
     const jiyuExp = r.jiyuExplain || r.directAnswer
     if (jiyuExp) {
-      text += `【偈语解释 · 趋吉避凶】\n${jiyuExp}\n\n`
-    }
-    const guaExp = r.guaExplain || r.judgment
-    if (guaExp) {
-      text += `【卦象解释】\n${guaExp}\n`
+      text += `【偈语解释 · 卦象直断】\n${jiyuExp}\n\n`
     }
     wx.setClipboardData({
       data: text,

@@ -1003,7 +1003,6 @@
 
     const res = state.aiResult || (window.LiuYao.interpret ? window.LiuYao.interpret(state.cast, 'general') : {})
     const jiyuExp = cleanText(res.jiyuExplain || res.directAnswer || '')
-    const guaExp = cleanText(res.guaExplain || res.judgment || '')
     const explainItems = Array.isArray(res.jiyuExplainItems) && res.jiyuExplainItems.length
       ? res.jiyuExplainItems
       : (jiyuExp ? jiyuExp.split(/\n+/).map(line => {
@@ -1020,7 +1019,7 @@
         <div class="ask-q">${state.question || '心意默祷（诸事顺逆与进退机宜）'}</div>
       </div>
 
-      <!-- 1. 置顶第一位：趋吉避凶 · 神机四句偈 -->
+      <!-- 1. 置顶：趋吉避凶 · 神机四句偈 -->
       ${res.jiyu && res.jiyu.length ? `
         <div class="jiyu-card">
           ${corners()}
@@ -1034,13 +1033,13 @@
         </div>
       ` : ''}
 
-      <!-- 2. 第二位：偈语解释（针对所测事宜的具体解答与避凶指引） -->
+      <!-- 2. 偈语解释（卦象已融入各句） -->
       ${explainItems.length ? `
         <div class="card-box">
           ${corners()}
           <div class="card-head">
-            <span class="card-badge">直断指引</span>
-            <span class="card-title">偈语解释 · 趋吉避凶</span>
+            <span class="card-badge">象理直断</span>
+            <span class="card-title">偈语解释 · 卦象直断</span>
           </div>
           <div class="explain-list">
             ${explainItems.map(it => `
@@ -1055,24 +1054,12 @@
         <div class="card-box">
           ${corners()}
           <div class="card-head">
-            <span class="card-badge">直断指引</span>
-            <span class="card-title">偈语解释 · 趋吉避凶</span>
+            <span class="card-badge">象理直断</span>
+            <span class="card-title">偈语解释 · 卦象直断</span>
           </div>
           <div class="card-body">${escapeHtml(jiyuExp)}</div>
         </div>
       ` : '')}
-
-      <!-- 3. 第三位：卦象解释（本变卦与爻动之易理精释） -->
-      ${guaExp ? `
-        <div class="card-box">
-          ${corners()}
-          <div class="card-head">
-            <span class="card-badge">象数易理</span>
-            <span class="card-title">卦象解释</span>
-          </div>
-          <div class="card-body">${escapeHtml(guaExp)}</div>
-        </div>
-      ` : ''}
 
       <div class="row" style="margin:16px 0 8px">
         <button class="btn btn-ghost" id="reInterpret">重新参详</button>
@@ -1100,10 +1087,7 @@
         text += `【趋吉避凶 · 神机四句偈】\n${res.jiyu.map(l => cleanText(l)).join('\n')}\n\n`
       }
       if (jiyuExp) {
-        text += `【偈语解释 · 趋吉避凶】\n${jiyuExp}\n\n`
-      }
-      if (guaExp) {
-        text += `【卦象解释】\n${guaExp}\n`
+        text += `【偈语解释 · 卦象直断】\n${jiyuExp}\n\n`
       }
       if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
