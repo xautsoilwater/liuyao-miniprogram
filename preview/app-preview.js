@@ -713,12 +713,12 @@
         <div class="coin-stage">
           <div class="shaker-stage ${state.shaking ? 'is-shaking' : ''}" aria-hidden="true">
             <div class="shaker-vessel">
-              <svg class="shaker-svg" viewBox="0 0 90 120" width="66" height="88">
+              <svg class="shaker-svg" viewBox="0 0 140 88" width="138" height="88">
                 <defs>
-                  <radialGradient id="shellBody" cx="45%" cy="40%" r="60%">
+                  <radialGradient id="shellBody" cx="48%" cy="46%" r="58%">
                     <stop offset="0%" stop-color="#4a3622" />
-                    <stop offset="50%" stop-color="#312215" />
-                    <stop offset="85%" stop-color="#1f140c" />
+                    <stop offset="45%" stop-color="#312215" />
+                    <stop offset="82%" stop-color="#1f140c" />
                     <stop offset="100%" stop-color="#120b06" />
                   </radialGradient>
                   <linearGradient id="shellGold" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -726,7 +726,7 @@
                     <stop offset="50%" stop-color="#b88d3d" />
                     <stop offset="100%" stop-color="#f5e7bf" />
                   </linearGradient>
-                  <radialGradient id="shellHole" cx="50%" cy="40%" r="55%">
+                  <radialGradient id="shellHole" cx="45%" cy="50%" r="55%">
                     <stop offset="0%" stop-color="#2a1d12" />
                     <stop offset="70%" stop-color="#120c08" />
                     <stop offset="100%" stop-color="#050302" />
@@ -737,32 +737,42 @@
                     <stop offset="100%" stop-color="#c99738" stop-opacity="0" />
                   </radialGradient>
                 </defs>
-                <path d="M 22 22 C 10 38, 8 82, 17 104 C 25 116, 65 116, 73 104 C 82 82, 80 38, 68 22 Z" fill="#0d0805" opacity="0.6" />
-                <path d="M 23 20 C 11 36, 9 80, 18 102 C 26 114, 64 114, 72 102 C 81 80, 79 36, 67 20 Z" fill="url(#shellBody)" stroke="#1a110a" stroke-width="1.8" />
-                <ellipse cx="45" cy="20" rx="22" ry="9" fill="#18100a" stroke="url(#shellGold)" stroke-width="1.4" />
-                <ellipse cx="45" cy="20.5" rx="18" ry="6" fill="url(#shellHole)" />
-                <ellipse class="shell-coin-glint" cx="45" cy="20.5" rx="10" ry="4" fill="url(#shellCoinGlint)" />
-                <path d="M 20 32 C 18 42, 16 56, 15 70 C 15 82, 18 94, 23 103" fill="none" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <path d="M 70 32 C 72 42, 74 56, 75 70 C 75 82, 72 94, 67 103" fill="none" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <line x1="17" y1="44" x2="22" y2="46" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
-                <line x1="15" y1="62" x2="21" y2="63" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
-                <line x1="15" y1="80" x2="21" y2="79" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
-                <line x1="73" y1="44" x2="68" y2="46" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
-                <line x1="75" y1="62" x2="69" y2="63" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
-                <line x1="75" y1="80" x2="69" y2="79" stroke="url(#shellGold)" stroke-width="0.7" opacity="0.4" />
-                <polygon points="45,30 55,38 53,52 45,55 37,52 35,38" fill="rgba(255,240,200,0.06)" stroke="url(#shellGold)" stroke-width="1.2" />
-                <polygon points="45,57 55,65 54,80 45,84 36,80 35,65" fill="rgba(255,240,200,0.08)" stroke="url(#shellGold)" stroke-width="1.4" />
-                <polygon points="45,85 54,92 50,103 45,106 40,103 36,92" fill="rgba(255,240,200,0.05)" stroke="url(#shellGold)" stroke-width="1.2" />
-                <polygon points="35,38 37,52 24,56 22,40" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
-                <polygon points="55,38 53,52 66,56 68,40" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
-                <polygon points="37,52 35,65 36,80 23,80 23,64 24,56" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
-                <polygon points="53,52 55,65 54,80 67,80 67,64 66,56" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
-                <polygon points="36,80 45,85 40,103 28,99 23,80" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
-                <polygon points="54,80 45,85 50,103 62,99 67,80" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.7" />
-                <circle cx="45" cy="70" r="5" fill="#8f261f" opacity="0.92" />
-                <circle cx="45" cy="70" r="4.2" fill="none" stroke="url(#shellGold)" stroke-width="0.6" opacity="0.8" />
-                <text x="45" y="72.6" font-size="5" fill="#faeed7" font-weight="bold" text-anchor="middle" font-family="serif">易</text>
-                <path d="M 45 32 L 45 104" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.35" stroke-dasharray="2,2" />
+                <!-- 横卧龟甲底层沉淀投影 -->
+                <path d="M 16 44 C 16 18, 58 8, 114 20 C 128 24, 136 36, 132 48 C 126 64, 110 77, 70 79 C 30 80, 16 66, 16 44 Z" fill="#0d0805" opacity="0.65" />
+                <!-- 龟身横甲主轮廓 -->
+                <path d="M 18 44 C 18 19, 58 10, 112 22 C 126 26, 134 37, 130 48 C 124 62, 108 75, 70 77 C 31 78, 18 65, 18 44 Z" fill="url(#shellBody)" stroke="#1a110a" stroke-width="2.2" />
+                <!-- 侧前出纳龟口（右侧微倾纳币金口） -->
+                <ellipse cx="116" cy="42" rx="12" ry="23" transform="rotate(12 116 42)" fill="#18100a" stroke="url(#shellGold)" stroke-width="1.8" />
+                <ellipse cx="116" cy="42" rx="9.5" ry="19" transform="rotate(12 116 42)" fill="url(#shellHole)" />
+                <ellipse class="shell-coin-glint" cx="116" cy="42" rx="6.5" ry="13" transform="rotate(12 116 42)" fill="url(#shellCoinGlint)" />
+                <!-- 横向灵龟背甲骨线（左右裙缘流线） -->
+                <path d="M 30 30 C 48 21, 82 20, 104 28" fill="none" stroke="url(#shellGold)" stroke-width="1" opacity="0.5" />
+                <path d="M 30 60 C 48 68, 82 69, 104 62" fill="none" stroke="url(#shellGold)" stroke-width="1" opacity="0.5" />
+                <!-- 裙边放射骨节 -->
+                <line x1="42" y1="24" x2="46" y2="31" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <line x1="68" y1="21" x2="69" y2="28" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <line x1="92" y1="23" x2="89" y2="30" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <line x1="42" y1="65" x2="46" y2="58" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <line x1="68" y1="68" x2="69" y2="61" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <line x1="92" y1="66" x2="89" y2="59" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
+                <!-- 横向中央三块主脊板 -->
+                <polygon points="28,44 38,33 52,35 56,44 52,53 38,55" fill="rgba(255,240,200,0.05)" stroke="url(#shellGold)" stroke-width="1.1" />
+                <polygon points="56,44 64,30 82,30 90,44 82,58 64,58" fill="rgba(255,240,200,0.08)" stroke="url(#shellGold)" stroke-width="1.4" />
+                <polygon points="90,44 96,32 107,34 110,43 107,52 96,54" fill="rgba(255,240,200,0.05)" stroke="url(#shellGold)" stroke-width="1.1" />
+                <!-- 上肋侧板 -->
+                <polygon points="38,33 52,35 60,23 44,23" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
+                <polygon points="64,30 82,30 88,19 59,19" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
+                <polygon points="82,30 96,32 103,23 88,19" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
+                <!-- 下肋侧板 -->
+                <polygon points="38,55 52,53 60,65 44,65" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
+                <polygon points="64,58 82,58 88,69 59,69" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
+                <polygon points="82,58 96,54 103,65 88,69" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
+                <!-- 中央朱砂「易」道火漆神印 -->
+                <circle cx="73" cy="44" r="8" fill="#8f261f" opacity="0.94" />
+                <circle cx="73" cy="44" r="6.6" fill="none" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.85" />
+                <text x="73" y="47.6" font-size="8" fill="#faeed7" font-weight="bold" text-anchor="middle" font-family="serif">易</text>
+                <!-- 横向脊背金虚线 -->
+                <path d="M 26 44 L 109 44" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,2" />
               </svg>
             </div>
           </div>
