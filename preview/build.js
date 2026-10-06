@@ -145,7 +145,12 @@ fs.writeFileSync(path.join(__dirname, 'engine.bundle.js'), engine)
 console.log('wrote engine.bundle.js', engine.length)
 
 const standalonePath = path.join(__dirname, 'liuyao-standalone.html')
-const appPreview = fs.readFileSync(path.join(__dirname, 'app-preview.js'), 'utf8')
+let appPreview = fs.readFileSync(path.join(__dirname, 'app-preview.js'), 'utf8')
+const tortoiseImgPath = path.join(__dirname, 'tortoise_shell.png')
+if (fs.existsSync(tortoiseImgPath)) {
+  const b64 = fs.readFileSync(tortoiseImgPath).toString('base64')
+  appPreview = `window.__TORTOISE_SHELL = "data:image/png;base64,${b64}";\n` + appPreview
+}
 const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8')
 const styleMatch = indexHtml.match(/<style>([\s\S]*?)<\/style>/)
 

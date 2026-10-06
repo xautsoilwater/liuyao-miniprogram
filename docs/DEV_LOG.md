@@ -2,6 +2,27 @@
 
 ---
 
+## [2026-10-06] 器物极致真身：直接采用用户实拍文王筮龟真身图（纯净透明抠图/多端自包含/原生微距质感）
+
+### 1. 业务背景与用户诉求
+- **实物照片直采**：用户明确指示“你直接用这个龟壳图就行了，不要自己画了”，并上传了一张高精度的真实陆龟壳实物照片（金黑天然放射纹、骨板回纹、裙边缘盾清晰分明）。
+- **诉求核心**：彻底告别手绘 SVG 矢量的生硬感与违和感，将真实的器物实景图直接作为卜卦灵龟容器，实现 100% 真实器物的沉浸感与庄严神韵。
+
+### 2. 核心架构与代码变更
+- **高精度无损抠图与透明背景边缘羽化 (`preview/process_tortoise.js` & `preview/clean_shadow.js`)**：
+  - 基于 Node.js 原生 zlib/PNG 解码引擎，对原图进行 BFS 洪水填充算法剔除纯白摄影背景与地表浅色阴影；
+  - 边缘引入 Alpha 平滑衰减（抗锯齿消白边），完整保留龟壳侧腹甲黄金边缘与深邃龟壳轮廓；
+  - Tight Crop 精准剪裁（328 × 219，长宽比 1.5 : 1），无缝融入深底与宣纸风背景；
+  - 输出为资产文件 `assets/tortoise_shell.png`、`pages/cast/tortoise_shell.png` 与 Base64 Data URI。
+- **模板与样式多端对齐**：
+  - **微信小程序端 (`pages/cast/cast.wxml` & `pages/cast/cast.wxss`)**：以 `<image class="shaker-img" src="/assets/tortoise_shell.png" mode="aspectFit" />` 替代长篇 SVG 代码，尺寸配置为 `312rpx × 208rpx`，配合拟人双手摇动动画；
+  - **Web 预览与独立单页端 (`preview/app-preview.js` & `preview/index.html` & `preview/build.js`)**：以 `<img class="shaker-img" src="${window.__TORTOISE_SHELL || './assets/tortoise_shell.png'}" />` 渲染，并在打包时自动注入 Base64 Data URI，确保单页在任何本地无服务环境下 100% 离线自包含完美显示。
+- **测试与验证**：
+  - 全量 8 组单元测试通过；
+  - Puppeteer 捕获 iPhone 14 Pro 视口（393 × 852）下初始静止态与成爻落定态截图，真实器物光影浑然天成。
+
+---
+
 ## [2026-10-06] 造型精调与拟人动效：神龟消臃扁阔协调重构、双手捧执手腕颠摇与翻腕倾倒拟人仪轨落地
 
 ### 1. 业务背景与用户诉求
