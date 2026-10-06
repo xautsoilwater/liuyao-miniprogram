@@ -14347,6 +14347,7 @@ function analyzeQuestionIntent(rawQuestion) {
 function buildDivinationPrompt(a, b) {
   const { question, cast } = normalizeArgs(a, b)
   const intent = analyzeQuestionIntent(question)
+  const asked = (question || intent.raw || intent.cleanTopic || '所问之事').trim()
 
   const benAlias = (cast?.ben?.name || '').replace(/为[天地水火山风雷泽]/g, '')
   const bianAlias = (cast?.bian?.name || '').replace(/为[天地水火山风雷泽]/g, '')
@@ -14355,43 +14356,50 @@ function buildDivinationPrompt(a, b) {
   const placeHint = resolvePlaceFromCast(cast) || '待由用神地支细参'
   const mode = intent.askMode || 'outlook'
   const modeHint = mode === 'where'
-    ? `此问是方位题，必须给出具体方位（如东南、正北），参考盘面方位取象「${placeHint}」`
+    ? `用户在问方位。你必须给出具体方位（如东南、正北），可参考「${placeHint}」。`
     : mode === 'when'
-      ? `此问是时间/应期题，必须给出具体时间范围（如近几日、本月内、某地支日冲合）`
+      ? '用户在问时间/应期。你必须给出具体时间范围（如近几日、本月内、某地支日及其冲合日）。'
       : mode === 'yesno'
-        ? `此问是成否/可否题，第一句必须明确倾向：可行 / 暂不宜 / 先试探`
-        : `此问须紧扣「${intent.cleanTopic}」作答，勿答成不相干的空话`
+        ? '用户在问成否/可否。第一句解释必须明确：可行 / 暂不宜 / 宜先试探。'
+        : mode === 'how'
+          ? '用户在问怎么办。必须给出可执行的下一步。'
+          : '必须直接回答用户这句问话，禁止答成与所问无关的空话。'
 
-  const systemPrompt = `你是精通《周易》纳甲六爻的断卦师。断语必须回答用户真正问的那件事，不能答非所问。
+  const systemPrompt = `你是纳甲六爻断卦师。你的唯一任务：读懂用户原话，结合卦象，回答他所问的那一件事。
+
+【最高法则：所问即所答】
+- 用户原话是：「${asked}」
+- 先理解他到底在问什么（成否、时机、方位、怎么办、走势），再断。
+- 禁止套用与所问无关的万能吉凶话；禁止只谈卦名玄理却不回答问题。
+- 四句偈与解释都必须围绕「${intent.cleanTopic}」来写。
 
 【盘面】
-- 本卦：《${cast?.ben?.name || '本卦'}》（卦德：${benDetail.theme || '知进知退，顺时而动'}；象理：${benDetail.yili || benDetail.nameWhy || '君子以顺天应人'}）
+- 本卦：《${cast?.ben?.name || '本卦'}》（卦德：${benDetail.theme || '知进知退'}；${benDetail.yili || benDetail.nameWhy || ''}）
 - 变卦：${cast?.bian?.name ? `动化《${cast.bian.name}》（${bianDetail.theme || '机运流转'}）` : '静卦无变'}
-- 所问原话：「${question || '综合运程'}」
-- 核心标的：「${intent.cleanTopic}」；问法：${intent.modeLabel || '走势'}；时间：${intent.timeFrame || '未特别指定'}；关键：${intent.keyDilemma}
+- 问法：${intent.modeLabel || '走势'}；时间窗口：${intent.timeFrame || '未特别指定'}；关键：${intent.keyDilemma}
 - 方位取象参考：${placeHint}
 
-【要求】
-1. 只输出两部分：神机四句偈、偈语解释。不要单独写「卦象解释」。
+【输出要求】
+1. 只输出两部分，不要写「卦象解释」。
 2. ${modeHint}
-3. 神机四句偈：七言四句，每行一句，共28字；从本卦取象，紧扣「${intent.cleanTopic}」，措辞谨慎。
-4. 偈语解释：逐句对应四句偈，格式固定四行——
-「第一句原文」：直断——明确回答所问（成否/方位/时间范围），并点本卦取象（约35～55字）
-「第二句原文」：何以见得——用卦德说明依据与关键
-「第三句原文」：时间或方位细节 + 须防什么（问时间给具体窗口；问地点给具体方位）
-「第四句原文」：下一步怎么做——可立刻执行的一步
-禁止空泛套话，禁止与所问无关的内容；勿写成长文。
-5. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
+3. 神机四句偈：你必须为「这一问」现场写七言四句（每行一句，共28字），把所问之事写进诗意里；不要写与所问无关的套诗。
+4. 偈语解释：必须逐句对应上面四句原文，固定四行：
+「第一句原文」：直断——用白话明确回答「${asked}」（约40字）
+「第二句原文」：何以见得——点出本卦/动变如何支持这个判断
+「第三句原文」：若问时间给具体范围；若问地点给具体方位；否则说本阶段须防什么
+「第四句原文」：下一步——针对「${intent.cleanTopic}」的可执行动作
+5. 禁止 AI、大模型等词；禁止 Markdown 星号。
 
-【严格按以下两部分输出】：
 ### 【神机四句偈】
-（七言四句，每行一句，紧扣本卦与所问）
+（为所问专写的七言四句，每行一句）
 
 ### 【偈语解释】
-（四行，每行「该句原文」：直断/依据/时位/下一步；与上面四句一一对应）`
+（四行「原文」：直断/依据/时位/下一步）`
 
-  const userPrompt = `所测事宜：「${question || '未注明具体事由，请就卦象吉凶作综合研判'}」
-本卦《${cast?.ben?.name || '本卦'}》（${benDetail.theme || ''}）。请紧扣这句问话作答：先给明确结论，再给时间或方位（若问到），最后给下一步；不要答非所问，不要单独写卦象解释。
+  const userPrompt = `请只回答下面这句问话，不要跑题：
+「${asked}」
+
+本卦《${cast?.ben?.name || '本卦'}》。请先理解问题，再依卦给出明确结论、必要的时间或方位，以及下一步。
 
 盘面：
 ${formatCastForPrompt(cast)}`
@@ -14399,9 +14407,6 @@ ${formatCastForPrompt(cast)}`
   return { systemPrompt, userPrompt }
 }
 
-/**
- * 调用 AI 大模型 API 进行解卦
- */
 async function callAiDivinationApi(a, b) {
   const { question, cast } = normalizeArgs(a, b)
   const config = getAiConfig()
@@ -14413,7 +14418,7 @@ async function callAiDivinationApi(a, b) {
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt }
     ],
-    temperature: config.temperature || 0.7,
+    temperature: typeof config.temperature === 'number' ? Math.min(config.temperature, 0.45) : 0.45,
     max_tokens: config.maxTokens || 2000
   }
 
@@ -14557,75 +14562,73 @@ function resolveGuaAlias(name) {
 }
 
 /**
- * 依据卦名、吉凶势态与所测问题，生成专属的四句趋吉避凶绝句偈语
+ * 依据卦名、吉凶势态与所测问题，生成更贴题的四句偈
+ * 优先按所问类别取诗，避免「卦诗漂亮但与所问无关」
  */
 function generateDivinationJiyu(benGuaName, tone, question) {
   const intent = analyzeQuestionIntent(question)
   const cleanName = resolveGuaAlias(benGuaName)
 
-  // 1. 优先使用 64 卦经典神机七言诗，每一首皆凝聚该卦至深卦德意象与吉凶天机！
-  if (GUA_JIYU_MAP[cleanName]) {
-    return GUA_JIYU_MAP[cleanName]
+  const byCategory = () => {
+    if (intent.category === 'expand' || intent.askMode === 'yesno' && /市场|拓|业务|项目/.test(intent.raw || '')) {
+      if (tone === 'good') return ['所问开拓有路通', '借势附丽莫逞雄', '窗口推进防过猛', '深根一域自昌隆']
+      if (tone === 'bad') return ['所问开拓路犹偏', '莫向荒原猛加码', '先固本盘再外拓', '待时乘势步从宽']
+      return ['所问开拓宜审详', '先试一域再铺张', '量力用度全周密', '稳中求进上高岗']
+    }
+    if (intent.category === 'place' || intent.askMode === 'where') {
+      if (tone === 'good') return ['所问方位有主向', '东南西北细端详', '先循主位再旁探', '莫使多方乱步场']
+      if (tone === 'bad') return ['所问方位信号弱', '不宜钉死一处找', '先循旧迹与动线', '旁侧扩展步步到']
+      return ['所问方位宜审度', '主位邻近两相顾', '先查一处再扩散', '忌凭臆测空奔忙']
+    }
+    if (intent.askMode === 'when') {
+      if (tone === 'good') return ['所问时机窗已开', '近应可期莫徘徊', '盯住冲合关键日', '依窗推进自迎来']
+      if (tone === 'bad') return ['所问时机多迟滞', '近旬不宜强求成', '且待冲合日再现', '窗口后段再发功']
+      return ['所问时机尚未明', '先观半月辨阴晴', '小步试水探应期', '逢值逢合再起程']
+    }
+    if (intent.category === 'partner') {
+      if (tone === 'good') return ['所问合伙利通津', '权责先明见诚真', '白纸落笔无猜忌', '共赢风浪展经纶']
+      if (tone === 'bad') return ['所问合伙藏暗礁', '财利分张起浪涛', '莫信虚言轻托付', '早定边界免徒劳']
+      return ['所问合伙且审详', '先明权责后图张', '公私分际清如水', '免使嫌生两断肠']
+    }
+    if (intent.category === 'career_switch') {
+      if (tone === 'good') return ['所问跳槽有新程', '下家明堂正待君', '果决衔接休空窗', '借力一跃建新勋']
+      if (tone === 'bad') return ['所问跳槽且慢行', '空仓盲跳陷泥坑', '先磨利器稳旧阵', '春暖花开再动身']
+      return ['所问去留费思量', '未可轻离旧主场', '把身家事筹算定', '东风忽起再扬航']
+    }
+    if (intent.category === 'study') {
+      if (tone === 'good') return ['所问功名路非遥', '文运可期气象高', '细补短板除隐患', '临场沉着领风骚']
+      if (tone === 'bad') return ['所问功名待厚积', '莫为浮名乱步履', '查漏补缺深下力', '来时一举越阶梯']
+      return ['所问学业定心神', '戒躁防虚下苦功', '磨得胸中冰雪净', '天道终不负苦人']
+    }
+    if (intent.category === 'love_reconcile' || intent.category === 'love') {
+      if (tone === 'good') return ['所问情缘有回温', '坦诚相待解疑痕', '少翻陈账多顾今', '珍重当前月满门']
+      if (tone === 'bad') return ['所问情缘宜止争', '强求反使意难平', '先安己心修边界', '转角或有别样晴']
+      return ['所问情丝意如麻', '各自冷静看真假', '冷暖随缘休执念', '心安之处即天涯']
+    }
+    if (intent.category === 'wealth') {
+      if (tone === 'good') return ['所问求财有门路', '顺势推进勿贪速', '风控留白防回撤', '稳拿利润步步固']
+      if (tone === 'bad') return ['所问求财多阻滞', '本金安全放第一', '暂停加码先止损', '另寻稳途再择机']
+      return ['所问钱财宜稳健', '先算退路后求进', '分批试水控仓位', '忌一口吞成大饼']
+    }
+    return null
   }
+
+  const cat = byCategory()
+  if (cat) return cat
+
+  // 类别不明时再回落卦诗
+  if (GUA_JIYU_MAP[cleanName]) return GUA_JIYU_MAP[cleanName]
   for (const k of Object.keys(GUA_JIYU_MAP)) {
-    if (cleanName.includes(k) || k.includes(cleanName)) {
-      return GUA_JIYU_MAP[k]
-    }
-  }
-
-  // 2. 备用兜底（若遇特殊生僻别名）
-  if (intent.category === 'expand') {
-    if (tone === 'good') {
-      return ['扬帆踏浪辟新程', '天相吉星四海清', '最贵谋深防浪险', '步全根固自风行']
-    } else if (tone === 'bad') {
-      return ['关山涉远路犹偏', '莫向荒原拓险滩', '且敛锋芒修本固', '待时乘势步从宽']
-    }
-    return ['开拓图新莫急攀', '深耕一域度重关', '量材用度全周密', '云起风来上泰山']
-  }
-
-  if (intent.category === 'partner') {
-    if (tone === 'good') {
-      return ['同心合德利通津', '相照肝胆见诚真', '白纸明书无猜忌', '共赢风浪展经纶']
-    } else if (tone === 'bad') {
-      return ['同床异梦暗藏刀', '财利分张起浪涛', '莫信虚言轻托付', '早抽身手免徒劳']
-    }
-    return ['合伴同行且审详', '先明权责后图张', '公私分际清如水', '免使嫌生两断肠']
-  }
-
-  if (intent.category === 'career_switch') {
-    if (tone === 'good') {
-      return ['乘时变轨步青云', '下里明堂正待君', '果决前行休顾虑', '一朝借力建新勋']
-    } else if (tone === 'bad') {
-      return ['林暗风高莫弃枝', '空仓盲跳陷泥池', '安心守拙磨利刃', '春暖花开再待时']
-    }
-    return ['去留进退费思量', '未可轻离旧主场', '且把身家筹算定', '东风忽起再扬航']
-  }
-
-  if (intent.category === 'study') {
-    if (tone === 'good') {
-      return ['蟾宫折桂路非遥', '文运腾升气象高', '细理偏枯除隐患', '一朝金榜领风骚']
-    } else if (tone === 'bad') {
-      return ['寒窗苦志待春开', '莫为浮名乱步台', '查漏补缺深下力', '来时一举越金阶']
-    }
-    return ['读书穷理定心神', '戒躁防虚下苦因', '磨得胸中冰雪净', '天公终不负苦人']
-  }
-
-  if (intent.category === 'love_reconcile') {
-    if (tone === 'good') {
-      return ['历尽风波重拾温', '心扉敞处解疑痕', '宽容莫再翻陈账', '珍重当前月满门']
-    } else if (tone === 'bad') {
-      return ['覆水难收莫强牵', '残灯明灭结愁眠', '不如放手修宁静', '转角青山有善缘']
-    }
-    return ['情丝剪乱意如麻', '各自回头静看花', '冷暖随缘休执念', '心安何处不天涯']
+    if (cleanName.includes(k) || k.includes(cleanName)) return GUA_JIYU_MAP[k]
   }
 
   if (tone === 'good') {
-    return ['天心顺遂好乘舟', '动变相生利道周', '得意莫忘持戒慎', '宽怀容物自优游']
+    return ['天心顺遂好乘舟', '所问之事有望收', '得意莫忘持戒慎', '宽怀落实自优游']
   }
   if (tone === 'bad') {
-    return ['关山万叠水流迟', '莫向穷途踏浪危', '退避守正修内省', '暗流过后现朝晖']
+    return ['关山万叠水流迟', '所问之事宜暂持', '退避守正修内省', '暗流过后现朝晖']
   }
-  return ['阴阳代谢有恒程', '暂耐风霜莫急行', '待等春雷破残夜', '一朝昂首跃青溟']
+  return ['阴阳代谢有恒程', '所问之事莫急行', '待等春雷破残夜', '一朝昂首跃青溟']
 }
 
 /**
@@ -15230,6 +15233,79 @@ function generateConcreteAnswer(question, cast, benGuaName, tone, jiyu) {
 }
 
 /**
+ * 判断解释是否真正在回答所问（避免答非所问）
+ */
+function explainAnswersQuestion(explain, question) {
+  if (!explain || !question) return false
+  const intent = analyzeQuestionIntent(question)
+  const raw = String(question)
+  const topic = String(intent.cleanTopic || intent.focus || '')
+  const core = raw
+    .replace(/[吗呢吧呀？\?！!。，、：:；;]/g, '')
+    .replace(/(能不能|是否合适|是否可以|好不好|会怎样|如何|怎么样|能否顺利|成不成|可以吗|可否|行不行|什么时候|何时|哪里|哪儿|哪个方向)/g, '')
+  const chunks = new Set()
+  const addChunks = (s) => {
+    const t = String(s || '').trim()
+    if (t.length < 2) return
+    for (let i = 0; i <= t.length - 2; i++) chunks.add(t.slice(i, i + 2))
+  }
+  addChunks(topic)
+  addChunks(core.slice(0, 16))
+  if (intent.timeFrame) addChunks(intent.timeFrame)
+  let hits = 0
+  chunks.forEach((c) => { if (explain.includes(c)) hits += 1 })
+  if (topic && explain.includes(topic)) return true
+  if (intent.askMode === 'where' && /东|南|西|北|方位/.test(explain)) return hits >= 1
+  if (intent.askMode === 'when' && /日|月|旬|应期|近几|窗口/.test(explain)) return hits >= 1
+  return hits >= 2
+}
+
+/**
+ * 从 AI 文本宽松抽取四句偈（避免格式稍偏就整段被本地套诗替换）
+ */
+function extractJiyuLines(content) {
+  if (!content) return []
+  const cleaned = cleanAiMarkdown(content)
+  let lines = cleaned.split(/\n+/)
+    .map((l) => cleanAiMarkdown(l).replace(/^[0-9一二三四\.\、\-\s]+/g, '').replace(/[。！？]/g, '').trim())
+    .filter((l) => l.length >= 5 && l.length <= 20)
+  if (lines.length >= 4) return lines.slice(0, 4)
+
+  const compact = cleaned.replace(/\s+/g, '').replace(/[“”"']/g, '')
+  const sevens = compact.match(/[\u4e00-\u9fff]{5,8}/g) || []
+  if (sevens.length >= 4) return sevens.slice(0, 4)
+  return lines.slice(0, 4)
+}
+
+/**
+ * 把 AI 解释整理成与四句偈对应的条目，尽量保留 AI 原文，不改写其判断
+ */
+function structureExplainAgainstJiyu(explain, jiyu) {
+  const aligned = parseJiyuExplainItems(explain, jiyu)
+  if (aligned.length >= 4) return aligned
+
+  const parts = String(explain || '').split(/\n+/).map((s) => s.trim()).filter(Boolean)
+  if (parts.length >= 4 && Array.isArray(jiyu) && jiyu.length >= 4) {
+    return jiyu.slice(0, 4).map((quote, i) => ({
+      quote,
+      text: parts[i].replace(/^「[^」]+」\s*[：:]\s*/, '').replace(/^[—\-–\s]+/, '').trim() || parts[i]
+    }))
+  }
+
+  const sents = String(explain || '')
+    .split(/[。！？\n]+/)
+    .map((s) => s.replace(/^「[^」]+」\s*[：:]\s*/, '').trim())
+    .filter((s) => s.length >= 6)
+  if (sents.length >= 4 && Array.isArray(jiyu) && jiyu.length >= 4) {
+    return jiyu.slice(0, 4).map((quote, i) => ({
+      quote,
+      text: /[。！？]$/.test(sents[i]) ? sents[i] : `${sents[i]}。`
+    }))
+  }
+  return aligned
+}
+
+/**
  * 解析大模型返回的结构化文本
  */
 function parseAiDivinationOutput(text, question, cast) {
@@ -15253,9 +15329,7 @@ function parseAiDivinationOutput(text, question, cast) {
   parts.forEach(part => {
     if (part.startsWith('神机四句偈】') || part.startsWith('趋吉避凶 · 神机四句偈】') || part.startsWith('神机偈语】') || part.startsWith('四句偈语】')) {
       const jiyuContent = cleanAiMarkdown(part.replace(/^(趋吉避凶 · 神机四句偈|神机四句偈|神机偈语|四句偈语)】\s*/, '').trim())
-      const jiyuLines = jiyuContent.split('\n')
-        .map(l => cleanAiMarkdown(l).replace(/^[0-9一二三四\.\、\-\s]+/g, '').trim())
-        .filter(l => l.length >= 5 && l.length <= 16)
+      const jiyuLines = extractJiyuLines(jiyuContent)
       if (jiyuLines.length >= 4) {
         parsed.jiyu = jiyuLines.slice(0, 4)
       }
@@ -15284,30 +15358,30 @@ function parseAiDivinationOutput(text, question, cast) {
   }
 
   const benGuaName = cast?.ben?.name || '大成卦'
-  const cleanAlias = resolveGuaAlias(benGuaName)
-  const intentTopic = (analyzeQuestionIntent(question).cleanTopic || '').trim()
+  const hadAiJiyu = !!(parsed.jiyu && parsed.jiyu.length >= 4)
+  const hadAiExplain = !!(parsed.jiyuExplain && parsed.jiyuExplain.trim())
+  const aiExplainOnTopic = hadAiExplain && explainAnswersQuestion(parsed.jiyuExplain, question)
 
-  // 1. 确保四句偈语 100% 存在且工整
-  if (!parsed.jiyu || parsed.jiyu.length < 4) {
+  // 1. 四句偈：优先保留 AI 专为所问写的偈；仅缺失时才本地补
+  if (!hadAiJiyu) {
     parsed.jiyu = generateDivinationJiyu(benGuaName, tone, question)
   }
 
-  // 2. 偈语解释须逐句对应、紧扣卦象与所问；否则重写
-  const explainHasGua = !!(parsed.jiyuExplain && (
-    parsed.jiyuExplain.includes(`《${cleanAlias}`) ||
-    parsed.jiyuExplain.includes('本卦') ||
-    parsed.jiyuExplain.includes('卦德') ||
-    (cleanAlias && parsed.jiyuExplain.includes(cleanAlias))
-  ))
-  const explainHitsQuestion = !!(parsed.jiyuExplain && (
-    parsed.jiyuExplain.includes('直断') ||
-    (intentTopic && parsed.jiyuExplain.includes(intentTopic.slice(0, Math.min(4, intentTopic.length))))
-  ))
-  if (!isJiyuExplainAligned(parsed.jiyu, parsed.jiyuExplain) || !explainHasGua || !explainHitsQuestion) {
-    parsed.jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone, parsed.jiyu)
-  }
-  let jiyuExplainItems = parseJiyuExplainItems(parsed.jiyuExplain, parsed.jiyu)
-  if (jiyuExplainItems.length < 4) {
+  // 2. 解释：优先保留 AI 对所问的理解；仅空缺或明显跑题时才本地重写
+  let jiyuExplainItems = []
+  if (aiExplainOnTopic) {
+    jiyuExplainItems = structureExplainAgainstJiyu(parsed.jiyuExplain, parsed.jiyu)
+    if (jiyuExplainItems.length >= 4) {
+      parsed.jiyuExplain = formatJiyuExplain(jiyuExplainItems)
+    } else {
+      // AI 正文在题，但格式松散：原样保留，按行尽量分段
+      const loose = String(parsed.jiyuExplain).split(/\n+/).map((s) => s.trim()).filter(Boolean)
+      jiyuExplainItems = (parsed.jiyu || []).slice(0, 4).map((quote, i) => ({
+        quote,
+        text: (loose[i] || loose[0] || parsed.jiyuExplain).replace(/^「[^」]+」\s*[：:]\s*/, '')
+      }))
+    }
+  } else {
     jiyuExplainItems = buildJiyuExplainItems(question, cast, benGuaName, tone, parsed.jiyu)
     parsed.jiyuExplain = formatJiyuExplain(jiyuExplainItems)
   }
@@ -15444,7 +15518,9 @@ module.exports = {
   generateDivinationJiyu,
   generateConcreteAnswer,
   buildJiyuExplainItems,
-  parseJiyuExplainItems
+  parseJiyuExplainItems,
+  parseAiDivinationOutput,
+  explainAnswersQuestion
 }
 
 })(__mods["./ai-interpreter"], __mods["./ai-interpreter"].exports, __require);

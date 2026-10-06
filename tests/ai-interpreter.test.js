@@ -4,7 +4,10 @@ const {
   analyzeQuestionIntent,
   buildDivinationPrompt,
   buildIntelligentFallbackInterpretation,
-  interpretWithAi
+  interpretWithAi,
+  generateDivinationJiyu,
+  parseAiDivinationOutput,
+  explainAnswersQuestion
 } = require('../utils/ai-interpreter')
 const { manualYao } = require('../utils/coin')
 const { arrangeCast } = require('../utils/paipan')
@@ -47,9 +50,38 @@ const { systemPrompt, userPrompt } = buildDivinationPrompt({
 
 assert(systemPrompt.includes('开拓新市场'), '系统Prompt应注入深度解构的标的物')
 assert(systemPrompt.includes('今年下半年'), '系统Prompt应注入时间窗口')
+assert(systemPrompt.includes('所问即所答') || systemPrompt.includes('不能答非所问') || systemPrompt.includes('所问'), '系统Prompt须强调紧扣所问')
 assert(userPrompt.includes('开拓新市场'), '用户Prompt必须包含用户亲笔问题')
 assert(userPrompt.includes(cast.ben.name), '用户Prompt必须包含本卦名称')
 console.log('✔ AI 神机 Prompt 深度聚焦组装测试通过')
+
+// 本地偈语须按所问类别生成，不能总是无关卦诗
+const expandJiyu = generateDivinationJiyu(cast.ben.name, 'good', '今年下半年开拓新市场是否合适？')
+assert(expandJiyu.some((l) => /开拓|所问/.test(l)), '开拓类问题的偈语须贴题')
+const placeJiyu = generateDivinationJiyu(cast.ben.name, 'good', '东西丢在哪个方向？')
+assert(placeJiyu.some((l) => /方位|所问/.test(l)), '方位类问题的偈语须贴题')
+console.log('✔ 贴题偈语生成测试通过')
+
+// AI 若已扣题作答，解析后不得被本地套话覆盖
+const aiRaw = [
+  '### 【神机四句偈】',
+  '合伙开店须审详',
+  '权责先明再开张',
+  '利润分配防内耗',
+  '白纸落笔免参商',
+  '',
+  '### 【偈语解释】',
+  '「合伙开店须审详」：直断：跟张三合伙开咖啡店，倾向可行但须先定权责。',
+  '「权责先明再开张」：何以见得：合作要边界清楚，才不致后患。',
+  '「利润分配防内耗」：今年内尤防口头约定导致分利争议。',
+  '「白纸落笔免参商」：下一步：先签合伙协议，写清出资、分成与退出。'
+].join('\n')
+assert(explainAnswersQuestion(aiRaw, '跟张三合伙开咖啡店能不能赚钱？'), 'AI扣题正文应被判定为切题')
+const parsedAi = parseAiDivinationOutput(aiRaw, '跟张三合伙开咖啡店能不能赚钱？', cast)
+assert(parsedAi.jiyu[0] === '合伙开店须审详', '须保留AI现场所写四句偈，不能换成无关卦诗')
+assert(parsedAi.jiyuExplain.includes('张三') || parsedAi.jiyuExplain.includes('咖啡店') || parsedAi.jiyuExplain.includes('合伙'), '须保留AI对所问的直断')
+assert(!parsedAi.jiyuExplain.includes('丽天丽地彩云飞'), '不得用离卦套诗覆盖AI切题断语')
+console.log('✔ AI切题断语不被本地覆盖测试通过')
 
 // 2. 测试智能理数兜底推演（高度聚焦）
 const fallbackResult = buildIntelligentFallbackInterpretation({
