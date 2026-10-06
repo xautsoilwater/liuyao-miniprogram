@@ -57,7 +57,8 @@ const fileOf = {
 
 const aliases = {
   './bagua': '../data/bagua',
-  './guaci': '../data/guaci'
+  './guaci': '../data/guaci',
+  '../data/gua64-xiangjie': './gua64-xiangjie'
 }
 
 const modules = {}
