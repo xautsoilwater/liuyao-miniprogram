@@ -360,7 +360,9 @@
       transform: translate3d(0, 0, 0) rotate(-2deg);
       transform-origin: 50% 65%;
       transition: opacity 0.3s ease, transform 0.3s ease;
-      filter: drop-shadow(0 10px 22px rgba(18, 12, 8, 0.45));
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     .shaker-vessel {
       width: 100%;
@@ -368,11 +370,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      will-change: transform;
+      transform: translateZ(0);
     }
     .shaker-img {
       display: block;
       width: 100%;
       height: 100%;
+      filter: drop-shadow(0 7px 12px rgba(18, 12, 8, 0.38));
+      will-change: transform;
+      transform: translateZ(0);
     }
     .shell-coin-glint, .cup-coin-glint {
       opacity: 0;
@@ -388,6 +395,10 @@
     .shaker-stage.is-shaking {
       opacity: 1;
       animation: vessel-cast 2.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+      will-change: transform;
+    }
+    .shaker-stage.is-shaking .shaker-img {
+      filter: drop-shadow(0 4px 7px rgba(18, 12, 8, 0.28));
     }
     /* 拟人化双手摇卦仪轨：双手捧执 -> 手腕3轮发力上下颠簸顿挫 -> 双手前推翻腕下倾倒出 -> 恭肃放平 */
     @keyframes vessel-cast {
@@ -931,6 +942,57 @@
     .verdict .advice {
       margin-top: 6px; padding-top: 10px; border-top: 1px dashed var(--gold-border);
       font-size: 13px; color: var(--bronze); text-align: justify; line-height: 1.75;
+    }
+
+    /* 针对所测事宜 · 明确指引卡片 */
+    .concrete-card {
+      margin: 12px 0 14px; padding: 14px 14px;
+      border: 1px solid #c8b99d; border-radius: 4px;
+      background: rgba(254, 252, 246, 0.96);
+      box-shadow: 0 4px 14px rgba(50, 36, 18, 0.05);
+      position: relative;
+    }
+    .concrete-head {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+      padding-bottom: 6px; border-bottom: 1px dashed rgba(180, 155, 120, 0.35);
+    }
+    .concrete-badge {
+      padding: 2px 8px; border-radius: 2px; font-size: 11px;
+      background: var(--cinnabar); color: #fffaf0;
+      letter-spacing: 0.12em; font-weight: 600;
+    }
+    .concrete-title {
+      font-size: 13px; color: var(--bronze); letter-spacing: 0.08em; font-weight: 600;
+    }
+    .concrete-body {
+      font-size: 13.5px; line-height: 1.85; color: var(--ink);
+      letter-spacing: 0.04em; text-align: justify;
+    }
+
+    /* 趋吉避凶 · 神机四句金偈卡片 */
+    .jiyu-card {
+      margin: 14px 0 16px; padding: 16px 14px;
+      border: 1.5px solid #ab3834; border-radius: 4px;
+      background: linear-gradient(180deg, #fdfaf3, #f7efe0);
+      box-shadow: inset 0 0 0 3px rgba(171, 56, 52, 0.12), 0 6px 18px rgba(80, 40, 20, 0.07);
+      text-align: center; position: relative;
+    }
+    .jiyu-head { margin-bottom: 10px; }
+    .jiyu-seal {
+      display: inline-block; font-size: 12px; color: #ab3834;
+      letter-spacing: 0.22em; font-weight: 700; font-family: var(--serif);
+    }
+    .jiyu-lines {
+      display: flex; flex-direction: column; gap: 6px; margin: 10px 0;
+    }
+    .jiyu-line {
+      font-size: 17px; font-weight: 600; color: #2b1f16;
+      letter-spacing: 0.26em; text-indent: 0.26em;
+      font-family: var(--serif); line-height: 1.45;
+    }
+    .jiyu-foot {
+      margin-top: 8px; font-size: 11px; color: #8c7658;
+      letter-spacing: 0.16em; text-indent: 0.16em;
     }
 
     /* meihua */

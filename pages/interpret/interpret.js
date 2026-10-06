@@ -87,6 +87,12 @@ Page({
     let text = `【所测事宜】${r.question || '心意默祷'}\n`
     text += `【周易排盘】本卦《${c.ben?.name || ''}》 变卦《${c.bian?.name || '无变'}》\n`
     text += `【神机结论】${r.summary || ''}\n\n`
+    if (r.directAnswer) {
+      text += `【针对答复 · 明确指引】\n${r.directAnswer}\n\n`
+    }
+    if (r.jiyu && r.jiyu.length) {
+      text += `【趋吉避凶 · 神机金偈】\n${r.jiyu.join('\n')}\n\n`
+    }
     if (r.sections) {
       r.sections.forEach((s) => {
         text += `■ ${s.title}\n`
@@ -96,7 +102,7 @@ Page({
     }
     wx.setClipboardData({
       data: text,
-      success: () => wx.showToast({ title: '已复制断语', icon: 'success' })
+      success: () => wx.showToast({ title: '已复制断语与偈语', icon: 'success' })
     })
   },
 

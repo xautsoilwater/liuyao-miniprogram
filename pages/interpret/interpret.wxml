@@ -35,6 +35,26 @@
       <view class="advice" wx:if="{{result.advice}}">{{result.advice}}</view>
     </view>
 
+    <!-- 针对具体问题的解答与破局先手 -->
+    <view class="concrete-card" wx:if="{{result.directAnswer}}">
+      <view class="concrete-head">
+        <text class="concrete-badge">切题直断</text>
+        <text class="concrete-title">针对所测事宜 · 明确指引</text>
+      </view>
+      <view class="concrete-body">{{result.directAnswer}}</view>
+    </view>
+
+    <!-- 趋吉避凶 · 神机金偈 -->
+    <view class="jiyu-card" wx:if="{{result.jiyu && result.jiyu.length}}">
+      <view class="jiyu-head">
+        <text class="jiyu-seal">✦ 趋吉避凶 · 神机金偈 ✦</text>
+      </view>
+      <view class="jiyu-lines">
+        <view class="jiyu-line" wx:for="{{result.jiyu}}" wx:key="*this">{{item}}</view>
+      </view>
+      <view class="jiyu-foot">默念受持 · 明理远虑 · 顺时趋吉</view>
+    </view>
+
     <view class="section" wx:for="{{result.sections}}" wx:key="title">
       <view class="sec-title">{{item.title}}</view>
       <view class="sec-item" wx:for="{{item.items}}" wx:for-item="line" wx:key="*this">{{line}}</view>

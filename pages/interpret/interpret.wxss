@@ -297,3 +297,98 @@
   gap: 16rpx;
   margin-top: 28rpx;
 }
+
+/* 针对所测事宜 · 明确指引卡片 */
+.concrete-card {
+  margin: 16rpx 0 20rpx;
+  padding: 24rpx;
+  border: 1rpx solid #c8b99d;
+  background: rgba(254, 252, 246, 0.95);
+  box-shadow: 0 4rpx 14rpx rgba(50, 36, 18, 0.05);
+}
+
+.concrete-head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 14rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx dashed rgba(180, 155, 120, 0.35);
+}
+
+.concrete-badge {
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+  font-size: 22rpx;
+  background: var(--cinnabar);
+  color: #fffaf0;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+.concrete-title {
+  font-size: 26rpx;
+  color: var(--bronze);
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.concrete-body {
+  font-size: 29rpx;
+  line-height: 1.85;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  text-align: justify;
+}
+
+/* 趋吉避凶 · 神机四句金偈卡片 */
+.jiyu-card {
+  margin: 20rpx 0 24rpx;
+  padding: 28rpx 20rpx;
+  border: 2rpx solid #ab3834;
+  background: linear-gradient(180deg, #fdfaf3, #f5ecd8);
+  box-shadow:
+    inset 0 0 0 4rpx rgba(171, 56, 52, 0.15),
+    0 6rpx 20rpx rgba(80, 40, 20, 0.08);
+  text-align: center;
+  position: relative;
+}
+
+.jiyu-head {
+  margin-bottom: 16rpx;
+}
+
+.jiyu-seal {
+  display: inline-block;
+  font-size: 24rpx;
+  color: #ab3834;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  font-weight: 700;
+  font-family: var(--serif);
+}
+
+.jiyu-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin: 14rpx 0;
+}
+
+.jiyu-line {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #2b1f16;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  font-family: var(--serif);
+  line-height: 1.4;
+}
+
+.jiyu-foot {
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  color: #8c7658;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
+}
