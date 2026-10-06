@@ -711,6 +711,34 @@
     const stageBody = state.mode === 'shake' ? `
       <div class="stage-live">
         <div class="coin-stage">
+          <div class="shaker-stage ${state.shaking ? 'is-shaking' : ''}" aria-hidden="true">
+            <div class="shaker-vessel">
+              <svg class="shaker-svg" viewBox="0 0 80 110" width="56" height="77">
+                <defs>
+                  <linearGradient id="shakerWood" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#2a2017" />
+                    <stop offset="25%" stop-color="#3d2f23" />
+                    <stop offset="60%" stop-color="#241a12" />
+                    <stop offset="100%" stop-color="#140f0b" />
+                  </linearGradient>
+                  <linearGradient id="shakerGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ebd59f" />
+                    <stop offset="50%" stop-color="#aa8645" />
+                    <stop offset="100%" stop-color="#ebd59f" />
+                  </linearGradient>
+                </defs>
+                <path d="M 16 24 C 18 60, 20 86, 22 96 C 24 100, 56 100, 58 96 C 60 86, 62 60, 64 24 Z" fill="url(#shakerWood)" stroke="#140f0b" stroke-width="1.5" />
+                <ellipse cx="40" cy="24" rx="24" ry="10" fill="#150f0b" stroke="url(#shakerGold)" stroke-width="1.8" />
+                <ellipse cx="40" cy="25" rx="18" ry="6" fill="#0d0907" />
+                <circle class="cup-coin-glint" cx="40" cy="24" r="7" fill="rgba(242, 220, 150, 0.75)" />
+                <path d="M 18 42 C 28 47, 52 47, 62 42" fill="none" stroke="url(#shakerGold)" stroke-width="1.4" opacity="0.85" />
+                <path d="M 19 46 C 29 51, 51 51, 61 46" fill="none" stroke="url(#shakerGold)" stroke-width="0.8" opacity="0.65" />
+                <path d="M 21 72 C 30 76, 50 76, 59 72" fill="none" stroke="url(#shakerGold)" stroke-width="1.4" opacity="0.85" />
+                <circle cx="40" cy="59" r="6.5" fill="#8f261f" opacity="0.9" />
+                <text x="40" y="62.5" font-size="6" fill="#faeed7" font-weight="bold" text-anchor="middle" font-family="serif">易</text>
+              </svg>
+            </div>
+          </div>
           <div class="coins ${state.shaking ? 'shake' : ''}">
             ${[0,1,2].map((i) => {
               const c = (state.displayCoins && state.displayCoins[i]) || null
@@ -788,8 +816,12 @@
       state.shaking = true
       state.current = null
       state.displayCoins = result.coins
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        // 摇筒震颤 (0ms, 180ms, 360ms) + 倾掷出钱 (720ms) + 触盘落定 (1200ms)
+        try { navigator.vibrate([15, 80, 18, 90, 20, 200, 35, 60, 20]) } catch (e) { /* ignore */ }
+      }
       render()
-      setTimeout(() => pushYao(result), 1600)
+      setTimeout(() => pushYao(result), 1800)
     }
     app.querySelectorAll('[data-manual]').forEach((el) => {
       el.onclick = () => {

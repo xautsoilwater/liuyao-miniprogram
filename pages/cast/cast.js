@@ -129,9 +129,23 @@ Page({
       current: null,
       displayCoins: result.coins
     })
+
+    // 方案二阶梯触觉反馈：筒内摇动轻震 -> 倾倒掷出 -> 铜钱撞盘中震
+    try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
+    setTimeout(() => {
+      try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
+    }, 280)
+    setTimeout(() => {
+      try { wx.vibrateShort({ type: 'light' }) } catch (e) { /* ignore */ }
+    }, 560)
+    setTimeout(() => {
+      // 约 1380ms 处铜钱自筒口飞坠触及钱盘
+      try { wx.vibrateShort({ type: 'medium' }) } catch (e) { /* ignore */ }
+    }, 1380)
+
     setTimeout(() => {
       this.pushYao(result)
-    }, 1600)
+    }, 1800)
   },
 
   pickManual(e) {
