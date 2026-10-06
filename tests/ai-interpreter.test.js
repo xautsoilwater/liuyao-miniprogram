@@ -60,7 +60,8 @@ const fallbackResult = buildIntelligentFallbackInterpretation({
 assert(fallbackResult.summary, '必须有神机总断')
 assert(fallbackResult.jiyuExplain.includes('开拓新市场'), '偈语解释必须靶向出现问卦者的具体标的')
 assert(fallbackResult.jiyuExplain.includes('今年下半年'), '必须有时间节律回应')
-assert(fallbackResult.jiyuExplain.includes('当下') || fallbackResult.jiyuExplain.includes('依卦'), '必须有具体先手动作指引')
+assert(fallbackResult.jiyuExplain.includes('直断'), '必须先给出明确直断')
+assert(fallbackResult.jiyuExplain.includes('下一步'), '必须有具体下一步动作')
 assert(fallbackResult.jiyuExplain.includes('本卦') || fallbackResult.jiyuExplain.includes('卦德'), '偈语解释须紧扣卦象')
 assert(!fallbackResult.guaExplain, '不再单独输出卦象解释')
 assert(Array.isArray(fallbackResult.jiyu) && fallbackResult.jiyu.length === 4, '必须包含四句趋吉避凶神机偈语')
@@ -70,8 +71,28 @@ fallbackResult.jiyu.forEach((line, i) => {
   assert(fallbackResult.jiyuExplain.includes(line), `偈语解释必须引用第${i + 1}句原文以逐句对应`)
   assert(fallbackResult.jiyuExplainItems[i].quote === line, `分段条目第${i + 1}句须对齐偈文`)
   assert(fallbackResult.jiyuExplainItems[i].text.length >= 12, `分段解释须可读懂（第${i + 1}句过短）`)
-  assert(fallbackResult.jiyuExplainItems[i].text.length <= 80, `分段解释仍宜克制篇幅（第${i + 1}句）`)
+  assert(fallbackResult.jiyuExplainItems[i].text.length <= 120, `分段解释仍宜克制篇幅（第${i + 1}句）`)
 })
+
+// 方位题必须给出具体方位
+const placeResult = buildIntelligentFallbackInterpretation({
+  question: '东西丢在哪个方向？',
+  cast
+})
+assert(placeResult.jiyuExplain.includes('直断'), '方位题须有直断')
+assert(/东|南|西|北/.test(placeResult.jiyuExplain), '方位题须给出具体方位')
+assert(placeResult.jiyuExplain.includes('下一步'), '方位题须有下一步')
+console.log('✔ 方位题直断测试通过')
+
+// 时间题必须给出时间范围
+const whenResult = buildIntelligentFallbackInterpretation({
+  question: '开拓新市场什么时候合适？',
+  cast
+})
+assert(whenResult.jiyuExplain.includes('直断'), '时间题须有直断')
+assert(/日|月|近几|旬|窗口|应期/.test(whenResult.jiyuExplain), '时间题须给出具体时间范围')
+console.log('✔ 时间题直断测试通过')
+
 console.log('✔ 智能理数兜底推演高度聚焦测试通过')
 console.log('总断概要:', fallbackResult.summary)
 console.log('四句偈语:\n' + fallbackResult.jiyu.join('\n'))

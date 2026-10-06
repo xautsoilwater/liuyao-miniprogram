@@ -7,6 +7,7 @@
 const { getAiConfig } = require('./ai-config')
 const { getGuaCi } = require('../data/guaci')
 const { getGuaXiangjie } = require('../data/gua64-xiangjie')
+const { parseQuestion, ZHI_DIR, GUA_DIR } = require('./ask')
 
 /**
  * 将六爻排盘数据格式化为适合大模型理解的周易象数报单
@@ -123,6 +124,52 @@ function toSectionItems(text) {
 }
 
 /**
+ * 从盘面取主方位（妻财/应爻/动爻/世爻地支 → 外卦后天位）
+ */
+function resolvePlaceFromCast(cast) {
+  const ben = cast && cast.ben
+  if (!ben) return ''
+  const yaos = ben.yaosBottomUp || []
+  const prefer = [
+    yaos.find((y) => y.liuqin === '妻财'),
+    yaos.find((y) => y.role === '应'),
+    yaos.find((y) => y.changing),
+    yaos.find((y) => y.role === '世')
+  ].filter(Boolean)
+  for (const y of prefer) {
+    if (y.zhi && ZHI_DIR[y.zhi]) return ZHI_DIR[y.zhi]
+  }
+  if (ben.upper && GUA_DIR[ben.upper.name]) return GUA_DIR[ben.upper.name]
+  if (ben.lower && GUA_DIR[ben.lower.name]) return GUA_DIR[ben.lower.name]
+  const palace = (ben.palaceName || '').replace(/宫$/, '')
+  if (palace && GUA_DIR[palace]) return GUA_DIR[palace]
+  return ''
+}
+
+/**
+ * 给出可读的具体应期/时间范围
+ */
+function resolveYingqiFromCast(cast, tone, timeFrame) {
+  const yaos = (cast && cast.ben && cast.ben.yaosBottomUp) || []
+  const moving = yaos.filter((y) => y.changing)
+  const y = moving[0] || yaos.find((y) => y.role === '世') || yaos[0]
+  const zhi = (y && y.zhi) || ''
+  const dayZhi = (cast && cast.calendar && cast.calendar.day && cast.calendar.day.zhi) || ''
+  const keyZhi = zhi || dayZhi
+  const zhiHint = keyZhi ? `「${keyZhi}」日及其冲合日` : '值日支冲合之日'
+
+  if (timeFrame) {
+    if (tone === 'good') return `就你问的「${timeFrame}」看，偏可推进；该窗口内重点盯${zhiHint}`
+    if (tone === 'bad') return `就你问的「${timeFrame}」看，偏不宜硬闯；宁可放到该窗口后半段，或等到${zhiHint}再动`
+    return `「${timeFrame}」内尚两可，宜先小步试探，逢${zhiHint}再加码`
+  }
+  if (tone === 'good' && moving.length) return `应期偏近，约近几日至本月内；重点看${zhiHint}`
+  if (tone === 'good') return `应期偏稳偏慢，宜按月推进；可参${zhiHint}`
+  if (tone === 'bad') return `应期易迟滞反复，近一旬不宜死磕；等${zhiHint}后再看`
+  return `应期未明，先观察半个月；重点留意${zhiHint}前后`
+}
+
+/**
  * 深度解构问卦者的问题意图、核心标的物、时间窗口与动作焦点
  */
 function analyzeQuestionIntent(rawQuestion) {
@@ -136,13 +183,19 @@ function analyzeQuestionIntent(rawQuestion) {
       actionVerb: '行事进退',
       targetNoun: '万事机缘',
       category: 'general',
-      keyDilemma: '知常明变与审时度势'
+      keyDilemma: '知常明变与审时度势',
+      askMode: 'outlook',
+      whenKind: '',
+      modeLabel: '走势',
+      focus: '综合运程进退'
     }
   }
 
-  // 1. 抽取时间窗口
-  let timeFrame = ''
-  const timeMatch = q.match(/(今年下半年|今年上半年|下半年|上半年|今年年底|年底|明年|下个月|本月|近期|眼下|当下|未来三年|未来五年|这几天|未来半年|秋天|冬天|春天|夏天)/)
+  const parsed = parseQuestion(q) || {}
+
+  // 1. 抽取时间窗口（用户原话优先）
+  let timeFrame = parsed.timeHint || ''
+  const timeMatch = q.match(/(今年下半年|今年上半年|下半年|上半年|今年年底|年底前|年底|明年上半年|明年下半年|明年|下个月|本月|这个月|近期|眼下|当下|未来三年|未来五年|这几天|近一周|本周|下周|未来半年|秋天|冬天|春天|夏天|年内|月底前)/)
   if (timeMatch) {
     timeFrame = timeMatch[1]
   }
@@ -153,12 +206,17 @@ function analyzeQuestionIntent(rawQuestion) {
   let targetNoun = '所测事宜'
   let keyDilemma = '把握机先与化解阻滞'
 
-  if (/拓|辟|进军|新市场|新赛道|业务|获客|扩张|新项目/.test(q)) {
+  if (/哪里|哪儿|何处|何方|什么地方|哪个方向|什么方向|方位|丢在哪|在哪个|往哪/.test(q) || parsed.mode === 'where') {
+    category = 'place'
+    actionVerb = '寻位定向'
+    targetNoun = '所求方位'
+    keyDilemma = '主方位与邻近方位的取舍'
+  } else if (/拓|辟|进军|新市场|新赛道|业务|获客|扩张|新项目/.test(q)) {
     category = 'expand'
     actionVerb = '开拓进取'
     targetNoun = '开拓新市场业务'
     keyDilemma = '外围获客与内部资金链防守'
-  } else if (/合伙|合作|入股|搭伙|股份|分红/.test(q)) {
+  } else if (/合伙|合作|入股|搭伙|股份|加盟/.test(q)) {
     category = 'partner'
     actionVerb = '合伙共事'
     targetNoun = '合伙商业合作'
@@ -210,9 +268,10 @@ function analyzeQuestionIntent(rawQuestion) {
     keyDilemma = '旅途防备与人际和气'
   }
 
-  // 提取用户问句的核心标的，过滤掉“能不能”、“是否合适”等提问词与时间状语
-  let cleanTopic = q
+  // 提取用户问句的核心标的
+  let cleanTopic = (parsed.focus || q)
     .replace(/[吗呢吧呀？\?！!]/g, '')
+    .replace(/(能不能|是否合适|是否可以|好不好|会怎样|如何|怎么样|能否顺利|成不成|可以吗|可否|行不行|合适)$/g, '')
     .replace(/(能不能|是否合适|是否可以|好不好|会怎样|如何|怎么样|能否顺利|成不成|可以吗|可否|行不行)/g, '')
     .trim()
 
@@ -230,7 +289,12 @@ function analyzeQuestionIntent(rawQuestion) {
     category,
     actionVerb,
     targetNoun: targetNoun || cleanTopic,
-    keyDilemma
+    keyDilemma,
+    askMode: parsed.mode || 'outlook',
+    whenKind: parsed.whenKind || '',
+    modeLabel: parsed.modeLabel || '走势',
+    focus: cleanTopic,
+    parsed
   }
 }
 
@@ -245,34 +309,46 @@ function buildDivinationPrompt(a, b) {
   const bianAlias = (cast?.bian?.name || '').replace(/为[天地水火山风雷泽]/g, '')
   const benDetail = getGuaXiangjie(benAlias) || {}
   const bianDetail = getGuaXiangjie(bianAlias) || {}
+  const placeHint = resolvePlaceFromCast(cast) || '待由用神地支细参'
+  const mode = intent.askMode || 'outlook'
+  const modeHint = mode === 'where'
+    ? `此问是方位题，必须给出具体方位（如东南、正北），参考盘面方位取象「${placeHint}」`
+    : mode === 'when'
+      ? `此问是时间/应期题，必须给出具体时间范围（如近几日、本月内、某地支日冲合）`
+      : mode === 'yesno'
+        ? `此问是成否/可否题，第一句必须明确倾向：可行 / 暂不宜 / 先试探`
+        : `此问须紧扣「${intent.cleanTopic}」作答，勿答成不相干的空话`
 
-  const systemPrompt = `你是精通《周易》纳甲六爻的断卦师。请紧扣本卦卦象与所测事宜，写出谨慎、可读的断语。
+  const systemPrompt = `你是精通《周易》纳甲六爻的断卦师。断语必须回答用户真正问的那件事，不能答非所问。
 
 【盘面】
 - 本卦：《${cast?.ben?.name || '本卦'}》（卦德：${benDetail.theme || '知进知退，顺时而动'}；象理：${benDetail.yili || benDetail.nameWhy || '君子以顺天应人'}）
 - 变卦：${cast?.bian?.name ? `动化《${cast.bian.name}》（${bianDetail.theme || '机运流转'}）` : '静卦无变'}
-- 所测：「${intent.cleanTopic}」；时间：${intent.timeFrame || '当前'}；关键：${intent.keyDilemma}
+- 所问原话：「${question || '综合运程'}」
+- 核心标的：「${intent.cleanTopic}」；问法：${intent.modeLabel || '走势'}；时间：${intent.timeFrame || '未特别指定'}；关键：${intent.keyDilemma}
+- 方位取象参考：${placeHint}
 
 【要求】
 1. 只输出两部分：神机四句偈、偈语解释。不要单独写「卦象解释」。
-2. 神机四句偈：七言四句，每行一句，共28字；须从本卦取象，紧扣「${intent.cleanTopic}」，措辞谨慎，勿夸大、勿空话。
-3. 偈语解释：必须逐句对应四句偈，格式固定四行——
-「第一句原文」：点明本卦取象与此事大势（约30～50字）
-「第二句原文」：用卦德说明成败关键
-「第三句原文」：结合动静/变卦与「${intent.timeFrame || '当前'}」说明须防什么
-「第四句原文」：给出紧扣卦象的当下一步
-每句解释都要把卦象（本卦名、卦德或象意）融入人事，让人读懂；勿另开卦象专段，勿写成长文。
-4. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
+2. ${modeHint}
+3. 神机四句偈：七言四句，每行一句，共28字；从本卦取象，紧扣「${intent.cleanTopic}」，措辞谨慎。
+4. 偈语解释：逐句对应四句偈，格式固定四行——
+「第一句原文」：直断——明确回答所问（成否/方位/时间范围），并点本卦取象（约35～55字）
+「第二句原文」：何以见得——用卦德说明依据与关键
+「第三句原文」：时间或方位细节 + 须防什么（问时间给具体窗口；问地点给具体方位）
+「第四句原文」：下一步怎么做——可立刻执行的一步
+禁止空泛套话，禁止与所问无关的内容；勿写成长文。
+5. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
 
 【严格按以下两部分输出】：
 ### 【神机四句偈】
-（七言四句，每行一句，紧扣本卦取象）
+（七言四句，每行一句，紧扣本卦与所问）
 
 ### 【偈语解释】
-（四行，每行「该句原文」：融入卦象的短解；与上面四句一一对应）`
+（四行，每行「该句原文」：直断/依据/时位/下一步；与上面四句一一对应）`
 
   const userPrompt = `所测事宜：「${question || '未注明具体事由，请就卦象吉凶作综合研判'}」
-本卦《${cast?.ben?.name || '本卦'}》（${benDetail.theme || ''}）。请把卦象融入四句偈及其解释，不要单独写卦象解释。
+本卦《${cast?.ben?.name || '本卦'}》（${benDetail.theme || ''}）。请紧扣这句问话作答：先给明确结论，再给时间或方位（若问到），最后给下一步；不要答非所问，不要单独写卦象解释。
 
 盘面：
 ${formatCastForPrompt(cast)}`
@@ -999,7 +1075,7 @@ function parseJiyuExplainItems(explain, jiyu) {
 }
 
 /**
- * 依据四句偈生成逐句解释：卦象融入人事，措辞谨慎、可读
+ * 依据四句偈生成逐句解释：紧扣所问，给出明确答复、时间/方位与下一步
  */
 function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
   const intent = analyzeQuestionIntent(question)
@@ -1020,8 +1096,9 @@ function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
     action: '坚守正道，以退为进'
   }
 
-  const topic = intent.cleanTopic
-  const timeStr = intent.timeFrame || '当前'
+  const topic = intent.focus || intent.cleanTopic
+  const timeStr = intent.timeFrame || ''
+  const askMode = intent.askMode || 'outlook'
   const theme = (benDetail.theme || '知进知退，顺时而动').replace(/[。；]+$/g, '')
   const nature = compressEssence(essence.nature, theme, lines[0], 26)
   const spirit = compressEssence(essence.spirit, theme, lines[1], 28)
@@ -1032,35 +1109,69 @@ function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
     .trim()
     .slice(0, 18)
 
-  const toneHint = tone === 'good'
-    ? '总体可推进，但仍须依象谨慎'
-    : tone === 'bad'
-      ? '阻力偏多，宜缓不宜急'
-      : '吉凶相半，宜稳中求进'
-
+  const place = resolvePlaceFromCast(cast)
+  const yingqi = resolveYingqiFromCast(cast, tone, timeStr)
+  const guaLabel = cleanName || benGuaName
   const moveHint = hasMove && bianAlias && bianAlias !== cleanName
     ? `爻动化《${bianAlias}》，事有转折`
     : '六爻安静，宜守常蓄力'
 
-  const guaLabel = cleanName || benGuaName
+  // 第一句：直断——必须回答用户问的那件事
+  let verdict = ''
+  if (askMode === 'where' || intent.category === 'place') {
+    verdict = place
+      ? `直断：你问的方位，重点落在「${place}」一侧。`
+      : `直断：你问的方位信号不足，暂不宜钉死一处。`
+  } else if (askMode === 'when') {
+    verdict = `直断：${yingqi}。`
+  } else if (askMode === 'yesno') {
+    verdict = tone === 'good'
+      ? `直断：就「${topic}」而言，倾向可行，可以推进。`
+      : tone === 'bad'
+        ? `直断：就「${topic}」而言，倾向暂不宜，宜缓或改道。`
+        : `直断：就「${topic}」而言，尚未明朗，宜先试探再定。`
+  } else if (askMode === 'how') {
+    verdict = `直断：办「${topic}」，先落地一步——${action}。`
+  } else {
+    verdict = tone === 'good'
+      ? `直断：你问「${topic}」，大势偏好，可推进。`
+      : tone === 'bad'
+        ? `直断：你问「${topic}」，大势偏逆，宜暂守。`
+        : `直断：你问「${topic}」，吉凶相半，宜稳中求。`
+  }
+
+  // 第三句：时间或方位细节
+  let line3 = ''
+  if (askMode === 'where' || intent.category === 'place') {
+    line3 = `${moveHint}。方位取象以「${place || '邻近方位'}」为主${place ? '，可连同相邻方位核查' : ''}。尤须戒：${pitfall}。`
+  } else if (askMode === 'when') {
+    line3 = `${moveHint}。时间范围：${yingqi}。尤须戒：${pitfall}。`
+  } else if (timeStr) {
+    line3 = `${moveHint}。时间上：${yingqi}。尤须戒：${pitfall}。`
+  } else {
+    line3 = `${moveHint}。若问何时：${yingqi}。尤须戒：${pitfall}。`
+  }
+
+  // 第四句：下一步怎么做
+  let nextStep = ''
+  if (askMode === 'where' || intent.category === 'place') {
+    nextStep = place
+      ? `下一步：先往「${place}」方向核查或行动，再向相邻方位扩展；忌漫无目的乱找。`
+      : `下一步：先回到最后出现处与动线回溯，方位未明时勿只盯一点。`
+  } else if (askMode === 'when') {
+    nextStep = `下一步：按上述时间窗口排期，窗口外勿硬推；先做一件可验证的小动作试水。`
+  } else if (tone === 'bad') {
+    nextStep = `下一步：先停主攻，改为「${action}」；把「${topic}」拆成可验证的小步再议。`
+  } else {
+    nextStep = `下一步：立刻落地「${action}」，专攻「${topic}」这一件，忌同时铺太多线。`
+  }
+  if (xiang) nextStep = `象意「${xiang}」。` + nextStep
 
   return [
-    {
-      quote: lines[0],
-      text: `本卦《${guaLabel}》，取象「${nature}」。问「${topic}」：${toneHint}。`
-    },
-    {
-      quote: lines[1],
-      text: `卦德「${theme}」。此句点明关键：${spirit}。`
-    },
-    {
-      quote: lines[2],
-      text: `${moveHint}。${timeStr}尤须戒：${pitfall}。`
-    },
-    {
-      quote: lines[3],
-      text: `${xiang ? `象意「${xiang}」。` : ''}当下宜依卦而行：${action}。`
-    }
+    { quote: lines[0], text: `${verdict}本卦《${guaLabel}》，取象「${nature}」。` },
+    { quote: lines[1], text: `何以见得：卦德「${theme}」，关键在「${spirit}」。` },
+    { quote: lines[2], text: line3 },
+    { quote: lines[3], text: nextStep }
   ]
 }
 
@@ -1131,20 +1242,25 @@ function parseAiDivinationOutput(text, question, cast) {
 
   const benGuaName = cast?.ben?.name || '大成卦'
   const cleanAlias = resolveGuaAlias(benGuaName)
+  const intentTopic = (analyzeQuestionIntent(question).cleanTopic || '').trim()
 
   // 1. 确保四句偈语 100% 存在且工整
   if (!parsed.jiyu || parsed.jiyu.length < 4) {
     parsed.jiyu = generateDivinationJiyu(benGuaName, tone, question)
   }
 
-  // 2. 偈语解释须逐句对应，并紧扣本卦卦象；否则按卦象重写
+  // 2. 偈语解释须逐句对应、紧扣卦象与所问；否则重写
   const explainHasGua = !!(parsed.jiyuExplain && (
     parsed.jiyuExplain.includes(`《${cleanAlias}`) ||
     parsed.jiyuExplain.includes('本卦') ||
     parsed.jiyuExplain.includes('卦德') ||
     (cleanAlias && parsed.jiyuExplain.includes(cleanAlias))
   ))
-  if (!isJiyuExplainAligned(parsed.jiyu, parsed.jiyuExplain) || !explainHasGua) {
+  const explainHitsQuestion = !!(parsed.jiyuExplain && (
+    parsed.jiyuExplain.includes('直断') ||
+    (intentTopic && parsed.jiyuExplain.includes(intentTopic.slice(0, Math.min(4, intentTopic.length))))
+  ))
+  if (!isJiyuExplainAligned(parsed.jiyu, parsed.jiyuExplain) || !explainHasGua || !explainHitsQuestion) {
     parsed.jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone, parsed.jiyu)
   }
   let jiyuExplainItems = parseJiyuExplainItems(parsed.jiyuExplain, parsed.jiyu)
