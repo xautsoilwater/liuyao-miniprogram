@@ -592,7 +592,14 @@
     .manual-live .manual-gua-box .mini-yao {
       width: 66px;
       height: 10px;
-      background: rgba(20, 15, 12, 0.12);
+      background: rgba(20, 15, 12, 0.1);
+      border-radius: 2px;
+    }
+    .manual-live .manual-gua-box .mini-yao.filled.yang {
+      background: var(--ink);
+    }
+    .manual-live .manual-gua-box .mini-yao.filled.yin {
+      background: linear-gradient(90deg, var(--ink) 0 42%, transparent 42% 58%, var(--ink) 58% 100%);
     }
     .yao-line {
       display: flex; justify-content: space-between; align-items: center;
