@@ -1,12 +1,9 @@
 <view class="yitu">
-  <!-- 顶部读数：方位 + 度数 + 山向（借鉴专业罗盘 HUD） -->
+  <!-- 顶部读数：方位 + 度数 -->
   <view class="hud">
     <view class="hud-main">
       <text class="hud-dir">{{headingDir}}</text>
       <text class="hud-deg">{{headingDeg}}°</text>
-    </view>
-    <view class="hud-sub">
-      <text class="hud-mountain">{{mountain}}山</text>
     </view>
   </view>
 

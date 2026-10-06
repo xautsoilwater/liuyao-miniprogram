@@ -334,14 +334,12 @@
     const plate = document.getElementById('luopan-plate')
     const hudDir = document.getElementById('hud-dir')
     const hudDeg = document.getElementById('hud-deg')
-    const hudMountain = document.getElementById('hud-mountain')
     const h = state.compassReady
       ? state.compassHeading
       : headingFromPlate(state.plateDeg)
     if (plate) plate.setAttribute('transform', `rotate(${state.plateDeg} 200 200)`)
     if (hudDir) hudDir.textContent = dirNameOf(h)
     if (hudDeg) hudDeg.textContent = `${(Math.round(h * 10) / 10)}°`
-    if (hudMountain) hudMountain.textContent = `${mountainOf(h)}山`
   }
 
   function applyLiveHeading(heading) {
@@ -493,7 +491,6 @@
       <div class="luopan-controls">
         <div class="luopan-hud" id="luopan-hud">
           <div class="hud-main"><span id="hud-dir">${dirNameOf(h)}</span><span id="hud-deg">${(Math.round(h * 10) / 10)}°</span></div>
-          <div class="hud-sub"><span id="hud-mountain">${mountainOf(h)}山</span></div>
           <div class="lucky-hint ${state.luckyOpen ? 'on' : ''}" id="lucky-hint">${luckyHint}</div>
         </div>
       </div>

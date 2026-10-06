@@ -61,18 +61,8 @@
   font-variant-numeric: tabular-nums;
 }
 .hud-sub {
-  margin-top: 6rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8rpx;
-  font-size: 28rpx;
-  letter-spacing: 0.14em;
-  color: rgba(42, 34, 28, 0.55);
+  display: none !important;
 }
-.hud-mountain {
-  color: rgba(160, 51, 40, 0.88);
-  font-weight: 700;
   font-size: 30rpx;
 }
 .hud-sep { opacity: 0.45; }
