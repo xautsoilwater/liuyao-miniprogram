@@ -996,11 +996,8 @@
     }
 
     const res = state.aiResult || (window.LiuYao.interpret ? window.LiuYao.interpret(state.cast, 'general') : {})
-    const sections = (res.sections || []).map((sec, idx) => `
-      <div class="sec">
-        <div class="sec-head"><span class="sec-no">${idx + 1}</span><span class="sec-title">${cleanText(sec.title).replace(/^[一二三四五六七]、/, '')}</span></div>
-        ${sec.items.map((it) => `<div class="point">${cleanText(it)}</div>`).join('')}
-      </div>`).join('')
+    const jiyuExp = cleanText(res.jiyuExplain || res.directAnswer || '')
+    const guaExp = cleanText(res.guaExplain || res.judgment || '')
 
     app.innerHTML = `
       <div class="title-zh">神机断卦</div>
@@ -1011,31 +1008,12 @@
         <div class="ask-q">${state.question || '心意默祷（诸事顺逆与进退机宜）'}</div>
       </div>
 
-      <div class="verdict ${res.tendency ? res.tendency.tone : 'mid'}">
-        ${corners()}
-        <div style="display:inline-block;padding:2px 10px;border:1px solid rgba(158,42,43,0.6);color:var(--cinnabar);font-size:11px;letter-spacing:0.22em;border-radius:2px;background:rgba(158,42,43,0.06);margin-bottom:6px;font-family:var(--serif)">✦ 太史令 · 研断 ✦</div>
-        <div class="summary">神机：${cleanText(res.summary) || '静候天时'}</div>
-        ${res.reply ? `<div class="reply">${cleanText(res.reply)}</div>` : ''}
-        <div class="judgment">${cleanText(res.judgment || res.summaryNote || '')}</div>
-        ${res.advice ? `<div class="advice">${cleanText(res.advice)}</div>` : ''}
-      </div>
-
-      ${res.directAnswer ? `
-        <div class="concrete-card">
-          ${corners()}
-          <div class="concrete-head">
-            <span class="concrete-badge">切题直断</span>
-            <span class="concrete-title">针对所测事宜 · 明确指引</span>
-          </div>
-          <div class="concrete-body">${cleanText(res.directAnswer)}</div>
-        </div>
-      ` : ''}
-
+      <!-- 1. 置顶第一位：趋吉避凶 · 神机四句偈 -->
       ${res.jiyu && res.jiyu.length ? `
         <div class="jiyu-card">
           ${corners()}
           <div class="jiyu-head">
-            <span class="jiyu-seal">✦ 趋吉避凶 · 神机金偈 ✦</span>
+            <span class="jiyu-seal">✦ 趋吉避凶 · 神机四句偈 ✦</span>
           </div>
           <div class="jiyu-lines">
             ${res.jiyu.map(line => `<div class="jiyu-line">${cleanText(line)}</div>`).join('')}
@@ -1044,7 +1022,29 @@
         </div>
       ` : ''}
 
-      <div class="frame">${corners()}${sections}</div>
+      <!-- 2. 第二位：偈语解释（针对所测事宜的具体解答与避凶指引） -->
+      ${jiyuExp ? `
+        <div class="card-box">
+          ${corners()}
+          <div class="card-head">
+            <span class="card-badge">直断指引</span>
+            <span class="card-title">偈语解释 · 趋吉避凶</span>
+          </div>
+          <div class="card-body">${jiyuExp}</div>
+        </div>
+      ` : ''}
+
+      <!-- 3. 第三位：卦象解释（本变卦与爻动之易理精释） -->
+      ${guaExp ? `
+        <div class="card-box">
+          ${corners()}
+          <div class="card-head">
+            <span class="card-badge">象数易理</span>
+            <span class="card-title">卦象解释</span>
+          </div>
+          <div class="card-body">${guaExp}</div>
+        </div>
+      ` : ''}
 
       <div class="row" style="margin:16px 0 8px">
         <button class="btn btn-ghost" id="reInterpret">重新参详</button>
@@ -1067,20 +1067,15 @@
       const benGua = state.cast.ben ? state.cast.ben.name : ''
       const bianGua = state.cast.bian ? state.cast.bian.name : '无变'
       let text = `【所测事宜】${state.question || '心意默祷'}\n`
-      text += `【周易排盘】本卦《${benGua}》 变卦《${bianGua}》\n`
-      text += `【神机结论】${cleanText(res.summary) || ''}\n\n`
-      if (res.directAnswer) {
-        text += `【针对答复 · 明确指引】\n${cleanText(res.directAnswer)}\n\n`
-      }
+      text += `【周易排盘】本卦《${benGua}》 变卦《${bianGua}》\n\n`
       if (res.jiyu && res.jiyu.length) {
-        text += `【趋吉避凶 · 神机金偈】\n${res.jiyu.map(l => cleanText(l)).join('\n')}\n\n`
+        text += `【趋吉避凶 · 神机四句偈】\n${res.jiyu.map(l => cleanText(l)).join('\n')}\n\n`
       }
-      if (res.sections && res.sections.length) {
-        res.sections.forEach((s) => {
-          text += `■ ${cleanText(s.title)}\n`
-          s.items.forEach((it) => { text += `· ${cleanText(it)}\n` })
-          text += '\n'
-        })
+      if (jiyuExp) {
+        text += `【偈语解释 · 趋吉避凶】\n${jiyuExp}\n\n`
+      }
+      if (guaExp) {
+        text += `【卦象解释】\n${guaExp}\n`
       }
       if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {

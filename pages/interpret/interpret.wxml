@@ -21,33 +21,18 @@
     </view>
   </view>
 
-  <!-- 结果状态 -->
+  <!-- 结果状态：四句偈语放前面，偈语解释与卦象解释放下面 -->
   <block wx:if="{{!loading && result}}">
+    <!-- 所测事宜 -->
     <view class="ask-box" wx:if="{{result.question}}">
       <view class="ask-lab">所测事宜</view>
       <view class="ask-q">{{result.question}}</view>
     </view>
 
-    <view class="verdict {{result.tendency ? result.tendency.tone : 'mid'}}">
-      <view class="summary">神机：{{result.summary}}</view>
-      <view class="reply" wx:if="{{result.reply}}">{{result.reply}}</view>
-      <view class="judgment">{{result.judgment || result.summaryNote}}</view>
-      <view class="advice" wx:if="{{result.advice}}">{{result.advice}}</view>
-    </view>
-
-    <!-- 针对具体问题的解答与破局先手 -->
-    <view class="concrete-card" wx:if="{{result.directAnswer}}">
-      <view class="concrete-head">
-        <text class="concrete-badge">切题直断</text>
-        <text class="concrete-title">针对所测事宜 · 明确指引</text>
-      </view>
-      <view class="concrete-body">{{result.directAnswer}}</view>
-    </view>
-
-    <!-- 趋吉避凶 · 神机金偈 -->
+    <!-- 1. 置顶第一位：趋吉避凶 · 神机四句偈 -->
     <view class="jiyu-card" wx:if="{{result.jiyu && result.jiyu.length}}">
       <view class="jiyu-head">
-        <text class="jiyu-seal">✦ 趋吉避凶 · 神机金偈 ✦</text>
+        <text class="jiyu-seal">✦ 趋吉避凶 · 神机四句偈 ✦</text>
       </view>
       <view class="jiyu-lines">
         <view class="jiyu-line" wx:for="{{result.jiyu}}" wx:key="*this">{{item}}</view>
@@ -55,9 +40,22 @@
       <view class="jiyu-foot">默念受持 · 明理远虑 · 顺时趋吉</view>
     </view>
 
-    <view class="section" wx:for="{{result.sections}}" wx:key="title">
-      <view class="sec-title">{{item.title}}</view>
-      <view class="sec-item" wx:for="{{item.items}}" wx:for-item="line" wx:key="*this">{{line}}</view>
+    <!-- 2. 第二位：偈语解释（针对所测事宜的具体解答与避凶指引） -->
+    <view class="card-box" wx:if="{{result.jiyuExplain || result.directAnswer}}">
+      <view class="card-head">
+        <text class="card-badge">直断指引</text>
+        <text class="card-title">偈语解释 · 趋吉避凶</text>
+      </view>
+      <view class="card-body">{{result.jiyuExplain || result.directAnswer}}</view>
+    </view>
+
+    <!-- 3. 第三位：卦象解释（本变卦与爻动之易理精释） -->
+    <view class="card-box" wx:if="{{result.guaExplain || result.judgment}}">
+      <view class="card-head">
+        <text class="card-badge">象数易理</text>
+        <text class="card-title">卦象解释</text>
+      </view>
+      <view class="card-body">{{result.guaExplain || result.judgment}}</view>
     </view>
 
     <view class="action-row">

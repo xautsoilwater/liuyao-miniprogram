@@ -66,16 +66,16 @@ function formatCastForPrompt(cast) {
  * 参数归一化：无缝支持 ({ question, cast })、(cast, question)、(question, cast) 等多种调用签名
  */
 function normalizeArgs(a, b) {
-  if (a && typeof a === 'object' && ('cast' in a || 'question' in a)) {
+  if (a && typeof a === 'object' && 'cast' in a) {
     return {
       cast: a.cast || null,
-      question: typeof a.question === 'string' ? a.question : ''
+      question: typeof a.question === 'string' ? a.question : (typeof b === 'string' ? b : '')
     }
   }
-  if (a && typeof a === 'object' && (a.ben || a.changingIndexes || a.yaosBottomUp || a.lines)) {
+  if (a && typeof a === 'object' && (a.ben || a.changingIndexes || a.rawYaos || a.yaosBottomUp || a.lines)) {
     return {
       cast: a,
-      question: typeof b === 'string' ? b : (b && b.question ? b.question : '')
+      question: typeof b === 'string' ? b : (b && b.question ? b.question : (typeof a.question === 'string' ? a.question : ''))
     }
   }
   if (typeof a === 'string') {
@@ -131,32 +131,21 @@ function buildDivinationPrompt(a, b) {
 请你以高深、典雅、透彻、通情达理的文风，为问卦者抽丝剥茧地推演卦象天机。
 
 【断卦法则要求】：
-1. 【切中问题，直断事由】：紧扣问卦者的【具体所问】，开门见山给出鲜明、相对具体的回答与直接推断。明确事情可否行进、成败关键、顺逆走向、人际/合同/沟通中的具体防范点，并给出具体的破局先手策略，严禁空泛套话。
-2. 【神机四句偈，指明玄机】：必须为问卜者专赋一首七言绝句（四句诗偈，每句七字，共四句，共28字）。诗偈须融合本卦卦意、所问事宜与动变天机，言浅意深，工整押韵，专门指引问卦者在现实中如何「趋吉避凶」、转危为安。
-3. 【辨明用神】：依据问事所属，精准指认本卦中的【用神】（求财看妻财，求功名事业看官鬼，求文书学业论文看父母，问健康看世爻与官鬼，求子嗣看子孙，问婚恋男看财女看官并参世应等），明确说明为何取该爻为用神。
-4. 【察日月动化】：分析月建对用神之旺相休囚、日辰对用神之生克冲合，重点剖析动爻是回头生、回头克、化进神还是化退神，有无旬空或伏神。
-5. 【周易理数结合】：文白相间，典雅温润，兼具传统纳甲精髓与当代现实启发。绝不搞恐吓式的江湖宿命论，重在指引问卦者修德、审势、定心、知止与明理。
-6. 【纯正文风，绝无技术痕迹】：通篇必须纯以易学宗师太史令的身份作答，严禁出现任何“AI”、“人工智能”、“大模型”、“算法提示”、“语言模型”、“计算机”等现代词汇，言辞典雅纯正，深具古风易理底蕴。
-7. 【排版禁忌，严禁星号】：通篇绝对禁止输出任何 Markdown 星号（严禁出现 ** 加粗、严禁出现 * 列表符号或任何形式的星号），所有强调、重点字句请直接使用中文方头括号【】或书名号《》，列表请直接使用数字序号或汉字段落，保持纯净典雅的书卷阅读质感。
+1. 【神机四句偈，居首开示】：必须为问卜者专赋一首七言绝句（四句诗偈，每句七字，共四句，共28字）。诗偈须融合本卦卦意、所问事宜与动变天机，言浅意深，工整押韵，专门指引问卦者在现实中如何「趋吉避凶」、转危为安。
+2. 【偈语解释，直断事由】：紧扣问卦者的【具体所问】对四句偈语作通俗透彻解读，开门见山给出鲜明、相对具体的回答与直接推断。明确事情可否行进、成败关键、顺逆走向、人际/合同/沟通中的具体防范点，并给出具体的破局先手策略，严禁空泛套话。
+3. 【卦象解释，提纲挈领】：精炼阐明本卦、变卦、用神与动爻之易理象数。紧扣世应动变与天时大势，言简意赅，兼具传统纳甲精髓与当代现实启发，绝不搞恐吓式的江湖宿命论，重在指引问卦者修德、审势、定心、知止与明理。
+4. 【纯正文风，绝无技术痕迹】：通篇必须纯以易学宗师太史令的身份作答，严禁出现任何“AI”、“人工智能”、“大模型”、“算法提示”、“语言模型”、“计算机”等现代词汇，言辞典雅纯正，深具古风易理底蕴。
+5. 【排版禁忌，严禁星号】：通篇绝对禁止输出任何 Markdown 星号（严禁出现 ** 加粗、严禁出现 * 列表符号或任何形式的星号），所有强调、重点字句请直接使用中文方头括号【】或书名号《》，列表请直接使用数字序号或汉字段落，保持纯净典雅的书卷阅读质感。
 
-【请必须按如下结构输出】：
-### 【神机总断】
-（给出8-16字的四字断语排律，例如：“大吉亨通 · 渐入佳境”、“时机未至 · 持重蓄力”等，紧跟100字左右的核心判词定性）
+【请严格按如下三部分输出，结构精炼，层次分明】：
+### 【神机四句偈】
+（依卦理与所测事宜专赋七言四句诗偈，朗朗上口，言浅意深，每行一句，共四句，共28字）
 
-### 【切问切题 · 针对答复】
-（就问卜者具体所问的问题给出具体针对的回答：可否成事、何时破局、核心阻力人/事为何、当下第一步该怎么做，给出明确落地指引）
+### 【偈语解释】
+（解读四句诗偈玄机，紧扣问卦者所测事宜给出相对具体的回答与趋吉避凶指引：可否成事、成败关键、人际/合同防范与当下行动策略）
 
-### 【趋吉避凶 · 神机四句偈】
-（依卦理为问卜者专赋七言四句趋吉避凶绝句偈语，朗朗上口，言浅意深，每行一句，共四句，共28字）
-
-### 【用神与爻象探微】
-（详细剖析所取用神、月建日辰旺衰、世应生克、动爻化象及深层机理）
-
-### 【机运演进与应期】
-（分析事情发展的阶段节律，推断关键转机时段、月令应期或注意事项）
-
-### 【周易明理 · 趋吉避凶】
-（结合《易经》象传义理与现实处事智慧，给出切实可行的心态调摄与应对良策）`
+### 【卦象解释】
+（精练阐释本卦、变卦与动爻用神之易理象数，说明局势走向与易道修身处事之方）`
 
   const userPrompt = `问卦者所求之事：
 「${question || '未注明具体事由，请就卦象吉凶与当前运势作综合总断'}」
@@ -220,7 +209,8 @@ async function callAiDivinationApi(a, b) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${config.apiKey}`
       },
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify(requestBody),
+      signal: typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined
     })
 
     if (!response.ok) {
@@ -394,6 +384,8 @@ function parseAiDivinationOutput(text, question, cast) {
     judgment: '',
     directAnswer: '',
     jiyu: [],
+    jiyuExplain: '',
+    guaExplain: '',
     yongshen: '',
     yingqi: '',
     advice: '',
@@ -403,14 +395,7 @@ function parseAiDivinationOutput(text, question, cast) {
   // 提取各部分
   const parts = text.split(/###?\s*【/g)
   parts.forEach(part => {
-    if (part.startsWith('神机总断】')) {
-      const content = cleanAiMarkdown(part.replace(/^神机总断】\s*/, '').trim())
-      const lines = content.split('\n').map(l => cleanAiMarkdown(l).trim()).filter(Boolean)
-      parsed.summary = cleanAiMarkdown(lines[0] || '大成卦象 · 天机显现')
-      parsed.judgment = cleanAiMarkdown(lines.slice(1).join('\n') || content)
-    } else if (part.startsWith('切问切题 · 针对答复】') || part.startsWith('针对答复】') || part.startsWith('直断事宜') || part.startsWith('具体指引】')) {
-      parsed.directAnswer = cleanAiMarkdown(part.replace(/^(切问切题 · 针对答复|针对答复|直断事宜 · 具体指引|直断事宜|具体指引)】\s*/, '').trim())
-    } else if (part.startsWith('趋吉避凶 · 神机四句偈】') || part.startsWith('神机四句偈】') || part.startsWith('神机偈语】') || part.startsWith('四句偈语】')) {
+    if (part.startsWith('神机四句偈】') || part.startsWith('趋吉避凶 · 神机四句偈】') || part.startsWith('神机偈语】') || part.startsWith('四句偈语】')) {
       const jiyuContent = cleanAiMarkdown(part.replace(/^(趋吉避凶 · 神机四句偈|神机四句偈|神机偈语|四句偈语)】\s*/, '').trim())
       const jiyuLines = jiyuContent.split('\n')
         .map(l => cleanAiMarkdown(l).replace(/^[0-9一二三四\.\、\-\s]+/g, '').trim())
@@ -418,18 +403,21 @@ function parseAiDivinationOutput(text, question, cast) {
       if (jiyuLines.length >= 4) {
         parsed.jiyu = jiyuLines.slice(0, 4)
       }
-    } else if (part.startsWith('用神与爻象探微】')) {
-      parsed.yongshen = cleanAiMarkdown(part.replace(/^用神与爻象探微】\s*/, '').trim())
+    } else if (part.startsWith('偈语解释】') || part.startsWith('偈语解意】') || part.startsWith('切问切题 · 针对答复】') || part.startsWith('针对答复】') || part.startsWith('直断事宜') || part.startsWith('具体指引】')) {
+      parsed.jiyuExplain = cleanAiMarkdown(part.replace(/^(偈语解释 · 趋吉避凶|偈语解释|偈语解意|切问切题 · 针对答复|针对答复|直断事宜 · 具体指引|直断事宜|具体指引)】\s*/, '').trim())
+    } else if (part.startsWith('卦象解释】') || part.startsWith('卦象阐释】') || part.startsWith('用神与爻象探微】') || part.startsWith('卦象分析】')) {
+      parsed.guaExplain = cleanAiMarkdown(part.replace(/^(卦象解释 · 易理象数|卦象阐释|卦象解释|用神与爻象探微|卦象分析)】\s*/, '').trim())
+    } else if (part.startsWith('神机总断】')) {
+      const content = cleanAiMarkdown(part.replace(/^神机总断】\s*/, '').trim())
+      const lines = content.split('\n').map(l => cleanAiMarkdown(l).trim()).filter(Boolean)
+      parsed.summary = cleanAiMarkdown(lines[0] || '大成卦象 · 天机显现')
+      if (!parsed.guaExplain) parsed.guaExplain = cleanAiMarkdown(lines.slice(1).join('\n') || content)
     } else if (part.startsWith('机运演进与应期】')) {
       parsed.yingqi = cleanAiMarkdown(part.replace(/^机运演进与应期】\s*/, '').trim())
     } else if (part.startsWith('周易明理 · 趋吉避凶】')) {
       parsed.advice = cleanAiMarkdown(part.replace(/^周易明理 · 趋吉避凶】\s*/, '').trim())
     }
   })
-
-  // 兜底提取
-  if (!parsed.judgment) parsed.judgment = cleanAiMarkdown(text.slice(0, 300))
-  if (!parsed.summary) parsed.summary = '神机内蕴 · 顺时而动'
 
   // 判断倾向色调
   let tone = 'mid'
@@ -441,40 +429,39 @@ function parseAiDivinationOutput(text, question, cast) {
 
   const benGuaName = cast?.ben?.name || '大成卦'
 
-  // 确保四句偈语 100% 存在且工整
+  // 1. 确保四句偈语 100% 存在且工整
   if (!parsed.jiyu || parsed.jiyu.length < 4) {
     parsed.jiyu = generateDivinationJiyu(benGuaName, tone)
   }
 
-  // 确保切题具体答复存在
-  if (!parsed.directAnswer) {
-    parsed.directAnswer = generateConcreteAnswer(question, cast, benGuaName, tone)
+  // 2. 确保偈语解释 / 针对具体回答存在
+  if (!parsed.jiyuExplain) {
+    parsed.jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone)
+  }
+  parsed.directAnswer = parsed.jiyuExplain
+
+  // 3. 确保卦象解释存在
+  if (!parsed.guaExplain) {
+    parsed.guaExplain = cleanAiMarkdown(text.slice(0, 260))
+  }
+  parsed.judgment = parsed.guaExplain
+
+  if (!parsed.summary) {
+    parsed.summary = tone === 'good' ? '天开化育 · 顺势而上' : (tone === 'bad' ? '关山险阻 · 审慎待时' : '静待蓄势 · 循序渐进')
   }
 
   const sections = [
     {
-      title: '一、神机总断',
-      items: toSectionItems(parsed.judgment || parsed.summary)
-    },
-    {
-      title: '二、切问切题 · 针对答复',
-      items: toSectionItems(parsed.directAnswer)
-    },
-    {
-      title: '三、趋吉避凶 · 神机金偈',
+      title: '一、神机四句偈',
       items: parsed.jiyu
     },
     {
-      title: '四、用神与爻象探微',
-      items: toSectionItems(parsed.yongshen || '卦中用神清晰，察日月生克与动爻乘除，天机自现。')
+      title: '二、偈语解释 · 趋吉避凶',
+      items: toSectionItems(parsed.jiyuExplain)
     },
     {
-      title: '五、机运演进与应期',
-      items: toSectionItems(parsed.yingqi || '万物有时，事机发动逢值逢合之候为关键应期。')
-    },
-    {
-      title: '六、周易明理 · 趋吉避凶',
-      items: toSectionItems(parsed.advice || '知进知退，顺天应人，修德明理方能趋吉避凶。')
+      title: '三、卦象解释',
+      items: toSectionItems(parsed.guaExplain)
     }
   ]
 
@@ -484,12 +471,14 @@ function parseAiDivinationOutput(text, question, cast) {
     tone,
     tendency: { tone },
     summary: parsed.summary,
-    judgment: parsed.judgment,
-    directAnswer: parsed.directAnswer,
     jiyu: parsed.jiyu,
-    yongshen: parsed.yongshen,
-    yingqi: parsed.yingqi,
-    advice: parsed.advice,
+    jiyuExplain: parsed.jiyuExplain,
+    guaExplain: parsed.guaExplain,
+    directAnswer: parsed.jiyuExplain,
+    judgment: parsed.guaExplain,
+    yongshen: parsed.yongshen || parsed.guaExplain,
+    yingqi: parsed.yingqi || '',
+    advice: parsed.advice || '',
     sections,
     fullText: text
   }
@@ -503,7 +492,6 @@ function buildIntelligentFallbackInterpretation(a, b) {
   const benGuaName = cast?.ben?.name || '乾为天'
   const bianGuaName = (cast?.bian && cast?.bian?.name) || benGuaName
   const benGuaci = getGuaCi(benGuaName) || {}
-  const bianGuaci = getGuaCi(bianGuaName) || {}
 
   // 分析卦象动静
   const hasMove = !!(cast?.changingIndexes && cast.changingIndexes.length > 0)
@@ -527,69 +515,40 @@ function buildIntelligentFallbackInterpretation(a, b) {
   const dayGz = cal.day?.text || '吉日'
   const monthGz = cal.month?.text || '令月'
 
-  // 1. 针对性落地答复
-  const directAnswer = generateConcreteAnswer(question, cast, benGuaName, tone)
-
-  // 2. 四句神机诗偈
+  // 1. 置顶四句神机诗偈
   const jiyu = generateDivinationJiyu(benGuaName, tone)
 
-  // 3. 智能推演用神
-  let yongshenDesc = ''
-  if (/钱|财|收益|买|卖|盈|利/.test(question)) {
-    yongshenDesc = `问测求财获利，专以卦中【妻财】为用神。逢${monthGz}月建生助，财源有气；动爻生扶财爻，主利市可期，唯防兄弟爻暗动分夺。`
-  } else if (/工作|事业|考|官|晋升|职位|项目|前途/.test(question)) {
-    yongshenDesc = `问测功名事业与项目立项，首重卦中【官鬼】与【父母】爻。官鬼为职阶机运，父母为文书批文。今盘中世爻得地，官印相生，所图之事脉络分明。`
-  } else if (/感情|婚|爱|喜欢|交往|他|她/.test(question)) {
-    yongshenDesc = `问测姻缘情缘，重在参验【世爻】与【应爻】之相生相合。世应同心则吉，若逢相冲克害，则宜多假以时日，增进诚意相通。`
+  // 2. 偈语解释与针对所测落地具体答复
+  const jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone)
+
+  // 3. 卦象精炼解释
+  let guaExplain = ''
+  if (hasMove) {
+    guaExplain = `问测「${question || '所求诸事'}」，筮得本卦《${benGuaName}》，动化《${bianGuaName}》卦。卦中${changingCount}爻发动，逢${monthGz}值${dayGz}，机变丛生。象曰：「${benGuaci.xiang || '自强不息'}」。动爻翻转主事态见转枢，顺天休命、行所当行，虽有微滞亦能履险如夷。`
   } else {
-    yongshenDesc = `综合审视卦象，以【世爻】为自身根基，以【动爻】为机变枢纽。今得《${benGuaName}》卦，动化《${bianGuaName}》卦，主事态正在推移演变之中。`
+    guaExplain = `问测「${question || '所求诸事'}」，筮得《${benGuaName}》静卦。卦辞云：「${benGuaci.guaci || '利贞'}」。六爻安静无动变，气机凝敛，主大势以稳健持重为根基。宜守正固本，待时而发，不宜轻举盲动。`
   }
-
-  // 4. 智能推演应期
-  const yingqiDesc = hasMove
-    ? `卦中${changingCount}爻发动，变生不测。机运变转多应在动爻干支逢值、逢合之期，近期以逢冲开滞或月令交接之日（见${cal.month?.text || '本月'}中下旬）为关键分水岭。`
-    : `此卦纯静无动爻，事态处于恒定蓄势之局。无变则主慢，宜静守其常，待逢值之日月方见枢机明朗。`
-
-  // 5. 周易明理
-  const adviceDesc = `《易经·${benGuaName}卦》象曰：「${benGuaci.xiang || '君子以自强不息'}」。问事之要，不在贪求必应，而在知阴阳之消息。若顺应天时、修谨人事，则虽有阻滞亦可化险为夷。`
-
-  const judgmentDesc = `所问「${question || '事由'}」，筮得本卦《${benGuaName}》${hasMove ? `，变卦《${bianGuaName}》` : '（静卦）'}。卦辞云：「${benGuaci.guaci || '利贞'}」。当前${dayGz}日辰，吉凶隐伏已现端倪。`
 
   const sections = [
     {
-      title: '一、神机总断',
-      items: toSectionItems(judgmentDesc)
-    },
-    {
-      title: '二、切问切题 · 针对答复',
-      items: toSectionItems(directAnswer)
-    },
-    {
-      title: '三、趋吉避凶 · 神机金偈',
+      title: '一、神机四句偈',
       items: jiyu
     },
     {
-      title: '四、用神与爻象探微',
-      items: toSectionItems(yongshenDesc)
+      title: '二、偈语解释 · 趋吉避凶',
+      items: toSectionItems(jiyuExplain)
     },
     {
-      title: '五、机运演进与应期',
-      items: toSectionItems(yingqiDesc)
-    },
-    {
-      title: '六、周易明理 · 趋吉避凶',
-      items: toSectionItems(adviceDesc)
+      title: '三、卦象解释',
+      items: toSectionItems(guaExplain)
     }
   ]
 
   const fullText = [
     summary,
-    `【针对答复】\n${directAnswer}`,
     `【神机四句偈】\n${jiyu.join('\n')}`,
-    judgmentDesc,
-    yongshenDesc,
-    yingqiDesc,
-    adviceDesc
+    `【偈语解释 · 趋吉避凶】\n${jiyuExplain}`,
+    `【卦象解释】\n${guaExplain}`
   ].join('\n\n')
 
   return {
@@ -598,12 +557,14 @@ function buildIntelligentFallbackInterpretation(a, b) {
     tone,
     tendency: { tone },
     summary,
-    judgment: judgmentDesc,
-    directAnswer,
     jiyu,
-    yongshen: yongshenDesc,
-    yingqi: yingqiDesc,
-    advice: adviceDesc,
+    jiyuExplain,
+    guaExplain,
+    directAnswer: jiyuExplain,
+    judgment: guaExplain,
+    yongshen: guaExplain,
+    yingqi: hasMove ? '动爻逢值逢合之期为转机' : '静卦守常待逢冲破局',
+    advice: '顺天应人，修德明理，方见通达。',
     sections,
     fullText
   }

@@ -85,20 +85,17 @@ Page({
     if (!r) return
     const c = this.data.cast
     let text = `【所测事宜】${r.question || '心意默祷'}\n`
-    text += `【周易排盘】本卦《${c.ben?.name || ''}》 变卦《${c.bian?.name || '无变'}》\n`
-    text += `【神机结论】${r.summary || ''}\n\n`
-    if (r.directAnswer) {
-      text += `【针对答复 · 明确指引】\n${r.directAnswer}\n\n`
-    }
+    text += `【周易排盘】本卦《${c.ben?.name || ''}》 变卦《${c.bian?.name || '无变'}》\n\n`
     if (r.jiyu && r.jiyu.length) {
-      text += `【趋吉避凶 · 神机金偈】\n${r.jiyu.join('\n')}\n\n`
+      text += `【趋吉避凶 · 神机四句偈】\n${r.jiyu.join('\n')}\n\n`
     }
-    if (r.sections) {
-      r.sections.forEach((s) => {
-        text += `■ ${s.title}\n`
-        s.items.forEach((it) => { text += `· ${it}\n` })
-        text += '\n'
-      })
+    const jiyuExp = r.jiyuExplain || r.directAnswer
+    if (jiyuExp) {
+      text += `【偈语解释 · 趋吉避凶】\n${jiyuExp}\n\n`
+    }
+    const guaExp = r.guaExplain || r.judgment
+    if (guaExp) {
+      text += `【卦象解释】\n${guaExp}\n`
     }
     wx.setClipboardData({
       data: text,

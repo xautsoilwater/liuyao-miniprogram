@@ -2,6 +2,42 @@
 
 ---
 
+## [2026-10-06] 断卦极简重塑：四句金偈置顶首位、偈语解释与卦象解释精炼三段式架构
+
+### 1. 业务背景与用户诉求
+- **断卦界面精简与重塑**：用户明确指出“很好，但断卦部分太多了，简化下，四句偈语放前面，偈语解释与卦象解释放下面即可”。
+- **诉求核心**：
+  1. 摒弃繁琐沉重的说明书式大段长篇展开（神机总断/切题直断/用神爻象探微/机运演进与应期/周易明理等冗余列表）；
+  2. 重构视觉与逻辑层次：
+     - **第一位（置顶焦点）**：**【神机四句偈】**（七言绝句四句大字诗偈，每行一句共28字，以专属典雅红金宣纸卡片置顶）；
+     - **第二位**：**【偈语解释 · 趋吉避凶】**（紧扣所测事宜给出相对具体直接的回答与行动策略指引）；
+     - **第三位**：**【卦象解释】**（提纲挈领阐释本卦、变卦、用神与动爻之易理象数）。
+
+### 2. 核心架构与代码变更
+- **大模型 Prompt 与推演核心精炼重构 (`utils/ai-interpreter.js`)**：
+  - **提示词三段式重塑**：在 `buildDivinationPrompt` 中精简规范为只输出【神机四句偈】、【偈语解释】、【卦象解释】三大部分；
+  - **解析器与归一化优化**：
+    - `parseAiDivinationOutput` 智能提取 `jiyu`、`jiyuExplain` 与 `guaExplain`，并保持 `directAnswer` / `judgment` 别名向下兼容；
+    - 修复 `normalizeArgs` 分支判断边界，避免 `cast` 对象自带 `question` 字段时被误判为空参数；
+    - 加入 `AbortSignal.timeout(5000)` 超时防护，防止网络受阻时长时间挂起，保障秒级平滑降级至本地智能算法；
+  - **离线兜底推演器升级**：在 `buildIntelligentFallbackInterpretation` 中全面产出精工工整的 64 卦七言绝句、针对性直断与提纲挈领的卦象解释。
+- **微信小程序端界面全面简化 (`pages/interpret/interpret.wxml` & `pages/interpret/interpret.wxss` & `pages/interpret/interpret.js`)**：
+  - 彻底移除冗长繁琐的 6 大 sections 列表；
+  - 严格采用极简三段式卡片流：
+    1. 所测事宜小笺；
+    2. 【✦ 趋吉避凶 · 神机四句偈 ✦】专属大字居中诗偈卡片；
+    3. 【直断指引 · 偈语解释 · 趋吉避凶】具体答复卡片；
+    4. 【象数易理 · 卦象解释】卦象阐释卡片；
+  - 一键复制功能更新为纯净三段式文本格式。
+- **Web 预览与独立单页全面对齐 (`preview/app-preview.js` & `preview/index.html` & `preview/build.js`)**：
+  - 更新渲染器与 CSS 样式，增加 `.card-box`, `.card-head`, `.card-badge`, `.card-title`, `.card-body` 通用模块；
+  - 执行 `node preview/build.js` 重新编译打包 `preview/liuyao-standalone.html` 与 `preview/engine.bundle.js`。
+- **验证与测试**：
+  - 全量单元测试 `node tests/ai-interpreter.test.js` 及全套测试全部绿色通过；
+  - 通过 Puppeteer 截屏在 iPhone 14 Pro 视口下验证，页面一目了然，灵验感与文化仪式感拉满。
+
+---
+
 ## [2026-10-06] 易道通神：断卦切问切题具体答复、趋吉避凶神机四句金偈与摇卦动画极致流畅优化
 
 ### 1. 业务背景与用户诉求
