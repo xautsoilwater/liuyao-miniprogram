@@ -271,14 +271,14 @@
   min-height: 0;
 }
 
-/* 周易文王灵龟神壳（大号横放 · 正对黄金焦点） */
+/* 周易文王灵龟神壳（扁平协调款 · 拟人双手捧执） */
 .shaker-stage {
   position: absolute;
-  top: -320rpx;
+  top: -304rpx;
   left: 50%;
-  margin-left: -138rpx;
-  width: 276rpx;
-  height: 176rpx;
+  margin-left: -152rpx;
+  width: 304rpx;
+  height: 152rpx;
   z-index: 10;
   pointer-events: none;
   opacity: 0.95;
@@ -316,18 +316,31 @@
   animation: vessel-cast 2.2s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
+/* 拟人化双手摇卦仪轨：双手捧执 -> 手腕3轮发力上下颠簸顿挫 -> 双手前推翻腕下倾倒出 -> 恭肃放平 */
 @keyframes vessel-cast {
   0% { transform: translate3d(0, 0, 0) rotate(-2deg); }
-  16% { transform: translate3d(0, 8rpx, 0) rotate(0deg); } /* 迎金钱飞入龟腹，微沉承纳 */
-  22% { transform: translate3d(-36rpx, -28rpx, 0) rotate(-16deg); } /* 纳毕横向起势起摇 */
-  30% { transform: translate3d(48rpx, -48rpx, 0) rotate(18deg); }
-  38% { transform: translate3d(-52rpx, -56rpx, 0) rotate(-20deg); }
-  46% { transform: translate3d(44rpx, -40rpx, 0) rotate(16deg); }
-  54% { transform: translate3d(-32rpx, -24rpx, 0) rotate(-10deg); }
-  62% { transform: translate3d(0, -12rpx, 0) rotate(0deg); }
-  70% { transform: translate3d(28rpx, 40rpx, 0) rotate(58deg) scale(1.06); } /* 龟口向下深倾，正对托盘倒出 */
-  82% { transform: translate3d(40rpx, 64rpx, 0) rotate(68deg) scale(1.02); opacity: 0.98; }
-  88% { transform: translate3d(20rpx, 24rpx, 0) rotate(18deg) scale(0.94); opacity: 0.65; }
+  /* 0~16%：双手捧住接纳三钱飞入，双手顺势下沉蓄势端起 */
+  10% { transform: translate3d(0, 8rpx, 0) rotate(0deg); }
+  16% { transform: translate3d(0, -12rpx, 0) rotate(-2deg); }
+  /* 18%~28%：第1次手腕发力向上用力颠起 ➡️ 沉顿挫震 */
+  22% { transform: translate3d(-6rpx, -40rpx, 0) rotate(6deg); }
+  28% { transform: translate3d(4rpx, 8rpx, 0) rotate(-4deg); }
+  /* 30%~42%：第2次双手更大发力向上颠摇 ➡️ 失重沉落 */
+  34% { transform: translate3d(-10rpx, -52rpx, 0) rotate(8deg); }
+  42% { transform: translate3d(4rpx, 10rpx, 0) rotate(-5deg); }
+  /* 44%~54%：第3次手腕快速颠颠碰撞 ➡️ 挫震收势 */
+  48% { transform: translate3d(-4rpx, -36rpx, 0) rotate(5deg); }
+  54% { transform: translate3d(0, 4rpx, 0) rotate(-2deg); }
+  /* 56%~64%：双手在胸前平端微晃蓄势，准备前推翻腕 */
+  60% { transform: translate3d(-2rpx, -12rpx, 0) rotate(1deg); }
+  64% { transform: translate3d(0, -6rpx, 0) rotate(0deg); }
+  /* 68%~78%：真实人手动作：双手向前推伸、手腕自然向前翻腕下压倾倒 */
+  70% { transform: translate3d(24rpx, 24rpx, 0) rotate(48deg) scale(1.03); }
+  76% { transform: translate3d(32rpx, 40rpx, 0) rotate(56deg) scale(1.02); }
+  /* 78%~84%：铜钱滑落砸出，手腕一轻微滞顿挫 */
+  82% { transform: translate3d(34rpx, 44rpx, 0) rotate(58deg); opacity: 0.98; }
+  /* 86%~100%：双手平稳将龟壳收回胸前，缓缓放平端正，神态恭肃 */
+  92% { transform: translate3d(14rpx, 16rpx, 0) rotate(16deg) scale(0.96); opacity: 0.75; }
   100% { transform: translate3d(0, 0, 0) rotate(-2deg); opacity: 0.95; }
 }
 

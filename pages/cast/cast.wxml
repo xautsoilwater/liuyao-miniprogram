@@ -27,9 +27,9 @@
       <view class="coin-stage">
         <view class="shaker-stage {{shaking ? 'is-shaking' : ''}}" aria-hidden="true">
           <view class="shaker-vessel">
-            <svg class="shaker-svg" viewBox="0 0 152 98" width="138" height="88">
+            <svg class="shaker-svg" viewBox="0 0 168 86" width="152" height="76">
               <defs>
-                <radialGradient id="brassMetalWx" cx="50%" cy="30%" r="66%">
+                <radialGradient id="brassMetalWx" cx="50%" cy="28%" r="68%">
                   <stop offset="0%" stop-color="#fae79b" />
                   <stop offset="20%" stop-color="#dfb658" />
                   <stop offset="50%" stop-color="#ba9137" />
@@ -60,100 +60,99 @@
                   <stop offset="100%" stop-color="#e5b843" stop-opacity="0" />
                 </radialGradient>
                 <clipPath id="shellClipWx">
-                  <path d="M 22 66 C 18 50, 26 33, 40 23 C 56 12, 84 11, 108 17 C 123 21, 137 31, 143 41 C 147 48, 146 54, 140 59 C 133 65, 126 69, 120 74 C 104 78, 62 80, 36 78 C 25 76, 21 72, 22 66 Z" />
+                  <path d="M 22 58 C 18 44, 26 30, 42 22 C 62 12, 100 11, 126 16 C 142 20, 154 28, 158 37 C 161 43, 159 48, 153 53 C 145 58, 137 62, 131 66 C 114 70, 68 71, 38 69 C 26 67, 21 63, 22 58 Z" />
                 </clipPath>
               </defs>
-              <ellipse cx="76" cy="85.5" rx="56" ry="6.5" fill="#181006" opacity="0.4" />
-              <ellipse cx="76" cy="86" rx="46" ry="3.5" fill="#080401" opacity="0.65" />
-              <path d="M 30 78 C 50 83, 100 83, 124 76 C 122 80, 98 84, 40 83 Z" fill="#3c280e" stroke="#160d03" stroke-width="0.8" />
-              <path d="M 22 66 C 18 50, 26 33, 40 23 C 56 12, 84 11, 108 17 C 123 21, 137 31, 143 41 C 147 48, 146 54, 140 59 C 133 65, 126 69, 120 74 C 104 78, 62 80, 36 78 C 25 76, 21 72, 22 66 Z" fill="url(#brassMetalWx)" stroke="#241707" stroke-width="1.8" />
+              <ellipse cx="84" cy="76" rx="66" ry="6" fill="#181006" opacity="0.4" />
+              <ellipse cx="84" cy="76.5" rx="54" ry="3.2" fill="#080401" opacity="0.65" />
+              <path d="M 32 69 C 54 74, 112 74, 136 68 C 134 71, 108 75, 42 74 Z" fill="#3c280e" stroke="#160d03" stroke-width="0.8" />
+              <path d="M 22 58 C 18 44, 26 30, 42 22 C 62 12, 100 11, 126 16 C 142 20, 154 28, 158 37 C 161 43, 159 48, 153 53 C 145 58, 137 62, 131 66 C 114 70, 68 71, 38 69 C 26 67, 21 63, 22 58 Z" fill="url(#brassMetalWx)" stroke="#241707" stroke-width="1.8" />
               <g clip-path="url(#shellClipWx)">
-                <path d="M 44 24 C 48 19, 58 19, 62 25 C 58 28, 48 28, 44 24 Z" fill="#d2aa4c" stroke="#251607" stroke-width="0.9" />
-                <path d="M 46 22.5 C 50 20.5, 56 20.5, 59 23.5" stroke="#fff4c8" stroke-width="0.5" fill="none" opacity="0.8" />
-                <path d="M 64 19 C 74 15, 88 15, 96 21 C 92 25, 74 25, 64 19 Z" fill="#edd076" stroke="#251607" stroke-width="1.1" />
-                <path d="M 67 17.5 C 76 14.5, 86 14.5, 93 19" stroke="#fffadc" stroke-width="0.75" fill="none" opacity="0.95" />
-                <path d="M 98 20 C 108 21, 116 25, 121 30 C 116 33, 104 30, 98 20 Z" fill="#d5ae50" stroke="#251607" stroke-width="0.9" />
-                <path d="M 101 22 C 108 23, 114 26, 118 29.5" stroke="#fff4c8" stroke-width="0.5" fill="none" opacity="0.8" />
-                <path d="M 57 23 L 56 46 L 54 64" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
-                <path d="M 58 23 L 57 46 L 55 64" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
-                <path d="M 96 20 L 94 45 L 91 63" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
-                <path d="M 97 20 L 95 45 L 92 63" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
-                <path d="M 124 28 L 122 47 L 117 62" fill="none" stroke="#201407" stroke-width="2.0" stroke-linecap="round" />
-                <path d="M 125 28 L 123 47 L 118 62" fill="none" stroke="#fff5ca" stroke-width="0.5" opacity="0.75" />
-                <path d="M 18 65 C 36 67, 56 65, 80 63 C 98 62, 112 59, 124 54" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
-                <path d="M 18 66 C 36 68, 56 66, 80 64 C 98 63, 112 60, 124 55" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
-                <polygon points="73,40 79,40 80,45 74,45" fill="#a47d2c" stroke="#221406" stroke-width="0.9" />
-                <polygon points="73.5,40.5 78.5,40.5 79.5,44.5 74.5,44.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.8" />
-                <path d="M 70 37 L 82 37 L 83 48 L 71 48 Z" fill="none" stroke="#221406" stroke-width="1.0" />
-                <path d="M 70.5 37.5 L 81.5 37.5 L 82.5 47.5 L 71.5 47.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.7" />
-                <path d="M 67 34 L 85 34 L 86 51 L 68 51 Z" fill="none" stroke="#221406" stroke-width="1.0" />
-                <path d="M 67.5 34.5 L 84.5 34.5 L 85.5 50.5 L 68.5 50.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.7" />
-                <path d="M 64 31 L 88 31 L 89 54 L 65 54 Z" fill="none" stroke="#221406" stroke-width="1.0" />
-                <path d="M 64.5 31.5 L 87.5 31.5 L 88.5 53.5 L 65.5 53.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
-                <path d="M 61 28 L 91 28 L 92 57 L 62 57 Z" fill="none" stroke="#221406" stroke-width="1.0" />
-                <path d="M 61.5 28.5 L 90.5 28.5 L 91.5 56.5 L 62.5 56.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
-                <path d="M 59 25 L 93 25 L 93 60 L 59.5 60 Z" fill="none" stroke="#221406" stroke-width="0.9" />
-                <path d="M 59.5 25.5 L 92.5 25.5 L 92.5 59.5 L 60 59.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
-                <path d="M 58 22 C 72 20, 84 21, 94 22" fill="none" stroke="#221406" stroke-width="0.8" />
-                <path d="M 58 22.5 C 72 20.5, 84 21.5, 94 22.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
-                <path d="M 56 62 C 72 63, 84 63, 92 62" fill="none" stroke="#221406" stroke-width="0.8" />
-                <path d="M 56 62.5 C 72 63.5, 84 63.5, 92 62.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
-                <polygon points="40,41 45,39 46,45 41,47" fill="#997528" stroke="#221406" stroke-width="0.8" />
-                <path d="M 36 36 C 41 33, 47 34, 50 38 L 48 49 C 44 52, 38 50, 34 46 Z" fill="none" stroke="#221406" stroke-width="0.9" />
-                <path d="M 36.5 36.5 C 41 33.5, 47 34.5, 49.5 38.5 L 47.5 48.5 C 44 51.5, 38 49.5, 34.5 45.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
-                <path d="M 32 31 C 39 27, 49 28, 53 33 L 52 54 C 45 57, 34 55, 29 49 Z" fill="none" stroke="#221406" stroke-width="0.9" />
-                <path d="M 32.5 31.5 C 39 27.5, 49 28.5, 52.5 33.5 L 51.5 53.5 C 45 56.5, 34 54.5, 29.5 48.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
-                <path d="M 28 27 C 38 23, 49 23, 55 27 L 53 60 C 45 64, 30 61, 25 54 Z" fill="none" stroke="#221406" stroke-width="0.9" />
-                <path d="M 28.5 27.5 C 38 23.5, 49 23.5, 54.5 27.5 L 52.5 59.5 C 45 63.5, 30 60.5, 25.5 53.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.6" />
-                <path d="M 24 35 C 21 44, 22 53, 25 60" fill="none" stroke="#221406" stroke-width="0.8" />
-                <path d="M 24.5 35.5 C 21.5 44.5, 22.5 53.5, 25.5 60.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.55" />
-                <polygon points="104,37 109,36 111,42 105,43" fill="#997528" stroke="#221406" stroke-width="0.8" />
-                <path d="M 100 33 C 106 31, 113 32, 115 37 L 113 47 C 109 50, 102 49, 98 45 Z" fill="none" stroke="#221406" stroke-width="0.9" />
-                <path d="M 100.5 33.5 C 106 31.5, 113 32.5, 114.5 37.5 L 112.5 46.5 C 109 49.5, 102 48.5, 98.5 44.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
-                <path d="M 97 28 C 106 25, 115 27, 118 32 L 116 53 C 109 56, 99 54, 94 48 Z" fill="none" stroke="#221406" stroke-width="0.9" />
-                <path d="M 97.5 28.5 C 106 25.5, 115 27.5, 117.5 32.5 L 115.5 52.5 C 109 55.5, 99 53.5, 94.5 47.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
-                <path d="M 95 24 C 106 22, 117 24, 120 29 L 118 57 C 110 60, 97 58, 93 53 Z" fill="none" stroke="#221406" stroke-width="0.8" />
-                <path d="M 95.5 24.5 C 106 22.5, 117 24.5, 119.5 29.5 L 117.5 56.5 C 110 59.5, 97 57.5, 93.5 52.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.55" />
-                <path d="M 125 35 C 134 38, 140 43, 144 48" fill="none" stroke="#221406" stroke-width="0.8" />
-                <path d="M 125.5 35.5 C 134.5 38.5, 140.5 43.5, 144.5 48.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
-                <path d="M 127 41 C 134 43, 139 47, 142 52" fill="none" stroke="#221406" stroke-width="0.8" />
+                <path d="M 48 22 C 54 18, 64 18, 70 23 C 65 25, 52 25, 48 22 Z" fill="#d2aa4c" stroke="#251607" stroke-width="0.9" />
+                <path d="M 50 20.5 C 55 18.5, 62 18.5, 66 21.5" stroke="#fff4c8" stroke-width="0.5" fill="none" opacity="0.8" />
+                <path d="M 72 17 C 84 14, 102 14, 112 19 C 106 22, 84 22, 72 17 Z" fill="#edd076" stroke="#251607" stroke-width="1.1" />
+                <path d="M 76 15.5 C 88 13.5, 98 13.5, 108 17" stroke="#fffadc" stroke-width="0.75" fill="none" opacity="0.95" />
+                <path d="M 114 18 C 124 19, 132 22, 138 27 C 132 29, 120 26, 114 18 Z" fill="#d5ae50" stroke="#251607" stroke-width="0.9" />
+                <path d="M 117 19.5 C 124 20.5, 130 23, 134 26" stroke="#fff4c8" stroke-width="0.5" fill="none" opacity="0.8" />
+                <path d="M 64 21 L 63 41 L 61 56" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
+                <path d="M 65 21 L 64 41 L 62 56" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
+                <path d="M 112 18 L 110 40 L 106 55" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
+                <path d="M 113 18 L 111 40 L 107 55" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
+                <path d="M 140 24 L 138 41 L 132 54" fill="none" stroke="#201407" stroke-width="2.0" stroke-linecap="round" />
+                <path d="M 141 24 L 139 41 L 133 54" fill="none" stroke="#fff5ca" stroke-width="0.5" opacity="0.75" />
+                <path d="M 18 57 C 38 59, 66 57, 94 55 C 114 54, 128 51, 140 47" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
+                <path d="M 18 58 C 38 60, 66 58, 94 56 C 114 55, 128 52, 140 48" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
+                <polygon points="84,35 92,35 93,39 85,39" fill="#a47d2c" stroke="#221406" stroke-width="0.9" />
+                <polygon points="84.5,35.5 91.5,35.5 92.5,38.5 85.5,38.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.8" />
+                <path d="M 80 32 L 96 32 L 97 42 L 81 42 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                <path d="M 80.5 32.5 L 95.5 32.5 L 96.5 41.5 L 81.5 41.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.7" />
+                <path d="M 76 29 L 100 29 L 101 45 L 77 45 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                <path d="M 76.5 29.5 L 99.5 29.5 L 100.5 44.5 L 77.5 44.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.7" />
+                <path d="M 72 26 L 104 26 L 105 48 L 73 48 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                <path d="M 72.5 26.5 L 103.5 26.5 L 104.5 47.5 L 73.5 47.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                <path d="M 68 23 L 108 23 L 109 51 L 69 51 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                <path d="M 68.5 23.5 L 107.5 23.5 L 108.5 50.5 L 69.5 50.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                <path d="M 66 20 L 110 20 L 109.5 53.5 L 66.5 53.5 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                <path d="M 66.5 20.5 L 109.5 20.5 L 109 53 L 67 53 Z" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
+                <path d="M 65 18 C 82 16, 98 16, 111 17" fill="none" stroke="#221406" stroke-width="0.8" />
+                <path d="M 65 18.5 C 82 16.5, 98 16.5, 111 17.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
+                <path d="M 63 55 C 82 56, 98 56, 108 55" fill="none" stroke="#221406" stroke-width="0.8" />
+                <path d="M 63 55.5 C 82 56.5, 98 56.5, 108 55.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
+                <polygon points="44,36 50,34 52,39 46,41" fill="#997528" stroke="#221406" stroke-width="0.8" />
+                <path d="M 39 31 C 45 28, 53 29, 57 33 L 54 43 C 49 46, 42 44, 37 40 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                <path d="M 39.5 31.5 C 45 28.5, 53 29.5, 56.5 33.5 L 53.5 42.5 C 49 45.5, 42 43.5, 37.5 39.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                <path d="M 34 26 C 43 23, 55 24, 60 28 L 58 48 C 50 51, 38 49, 31 43 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                <path d="M 34.5 26.5 C 43 23.5, 55 24.5, 59.5 28.5 L 57.5 47.5 C 50 50.5, 38 48.5, 31.5 42.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                <path d="M 29 22 C 41 18, 56 19, 62 23 L 60 53 C 50 56, 33 53, 26 47 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                <path d="M 29.5 22.5 C 41 18.5, 56 19.5, 61.5 23.5 L 59.5 52.5 C 50 55.5, 33 52.5, 26.5 46.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.6" />
+                <path d="M 24 30 C 21 38, 22 46, 25 52" fill="none" stroke="#221406" stroke-width="0.8" />
+                <path d="M 24.5 30.5 C 21.5 38.5, 22.5 46.5, 25.5 52.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.55" />
+                <polygon points="120,32 126,31 128,36 122,37" fill="#997528" stroke="#221406" stroke-width="0.8" />
+                <path d="M 115 28 C 122 26, 131 27, 134 32 L 131 41 C 126 44, 118 43, 113 39 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                <path d="M 115.5 28.5 C 122 26.5, 131 27.5, 133.5 32.5 L 130.5 40.5 C 126 43.5, 118 42.5, 113.5 38.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                <path d="M 112 24 C 122 21, 134 23, 138 27 L 135 46 C 126 49, 114 47, 108 42 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                <path d="M 112.5 24.5 C 122 21.5, 134 23.5, 137.5 27.5 L 134.5 45.5 C 126 48.5, 114 46.5, 108.5 41.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                <path d="M 110 20 C 123 18, 136 20, 140 24 L 137 49 C 128 52, 113 50, 107 45 Z" fill="none" stroke="#221406" stroke-width="0.8" />
+                <path d="M 110.5 20.5 C 123 18.5, 136 20.5, 139.5 24.5 L 136.5 48.5 C 128 51.5, 113 49.5, 107.5 44.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.55" />
+                <path d="M 142 30 C 151 33, 156 37, 159 42" fill="none" stroke="#221406" stroke-width="0.8" />
+                <path d="M 142.5 30.5 C 151.5 33.5, 156.5 37.5, 159.5 42.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
                 <g stroke="#201407" stroke-width="1.5" stroke-linecap="round">
-                  <line x1="33" y1="67" x2="31" y2="76" />
-                  <line x1="44" y1="66" x2="43" y2="77" />
-                  <line x1="56" y1="65" x2="55" y2="78" />
-                  <line x1="69" y1="64" x2="69" y2="79" />
-                  <line x1="83" y1="63" x2="84" y2="78" />
-                  <line x1="97" y1="62" x2="98" y2="76" />
-                  <line x1="110" y1="60" x2="112" y2="73" />
+                  <line x1="34" y1="59" x2="32" y2="67" />
+                  <line x1="47" y1="58" x2="45" y2="68" />
+                  <line x1="61" y1="57" x2="60" y2="69" />
+                  <line x1="76" y1="56" x2="76" y2="70" />
+                  <line x1="92" y1="55" x2="93" y2="69" />
+                  <line x1="108" y1="54" x2="109" y2="67" />
+                  <line x1="123" y1="52" x2="125" y2="64" />
                 </g>
                 <g stroke="#fff5ca" stroke-width="0.5" opacity="0.65" stroke-linecap="round">
-                  <line x1="33.6" y1="67" x2="31.6" y2="76" />
-                  <line x1="44.6" y1="66" x2="43.6" y2="77" />
-                  <line x1="56.6" y1="65" x2="55.6" y2="78" />
-                  <line x1="69.6" y1="64" x2="69.6" y2="79" />
-                  <line x1="83.6" y1="63" x2="84.6" y2="78" />
-                  <line x1="97.6" y1="62" x2="98.6" y2="76" />
-                  <line x1="110.6" y1="60" x2="112.6" y2="73" />
+                  <line x1="34.6" y1="59" x2="32.6" y2="67" />
+                  <line x1="47.6" y1="58" x2="45.6" y2="68" />
+                  <line x1="61.6" y1="57" x2="60.6" y2="69" />
+                  <line x1="76.6" y1="56" x2="76.6" y2="70" />
+                  <line x1="92.6" y1="55" x2="93.6" y2="69" />
+                  <line x1="108.6" y1="54" x2="109.6" y2="67" />
+                  <line x1="123.6" y1="52" x2="125.6" y2="64" />
                 </g>
-                <path d="M 27 69 C 28 72, 29 74, 30 76" stroke="#241507" stroke-width="0.8" fill="none" />
-                <path d="M 37 68 L 36 76 M 40 67 L 39 76" stroke="#241507" stroke-width="0.8" />
-                <path d="M 37.5 68.5 L 36.5 76.5 M 40.5 67.5 L 39.5 76.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
-                <path d="M 48 67 L 48 77 M 52 66 L 52 78" stroke="#241507" stroke-width="0.8" />
-                <path d="M 48.5 67.5 L 48.5 77.5 M 52.5 66.5 L 52.5 78.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
-                <path d="M 61 66 L 61 79 M 65 65 L 65 79" stroke="#241507" stroke-width="0.8" />
-                <path d="M 61.5 66.5 L 61.5 79.5 M 65.5 65.5 L 65.5 79.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
-                <path d="M 75 65 L 75 79 M 78 65 L 79 79" stroke="#241507" stroke-width="0.8" />
-                <path d="M 75.5 65.5 L 75.5 79.5 M 78.5 65.5 L 79.5 79.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
-                <path d="M 88 64 L 89 77 M 92 64 L 93 77" stroke="#241507" stroke-width="0.8" />
-                <path d="M 88.5 64.5 L 89.5 77.5 M 92.5 64.5 L 93.5 77.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
-                <path d="M 102 63 L 104 74 M 106 62 L 108 73" stroke="#241507" stroke-width="0.8" />
-                <path d="M 102.5 63.5 L 104.5 74.5 M 106.5 62.5 L 108.5 73.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
-                <ellipse cx="78" cy="24" rx="28" ry="6" fill="url(#ridgeLightWx)" />
+                <path d="M 28 61 C 29 63, 30 65, 31 67" stroke="#241507" stroke-width="0.8" fill="none" />
+                <path d="M 39 60 L 38 67 M 43 59 L 42 67" stroke="#241507" stroke-width="0.8" />
+                <path d="M 39.5 60.5 L 38.5 67.5 M 43.5 59.5 L 42.5 67.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                <path d="M 52 59 L 52 68 M 56 58 L 56 68" stroke="#241507" stroke-width="0.8" />
+                <path d="M 52.5 59.5 L 52.5 68.5 M 56.5 58.5 L 56.5 68.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                <path d="M 67 58 L 67 69 M 71 57 L 71 70" stroke="#241507" stroke-width="0.8" />
+                <path d="M 67.5 58.5 L 67.5 69.5 M 71.5 57.5 L 71.5 70.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                <path d="M 82 57 L 83 69 M 86 56 L 87 70" stroke="#241507" stroke-width="0.8" />
+                <path d="M 82.5 57.5 L 83.5 69.5 M 86.5 56.5 L 87.5 70.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                <path d="M 98 56 L 99 68 M 102 55 L 103 68" stroke="#241507" stroke-width="0.8" />
+                <path d="M 98.5 56.5 L 99.5 68.5 M 102.5 55.5 L 103.5 68.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                <path d="M 113 54 L 115 65 M 117 53 L 119 64" stroke="#241507" stroke-width="0.8" />
+                <path d="M 113.5 54.5 L 115.5 65.5 M 117.5 53.5 L 119.5 64.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                <ellipse cx="88" cy="21" rx="36" ry="5.5" fill="url(#ridgeLightWx)" />
               </g>
-              <path d="M 116 63 C 126 56, 138 56, 143 62 C 143 67, 136 74, 123 76 C 116 77, 112 73, 112 68 C 112 65, 114 64, 116 63 Z" fill="url(#blackHoleWx)" />
-              <ellipse class="shell-coin-glint" cx="128" cy="68" rx="7" ry="9" transform="rotate(-15 128 68)" fill="url(#shellCoinGlintWx)" opacity="0" />
-              <path d="M 124 53 C 134 46, 146 45, 148 53 C 148 57, 141 61, 131 63 C 124 64, 122 59, 124 53 Z" fill="url(#hoodLipWx)" stroke="#301f09" stroke-width="0.8" />
-              <path d="M 114 73 C 120 76, 128 75, 132 72 C 127 75, 118 77, 114 73 Z" fill="#f8e096" opacity="0.85" />
+              <path d="M 128 55 C 139 49, 151 49, 156 54 C 156 59, 149 65, 136 67 C 128 68, 124 64, 124 60 C 124 57, 126 56, 128 55 Z" fill="url(#blackHoleWx)" />
+              <ellipse class="shell-coin-glint" cx="141" cy="60" rx="7" ry="8" transform="rotate(-15 141 60)" fill="url(#shellCoinGlintWx)" opacity="0" />
+              <path d="M 136 46 C 147 40, 159 39, 161 46 C 161 50, 154 53, 144 55 C 137 56, 134 52, 136 46 Z" fill="url(#hoodLipWx)" stroke="#301f09" stroke-width="0.8" />
+              <path d="M 126 64 C 132 67, 140 66, 144 63 C 139 66, 130 68, 126 64 Z" fill="#f8e096" opacity="0.85" />
             </svg>
           </view>
         </view>
