@@ -16466,11 +16466,11 @@ function buildDivinationPrompt(a, b) {
 1. 紧扣「${intent.cleanTopic}」说话，忌空泛套话。
 2. 神机四句偈：七言四句，每行一句，共28字，切合本卦与所测事宜。
 3. 偈语解释：必须逐句对应上面四句偈，格式固定为四行——
-「第一句原文」：不超过18字的短解
+「第一句原文」：用一两句说清此句对所测之事的含义（约25～45字，让人读懂即可，勿空喊）
 「第二句原文」：……
 「第三句原文」：……
 「第四句原文」：……
-第三句点出「${intent.timeFrame || '当前'}」注意点，第四句给当下一步；严禁长篇。
+第一句定性顺逆，第二句点关键，第三句结合「${intent.timeFrame || '当前'}」说须防什么，第四句给可落地的一步；保持分段、可读，勿写成长文。
 4. 卦象解释：两三句即可。
 5. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
 
@@ -17113,10 +17113,12 @@ const GUA_ESSENCE = {
 }
 
 /**
- * 将卦德长句压成短注，便于逐句解释；优先贴近对应偈句用词
+ * 将卦德长句压成可读短注；优先贴近对应偈句用词
+ * @param {number} [maxLen=28] 最长字数
  */
-function compressEssence(text, fallback, hintLine) {
+function compressEssence(text, fallback, hintLine, maxLen = 28) {
   if (!text) return fallback || '顺时而动'
+  const limit = Math.max(12, maxLen || 28)
   let t = String(text)
     .replace(/《[^》]+》者[^，。；]*[，。；]?/g, '')
     .replace(/正如[^，。；]+[，。；]?/g, '')
@@ -17136,40 +17138,37 @@ function compressEssence(text, fallback, hintLine) {
     }
     const scored = parts
       .map(p => ({ p, score: bigrams.filter(b => p.includes(b)).length }))
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => b.score - a.score || a.p.length - b.p.length)
     if (scored[0] && scored[0].score > 0) pick = scored[0].p
   }
   if (!pick) {
-    const punch = parts.filter(p => p.length >= 4 && p.length <= 18)
-    pick = punch.find(p => /宜|忌|在于|贵在|防范|莫|须|要/.test(p))
+    const punch = parts.filter(p => p.length >= 6 && p.length <= limit)
+    pick = punch.find(p => /宜|忌|在于|贵在|防范|莫|须|要|关键|借势|守|待/.test(p))
       || (punch.length ? punch[punch.length - 1] : '')
       || parts.find(p => /宜|忌|在于|贵在|防范|莫|须|要/.test(p))
       || parts[parts.length - 1]
       || parts[0]
       || t
   }
-  // 过短且不完整时，再换稍长分句
-  if (pick.length < 4 || /[与的和及于在]$/.test(pick)) {
-    const mid = parts.find(p => p !== pick && p.length >= 6 && p.length <= 16)
-    if (mid) pick = mid
-    else {
-      const longer = parts
-        .filter(p => p !== pick && p.length >= 8)
-        .sort((a, b) => a.length - b.length)[0]
-      if (longer) pick = longer
-    }
+  // 过短则补上邻近分句，读起来才完整
+  if (pick.length < 8) {
+    const neighbor = parts.find(p => p !== pick && p.length >= 6 && p.length <= limit)
+    if (neighbor) pick = `${pick}，${neighbor}`
+  } else if (pick.length < 14) {
+    const extra = parts.find(p => p !== pick && p.length >= 6 && p.length <= 18 && /宜|忌|关键|莫|须|要|借|守|待|防/.test(p))
+    if (extra && (pick + extra).length <= limit + 4) pick = `${pick}，${extra}`
   }
-  // 过长则在因果连接处截断，保持言简意赅
-  if (pick.length > 16) {
+  if (pick.length > limit) {
     const markers = ['导致', '从而', '以免', '以防']
     let cutAt = -1
     for (const m of markers) {
       const i = pick.indexOf(m)
-      if (i >= 4 && i <= 16) { cutAt = i; break }
+      if (i >= 6 && i <= limit) { cutAt = i; break }
     }
-    pick = cutAt > 0 ? pick.slice(0, cutAt) : pick.slice(0, 16)
-    pick = pick.replace(/[与的和及于在]$/, '')
+    pick = cutAt > 0 ? pick.slice(0, cutAt) : pick.slice(0, limit)
+    pick = pick.replace(/[与的和及于在，、]$/, '')
   }
+  pick = pick.replace(/^[但然而故]/, '')
   return pick || fallback || '顺时而动'
 }
 
@@ -17213,7 +17212,7 @@ function parseJiyuExplainItems(explain, jiyu) {
 }
 
 /**
- * 依据四句偈生成逐句短解（结构化）
+ * 依据四句偈生成逐句可读解释（结构化：引句 + 一两句说明）
  */
 function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
   const intent = analyzeQuestionIntent(question)
@@ -17232,21 +17231,22 @@ function buildJiyuExplainItems(question, cast, benGuaName, tone, jiyu) {
 
   const topic = intent.cleanTopic
   const timeStr = intent.timeFrame || '当前'
-  const spirit = compressEssence(essence.spirit, '审时度势', lines[1])
-  const pitfall = compressEssence(essence.pitfall, '忌轻举妄动', lines[2])
-  const action = compressEssence(essence.action, '守正待机', lines[3])
+  const nature = compressEssence(essence.nature, '卦象已成，须察机顺势', lines[0], 24)
+  const spirit = compressEssence(essence.spirit, '审时度势，稳健推进', lines[1], 30)
+  const pitfall = compressEssence(essence.pitfall, '忌轻举妄动', lines[2], 26)
+  const action = compressEssence(essence.action, '守正待机，步步落实', lines[3], 30)
 
   const toneHint = tone === 'good'
-    ? '大势可期'
+    ? '总体可做，宜顺势推进'
     : tone === 'bad'
-      ? '宜缓勿急'
-      : '宜稳中求进'
+      ? '当前阻力偏多，宜缓不宜急'
+      : '吉凶相半，宜稳中求进'
 
   return [
-    { quote: lines[0], text: `问「${topic}」：${toneHint}` },
-    { quote: lines[1], text: spirit },
-    { quote: lines[2], text: `${timeStr}：${pitfall}` },
-    { quote: lines[3], text: `当下：${action}` }
+    { quote: lines[0], text: `此句看「${topic}」的大势：${nature}。${toneHint}。` },
+    { quote: lines[1], text: `此句点明成败关键：${spirit}。` },
+    { quote: lines[2], text: `此句是告诫。${timeStr}尤须留意：${pitfall}。` },
+    { quote: lines[3], text: `此句指路。当下可做：${action}。` }
   ]
 }
 

@@ -66,7 +66,8 @@ assert(Array.isArray(fallbackResult.jiyuExplainItems) && fallbackResult.jiyuExpl
 fallbackResult.jiyu.forEach((line, i) => {
   assert(fallbackResult.jiyuExplain.includes(line), `偈语解释必须引用第${i + 1}句原文以逐句对应`)
   assert(fallbackResult.jiyuExplainItems[i].quote === line, `分段条目第${i + 1}句须对齐偈文`)
-  assert(fallbackResult.jiyuExplainItems[i].text.length <= 28, `分段短解宜言简意赅（第${i + 1}句）`)
+  assert(fallbackResult.jiyuExplainItems[i].text.length >= 12, `分段解释须可读懂（第${i + 1}句过短）`)
+  assert(fallbackResult.jiyuExplainItems[i].text.length <= 70, `分段解释仍宜克制篇幅（第${i + 1}句）`)
 })
 assert(fallbackResult.guaExplain, '必须包含卦象解释')
 console.log('✔ 智能理数兜底推演高度聚焦测试通过')
