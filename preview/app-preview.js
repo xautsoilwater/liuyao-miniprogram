@@ -713,66 +713,133 @@
         <div class="coin-stage">
           <div class="shaker-stage ${state.shaking ? 'is-shaking' : ''}" aria-hidden="true">
             <div class="shaker-vessel">
-              <svg class="shaker-svg" viewBox="0 0 140 88" width="138" height="88">
+              <svg class="shaker-svg" viewBox="0 0 152 98" width="138" height="88">
                 <defs>
-                  <radialGradient id="shellBody" cx="48%" cy="46%" r="58%">
-                    <stop offset="0%" stop-color="#4a3622" />
-                    <stop offset="45%" stop-color="#312215" />
-                    <stop offset="82%" stop-color="#1f140c" />
-                    <stop offset="100%" stop-color="#120b06" />
+                  <radialGradient id="brassMetalPreview" cx="50%" cy="30%" r="66%">
+                    <stop offset="0%" stop-color="#fae79b" />
+                    <stop offset="20%" stop-color="#dfb658" />
+                    <stop offset="50%" stop-color="#ba9137" />
+                    <stop offset="78%" stop-color="#88641e" />
+                    <stop offset="100%" stop-color="#543c10" />
                   </radialGradient>
-                  <linearGradient id="shellGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#eddba4" />
-                    <stop offset="50%" stop-color="#b88d3d" />
-                    <stop offset="100%" stop-color="#f5e7bf" />
+                  <linearGradient id="ridgeLightPreview" x1="10%" y1="0%" x2="90%" y2="40%">
+                    <stop offset="0%" stop-color="#fff9dd" stop-opacity="0.9" />
+                    <stop offset="35%" stop-color="#fae08c" stop-opacity="0.6" />
+                    <stop offset="75%" stop-color="#c99f3e" stop-opacity="0.15" />
+                    <stop offset="100%" stop-color="#7a5818" stop-opacity="0" />
                   </linearGradient>
-                  <radialGradient id="shellHole" cx="45%" cy="50%" r="55%">
-                    <stop offset="0%" stop-color="#2a1d12" />
-                    <stop offset="70%" stop-color="#120c08" />
-                    <stop offset="100%" stop-color="#050302" />
+                  <radialGradient id="blackHolePreview" cx="38%" cy="38%" r="62%">
+                    <stop offset="0%" stop-color="#2d1c0e" />
+                    <stop offset="40%" stop-color="#140b04" />
+                    <stop offset="80%" stop-color="#040201" />
+                    <stop offset="100%" stop-color="#000000" />
                   </radialGradient>
-                  <radialGradient id="shellCoinGlint" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#ffe8a3" />
-                    <stop offset="50%" stop-color="#c99738" stop-opacity="0.8" />
-                    <stop offset="100%" stop-color="#c99738" stop-opacity="0" />
+                  <linearGradient id="hoodLipPreview" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fff6cc" />
+                    <stop offset="35%" stop-color="#deba5e" />
+                    <stop offset="80%" stop-color="#78561d" />
+                    <stop offset="100%" stop-color="#3c2608" />
+                  </linearGradient>
+                  <radialGradient id="shellCoinGlintPreview" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fff9df" />
+                    <stop offset="45%" stop-color="#e5b843" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#e5b843" stop-opacity="0" />
                   </radialGradient>
+                  <clipPath id="shellClipPreview">
+                    <path d="M 22 66 C 18 50, 26 33, 40 23 C 56 12, 84 11, 108 17 C 123 21, 137 31, 143 41 C 147 48, 146 54, 140 59 C 133 65, 126 69, 120 74 C 104 78, 62 80, 36 78 C 25 76, 21 72, 22 66 Z" />
+                  </clipPath>
                 </defs>
-                <!-- 横卧龟甲底层沉淀投影 -->
-                <path d="M 16 44 C 16 18, 58 8, 114 20 C 128 24, 136 36, 132 48 C 126 64, 110 77, 70 79 C 30 80, 16 66, 16 44 Z" fill="#0d0805" opacity="0.65" />
-                <!-- 龟身横甲主轮廓 -->
-                <path d="M 18 44 C 18 19, 58 10, 112 22 C 126 26, 134 37, 130 48 C 124 62, 108 75, 70 77 C 31 78, 18 65, 18 44 Z" fill="url(#shellBody)" stroke="#1a110a" stroke-width="2.2" />
-                <!-- 侧前出纳龟口（右侧微倾纳币金口） -->
-                <ellipse cx="116" cy="42" rx="12" ry="23" transform="rotate(12 116 42)" fill="#18100a" stroke="url(#shellGold)" stroke-width="1.8" />
-                <ellipse cx="116" cy="42" rx="9.5" ry="19" transform="rotate(12 116 42)" fill="url(#shellHole)" />
-                <ellipse class="shell-coin-glint" cx="116" cy="42" rx="6.5" ry="13" transform="rotate(12 116 42)" fill="url(#shellCoinGlint)" />
-                <!-- 横向灵龟背甲骨线（左右裙缘流线） -->
-                <path d="M 30 30 C 48 21, 82 20, 104 28" fill="none" stroke="url(#shellGold)" stroke-width="1" opacity="0.5" />
-                <path d="M 30 60 C 48 68, 82 69, 104 62" fill="none" stroke="url(#shellGold)" stroke-width="1" opacity="0.5" />
-                <!-- 裙边放射骨节 -->
-                <line x1="42" y1="24" x2="46" y2="31" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <line x1="68" y1="21" x2="69" y2="28" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <line x1="92" y1="23" x2="89" y2="30" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <line x1="42" y1="65" x2="46" y2="58" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <line x1="68" y1="68" x2="69" y2="61" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <line x1="92" y1="66" x2="89" y2="59" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.45" />
-                <!-- 横向中央三块主脊板 -->
-                <polygon points="28,44 38,33 52,35 56,44 52,53 38,55" fill="rgba(255,240,200,0.05)" stroke="url(#shellGold)" stroke-width="1.1" />
-                <polygon points="56,44 64,30 82,30 90,44 82,58 64,58" fill="rgba(255,240,200,0.08)" stroke="url(#shellGold)" stroke-width="1.4" />
-                <polygon points="90,44 96,32 107,34 110,43 107,52 96,54" fill="rgba(255,240,200,0.05)" stroke="url(#shellGold)" stroke-width="1.1" />
-                <!-- 上肋侧板 -->
-                <polygon points="38,33 52,35 60,23 44,23" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
-                <polygon points="64,30 82,30 88,19 59,19" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
-                <polygon points="82,30 96,32 103,23 88,19" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
-                <!-- 下肋侧板 -->
-                <polygon points="38,55 52,53 60,65 44,65" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
-                <polygon points="64,58 82,58 88,69 59,69" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
-                <polygon points="82,58 96,54 103,65 88,69" fill="none" stroke="url(#shellGold)" stroke-width="0.9" opacity="0.65" />
-                <!-- 中央朱砂「易」道火漆神印 -->
-                <circle cx="73" cy="44" r="8" fill="#8f261f" opacity="0.94" />
-                <circle cx="73" cy="44" r="6.6" fill="none" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.85" />
-                <text x="73" y="47.6" font-size="8" fill="#faeed7" font-weight="bold" text-anchor="middle" font-family="serif">易</text>
-                <!-- 横向脊背金虚线 -->
-                <path d="M 26 44 L 109 44" stroke="url(#shellGold)" stroke-width="0.8" opacity="0.3" stroke-dasharray="2,2" />
+                <ellipse cx="76" cy="85.5" rx="56" ry="6.5" fill="#181006" opacity="0.4" />
+                <ellipse cx="76" cy="86" rx="46" ry="3.5" fill="#080401" opacity="0.65" />
+                <path d="M 30 78 C 50 83, 100 83, 124 76 C 122 80, 98 84, 40 83 Z" fill="#3c280e" stroke="#160d03" stroke-width="0.8" />
+                <path d="M 22 66 C 18 50, 26 33, 40 23 C 56 12, 84 11, 108 17 C 123 21, 137 31, 143 41 C 147 48, 146 54, 140 59 C 133 65, 126 69, 120 74 C 104 78, 62 80, 36 78 C 25 76, 21 72, 22 66 Z" fill="url(#brassMetalPreview)" stroke="#241707" stroke-width="1.8" />
+                <g clip-path="url(#shellClipPreview)">
+                  <path d="M 44 24 C 48 19, 58 19, 62 25 C 58 28, 48 28, 44 24 Z" fill="#d2aa4c" stroke="#251607" stroke-width="0.9" />
+                  <path d="M 46 22.5 C 50 20.5, 56 20.5, 59 23.5" stroke="#fff4c8" stroke-width="0.5" fill="none" opacity="0.8" />
+                  <path d="M 64 19 C 74 15, 88 15, 96 21 C 92 25, 74 25, 64 19 Z" fill="#edd076" stroke="#251607" stroke-width="1.1" />
+                  <path d="M 67 17.5 C 76 14.5, 86 14.5, 93 19" stroke="#fffadc" stroke-width="0.75" fill="none" opacity="0.95" />
+                  <path d="M 98 20 C 108 21, 116 25, 121 30 C 116 33, 104 30, 98 20 Z" fill="#d5ae50" stroke="#251607" stroke-width="0.9" />
+                  <path d="M 101 22 C 108 23, 114 26, 118 29.5" stroke="#fff4c8" stroke-width="0.5" fill="none" opacity="0.8" />
+                  <path d="M 57 23 L 56 46 L 54 64" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
+                  <path d="M 58 23 L 57 46 L 55 64" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
+                  <path d="M 96 20 L 94 45 L 91 63" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
+                  <path d="M 97 20 L 95 45 L 92 63" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
+                  <path d="M 124 28 L 122 47 L 117 62" fill="none" stroke="#201407" stroke-width="2.0" stroke-linecap="round" />
+                  <path d="M 125 28 L 123 47 L 118 62" fill="none" stroke="#fff5ca" stroke-width="0.5" opacity="0.75" />
+                  <path d="M 18 65 C 36 67, 56 65, 80 63 C 98 62, 112 59, 124 54" fill="none" stroke="#201407" stroke-width="2.2" stroke-linecap="round" />
+                  <path d="M 18 66 C 36 68, 56 66, 80 64 C 98 63, 112 60, 124 55" fill="none" stroke="#fff5ca" stroke-width="0.6" opacity="0.75" />
+                  <polygon points="73,40 79,40 80,45 74,45" fill="#a47d2c" stroke="#221406" stroke-width="0.9" />
+                  <polygon points="73.5,40.5 78.5,40.5 79.5,44.5 74.5,44.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.8" />
+                  <path d="M 70 37 L 82 37 L 83 48 L 71 48 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                  <path d="M 70.5 37.5 L 81.5 37.5 L 82.5 47.5 L 71.5 47.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.7" />
+                  <path d="M 67 34 L 85 34 L 86 51 L 68 51 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                  <path d="M 67.5 34.5 L 84.5 34.5 L 85.5 50.5 L 68.5 50.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.7" />
+                  <path d="M 64 31 L 88 31 L 89 54 L 65 54 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                  <path d="M 64.5 31.5 L 87.5 31.5 L 88.5 53.5 L 65.5 53.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                  <path d="M 61 28 L 91 28 L 92 57 L 62 57 Z" fill="none" stroke="#221406" stroke-width="1.0" />
+                  <path d="M 61.5 28.5 L 90.5 28.5 L 91.5 56.5 L 62.5 56.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                  <path d="M 59 25 L 93 25 L 93 60 L 59.5 60 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                  <path d="M 59.5 25.5 L 92.5 25.5 L 92.5 59.5 L 60 59.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
+                  <path d="M 58 22 C 72 20, 84 21, 94 22" fill="none" stroke="#221406" stroke-width="0.8" />
+                  <path d="M 58 22.5 C 72 20.5, 84 21.5, 94 22.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
+                  <path d="M 56 62 C 72 63, 84 63, 92 62" fill="none" stroke="#221406" stroke-width="0.8" />
+                  <path d="M 56 62.5 C 72 63.5, 84 63.5, 92 62.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
+                  <polygon points="40,41 45,39 46,45 41,47" fill="#997528" stroke="#221406" stroke-width="0.8" />
+                  <path d="M 36 36 C 41 33, 47 34, 50 38 L 48 49 C 44 52, 38 50, 34 46 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                  <path d="M 36.5 36.5 C 41 33.5, 47 34.5, 49.5 38.5 L 47.5 48.5 C 44 51.5, 38 49.5, 34.5 45.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                  <path d="M 32 31 C 39 27, 49 28, 53 33 L 52 54 C 45 57, 34 55, 29 49 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                  <path d="M 32.5 31.5 C 39 27.5, 49 28.5, 52.5 33.5 L 51.5 53.5 C 45 56.5, 34 54.5, 29.5 48.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                  <path d="M 28 27 C 38 23, 49 23, 55 27 L 53 60 C 45 64, 30 61, 25 54 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                  <path d="M 28.5 27.5 C 38 23.5, 49 23.5, 54.5 27.5 L 52.5 59.5 C 45 63.5, 30 60.5, 25.5 53.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.6" />
+                  <path d="M 24 35 C 21 44, 22 53, 25 60" fill="none" stroke="#221406" stroke-width="0.8" />
+                  <path d="M 24.5 35.5 C 21.5 44.5, 22.5 53.5, 25.5 60.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.55" />
+                  <polygon points="104,37 109,36 111,42 105,43" fill="#997528" stroke="#221406" stroke-width="0.8" />
+                  <path d="M 100 33 C 106 31, 113 32, 115 37 L 113 47 C 109 50, 102 49, 98 45 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                  <path d="M 100.5 33.5 C 106 31.5, 113 32.5, 114.5 37.5 L 112.5 46.5 C 109 49.5, 102 48.5, 98.5 44.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                  <path d="M 97 28 C 106 25, 115 27, 118 32 L 116 53 C 109 56, 99 54, 94 48 Z" fill="none" stroke="#221406" stroke-width="0.9" />
+                  <path d="M 97.5 28.5 C 106 25.5, 115 27.5, 117.5 32.5 L 115.5 52.5 C 109 55.5, 99 53.5, 94.5 47.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.45" opacity="0.65" />
+                  <path d="M 95 24 C 106 22, 117 24, 120 29 L 118 57 C 110 60, 97 58, 93 53 Z" fill="none" stroke="#221406" stroke-width="0.8" />
+                  <path d="M 95.5 24.5 C 106 22.5, 117 24.5, 119.5 29.5 L 117.5 56.5 C 110 59.5, 97 57.5, 93.5 52.5 Z" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.55" />
+                  <path d="M 125 35 C 134 38, 140 43, 144 48" fill="none" stroke="#221406" stroke-width="0.8" />
+                  <path d="M 125.5 35.5 C 134.5 38.5, 140.5 43.5, 144.5 48.5" fill="none" stroke="#fff5ca" stroke-width="0.4" opacity="0.6" />
+                  <path d="M 127 41 C 134 43, 139 47, 142 52" fill="none" stroke="#221406" stroke-width="0.8" />
+                  <g stroke="#201407" stroke-width="1.5" stroke-linecap="round">
+                    <line x1="33" y1="67" x2="31" y2="76" />
+                    <line x1="44" y1="66" x2="43" y2="77" />
+                    <line x1="56" y1="65" x2="55" y2="78" />
+                    <line x1="69" y1="64" x2="69" y2="79" />
+                    <line x1="83" y1="63" x2="84" y2="78" />
+                    <line x1="97" y1="62" x2="98" y2="76" />
+                    <line x1="110" y1="60" x2="112" y2="73" />
+                  </g>
+                  <g stroke="#fff5ca" stroke-width="0.5" opacity="0.65" stroke-linecap="round">
+                    <line x1="33.6" y1="67" x2="31.6" y2="76" />
+                    <line x1="44.6" y1="66" x2="43.6" y2="77" />
+                    <line x1="56.6" y1="65" x2="55.6" y2="78" />
+                    <line x1="69.6" y1="64" x2="69.6" y2="79" />
+                    <line x1="83.6" y1="63" x2="84.6" y2="78" />
+                    <line x1="97.6" y1="62" x2="98.6" y2="76" />
+                    <line x1="110.6" y1="60" x2="112.6" y2="73" />
+                  </g>
+                  <path d="M 27 69 C 28 72, 29 74, 30 76" stroke="#241507" stroke-width="0.8" fill="none" />
+                  <path d="M 37 68 L 36 76 M 40 67 L 39 76" stroke="#241507" stroke-width="0.8" />
+                  <path d="M 37.5 68.5 L 36.5 76.5 M 40.5 67.5 L 39.5 76.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                  <path d="M 48 67 L 48 77 M 52 66 L 52 78" stroke="#241507" stroke-width="0.8" />
+                  <path d="M 48.5 67.5 L 48.5 77.5 M 52.5 66.5 L 52.5 78.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                  <path d="M 61 66 L 61 79 M 65 65 L 65 79" stroke="#241507" stroke-width="0.8" />
+                  <path d="M 61.5 66.5 L 61.5 79.5 M 65.5 65.5 L 65.5 79.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                  <path d="M 75 65 L 75 79 M 78 65 L 79 79" stroke="#241507" stroke-width="0.8" />
+                  <path d="M 75.5 65.5 L 75.5 79.5 M 78.5 65.5 L 79.5 79.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                  <path d="M 88 64 L 89 77 M 92 64 L 93 77" stroke="#241507" stroke-width="0.8" />
+                  <path d="M 88.5 64.5 L 89.5 77.5 M 92.5 64.5 L 93.5 77.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                  <path d="M 102 63 L 104 74 M 106 62 L 108 73" stroke="#241507" stroke-width="0.8" />
+                  <path d="M 102.5 63.5 L 104.5 74.5 M 106.5 62.5 L 108.5 73.5" stroke="#fff5ca" stroke-width="0.4" opacity="0.65" />
+                  <ellipse cx="78" cy="24" rx="28" ry="6" fill="url(#ridgeLightPreview)" />
+                </g>
+                <path d="M 116 63 C 126 56, 138 56, 143 62 C 143 67, 136 74, 123 76 C 116 77, 112 73, 112 68 C 112 65, 114 64, 116 63 Z" fill="url(#blackHolePreview)" />
+                <ellipse class="shell-coin-glint" cx="128" cy="68" rx="7" ry="9" transform="rotate(-15 128 68)" fill="url(#shellCoinGlintPreview)" opacity="0" />
+                <path d="M 124 53 C 134 46, 146 45, 148 53 C 148 57, 141 61, 131 63 C 124 64, 122 59, 124 53 Z" fill="url(#hoodLipPreview)" stroke="#301f09" stroke-width="0.8" />
+                <path d="M 114 73 C 120 76, 128 75, 132 72 C 127 75, 118 77, 114 73 Z" fill="#f8e096" opacity="0.85" />
               </svg>
             </div>
           </div>
@@ -789,10 +856,6 @@
               </div>`
             }).join('')}
           </div>
-          <div class="result-line">${state.current
-            ? `<i class="yao-bar lg ${state.current.yinYang ? 'yang' : 'yin'} ${state.current.changing ? 'moving' : ''}"></i>
-               <div class="yao-label">${state.current.type}<span class="mark"> ${state.current.mark}</span></div>`
-            : ''}</div>
           <button class="btn btn-primary" id="shake" ${state.shaking || state.step >= 6 ? 'disabled' : ''}>${state.step >= 6 ? '六爻已成' : state.shaking ? '摇卦中…' : '摇铜钱'}</button>
         </div>
         ${miniGua()}
