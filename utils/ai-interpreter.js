@@ -246,59 +246,39 @@ function buildDivinationPrompt(a, b) {
   const benDetail = getGuaXiangjie(benAlias) || {}
   const bianDetail = getGuaXiangjie(bianAlias) || {}
 
-  const systemPrompt = `你是一位精通《周易》、《京房易传》、《卜筮正宗》、《增删卜易》与宋代理学义理的当代周易象数大师与心法导师。
-问卦者向你呈上了心中关切的具体疑难，以及刚刚依据大衍蓍法/金钱课所得的纳甲六爻排盘。
-请你以高深、典雅、透彻、通情达理的文风，为问卦者抽丝剥茧地推演卦象天机。
+  const systemPrompt = `你是精通《周易》纳甲六爻的断卦师。请结合卦象，针对问卦者的具体事宜作简明断语。
 
-【当前筮得卦盘之深层象数内涵】：
-- 【本卦】：本卦《${cast?.ben?.name || '本卦'}》
-  - 卦德核心精神：【${benDetail.theme || '知进知退，顺时而动'}】
-  - 易理大象：【${benDetail.yili || benDetail.nameWhy || '君子以顺天应人'}】
-  - 占事玄机：【${(benDetail.zhan || []).join('；') || '察机知变'}】
-- 【变卦】：${cast?.bian?.name ? `动化《${cast.bian.name}》（变卦内核：${bianDetail.theme || '机运流转'}）` : '六爻安静无变（静卦守常待时）'}
-- 【所测事由】：【${question || '综合运程'}】
-  - 核心标的：【${intent.cleanTopic}】
-  - 时间窗口：【${intent.timeFrame || '当前阶段'}】
-  - 核心矛盾：【${intent.keyDilemma}】
+【盘面】
+- 本卦：《${cast?.ben?.name || '本卦'}》（${benDetail.theme || '知进知退，顺时而动'}）
+- 变卦：${cast?.bian?.name ? `动化《${cast.bian.name}》（${bianDetail.theme || '机运流转'}）` : '静卦无变'}
+- 所测：「${intent.cleanTopic}」；时间：${intent.timeFrame || '当前'}；关键：${intent.keyDilemma}
 
-【断卦最高法则：卦象内涵与具体人事深度融合，切忌机械死板】：
-你是一位融通天人之际的周易大宗师。断卦绝不是填写冰冷的商业咨询报告，亦不是生搬硬套的万能空话！
-问卦者关切的是具体的「${intent.cleanTopic}」，你必须将《${cast?.ben?.name || '本卦'}》所承载的卦德神髓（如离之附丽借柴、坎之险中行信、屯之草创扎根、革之顺天破旧、乾之戒亢、坤之厚载顺随等），真正与问卦者的人事实情血肉相融：
-1. 【深入卦象之灵府，借象说事】：
-   不可将卦象与人事割裂成两张皮！必须开门见山把卦象所揭示的天道法则与物理性情，直接照进「${intent.cleanTopic}」的现实机理中。
-   透彻剖析其顺逆气数、成败关键、痛点隐患与时机节奏。
-2. 【神机四句偈，居首量身定赋】：
-   必须为问卦者所测的「${intent.cleanTopic}」专赋七言绝句一首（共4句，每句7字，共28字）。
-   诗偈必须自然流淌出本卦的卦魂意境与该事务的发展玄机，字字珠玑，言浅意深，让问卦者诵之即悟、受持以趋吉避凶。
-3. 【偈语解释，通透生动，靶向定断】：
-   紧扣「${intent.cleanTopic}」深入解读四句诗偈的玄机：
-   - 开篇第一句即结合卦象内核对该事作出鲜明定性（可不可为、顺逆几何、胜算几成）；
-   - 点透该事项中最关键的暗礁与成败枢纽（借卦象之象，点现实之穴）；
-   - 回应提问的时间窗口（如「${intent.timeFrame || '当下'}」），说明时运节律与转机节点；
-   - 指明一条充满易道智慧、可立即落实的破局先手策略。
-   【文风禁忌】：行文必须如大宗师当面开解，有如神助、一气呵成！严禁像填表格一样机械罗列【标签标题】或生硬套话！
-4. 【卦象解释，理数相扣】：
-   精炼阐发本卦、变卦动化之象数易理，明理修心。
-5. 【纯正文风，绝无技术痕迹】：通篇必须纯以易学宗师太史令的身份作答，严禁出现任何“AI”、“人工智能”、“大模型”、“算法提示”、“计算机”等现代词汇。
-6. 【排版禁忌，严禁星号】：通篇绝对禁止输出任何 Markdown 星号（严禁出现 ** 加粗、严禁出现 * 列表符号或任何形式的星号），所有强调、重点字句请直接使用中文方头括号【】或书名号《》。
+【要求】
+1. 紧扣「${intent.cleanTopic}」说话，忌空泛套话。
+2. 神机四句偈：七言四句，每行一句，共28字，切合本卦与所测事宜。
+3. 偈语解释：必须逐句对应上面四句偈，格式固定为四行——
+「第一句原文」：一句话点明此句对所测之事的含义（不超过40字）
+「第二句原文」：……
+「第三句原文」：……
+「第四句原文」：……
+四句解释须分别贴合对应偈句，言简意赅；第三句宜点出「${intent.timeFrame || '当前'}」的注意点，第四句给出当下可做的一步。
+4. 卦象解释：用两三句话说明本卦、变卦与动爻大意即可。
+5. 禁止出现 AI、大模型等现代词；禁止 Markdown 星号（*、**、#）。
 
-【请严格按如下三部分输出，结构精炼，层次分明】：
+【严格按以下三部分输出】：
 ### 【神机四句偈】
-（依卦理与所测事宜专赋七言四句诗偈，朗朗上口，言浅意深，每行一句，共四句，共28字）
+（七言四句，每行一句）
 
 ### 【偈语解释】
-（解读四句诗偈玄机，紧扣问卦者所测事宜给出相对具体的回答与趋吉避凶指引：可否成事、成败关键、人际/合同防范与当下行动策略）
+（四行，每行「该句原文」：短解；必须与上面四句一一对应）
 
 ### 【卦象解释】
-（精练阐释本卦、变卦与动爻用神之易理象数，说明局势走向与易道修身处事之方）`
+（两三句精炼象数说明）`
 
-  const userPrompt = `问卦者呈上的具体困惑与所求之事：
-「${question || '未注明具体事由，请就卦象吉凶作综合研判'}」
+  const userPrompt = `所测事宜：「${question || '未注明具体事由，请就卦象吉凶作综合研判'}」
+本卦《${cast?.ben?.name || '本卦'}》（${benDetail.theme || ''}），请围绕「${intent.cleanTopic}」简要断之。
 
-请大师务必将《${cast?.ben?.name || '本卦'}》（${benDetail.theme || ''}）之精魂深意，与「${intent.cleanTopic}」深度融合！
-切莫写成生硬机械的模板，请以大宗师洞烛幽微的智慧，为问卦者开示天机神意。
-
-当前筮得纳甲六爻盘面如下：
+盘面：
 ${formatCastForPrompt(cast)}`
 
   return { systemPrompt, userPrompt }
@@ -924,16 +904,85 @@ const GUA_ESSENCE = {
 }
 
 /**
- * 依据问测事宜与卦爻机变，生成极度聚焦、切中痛点、直指事由的答复与策略
- * 纯正周易大宗师当面开解风格，彻底摒弃生硬填空式小标题
+ * 将卦德长句压成短注，便于逐句解释；优先贴近对应偈句用词
  */
-function generateConcreteAnswer(question, cast, benGuaName, tone) {
+function compressEssence(text, fallback, hintLine) {
+  if (!text) return fallback || '顺时而动'
+  let t = String(text)
+    .replace(/《[^》]+》者[^，。；]*[，。；]?/g, '')
+    .replace(/正如[^，。；]+[，。；]?/g, '')
+    .replace(/此卦昭示「([^」]+)」[^，。；]*/g, '$1')
+    .replace(/「([^」]+)」/g, '$1')
+    .replace(/切忌|严禁|最忌/g, '忌')
+    .replace(/务必|必须/g, '要')
+    .replace(/\s+/g, '')
+    .trim()
+  const parts = t.split(/[，。；、——–−-]+/).map(p => p.trim()).filter(p => p.length >= 4)
+  let pick = ''
+  if (hintLine && parts.length) {
+    const bigrams = []
+    for (let i = 0; i < hintLine.length - 1; i++) {
+      const bg = hintLine.slice(i, i + 2)
+      if (!/[的之兮也于而与以莫最]/.test(bg)) bigrams.push(bg)
+    }
+    const scored = parts
+      .map(p => ({ p, score: bigrams.filter(b => p.includes(b)).length }))
+      .sort((a, b) => b.score - a.score)
+    if (scored[0] && scored[0].score > 0) pick = scored[0].p
+  }
+  if (!pick) {
+    const punch = parts.filter(p => p.length >= 4 && p.length <= 18)
+    pick = punch.find(p => /宜|忌|在于|贵在|防范|莫|须|要/.test(p))
+      || (punch.length ? punch[punch.length - 1] : '')
+      || parts.find(p => /宜|忌|在于|贵在|防范|莫|须|要/.test(p))
+      || parts[parts.length - 1]
+      || parts[0]
+      || t
+  }
+  // 过短且不完整时，再换稍长分句
+  if (pick.length < 4 || /[与的和及于在]$/.test(pick)) {
+    const mid = parts.find(p => p !== pick && p.length >= 6 && p.length <= 16)
+    if (mid) pick = mid
+    else {
+      const longer = parts
+        .filter(p => p !== pick && p.length >= 8)
+        .sort((a, b) => a.length - b.length)[0]
+      if (longer) pick = longer
+    }
+  }
+  // 过长则在因果连接处截断，保持言简意赅
+  if (pick.length > 16) {
+    const markers = ['导致', '从而', '以免', '以防']
+    let cutAt = -1
+    for (const m of markers) {
+      const i = pick.indexOf(m)
+      if (i >= 4 && i <= 16) { cutAt = i; break }
+    }
+    pick = cutAt > 0 ? pick.slice(0, cutAt) : pick.slice(0, 16)
+    pick = pick.replace(/[与的和及于在]$/, '')
+  }
+  return pick || fallback || '顺时而动'
+}
+
+/**
+ * 偈语解释是否已与四句偈逐句对应（每句原文都出现在解释中）
+ */
+function isJiyuExplainAligned(jiyu, explain) {
+  if (!explain || !Array.isArray(jiyu) || jiyu.length < 4) return false
+  return jiyu.slice(0, 4).every(line => explain.includes(line))
+}
+
+/**
+ * 依据四句偈逐句生成简明解释，与偈文一一对应
+ */
+function generateConcreteAnswer(question, cast, benGuaName, tone, jiyu) {
   const intent = analyzeQuestionIntent(question)
-  const hasMove = !!(cast?.changingIndexes && cast.changingIndexes.length > 0)
   const cleanName = resolveGuaAlias(benGuaName)
   const benDetail = getGuaXiangjie(cleanName) || {}
+  const lines = (Array.isArray(jiyu) && jiyu.length >= 4)
+    ? jiyu.slice(0, 4)
+    : generateDivinationJiyu(benGuaName, tone, question)
 
-  // 1. 获取本卦的核心精神与物理卦象
   const essence = GUA_ESSENCE[cleanName] || {
     nature: `《${benGuaName}》象天地运转、阴阳化合`,
     spirit: benDetail.theme ? `大势在于「${benDetail.theme}」` : '审时度势，顺应天机',
@@ -941,30 +990,25 @@ function generateConcreteAnswer(question, cast, benGuaName, tone) {
     action: '坚守正道，以退为进'
   }
 
-  // 2. 第一段：以象显意，结合所问之事直断顺逆（自然流淌，无机械小标题）
-  let p1 = `筮测「${intent.cleanTopic}」，得《${benGuaName}》之象。${essence.nature}。`
-  if (tone === 'good') {
-    p1 += `面对你所关切的这桩事务，卦象昭示气数亨通，大势向好，可行性极高。成败命门全在${essence.spirit}。顺天休命，大有可为。`
-  } else if (tone === 'bad') {
-    p1 += `面对你所关切的这桩事务，卦象昭示当前外部逆风阻隔，多遇关隘险阻，并非大张旗鼓强推进取之吉时。此时不可硬碰硬，核心在于${essence.spirit}。`
-  } else {
-    p1 += `面对你所关切的这桩事务，事物正处于蓄力沉淀的转折关键期，吉凶相半。成败不在外部虚名，而全看自身定力与${essence.spirit}。`
-  }
+  const topic = intent.cleanTopic
+  const timeStr = intent.timeFrame || '当前'
+  const nature = compressEssence(essence.nature, '卦象已成，须察机顺势', lines[0])
+  const spirit = compressEssence(essence.spirit, '审时度势，稳健推进', lines[1])
+  const pitfall = compressEssence(essence.pitfall, '忌轻举妄动', lines[2])
+  const action = compressEssence(essence.action, '守正待机，步步落实', lines[3])
 
-  // 3. 第二段：洞悉暗流命门，回应时间节律（自然融入时间节律与动爻）
-  let p2 = ''
-  const timeStr = intent.timeFrame ? `在「${intent.timeFrame}」这一时间节律内` : '在当前这一时间节律内'
-  p2 += `${timeStr}，切莫只看表面光鲜，最须警惕防范的是${essence.pitfall}。`
-  if (hasMove) {
-    p2 += `盘中有爻象发动翻转，昭示行进中途必有变数翻折或人事更迭，凡涉及合作协议与权责承诺，务必白纸黑字留存法定凭据，切莫仅凭口头之信。`
-  } else {
-    p2 += `六爻安静无变，气机凝敛，昭示大局以沉潜守常、打牢基本盘为上策，切忌心浮气躁自乱阵脚。`
-  }
+  const toneHint = tone === 'good'
+    ? '大势可期，宜顺势推进'
+    : tone === 'bad'
+      ? '多有阻滞，宜缓不宜急'
+      : '吉凶相半，宜稳中求进'
 
-  // 4. 第三段：易道心法，当下破局先手（自然流淌）
-  let p3 = `当下第一步破局先手，莫若${essence.action}。心存戒惧而不失从容，以易道大智应世，自然逢凶化吉、履险如夷。`
-
-  return `${p1}\n\n${p2}\n\n${p3}`
+  return [
+    `「${lines[0]}」：问「${topic}」，${nature}。${toneHint}。`,
+    `「${lines[1]}」：${spirit}。`,
+    `「${lines[2]}」：${timeStr}尤须留意——${pitfall}。`,
+    `「${lines[3]}」：当下先手：${action}。`
+  ].join('\n')
 }
 
 /**
@@ -1028,9 +1072,9 @@ function parseAiDivinationOutput(text, question, cast) {
     parsed.jiyu = generateDivinationJiyu(benGuaName, tone, question)
   }
 
-  // 2. 确保偈语解释 / 针对具体回答存在
-  if (!parsed.jiyuExplain) {
-    parsed.jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone)
+  // 2. 偈语解释必须与四句偈逐句对应；不对齐则按偈文重写简明解释
+  if (!isJiyuExplainAligned(parsed.jiyu, parsed.jiyuExplain)) {
+    parsed.jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone, parsed.jiyu)
   }
   parsed.directAnswer = parsed.jiyuExplain
 
@@ -1106,22 +1150,18 @@ function buildIntelligentFallbackInterpretation(a, b) {
     summary = '静待蓄势 · 循序渐进'
   }
 
-  const cal = cast?.calendar || {}
-  const dayGz = cal.day?.text || '吉日'
-  const monthGz = cal.month?.text || '令月'
-
-  // 1. 置顶四句神机诗偈（深度切题）
+  // 1. 置顶四句神机诗偈
   const jiyu = generateDivinationJiyu(benGuaName, tone, question)
 
-  // 2. 偈语解释与针对所测落地具体答复
-  const jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone)
+  // 2. 偈语解释：与四句偈逐句对应、言简意赅
+  const jiyuExplain = generateConcreteAnswer(question, cast, benGuaName, tone, jiyu)
 
   // 3. 卦象精炼解释
   let guaExplain = ''
   if (hasMove) {
-    guaExplain = `问测「${question || '所求诸事'}」，筮得本卦《${benGuaName}》，动化《${bianGuaName}》卦。卦中${changingCount}爻发动，逢${monthGz}值${dayGz}，机变丛生。象曰：「${benGuaci.xiang || '自强不息'}」。动爻翻转主事态见转枢，顺天休命、行所当行，虽有微滞亦能履险如夷。`
+    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》动化《${bianGuaName}》，${changingCount}爻发动。象曰「${benGuaci.xiang || '自强不息'}」。事态将有转折，宜顺势调整，勿固执一端。`
   } else {
-    guaExplain = `问测「${question || '所求诸事'}」，筮得《${benGuaName}》静卦。卦辞云：「${benGuaci.guaci || '利贞'}」。六爻安静无动变，气机凝敛，主大势以稳健持重为根基。宜守正固本，待时而发，不宜轻举盲动。`
+    guaExplain = `问「${question || '所求诸事'}」，得《${benGuaName}》静卦。卦辞「${benGuaci.guaci || '利贞'}」。气机未变，宜守正蓄力，待时而动。`
   }
 
   const sections = [

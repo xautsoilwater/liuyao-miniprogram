@@ -345,6 +345,7 @@
   color: var(--ink);
   letter-spacing: 0.04em;
   text-align: justify;
+  white-space: pre-line;
 }
 
 /* 趋吉避凶 · 神机四句金偈卡片 */
