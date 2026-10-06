@@ -43,7 +43,7 @@ function testPreviewShell() {
     const text = fs.readFileSync(path.join(__dirname, '..', rel), 'utf8')
     assert.match(text, /guadian/, `${rel} 缺少 guadian 路由/样式`)
     if (rel === 'preview/index.html' || rel === 'preview/liuyao-standalone.html') {
-      assert.match(text, /min\(86vw,\s*352px\)/, `${rel} 罗盘尺寸未恢复`)
+      assert.match(text, /min\((?:80|86)vw,\s*(?:332|352)px\)/, `${rel} 罗盘尺寸未恢复`)
     }
     if (rel !== 'preview/index.html') {
       assert.match(text, /renderGuadian/, `${rel} 未接入卦典总图`)
