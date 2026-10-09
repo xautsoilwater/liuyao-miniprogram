@@ -16,6 +16,7 @@ const order = [
   './learning-extra',
   '../data/learning',
   './ganzhi',
+  './calendar',
   './jixiang',
   './rules',
   './coin',
@@ -41,6 +42,7 @@ const fileOf = {
   './learning-extra': 'data/learning-extra.js',
   '../data/learning': 'data/learning.js',
   './ganzhi': 'utils/ganzhi.js',
+  './calendar': 'utils/calendar.js',
   './jixiang': 'utils/jixiang.js',
   './rules': 'utils/rules.js',
   './coin': 'utils/coin.js',
@@ -96,6 +98,7 @@ var bagua = __require('../data/bagua');
 var guaci = __require('../data/guaci');
 var guadian = __require('./gua64-xiangjie');
 var bazi = __require('./bazi');
+var calendar = __require('./calendar');
 var aiConfig = __require('./ai-config');
 var aiInterpreter = __require('./ai-interpreter');
 window.LiuYao = {
@@ -118,6 +121,17 @@ window.LiuYao = {
   buildLuckyDirections: jixiang.buildLuckyDirections,
   luckyByGan: jixiang.luckyByGan,
   calculateBazi: bazi.calculateBazi,
+  solarToLunar: calendar.solarToLunar,
+  lunarToSolar: calendar.lunarToSolar,
+  formatLunarDate: calendar.formatLunarDate,
+  listLunarMonths: calendar.listLunarMonths,
+  listLunarDays: calendar.listLunarDays,
+  getLunarPickerState: calendar.getLunarPickerState,
+  resolveBirthInstant: calendar.resolveBirthInstant,
+  LUNAR_YEAR_MIN: calendar.LUNAR_YEAR_MIN,
+  LUNAR_YEAR_MAX: calendar.LUNAR_YEAR_MAX,
+  SOLAR_DATE_MIN: calendar.SOLAR_DATE_MIN,
+  SOLAR_DATE_MAX: calendar.SOLAR_DATE_MAX,
   TIME_SCOPES: askOptions.TIME_SCOPES,
   listGroups: askOptions.listGroups,
   buildAskSelection: askOptions.buildAskSelection,

@@ -56,6 +56,10 @@
   box-shadow: inset 0 0 0 1rpx rgba(155, 45, 36, 0.2);
 }
 
+.calendar-grid {
+  margin-bottom: 0;
+}
+
 .picker-box {
   width: 100%;
   padding: 20rpx 16rpx;
@@ -65,6 +69,20 @@
   color: var(--ink);
   font-size: 29rpx;
   letter-spacing: 0.05em;
+}
+
+.date-hint {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+}
+
+.bazi-birth-meta {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: var(--bronze);
+  line-height: 1.6;
 }
 
 .bazi-board {
