@@ -22,10 +22,22 @@
 
     <view class="bazi-time-form">
       <view class="bazi-form-row">
-        <view class="form-label">公历出生日期</view>
-        <picker mode="date" value="{{birthDate}}" bindchange="onDateChange">
+        <view class="form-label">出生历法</view>
+        <view class="gender-grid calendar-grid">
+          <view class="gender-btn {{calendarType === 'solar' ? 'on' : ''}}" bindtap="setCalendarSolar">公历</view>
+          <view class="gender-btn {{calendarType === 'lunar' ? 'on' : ''}}" bindtap="setCalendarLunar">农历</view>
+        </view>
+      </view>
+
+      <view class="bazi-form-row">
+        <view class="form-label">{{calendarType === 'lunar' ? '农历出生日期' : '公历出生日期'}}</view>
+        <picker wx:if="{{calendarType === 'solar'}}" mode="date" start="{{solarDateMin}}" end="{{solarDateMax}}" value="{{birthDate}}" bindchange="onDateChange">
           <view class="picker-box">{{birthDate}}</view>
         </picker>
+        <picker wx:else mode="multiSelector" range="{{lunarPickerRange}}" value="{{lunarPickerValue}}" bindchange="onLunarDateChange" bindcolumnchange="onLunarColumnChange" bindcancel="onLunarCancel">
+          <view class="picker-box">{{lunarDisplay}}</view>
+        </picker>
+        <view class="date-hint">{{counterpartText}}</view>
       </view>
 
       <view class="bazi-form-row">
@@ -47,6 +59,9 @@
       <view class="seal" style="margin: 12rpx 0">{{baziData.summary}}</view>
       <view class="subtitle" style="margin-top: 8rpx">
         {{baziData.dayGan}}{{baziData.dayWuxing}}日元 · {{baziData.analysis.strength}} · 空亡{{baziData.kongwang.text}}
+      </view>
+      <view wx:if="{{birthMeta}}" class="bazi-birth-meta">
+        按{{birthMeta.calendarLabel}}输入 · 公历 {{birthMeta.solar}} {{birthMeta.time}} · 农历 {{birthMeta.lunar}}
       </view>
     </view>
 

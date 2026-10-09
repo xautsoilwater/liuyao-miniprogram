@@ -41,8 +41,11 @@
     guaAlias: null,
     feedbackText: '',
     baziGender: '男',
+    baziCalendarType: 'solar',
     baziBirthDate: '1995-10-24',
     baziBirthTime: '09:30',
+    baziLunar: { year: 1995, month: 9, day: 1, isLeap: false },
+    baziBirthMeta: null,
     baziData: null,
     aiLoading: false,
     aiResult: null,
@@ -1370,7 +1373,72 @@
     return '#888'
   }
 
+  function baziResolvedBirth(calendarType, solarDate, lunar, time) {
+    if (!window.LiuYao || !window.LiuYao.resolveBirthInstant) {
+      throw new Error('排盘算法引擎未准备就绪')
+    }
+    return window.LiuYao.resolveBirthInstant({
+      calendarType,
+      solarDate,
+      lunar,
+      time
+    })
+  }
+
+  function baziLunarSelectsHtml(lunar) {
+    const picker = window.LiuYao.getLunarPickerState(lunar)
+    const yearOpts = picker.years.map((item) => (
+      `<option value="${item.value}"${item.value === picker.lunar.year ? ' selected' : ''}>${item.label}</option>`
+    )).join('')
+    const monthOpts = picker.months.map((item, index) => (
+      `<option value="${index}"${index === picker.indexes[1] ? ' selected' : ''}>${item.label}</option>`
+    )).join('')
+    const dayOpts = picker.days.map((item) => (
+      `<option value="${item.day}"${item.day === picker.lunar.day ? ' selected' : ''}>${item.label}</option>`
+    )).join('')
+    return `
+      <div class="lunar-picker-row">
+        <select class="bazi-input" id="baziLunarYear">${yearOpts}</select>
+        <select class="bazi-input" id="baziLunarMonth">${monthOpts}</select>
+        <select class="bazi-input" id="baziLunarDay">${dayOpts}</select>
+      </div>`
+  }
+
+  function syncPreviewBaziDate({ calendarType, solarDate, lunar }) {
+    const resolved = baziResolvedBirth(
+      calendarType || state.baziCalendarType,
+      solarDate || state.baziBirthDate,
+      lunar || state.baziLunar,
+      state.baziBirthTime
+    )
+    state.baziCalendarType = resolved.calendarType
+    state.baziBirthDate = resolved.solarText
+    state.baziLunar = resolved.lunar
+    return resolved
+  }
+
   function renderBaziInputView() {
+    let counterpartText = ''
+    const solarMin = (window.LiuYao && window.LiuYao.SOLAR_DATE_MIN) || '1900-01-31'
+    const solarMax = (window.LiuYao && window.LiuYao.SOLAR_DATE_MAX) || '2100-12-31'
+    try {
+      const resolved = syncPreviewBaziDate({
+        calendarType: state.baziCalendarType,
+        solarDate: state.baziBirthDate,
+        lunar: state.baziLunar
+      })
+      counterpartText = resolved.calendarType === 'lunar'
+        ? `对应公历 ${resolved.solarText}`
+        : `对应农历 ${resolved.lunarText}`
+    } catch (err) {
+      counterpartText = (err && err.message) || '日期无效'
+    }
+
+    const isLunar = state.baziCalendarType === 'lunar'
+    const dateControl = isLunar
+      ? baziLunarSelectsHtml(state.baziLunar)
+      : `<input type="date" class="bazi-input" id="baziDateInput" min="${solarMin}" max="${solarMax}" value="${state.baziBirthDate || '1995-10-24'}">`
+
     app.innerHTML = `
       <div class="bazi-hero">
         <div class="title-zh" style="font-size:24px">命理起柱</div>
@@ -1388,8 +1456,16 @@
       </div>
       <div class="bazi-time-form">
         <div class="bazi-form-row">
-          <label>公历出生日期</label>
-          <input type="date" class="bazi-input" id="baziDateInput" value="${state.baziBirthDate || '1995-10-24'}">
+          <label>出生历法</label>
+          <div class="gender-grid calendar-grid">
+            <div class="gender-btn ${state.baziCalendarType === 'solar' ? 'on' : ''}" id="btnCalSolar">公历</div>
+            <div class="gender-btn ${state.baziCalendarType === 'lunar' ? 'on' : ''}" id="btnCalLunar">农历</div>
+          </div>
+        </div>
+        <div class="bazi-form-row">
+          <label>${isLunar ? '农历出生日期' : '公历出生日期'}</label>
+          ${dateControl}
+          <div class="date-hint">${counterpartText}</div>
         </div>
         <div class="bazi-form-row">
           <label>出生时间 (时辰)</label>
@@ -1402,34 +1478,106 @@
     bindNav()
     const maleBtn = document.getElementById('btnGenderMale')
     const femaleBtn = document.getElementById('btnGenderFemale')
+    const solarBtn = document.getElementById('btnCalSolar')
+    const lunarBtn = document.getElementById('btnCalLunar')
     const dateIn = document.getElementById('baziDateInput')
+    const lunarYearIn = document.getElementById('baziLunarYear')
+    const lunarMonthIn = document.getElementById('baziLunarMonth')
+    const lunarDayIn = document.getElementById('baziLunarDay')
     const timeIn = document.getElementById('baziTimeInput')
     const submitBtn = document.getElementById('btnBaziSubmit')
 
     if (maleBtn) maleBtn.onclick = () => { state.baziGender = '男'; render() }
     if (femaleBtn) femaleBtn.onclick = () => { state.baziGender = '女'; render() }
-    if (dateIn) dateIn.onchange = () => { state.baziBirthDate = dateIn.value }
+    if (solarBtn) {
+      solarBtn.onclick = () => {
+        try {
+          syncPreviewBaziDate({ calendarType: 'solar', solarDate: state.baziBirthDate })
+          render()
+        } catch (err) {
+          alert((err && err.message) || '日期无效')
+        }
+      }
+    }
+    if (lunarBtn) {
+      lunarBtn.onclick = () => {
+        try {
+          syncPreviewBaziDate({ calendarType: 'lunar', lunar: state.baziLunar })
+          render()
+        } catch (err) {
+          alert((err && err.message) || '日期无效')
+        }
+      }
+    }
+    if (dateIn) {
+      dateIn.onchange = () => {
+        try {
+          syncPreviewBaziDate({ calendarType: 'solar', solarDate: dateIn.value })
+          render()
+        } catch (err) {
+          alert((err && err.message) || '公历日期无效')
+        }
+      }
+    }
+    const onLunarSelectChange = (event) => {
+      try {
+        const year = Number((lunarYearIn && lunarYearIn.value) || state.baziLunar.year)
+        const day = Number((lunarDayIn && lunarDayIn.value) || state.baziLunar.day)
+        let lunar = { ...state.baziLunar, year, day }
+        if (event && event.target === lunarYearIn) {
+          lunar = { year, month: state.baziLunar.month, isLeap: state.baziLunar.isLeap, day }
+        } else {
+          const months = window.LiuYao.getLunarPickerState({ year }).months
+          const monthIndex = Number((lunarMonthIn && lunarMonthIn.value) || 0)
+          const picked = months[Math.min(monthIndex, months.length - 1)]
+          lunar = {
+            year,
+            month: picked.month,
+            isLeap: picked.isLeap,
+            day
+          }
+        }
+        syncPreviewBaziDate({ calendarType: 'lunar', lunar })
+        render()
+      } catch (err) {
+        alert((err && err.message) || '农历日期无效')
+      }
+    }
+    if (lunarYearIn) lunarYearIn.onchange = onLunarSelectChange
+    if (lunarMonthIn) lunarMonthIn.onchange = onLunarSelectChange
+    if (lunarDayIn) lunarDayIn.onchange = onLunarSelectChange
     if (timeIn) timeIn.onchange = () => { state.baziBirthTime = timeIn.value }
 
     if (submitBtn) {
       submitBtn.onclick = () => {
-        const dStr = (dateIn && dateIn.value) || state.baziBirthDate || '1995-10-24'
         const tStr = (timeIn && timeIn.value) || state.baziBirthTime || '09:30'
-        state.baziBirthDate = dStr
         state.baziBirthTime = tStr
-        const dt = new Date(`${dStr}T${tStr}:00`)
-        if (Number.isNaN(dt.getTime())) {
-          alert('请选择有效的出生日期时间')
-          return
-        }
-        if (window.LiuYao && window.LiuYao.calculateBazi) {
+        try {
+          const resolved = baziResolvedBirth(
+            state.baziCalendarType,
+            state.baziBirthDate,
+            state.baziLunar,
+            tStr
+          )
+          state.baziBirthDate = resolved.solarText
+          state.baziLunar = resolved.lunar
+          if (!window.LiuYao.calculateBazi) {
+            alert('排盘算法引擎未准备就绪')
+            return
+          }
           state.baziData = window.LiuYao.calculateBazi({
-            birthDate: dt,
+            birthDate: resolved.date,
             gender: state.baziGender
           })
+          state.baziBirthMeta = {
+            calendarLabel: resolved.calendarType === 'lunar' ? '农历' : '公历',
+            solar: resolved.solarText,
+            lunar: resolved.lunarText,
+            time: tStr
+          }
           render()
-        } else {
-          alert('排盘算法引擎未准备就绪')
+        } catch (err) {
+          alert((err && err.message) || '请选择有效的出生日期时间')
         }
       }
     }
@@ -1507,6 +1655,7 @@
         <div class="subtitle" style="margin-top:4px">
           ${data.dayGan}${data.dayWuxing}日元 · ${data.analysis.strength} · 空亡${data.kongwang.text}
         </div>
+        ${state.baziBirthMeta ? `<div class="bazi-birth-meta">按${state.baziBirthMeta.calendarLabel}输入 · 公历 ${state.baziBirthMeta.solar} ${state.baziBirthMeta.time} · 农历 ${state.baziBirthMeta.lunar}</div>` : ''}
       </div>
 
       <!-- 四柱大盘 -->
@@ -1550,6 +1699,7 @@
     if (resetBtn) {
       resetBtn.onclick = () => {
         state.baziData = null
+        state.baziBirthMeta = null
         render()
       }
     }
